@@ -1,0 +1,45 @@
+body{
+    background: #eee;
+}
+
+#side_nav{
+    background: white;
+    min-width: 300px;
+    max-width: 300px;
+    transition: all 0.3s;
+}
+.content{
+    min-height: 100vh;
+    width: 100%;
+}
+hr.h-color{
+    background: #eee;
+}
+.sidebar li{
+    min-height: 3rem;
+    line-height: 3rem;
+}
+.sidebar li.active{
+    background: #eee;
+    border-radius: 8px;
+}
+
+.sidebar li.active a, .sidebar li.active a:hover {
+color: rgb(246, 74, 74);
+}
+.sidebar li a{
+color: black;
+}
+
+@media(max-width: 767px){
+#side_nav{
+    margin-left: -300px;
+    position: absolute;
+    min-height: 100vh;
+    z-index: 1;
+
+}
+#side_nav.active{
+    margin-left: 0;
+    }
+}
