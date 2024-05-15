@@ -1,0 +1,147 @@
+.container .body .admin-form,
+.container .body .user-form,
+.container .body .medicine-form,
+.container .body .setting-set{
+    width: 100%;
+    height: fit-content;
+    padding: 2rem 4rem 4rem;
+    /* border: 1px solid rgba(0, 0, 0, 0.2); */
+    border-radius: 20px;
+    box-shadow: 10px 10px 50px rgba(0, 0, 0, 0.2);
+}
+
+.container .body .form{
+    /* border: 1px solid black; */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    position: relative;
+    padding-bottom: 5rem;
+}
+
+.container .body .input_field,
+.container .body .setting-field{
+    /* border: 1px solid black; */
+    font-weight: 500;
+    display: flex;
+    padding: .5rem 0rem;
+    width: 100%;
+}
+
+.container .body .input_field label,
+.container .body .setting-field label{
+    width: 150px;
+    padding: 10px 0px;
+}
+
+.container .body .input_field .input,
+.container .body .setting-field .input{
+    position: relative;
+    width: 70%;
+    padding: 10px 40px 10px 10px;
+    margin-left: 0px;
+    border: none;
+    outline: none;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.container .body .setting-field .input{
+    width: 98%;
+}
+
+.container .body .input_field .image{
+    position: relative;
+    width: 70%;
+    height: 100%;
+    margin-left: 15px;
+    border: none;
+    outline: none;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.container .body .image_field{
+    width: 70%;
+    margin-left: 15px;
+    text-align:center;
+    padding:3%;
+    border:thin solid black;
+}
+
+.container .body .image_field input{
+display: none;
+}
+
+.container .body .image_field label{
+cursor:pointer;
+}
+
+.container .body .image_field #imageName{
+color:green;
+}
+
+.container .body .input_field select{
+    border: 1px solid black;
+    width: 70%;
+    padding: 10px 40px 10px 10px;
+    margin-left: 0px;
+    border: none;
+    outline: none;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.container .body .setting-field textarea{
+    border: 1px solid black;
+    width: 0%;
+    padding: 10px 40px 10px 10px;
+    margin-left: 15px;
+    border: none;
+    outline: none;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.container .body .btn{
+    position: absolute;
+    right: 30px;
+    bottom: 0;
+    background-color: white;
+    width: 180px;
+    padding: 10px 10px 10px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.container .body .btn:hover{
+    background-image: linear-gradient(to right, #5d90d2, rgb(60, 71, 196));
+}
+
+.setting-container{
+    padding: 0px;
+    position: relative;
+    padding-bottom: 5rem;
+}
+
+.setting-container .setting-section{
+    display: flex;
+    flex-direction: column;
+    /* gap: 20px; */
+}
+
+.setting-container .setting-section .setting-field{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.setting-container .setting-section .setting-field label{
+    width: 20%;
+}
+
+.setting-container .setting-section .setting-field input,
+.setting-container .setting-section .setting-field textarea{
+    margin-left: 0;
+    width: calc(100% - 30px);
+}
