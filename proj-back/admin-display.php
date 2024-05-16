@@ -35,7 +35,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Gender</label>
-                    <select class="form-select" id="floatingSelect" id="gender" aria-label="Floating label select example" name="gender">
+                    <select class="form-select" id="gender" aria-label="Floating label select example" name="gender">
                         <option selected value="Not Selected">Gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>

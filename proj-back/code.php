@@ -137,16 +137,18 @@
         $manufacturer_name = $_POST['manufacturername'];
         $price = $_POST['price'];
         $quantity = $_POST['quantity'];
-        $exp_date = validate($_POST['exp_date']);
+        $exp_date = $_POST['exp_date'];
         $formatted_Date = date("Y-m-d", strtotime($exp_date));
         $dosage = $_POST['dosage'];
-        $images = $_FILES['images']['name'];
-        $fileNameNew = uniqid('', true).".".$images;
+        $imagename = $_FILES['images']['name'];
+        $fileExt = explode('.',$imagename);
+        $fileActualExt = strtolower(end($fileExt));
+        $fileNameNew = uniqid('', true).".".$fileActualExt;
 
-        $query = "INSERT INTO tbl_medicine (medicine_id,medicine_name,manufacturer,price,quantity,expiration_date,dosage, images) VALUES('','$medicine_name','$manufacturer_name','$price','$quantity', '$formatted_Date','$dosage','../uploaded_img/$fileNameNew')";
+        $query = "INSERT INTO tbl_medicine (medicine_id,medicine_name,manufacturer,price,quantity,expiration_date,dosage, images) VALUES('','$medicine_name','$manufacturer_name','$price','$quantity','$formatted_Date','$dosage','../uploaded_img/$fileNameNew')";
         $data = mysqli_query($conn,$query);
 
-        $upload_dir = '../uploaded_img/';
+        $upload_dir = "../uploaded_img/";
 
         // Create the directory if it doesn't exist
         if (!file_exists($upload_dir)) {
@@ -155,9 +157,10 @@
 
         // Get the file details
         $file_tmp = $_FILES['images']['tmp_name'];
+        $fileDestination = $upload_dir.$fileNameNew;
 
         // Move the uploaded file to the desired directory
-        if(move_uploaded_file($file_tmp, $upload_dir.$fileNameNew)){
+        if(move_uploaded_file($file_tmp, $fileDestination)){
             echo "Image $file_name uploaded successfully!<br>";
         } else{
             echo "Error uploading image $file_name!<br>";
@@ -173,7 +176,7 @@
 
     // UPDATE MEDICINE
     if(isset($_POST['update-medicine'])){
-        $medicine_id = $_POST['medicine_id'];
+        $medicine_id = $_POST['update_id'];
         $medicine_name = $_POST['name'];
         $manufacturer_name = $_POST['manufacturername'];
         $price = $_POST['price'];
@@ -187,10 +190,39 @@
                     manufacturer ='$manufacturer_name',
                     price ='$price',
                     quantity ='$quantity',
-                    expiration_date ='$formatted_Date',
+                    expiration_date = '$formatted_Date',
                     dosage = '$dosage'
                     WHERE medicine_id='$medicine_id'";
         $data = mysqli_query($conn,$query);
+
+        if(!empty($_FILES['images']['tmp_name'])) {
+            $imagename = $_FILES['images']['name'];
+            $fileExt = explode('.',$imagename);
+            $fileActualExt = strtolower(end($fileExt));
+            $fileNameNew = uniqid('', true).".".$fileActualExt;
+            $imagequery = "UPDATE tbl_medicine SET 
+                    images = '../uploaded_img/$fileNameNew'
+                    WHERE medicine_id='$medicine_id'";
+            $imagedata = mysqli_query($conn,$imagequery);
+        
+            $upload_dir = "../uploaded_img/";
+
+            // Create the directory if it doesn't exist
+            if (!file_exists($upload_dir)) {
+                mkdir($upload_dir, 0777, true);
+            }
+
+            // Get the file details
+            $file_tmp = $_FILES['images']['tmp_name'];
+            $fileDestination = $upload_dir.$fileNameNew;
+
+            // Move the uploaded file to the desired directory
+            if(move_uploaded_file($file_tmp, $fileDestination)){
+                echo "Image $file_name uploaded successfully!<br>";
+            } else{
+                echo "Error uploading image $file_name!<br>";
+            }
+    }
 
         if($data){
             redirect('medicine-display.php','Medicine Added Successfully');
