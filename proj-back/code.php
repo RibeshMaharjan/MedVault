@@ -137,12 +137,13 @@
         $manufacturer_name = $_POST['manufacturername'];
         $price = $_POST['price'];
         $quantity = $_POST['quantity'];
-        $exp_date = $_POST['exp_date'];
+        $exp_date = validate($_POST['exp_date']);
+        $formatted_Date = date("Y-m-d", strtotime($exp_date));
         $dosage = $_POST['dosage'];
         $images = $_FILES['images']['name'];
         $fileNameNew = uniqid('', true).".".$images;
 
-        $query = "INSERT INTO tbl_medicine (medicine_id,medicine_name,manufacturer,price,quantity,expiration_date,dosage, images) VALUES('','$medicine_name','$manufacturer_name','$price','$quantity', '$exp_date','$dosage','../uploaded_img/$fileNameNew')";
+        $query = "INSERT INTO tbl_medicine (medicine_id,medicine_name,manufacturer,price,quantity,expiration_date,dosage, images) VALUES('','$medicine_name','$manufacturer_name','$price','$quantity', '$formatted_Date','$dosage','../uploaded_img/$fileNameNew')";
         $data = mysqli_query($conn,$query);
 
         $upload_dir = '../uploaded_img/';
@@ -177,8 +178,8 @@
         $manufacturer_name = $_POST['manufacturername'];
         $price = $_POST['price'];
         $quantity = $_POST['quantity'];
-        $exp_date = $_POST['exp_date'];
-        $formatted_Date = date("Y-m-d", strtotime($exp_date));
+        $exp_date = validate($_POST['exp_date']);
+        $formatted_Date = date("Y-m-d", strtotime($exp_date));;
         $dosage = $_POST['dosage'];
 
         $query = "UPDATE tbl_medicine SET 
@@ -187,7 +188,7 @@
                     price ='$price',
                     quantity ='$quantity',
                     expiration_date ='$formatted_Date',
-                    dosage ='$dosage'
+                    dosage = '$dosage'
                     WHERE medicine_id='$medicine_id'";
         $data = mysqli_query($conn,$query);
 
