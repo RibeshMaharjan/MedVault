@@ -16,7 +16,7 @@
             <input type="hidden" name="pan" id="pan">
             <div class="mb-3">
                 <label for="name" class="form-label">PHARMACY NAME</label>
-                <input type="text" class="form-control" aria-describedby="emailHelp" id="name" name="pharmacy_name">
+                <input type="text" class="form-control"id="name" name="pharmacy_name">
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">EMAIL</label>
@@ -49,7 +49,7 @@
     ?>
     <div class="container-fluid bg-white ">
         <div class="row px-3 pt-4">
-            <div class="col"><h1 class="fw-normal mb-3">Medicine Table</h1></div>
+            <div class="col"><h1 class="fw-normal mb-3">Pharmacy Table</h1></div>
         </div>
         <div class="table-responsive px-3 pt-4 mb-5">
         <table class="table table-striped">

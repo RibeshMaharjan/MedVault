@@ -22,7 +22,7 @@
             <input type="hidden" name="update_id" id="update_id">
             <div class="mb-3">
                 <label for="name" class="form-label">Medicine Name</label>
-                <input class="form-control" type="text" placeholder="Full Name" id="name" aria-label="default input example" name="name">
+                <input class="form-control" type="text" placeholder="Full Name" id="name" name="name">
             </div>
             <div class="mb-3">
                 <label for="manufacturername" class="form-label">Manufacturere</label>
@@ -38,7 +38,7 @@
             </div>
             <div class="mb-3">
                 <label for="dosage" class="form-label">Dosage</label>
-                <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="gender">
+                <select class="form-select" id="floatingSelect" name="dosage">
                     <option selected value="Not Selected">Dosage</option>
                     <option value="tablet">Tablet</option>
                     <option value="capsule">Capsule</option>

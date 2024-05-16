@@ -8,23 +8,23 @@
                     <form action="code.php" class="form" method="POST" id="form" autocomplete="off">
                         <div class="mb-3">
                             <label for="name" class="form-label">Medicine Name</label>
-                            <input class="form-control" type="text" placeholder="Full Name" aria-label="default input example" name="name">
+                            <input class="form-control" type="text" placeholder="Medicine Name" aria-label="default input example" name="name">
                         </div>
                         <div class="mb-3">
                             <label for="manufacturername" class="form-label">Manufacturere</label>
-                            <input type="text" class="form-control" aria-describedby="emailHelp" name="manufacturername">
+                            <input type="text" class="form-control" placeholder="Manufacturere" name="manufacturername">
                         </div>
                         <div class="mb-3">
                             <label for="price" class="form-label">Price</label>
-                            <input type="text" class="form-control"  name="price">
+                            <input type="text" class="form-control" placeholder="Price" name="price">
                         </div>
                         <div class="mb-3">
                             <label for="quantity" class="form-label">Quantity</label>
-                            <input type="number" class="form-control"  name="quantity">
+                            <input type="number" class="form-control" placeholder="Quantity" name="quantity">
                         </div>
                         <div class="mb-3">
                             <label for="dosage" class="form-label">Dosage</label>
-                            <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="gender">
+                            <select class="form-select" id="floatingSelect" name="dosage">
                                 <option selected value="Not Selected">Dosage</option>
                                 <option value="tablet">Tablet</option>
                                 <option value="capsule">Capsule</option>
