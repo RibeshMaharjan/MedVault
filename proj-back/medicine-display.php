@@ -16,9 +16,8 @@
             <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="code.php" class="form" method="POST" id="form" autocomplete="off">
+        <form action="code.php" class="form" method="POST" id="form" enctype="multipart/form-data">
         <div class="modal-body">
-            
             <input type="hidden" name="update_id" id="update_id">
             <div class="mb-3">
                 <label for="name" class="form-label">Medicine Name</label>
@@ -38,15 +37,19 @@
             </div>
             <div class="mb-3">
                 <label for="dosage" class="form-label">Dosage</label>
-                <select class="form-select" id="floatingSelect" name="dosage">
-                    <option selected value="Not Selected">Dosage</option>
+                <select class="form-select" id="dosage" name="dosage">
+                    <option value="Not Selected">Dosage</option>
                     <option value="tablet">Tablet</option>
                     <option value="capsule">Capsule</option>
                 </select>
             </div>
             <div class="mb-3">
                 <label for="exp_date" class="form-label">Expiration Date</label>
-                <input type="date" class="form-control" name="birth" id="exp_date" required name="exp_date">
+                <input type="date" class="form-control" id="exp_date" name="exp_date">
+            </div>
+            <div class="mb-3">
+                <label for="formFile" class="form-label">Upload Image</label>
+                <input class="form-control" type="file" name="images" id="images">
             </div>
         </div>
         
@@ -104,7 +107,7 @@
                                 <td><?= $result['quantity'] ?></td>
                                 <td><?= $result['expiration_date'] ?></td>
                                 <td><?= $result['dosage'] ?></td>
-                                <td><img src="../uploaded_img/<?= $result['images'] ?>" alt="" style="height: 80px; width: 80px;"></td>
+                                <td><img src="<?= $result['images'] ?>" alt="" style="height: 80px; width: 80px;"></td>
                                     <td class="row g-0 ">
                                         <div class="col">
                                         <a class="text-white text-decoration-none "><button class="btn w-75  btn-success btn-md px-5 my-buy-button medicineeditbtn">Edit</button></a>

@@ -55,6 +55,7 @@
                     $('#price').val(data[3]);
                     $('#quantity').val(data [4]); 
                     $('#exp_date').val(data[5]);
+                    $('#dosage').val(data[6]);
                 });
             });
     </script>

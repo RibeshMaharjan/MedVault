@@ -5,7 +5,7 @@
                     <div class="col"><h1 class="fw-normal mb-3">Append Medicine From</h1></div>
                 </div>
                 <div class="row px-3 pb-4">
-                    <form action="code.php" class="form" method="POST" id="form" autocomplete="off">
+                    <form action="code.php" class="form" method="POST" id="form" autocomplete="off" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="name" class="form-label">Medicine Name</label>
                             <input class="form-control" type="text" placeholder="Medicine Name" aria-label="default input example" name="name">
@@ -32,15 +32,12 @@
                         </div>
                         <div class="mb-3">
                             <label for="exp_date" class="form-label">Expiration Date</label>
-                            <input type="date" class="form-control" name="birth" required name="exp_date">
+                            <input type="date" class="form-control" name="exp_date">
                         </div>
                         <div class="mb-3">
-                            <label for="formFile" class="form-label">Default file input example</label>
+                            <label for="formFile" class="form-label">Upload Image</label>
                             <input class="form-control" type="file" name="images" id="inputTag">
-                        </div><div class="input_field">
-                        <!-- <label for="image">Upload Image</label>
-                            <input type="file" name="image" multiple class="image"> -->
-                    </div>
+                        </div>
                         <input type="submit" value="Add" class="btn btn-danger" name="add-medicine">
                     </form>
                 </div>

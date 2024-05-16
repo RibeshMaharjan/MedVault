@@ -32,7 +32,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputEmail1" class="form-label">Birth-Date</label>
-                            <input type="date" class="form-control" name="birth" required name="birth">
+                            <input type="date" class="form-control" name="birth">
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputEmail1" class="form-label">Address</label>
