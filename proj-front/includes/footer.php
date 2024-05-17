@@ -48,5 +48,28 @@
     <script src="assets/js/app.js"></script>
     <script src="assets/js/dropmenu.js"></script>
     <script src="assets/js/subtotal.js"></script>
+    <script>
+            $(document).ready(function () {
+                $('.medicineeditbtn').on('click', function() {
+                    $('#medicineeditmodal').modal('show');
+                    $tr =$(this).closest('tr');
+
+                    var data = $tr.children("td").map(function() {
+                        return $(this).text();
+                    }).get();
+
+                    console.log(data);
+
+                    $('#update_id').val(data[0]);
+                    $('#name').val(data[1]);
+                    $('#description').val(data[2]);
+                    $('#category').val(data[3]);
+                    $('#instock').val(data [5]); 
+                    $('#buy_price').val(data [6]); 
+                    $('#sell_price').val(data [7]); 
+                    $('#exp_date').val(data[9]);
+                });
+            });
+    </script>
     </body>
 </html>

@@ -45,8 +45,8 @@
                             <input type="number" class="form-control" name="sell_price" required>
                         </div>
                         <div class="mb-3">
-                            <label for="formFile" class="form-label">Default file input example</label>
-                            <input class="form-control" type="file" name="images" id="formFile inputTag">
+                            <label for="exp_date" class="form-label">Expiration Date</label>
+                            <input type="date" class="form-control" name="exp_date">
                         </div>
                         <input type="submit" value="Add" class="btn btn-danger" name="add-medicine">
                     </form>
