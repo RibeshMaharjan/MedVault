@@ -1,5 +1,29 @@
 <?php include 'includes/header.php'; ?>
     <div class="inventorybody">
+        <!-- Modal -->
+        <div class="modal fade" id="categoryEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Category Edit</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="php/category-edit.php" class="form" method="POST" id="form" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type="hidden" name="update_id" id="update_id">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Category Name</label>
+                        <input class="form-control" type="text" id="name" name="name">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger" name="update-category">Save changes</button>
+                </div>
+                </form>
+                </div>
+            </div>
+        </div>
         <?php include 'includes/dashboard.php'; ?>
         <div class="inventory-container">
             <div class="category-form">
@@ -39,9 +63,7 @@
                             <td><?= $result['c_id'] ?></td>
                             <td><?= $result['category_name'] ?></td>
                             <td>
-                                <div class="button" style="background-color: limegreen;">
-                                    <a href="php/category-edit.php?c_id=<?=$result["c_id"]?>" id="button">Edit</a>
-                                </div>
+                                <a class="text-white text-decoration-none "><button class="btn w-75 btn-success btn-md px-5 my-buy-button categoryEditBtn">Edit</button></a>
                                 <div class="button" style="background-color: red;" id="button">
                                 <a href="php/category-delete.php?c_id=<?=$result["c_id"]?>" id="button"
                                     onclick="return confirm('You want to delete the data?')"

@@ -1,14 +1,20 @@
 <?php
-    include '../../config/function.php';
+    include_once('../../config/function.php');
 
     if(isset($_POST['update-sales'])){
-        $sales_id = $_POST['s_id'];
+        $sales_id = $_POST['update_id'];
+        $medicine_id = $_POST['m_id'];
+        $price = $_POST['price'];
         $quantity = $_POST['quantity'];
+        $total = $_POST['total'];
         $status = $_POST['status'];
-        $date = $_POST['date'];
+        $date = $_POST['sales_date'];
 
         $query = "UPDATE user_sales_tbl SET 
+                    m_id = '$medicine_id',
+                    price = '$price',
                     quantity = '$quantity',
+                    total_amount = '$total',
                     status = '$status',
                     sales_date = '$date'
                     WHERE s_id='$sales_id'";
@@ -22,31 +28,3 @@
         }
     }
 ?>
-<form action="" method="post">
-    <?php
-        $paraResult = checkParamId("s_id");
-        if (!is_numeric($paraResult)) {
-            echo '<h5>'.$paraReult.'<br /></h5>';
-            return;
-        }
-        $sales = getById('user_sales_tbl','s_id',checkParamId("s_id"));
-        if($sales['status'] == 200)
-        {
-    ?>
-    <h1>Append Sales From</h1>
-        <input type="hidden" name="s_id" value="<?=$sales['data']['s_id']?>">
-        <label for="quantity">Quanitity</label>
-        <input type="text"  name="quantity" value="<?=$sales['data']['quantity']?>"><br>
-        <label for="statys">Status</label>
-        <input type="text"  name="status" value="<?=$sales['data']['status']?>"><br>
-        <label for="date">Date</label>
-        <input type="date" value="<?=$sales['data']['sales_date']?>" name="date"><br>
-        <input type="submit" value="Submit Order" name="update-sales">
-    <?php
-        }
-        else
-        {
-            echo '<h5'.$order['message'].'</h5>';
-        }
-        ?>
-</form>

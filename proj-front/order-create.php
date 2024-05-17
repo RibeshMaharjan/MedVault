@@ -44,8 +44,6 @@
 
                     <div class="order-table">
                     <form action="php/order-add.php" method="POST">
-                    
-                    
                         <table class="order-add-table content-table">
                             <thead>
                                 <tr>
