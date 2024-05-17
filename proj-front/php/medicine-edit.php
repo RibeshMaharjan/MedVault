@@ -2,19 +2,24 @@
     include_once('../../config/function.php');
 
     if(isset($_POST['update-medicine'])){
-        $medicine_id = $_POST['m_id'];
+        $medicine_id = $_POST['update_id'];
         $medicine_name = $_POST['name'];
         $description = $_POST['description'];
         $category = $_POST['category'];
+        $instock = $_POST['instock'];
         $buy_price = $_POST['buy_price'];
         $sell_price = $_POST['sell_price'];
+        $exp_date = $_POST['exp_date'];
 
         $query = "UPDATE user_medicine_tbl SET 
                     medicine_name = '$medicine_name',
                     medicine_desc = '$description',
                     c_id = '$category',
+                    in_stock = '$instock',
                     buy_price = '$buy_price',
-                    sell_price = '$sell_price'";
+                    sell_price = '$sell_price',
+                    exp_date = '$exp_date'
+                    WHERE m_id='$medicine_id'";
         $data = mysqli_query($conn,$query);
 
         if($data){
