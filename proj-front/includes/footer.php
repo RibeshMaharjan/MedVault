@@ -71,5 +71,68 @@
                 });
             });
     </script>
+    <script>
+            $(document).ready(function () {
+                $('.categoryEditBtn').on('click', function() {
+                    $('#categoryEditModal').modal('show');
+                    $tr =$(this).closest('tr');
+
+                    var data = $tr.children("td").map(function() {
+                        return $(this).text();
+                    }).get();
+
+                    console.log(data);
+
+                    $('#update_id').val(data[0]);
+                    $('#name').val(data[1]);
+                });
+            });
+    </script>
+    <script>
+            $(document).ready(function () {
+                $('.orderEditBtn').on('click', function() {
+                    $('#orderEditModal').modal('show');
+                    $tr =$(this).closest('tr');
+
+                    var data = $tr.children("td").map(function() {
+                        return $(this).text();
+                    }).get();
+
+                    console.log(data);
+
+                    $('#update_id').val(data[0]);
+                    $('#m_id').val(data[1]);
+                    $('#name').val(data[2]);
+                    $('#price').val(data[3]);
+                    $('#quantity').val(data[4]);
+                    $('#total').val(data[5]);
+                    $('#status').val(data[6]);
+                    $('#order_date').val(data[7]);
+                });
+            });
+    </script>
+    <script>
+            $(document).ready(function () {
+                $('.salesEditBtn').on('click', function() {
+                    $('#salesEditModal').modal('show');
+                    $tr =$(this).closest('tr');
+
+                    var data = $tr.children("td").map(function() {
+                        return $(this).text();
+                    }).get();
+
+                    console.log(data);
+
+                    $('#update_id').val(data[0]);
+                    $('#m_id').val(data[1]);
+                    $('#name').val(data[2]);
+                    $('#price').val(data[3]);
+                    $('#quantity').val(data[4]);
+                    $('#total').val(data[5]);
+                    $('#status').val(data[6]);
+                    $('#sales_date').val(data[7]);
+                });
+            });
+    </script>
     </body>
 </html>
