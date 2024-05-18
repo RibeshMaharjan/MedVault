@@ -36,7 +36,7 @@
                             <td><?= $result['invoice_number'] ?></td>
                             <td><?= $result['total_products'] ?></td>
                             <td><?= $result['amount'] ?></td>
-                            <td><p id="status" class="btn m-0 " style="background-color: grey;"><?= $result['order_status'] ?></p></td>
+                            <td><p id="status" class="btn m-0 text-light " style="background-color: grey;"><?= $result['order_status'] ?></p></td>
                         </tr>
                         <?php
                         }

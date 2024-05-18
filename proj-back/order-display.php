@@ -39,16 +39,16 @@
                             <td><?= $result['total_products'] ?></td>
                             <td><?= $result['amount'] ?></td>
                             <td><?= $result['order_date'] ?></td>
-                            <td><p id="status" class="btn m-0 w-75" style="background-color: <?= ($result['order_status'] == 'COMPLETED') ? 'limegreen' : 'grey' ?>;"><?= $result['order_status'] ?></p></td>
+                            <td><p id="status" class="btn m-0 w-75 text-light px-3 py-2 my-2" style="background-color: <?= ($result['order_status'] == 'COMPLETED') ? 'red' : 'grey' ?>;"><?= $result['order_status'] ?></p></td>
                             <?php
                                 if($result['order_status'] != 'COMPLETED'){
                                     ?>
                                     <td class="row g-0 ">
                                         <div class="col">
-                                        <a class="text-white text-decoration-none " href="order-approve-code.php?order_id=<?= $result['order_id'] ?>"><button class="btn w-75 btn-success btn-md ">Approve</button></a>
+                                        <a class="text-white text-decoration-none " href="order-approve-code.php?order_id=<?= $result['order_id'] ?>"><button class="btn btn-success btn-md px-3 py-2 my-2"><i class="fa-solid fa-check"></i></button></a>
                                         </div>
                                         <div class="col">
-                                        <a class="text-white text-decoration-none " href="order-delete.php?order_id=<?= $result['order_id'] ?>"  onclick="return confirm('You want to delete the data?')"><button class="btn w-75 btn-danger btn-md ">Decline</button></a>
+                                        <a class="text-white text-decoration-none " href="order-delete.php?order_id=<?= $result['order_id'] ?>"  onclick="return confirm('You want to delete the data?')"><button class="btn btn-danger btn-md px-3 py-2 my-2 btn-md"><i class="fa-solid fa-xmark"></i></button></a>
                                         </div>
                                     </td>
                                     <?php

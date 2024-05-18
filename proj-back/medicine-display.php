@@ -101,23 +101,31 @@
                             }
                             ?>
                                 
-                                <td><?= $result['medicine_name'] ?></td>
-                                <td><?= $result['manufacturer'] ?></td>
-                                <td><?= $result['price'] ?></td>
-                                <td><?= $result['quantity'] ?></td>
-                                <td><?= $result['expiration_date'] ?></td>
-                                <td><?= $result['dosage'] ?></td>
-                                <td><img src="<?= $result['images'] ?>" alt="" style="height: 80px; width: 80px;"></td>
-                                    <td class="row g-0 ">
-                                        <div class="col">
-                                        <a class="text-white text-decoration-none "><button class="btn w-75  btn-success btn-md px-5 my-buy-button medicineeditbtn">Edit</button></a>
-                                        </div>
-                                        <div class="col">
-                                        <a class="text-white text-decoration-none " href="medicine-delete.php?medicine_id=<?=$result['medicine_id']?>"  onclick="return confirm('You want to delete the data?')"><button class="btn w-75 btn-danger btn-md my-buy-button">REMOVE</button></a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <?php
+                            <td><?= $result['medicine_name'] ?></td>
+                            <td><?= $result['manufacturer'] ?></td>
+                            <td><?= $result['price'] ?></td>
+                            <td><?= $result['quantity'] ?></td>
+                            <td><?= $result['expiration_date'] ?></td>
+                            <td><?= $result['dosage'] ?></td>
+                            <td><img src="<?= $result['images'] ?>" alt="" style="height: 80px; width: 80px;"></td>
+                            <td class="row g-0" style="height: 100px;">
+                                <div class="col">
+                                    <a class="text-white text-decoration-none ">
+                                        <button class="btn btn-success btn-md px-3 py-2 my-2 medicineeditbtn">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <a class="text-white text-decoration-none " href="medicine-delete.php?medicine_id=<?=$result['medicine_id']?>"  onclick="return confirm('You want to delete the data?')">
+                                        <button class="btn btn-danger btn-md px-3 py-2 my-2 btn-md">
+                                            <i class="fa-regular fa-trash-can"></i>
+                                        </button>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <?php
                         }
                     }
                     else{
