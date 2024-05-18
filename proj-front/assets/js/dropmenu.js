@@ -1,3 +1,29 @@
+$(document).ready(function () {
+    // Set the active class based on the current URL
+    const currentUrl = window.location.pathname;
+    
+    // Loop through each <a> element in the sidebar
+    $('#menu a').each(function () {
+        const href = $(this).attr('href');
+
+        // Check if the href matches the current URL
+        if (currentUrl.includes(href)) {
+            // Add 'active' class to the parent <li> element
+            $(this).parent().addClass('active');
+
+            // If the item is inside a nested menu, expand the parent menu
+            $(this).closest('ul.collapse').addClass('show');
+        }
+    });
+
+    // Handle click events for dynamically changing the active class
+    $(".sidebar ul li").on('click', function () {
+        $(".sidebar ul li.active").removeClass('active');
+        $(this).addClass('active');
+    });
+});
+
+
 const admin = document.querySelector("#admin");
 const user = document.querySelector("#user");
 const meds = document.querySelector("#meds");
@@ -70,3 +96,4 @@ function showList(id) {
     // Set the height of the list element to the total height of its list items
     list.style.height = list.classList.contains('show') ? totalHeight + 'px' : '50px';
 }
+

@@ -1,9 +1,10 @@
 <?php include 'includes/header.php'; ?>
-    <div class="inventorybody">
+    <div class="main-container d-flex">
         <?php include 'includes/dashboard.php'; ?>
-                <div class="form-section">
+            <div class="container-fluid p-4 bg-body-tertiary">
+                <div class="row p-4 bg-white">
                     <?= alertmessage()?>
-                    <h1 style="padding: 20px 0px 50px 0px;">Sales From</h1>
+                    <div class="col"><h1 class="fw-normal mb-3">Sales From</h1></div>
                     <!-- Search box. -->
                     <style>
                         #search{
@@ -32,18 +33,20 @@
                             background-color: black;
                         }
                     </style>
-                        <form action="" id="sales-suggest-form" method="post">
-                            <input type="text" id="search" name="medicine_name" placeholder="Search" />
-                            <button type="submit" class="add-btn">Add</button>
-                            <div id="display"></div>
-                        </form>
+                    
+                    <form action="" id="sales-suggest-form" method="post" class="d-flex">
+                        <input class="form-control me-4 " type="text" id="search" name="medicine_name" placeholder="Search" />
+                        <button type="submit" class="btn btn-outline-danger">Add</button>
+                    </form>
+                    <div id="display"></div>
                     <br>
+
                     <!-- Suggestions will be displayed in below div. -->
                     
-                    <div class="order-table">
+                    <div class="table-responsive pt-4 mb-5">
                     <form action="php/sales-add.php" method="POST">
-                        <table class="order-add-table content-table">
-                            <thead>
+                        <table class="table table-striped">
+                            <thead class="table-danger">
                                 <tr>
                                     <th>MEDICINE NAME</th>
                                     <th>PRICE</th>
@@ -58,6 +61,7 @@
                             </tbody>
                         </table>
                     </form>
+                    </div>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 <?php include './includes/header.php'; ?>
-    <div class="inventorybody">
+    <div class="main-container d-flex">
         <?php include 'includes/dashboard.php'; ?>
-        <div class="dashboard-content container pt-4 ">
+        <div class="container-fluid p-5 bg-body-tertiary ">
             <div class="row pt-4 mb-5">
                 <div class="col">
                     <div class="card" >

@@ -1,5 +1,5 @@
 <?php include 'includes/header.php'; ?>
-    <div class="inventorybody">
+    <div class="main-container d-flex">
         <!-- Modal -->
         <div class="modal fade" id="orderEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -49,30 +49,30 @@
             </div>
         </div>
         <?php include 'includes/dashboard.php'; ?>
-        <div class="container-fluid px-5">
+        <div class="container-fluid p-4 bg-body-tertiary">
                     <?php
                         alertmessage();
                         $order = getAll('user_order_tbl');
                         
                     ?>
-                    <div class="row px-3 pt-4">
-                                <div class="col"><h1 class="fw-normal mb-3">Order Table</h1></div>
-                            </div>
-                            <div class="table-responsive px-3 pt-4 mb-5">
-                            <table class="table table-striped">
-                            <thead class="table-danger">
-                                <tr>
-                                    <th scope="col">ORDER ID</th>
-                                    <th scope="col">MEDICINE NAME</th>
-                                    <th scope="col">PRICE</th>
-                                    <th scope="col">QUANTITY</th>
-                                    <th scope="col">TOTAL</th>
-                                    <th scope="col">STATUS</th>
-                                    <th scope="col">ORDER DATE</th>
-                                    <th scope="col">ACTION</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                    <div class="row px-4 pt-4 bg-white">
+                        <div class="col"><h1 class="fw-normal mb-3">Order Table</h1></div>
+                    
+                    <div class="row table-responsive px-4 pt-4 mb-5 bg-white">
+                    <table class="table table-striped">
+                    <thead class="table-danger">
+                        <tr>
+                            <th scope="col">ORDER ID</th>
+                            <th scope="col">MEDICINE NAME</th>
+                            <th scope="col">PRICE</th>
+                            <th scope="col">QUANTITY</th>
+                            <th scope="col">TOTAL</th>
+                            <th scope="col">STATUS</th>
+                            <th scope="col">ORDER DATE</th>
+                            <th scope="col">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     <?php 
                         if(mysqli_num_rows($order) > 0)
                         {
@@ -96,10 +96,10 @@
                                         <td><?= $result['order_date'] ?></td>
                                     <td class="row g-0 ">
                                         <div class="col">
-                                        <a class="text-white text-decoration-none "><button class="btn w-75  btn-success btn-md px-5 my-buy-button orderEditBtn">Edit</button></a>
+                                        <a class="text-white text-decoration-none "><button class="btn btn-success btn-md px-3 py-2 my-2 orderEditBtn"><i class="fa-solid fa-pen-to-square"></i></button></a>
                                         </div>
                                         <div class="col">
-                                        <a class="text-white text-decoration-none " href="php/order-delete.php?o_id=<?=$result['o_id']?>"  onclick="return confirm('You want to delete the data?')"><button class="btn w-75 btn-danger btn-md my-buy-button">REMOVE</button></a>
+                                        <a class="text-white text-decoration-none " href="php/order-delete.php?o_id=<?=$result['o_id']?>"  onclick="return confirm('You want to delete the data?')"><button class="btn btn-danger btn-md px-3 py-2 my-2 btn-md"><i class="fa-regular fa-trash-can"></i></button></a>
                                         </div>
                                     </td>
 
@@ -112,6 +112,7 @@
                         </tbody>
                         </table>
                             
+                </div>
                 </div>
     </div>
     </div>

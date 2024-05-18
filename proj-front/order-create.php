@@ -1,9 +1,10 @@
 <?php include 'includes/header.php'; ?>
-    <div class="inventorybody">
+    <div class="main-container d-flex">
         <?php include 'includes/dashboard.php'; ?>
-                <div class="form-section">
+            <div class="container-fluid p-4 bg-body-tertiary">
+                <div class="row p-4 bg-white">
                     <?= alertmessage()?>
-                    <h1 style="padding: 20px 0px 50px 0px;">Order From</h1>
+                    <div class="col"><h1 class="fw-normal mb-3">Order Table</h1></div>
                     <!-- Search box. -->
                     <style>
                         #search{
@@ -34,18 +35,19 @@
                             margin-top: 50px;
                         }
                     </style>
-                        <form action="" id="order-suggest-form" method="post">
-                            <input type="text" id="search" name="medicine_name" placeholder="Search">
-                            <button type="submit" class="add-btn">Add</button>
-                            <div id="display"></div>
+                        <form action="" id="order-suggest-form" method="post" class="d-flex">
+                            <input class="form-control me-4 " type="text" id="search" name="medicine_name" placeholder="Search">
+                            <button type="submit" class="btn btn-outline-danger">Add</button>
+                            
                         </form>
+                        <div id="display"></div>
                     <br>
                     <!-- Suggestions will be displayed in below div. -->
 
-                    <div class="order-table">
+                    <div class="table-responsive pt-4 mb-5">
                     <form action="php/order-add.php" method="POST">
-                        <table class="order-add-table content-table">
-                            <thead>
+                        <table class="table table-striped">
+                            <thead class="table-danger">
                                 <tr>
                                     <th>MEDICINE NAME</th>
                                     <th>PRICE</th>
@@ -61,29 +63,7 @@
                         </table>
                     </form>
                     </div>
-                    <!-- <form action="code.php" class="form" method="POST" id="user-form">
-                        <div class="input_field">
-                            <label>Pharmacy Name</label>
-                            <input type="text" class="input" name="name" required>
-                        </div>
-                        <div class="input_field">
-                            <label for="email">Email</label>
-                            <input type="email" class="input" name="email" placeholder="">
-                        </div>
-                        <div class="input_field">
-                            <label for="password">Password</label>
-                            <input type="text" class="input" name="password">
-                        </div>
-                        <div class="input_field">
-                            <label for="phone">Phone</label>
-                            <input type="text" class="input" maxlength="10" name="phone">
-                        </div>
-                        <div class="input_field">
-                            <label for="address">Address</label>
-                            <input type="text" class="input" name="address">
-                        </div>
-                            <input type="submit" value="Add" class="btn" name="add-user">
-                    </form> -->
+                </div>
                 </div>
             </div>
         </div>

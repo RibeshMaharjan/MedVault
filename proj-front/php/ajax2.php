@@ -24,8 +24,8 @@
                     <input type="date" class="input" name="order_date">
                 </td>
                 <td>
-                    <div class="button" style="background-color: limegreen;">
-                        <button type="submit" style="border:none;background-color: transparent; color: white;" name="add-order">Submit</button>
+                    <div class="button">
+                        <button type="submit" class="btn btn-danger btn-md px-3 py-2 my-2" name="add-order">Submit</button>
                     </div>
                 </td>
             </tr>';
@@ -59,8 +59,8 @@
                     <input type="date" class="input" name="sales_date">
                 </td>
                 <td>
-                <div class="button" style="background-color: limegreen;">
-                        <button type="submit" style="border:none;background-color: transparent; color: white;" name="add-sales">Submit</button>
+                <div class="button">
+                        <button type="submit" class="btn btn-danger btn-md px-3 py-2 my-2" name="add-sales">Submit</button>
                     </div>
                 </td>
             </tr>';
