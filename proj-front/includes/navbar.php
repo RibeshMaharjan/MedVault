@@ -3,7 +3,7 @@
         redirect('../proj-front/login.php','Please Log In First!');
     }
 ?>
-<nav class="navbar navbar-expand-lg bg-white border-bottom border-4 border-danger" style="min-height: 100px;">
+<nav class="navbar navbar-expand-lg bg-white border-bottom border-4 border-danger main-nav" style="min-height: 100px;">
     <div class="container">
         <a class="navbar-brand" href="home.php"><img class="logo" src="image/logo.png" alt="logo" ></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

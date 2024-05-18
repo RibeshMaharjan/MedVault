@@ -22,28 +22,6 @@
     border-bottom: 2px solid rgb(1, 34, 226);
 }
 
-.category-form .form{
-    padding: 20px 20px;
-}
-.category-form .form input{
-    width: 100%;
-    padding: 10px 20px;
-    margin-bottom: 10px;
-
-    border: none;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 30px;
-}
-
-.category-form .form button{
-    min-width: 100px;
-    padding: 10px;
-    border: none;
-    background-color: lightblue;
-    border-radius: 30px;
-    cursor: pointer;
-}
-
 .inventory-container .display-category{
     height: fit-content;
     width: 100%;
@@ -126,31 +104,3 @@
     padding: 4px;
     transition: transform  .2s;
 } */
-
-.display-category tbody td .button{
-    background-color: cornflowerblue;
-    width: 100px;
-    height: auto;
-    padding: 10px 10px;
-    border-radius: 5px;
-    box-sizing: border-box;
-    text-align: center;
-    cursor: pointer;
-    transition: transform .2s;
-}
-
-.display-category tbody td .button:hover{
-    transform: scale(1.1);
-}
-
-.display-category tbody td #button{
-    text-decoration: none;
-    color: white;
-    font-size: 16px;
-}
-
-.display-category tbody td #edit:hover{
-    transform: scale(1.2);
-    background-color: limegreen;
-    color: white;
-}

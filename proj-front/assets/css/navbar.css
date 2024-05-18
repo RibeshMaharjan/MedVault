@@ -3,7 +3,7 @@
     border: 1px solid black;
 }
 
-.nav-link {
+.main-nav .nav-link {
     color: rgba(251, 0, 0, 0.733) !important;
     /* color: black !important; */
 }

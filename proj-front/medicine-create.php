@@ -1,16 +1,12 @@
-
-
-
-
 <?php include 'includes/header.php'; ?>
-    <div class="inventorybody">
+    <div class="main-container d-flex">
         <?php include 'includes/dashboard.php'; ?>
-            <div class="container-fluid bg-white">
+            <div class="container-fluid p-4 bg-body-tertiary">
                 <?= alertmessage()?>    
-                <div class="row px-3 p-4">
+                <div class="row p-3 bg-white ">
                     <div class="col"><h1 class="fw-normal mb-3">Append Medicine From</h1></div>
                 </div>
-                <div class="row px-3 pb-4">
+                <div class="row px-3 pb-4 bg-white ">
                     <form action="php/medicine-add.php" class="form" method="POST" id="form" autocomplete="off">
                         <div class="mb-3">
                             <label for="name" class="form-label">Medicine Name</label>
