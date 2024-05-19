@@ -2,6 +2,11 @@
 <div class="container-fluid bg-body-secondary py-5">
     <div class="container mt-5">
         <div class="row bg-white py-4 px-3 gy-4 rounded">
+            <div class="row px-3">
+                <?php
+                    alertmessage();
+                ?>
+            </div>
                 <h1 class="h3 m-0 fw-bold">Products</h1>
                 <?php
                     $result = getAllProducts('tbl_medicine');

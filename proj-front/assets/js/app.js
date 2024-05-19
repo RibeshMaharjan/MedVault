@@ -147,3 +147,4 @@ document.querySelectorAll('.product-card').forEach(item => {
         window.location.href = item.getAttribute('data-href');
     });
 });
+

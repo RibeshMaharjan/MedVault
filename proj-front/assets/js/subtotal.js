@@ -15,7 +15,7 @@ var quantityInput = document.getElementById("quantity");
             subtotalInput.value = subtotal.toFixed(2); //toFixed(2) for two decimal places
 
             // Update the content of the subtotal paragraph (optional)
-            subtotalParagraph.innerText = "Subtotal: " + subtotal.toFixed(2); //toFixed(2) for two decimal places
+            subtotalParagraph.innerText = subtotal.toFixed(2); //toFixed(2) for two decimal places
         }
         // Add event listener to the quantity input for the "input" event
         quantityInput.addEventListener("input", updateSubtotal);

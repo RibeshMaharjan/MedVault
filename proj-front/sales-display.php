@@ -51,12 +51,16 @@
         <?php include 'includes/dashboard.php'; ?>
         <div class="container-fluid p-4 bg-body-tertiary">
                     <?php
-                        alertmessage();
                         $sales = getAll('user_sales_tbl');
                     ?>
                             <div class="row px-4 pt-4 bg-white">
-                                <div class="col"><h1 class="fw-normal mb-3">Sales Table</h1></div>
-                            
+                                <div class="row px-3">
+                                    <?php
+                                        alertmessage();
+                                    ?>
+                                </div>
+                                <div class="col"><h1 class="fw-normal mb-3">Sales Table</h1>
+                            </div>
                             <div class="row table-responsive px-4 pt-4 mb-5 bg-white ">
                             <table class="table table-striped">
                             <thead class="table-danger">

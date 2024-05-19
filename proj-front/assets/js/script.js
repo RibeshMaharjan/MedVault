@@ -133,7 +133,19 @@ $('#sales-suggest-form').submit(function(e) {
             console.log(total);
     });
 
+    $('.open-btn').on('click', function () {
+        $('.sidebar').addClass('active');
+        $('.open-btn').addClass('d-none');
+    });
+    
+    
+    $('.close-btn').on('click', function () {
+        $('.sidebar').removeClass('active');
+        $('.open-btn').removeClass('d-none');
+    })
+
 });
+
 
 
 

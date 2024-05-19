@@ -93,7 +93,7 @@
                 $sql_insert_order_address = "INSERT INTO tbl_pharmacy (pharmacy_id,pan, pharmacy_name, email, phone,address)VALUES('$pharmacy_id','$pan','$pharmacy_name','$email','$phone','$address')";
             
                 if ($conn->query($sql_insert_order_address) === TRUE) {
-                    redirect('pharmacy-create.php', "Data inserted successfully");
+                    redirect('pharmacy-create.php', "Pharmacy Added successfully");
                 } else {
                     echo "Error inserting data into order_address table: " . $conn->error;
                 }

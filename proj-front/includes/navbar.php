@@ -21,7 +21,7 @@
                 <a class="nav-link" href="aboutus.php">About us</a>
                 </li>
             </ul>
-        <form class="d-flex" role="search" action="search.php" method="get" style="height: 50px;">
+        <form class="d-flex my-3" role="search" action="search.php" method="get" style="height: 50px;">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="medicine_name" >
             <button class="btn btn-outline-danger" type="submit" name="search">Search</button>
         </form>

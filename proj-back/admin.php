@@ -1,7 +1,9 @@
 <?php include './includes/header.php'; ?>
 
     <div class="dashboard-content px-3 pt-4 ">
-    
+    <?php
+        alertmessage();
+    ?>
         <div class="row px-3 pt-4 mb-5">
             <div class="col">
                 <div class="card" >

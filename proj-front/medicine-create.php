@@ -2,8 +2,12 @@
     <div class="main-container d-flex">
         <?php include 'includes/dashboard.php'; ?>
             <div class="container-fluid p-4 bg-body-tertiary">
-                <?= alertmessage()?>    
                 <div class="row p-3 bg-white ">
+                    <div class="row px-3">
+                        <?php
+                            alertmessage();
+                        ?>
+                    </div>
                     <div class="col"><h1 class="fw-normal mb-3">Append Medicine From</h1></div>
                 </div>
                 <div class="row px-3 pb-4 bg-white ">

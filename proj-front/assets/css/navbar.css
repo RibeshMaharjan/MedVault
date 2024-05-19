@@ -89,10 +89,11 @@
 }
 
 
+/* Cart Css */
+
 .add-to-cart{
     position: relative;
 }
-
 
 #cartnum{
     position: absolute;
