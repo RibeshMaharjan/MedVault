@@ -22,14 +22,7 @@ if (isset($_POST['search'])) {
 
     //Creating unordered list to display result.
 
-    echo '
-
-    <ul class="suggestion-box" style="list-style: none;
-                                        width:300px;
-                                        border-radius: 0 0 5px 5px;
-                                        border:1px solid black;">
-
-    ';
+    echo '<ul class="dropdown-menu show">';
 
     //Fetching result from database.
 
@@ -42,25 +35,7 @@ if (isset($_POST['search'])) {
             Calling javascript function named as "fill" found in "script.js" file.
 
             By passing fetched result as parameter. -->
-            <style>
-                .suggestion-list{
-                    background-color: white;
-                    border-radius: 0 0 5px 5px;
-                    padding: 10px 5px;
-                }
-                .suggestion-list:hover{
-                    background-color: #dddddd;
-                    cursor: pointer;
-                }
-            </style>
-    <li class="suggestion-list" style="" onclick='fill("<?php echo $res_name; ?>")'>
-    <a class="suggestion-item" style="color: black;">
-
-    <!-- Assigning searched result in "Search box" in "search.php" file. -->
-
-        <?php echo $Result['medicine_name']; ?>
-
-    </li></a>
+            <li onclick='fill("<?php echo $res_name; ?>")'><a class="dropdown-item"><?php echo $Result['medicine_name']; ?></a></li>
 
     <!-- Below php code is just for closing parenthesis. Don't be confused. -->
 
@@ -83,7 +58,7 @@ if($results){
     echo '
         <tr>
             <td id="m_name"'.$results['medicine_name'].'></td>
-                <input type="hidden" name="s_id" value="'.$result['m_id'].'">
+                <input class="form-control" type="hidden" name="s_id" value="'.$result['m_id'].'">
                 <td>
                 <input type="text" class="form-control" name="price" value="'.$result['buy_price'].'">
                 </td>

@@ -2,7 +2,6 @@
 
     <div class="dashboard-content px-3 pt-4 ">
     <?php
-        alertmessage();
         $orders = getAll('user_orders');
 
         if(mysqli_num_rows($orders) > 0)
@@ -10,6 +9,11 @@
     ?>
     <div class="container-fluid bg-white ">
         <div class="row px-3 pt-4">
+            <div class="row px-3">
+                <?php
+                    alertmessage();
+                ?>
+            </div>
             <div class="col"><h1 class="fw-normal mb-3">Order Table</h1></div>
         </div>
         <div class="table-responsive px-3 pt-4 mb-5">

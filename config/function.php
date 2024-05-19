@@ -42,12 +42,9 @@
     function alertmessage(){
         if(isset($_SESSION['status'])){
             echo 
-                '<div class="alert alert-success" role="alert">
+                '<div class="alert alert-success w-25" role="alert">
                     '.$_SESSION['status'].'
                 </div>';
-
-
-            
             unset($_SESSION['status']);
         }
     }

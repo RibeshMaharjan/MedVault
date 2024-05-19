@@ -21,7 +21,6 @@
     </button>
 </div>
     <div class="container-fluid  bg-body-secondary py-5">
-        <?php alertmessage(); ?>
         <!-- <div class="big-slider">
             <div class="slides-display">
                 <p>hello</p>
@@ -36,6 +35,11 @@
             <button id="nextbtn">&gt</button>
         </div> -->
         <div class="container ">
+            <div class="row pb-3">
+                <?php
+                        alertmessage();
+                ?>
+            </div>
             <div class="row bg-white p-4 g-2">
                     <h1 class="h3 fw-bold">Tablets</h1>
                     <?php

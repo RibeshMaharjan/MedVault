@@ -60,15 +60,18 @@
         <?php include 'includes/dashboard.php'; ?>
         <div class="container-fluid p-4 bg-body-tertiary">
                     <?php
-                        alertmessage();
                         $medicine = getAll('user_medicine_tbl');
 
                         if(mysqli_num_rows($medicine) > 0)
                         {
                     ?>
                             <div class="row p-4 bg-white">
+                                <div class="row px-3">
+                                    <?php
+                                        alertmessage();
+                                    ?>
+                                </div>
                                 <div class="col"><h1 class="fw-normal mb-3">Medicine Table</h1></div>
-                            
                             <div class="bg-white table-responsive pt-4 mb-5">
                             <table class="table table-striped">
                             <thead class="table-danger">

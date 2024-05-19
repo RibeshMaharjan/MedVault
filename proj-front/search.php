@@ -10,17 +10,23 @@
                     $data = mysqli_fetch_array( $result , MYSQLI_ASSOC);
                     ?>
             <div class="row bg-white p-4 g-2">
-                    <h1 class="h3 fw-bold">Search Result for '<?= $name ?>'</h1>
+                <div class="row pb-3">
+                    <?php
+                            alertmessage();
+                    ?>
+                </div>
+
+                <h1 class="h3 fw-bold">Search Result for '<?= $name ?>'</h1>
                     
                 <div class="col">
                     <div class="card" style="width: 15rem;">
                         <img src="<?= $data['images']; ?>" class="card-img-top" style="height: 250px;" alt="<?=$product_name?>">
                         <div class="card-body h-100 ">
-                        <div class="product-card " role="button" data-href="product.php?medicine_id=<?= $product_id ?>">
-                            <a href="product.php?medicine_id=<?= $data['medicine_id']; ?>"><h5 class="card-title h6"><?=$data['medicine_name'];?></h5></a>
+                        <div class="product-card " role="button" data-href="product.php?medicine_id=<?=$data['medicine_id']; ?>">
+                            <a href="product.php?medicine_id=<?= $data['medicine_id']; ?>"><h5 class="card-title h6"><?= $data['medicine_name']; ?></h5></a>
                             <p class="card-text h5 text-danger fw-semibold mb-4 ">Rs. <?=$data['price']?>.00</p>
                         </div>
-                            <a href="php/add-to-cart.php?add_to_cart=<?=$product_id?>" class="btn btn-danger w-100 py-2">Add to cart</a>
+                            <a href="php/add-to-cart.php?add_to_cart=<?= $data['medicine_id']; ?>" class="btn btn-danger w-100 py-2">Add to cart</a>
                         </div>
                     </div>
                 </div>

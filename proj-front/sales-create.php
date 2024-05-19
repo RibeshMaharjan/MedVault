@@ -3,41 +3,23 @@
         <?php include 'includes/dashboard.php'; ?>
             <div class="container-fluid p-4 bg-body-tertiary">
                 <div class="row p-4 bg-white">
-                    <?= alertmessage()?>
-                    <div class="col"><h1 class="fw-normal mb-3">Sales From</h1></div>
+                    <div class="col">
+                        <div class="row px-3">
+                            <?php
+                                alertmessage();
+                            ?>
+                        </div>
+                        <h1 class="fw-normal mb-3">Sales From</h1>
+                    </div>
                     <!-- Search box. -->
-                    <style>
-                        #search{
-                            width: 300px;
-                            height: auto;
-                            font-size: larger;
-                            margin: 0;
-                        }
-                        .add-btn{
-                            background-color: #0d6efd;
-                            width: 100px;
-                            height: auto;
-                            color: white;
-                            padding: 10px 10px;
-                            border-radius: 5px;
-                            box-sizing: border-box;
-                            text-align: center;
-                            cursor: pointer;
-                            transition: transform .2s;
-                        }
-
-                        .add-btn:hover{
-                            transform: scale(1.1);
-                        }
-                        .submit-btn{
-                            background-color: black;
-                        }
-                    </style>
-                    
-                    <form action="" id="sales-suggest-form" method="post" class="d-flex">
-                        <input class="form-control me-4 " type="text" id="search" name="medicine_name" placeholder="Search" />
-                        <button type="submit" class="btn btn-outline-danger">Add</button>
-                    </form>
+                    <div class="row">
+                        <div class="col-xl-3">
+                            <form action="" id="sales-suggest-form" method="post" class="d-flex">
+                                <input class="form-control me-4 " type="text" id="search" name="medicine_name" placeholder="Search" />
+                                <button type="submit" class="btn btn-outline-danger">Add</button>
+                            </form>
+                        </div>
+                    </div>
                     <div id="display"></div>
                     <br>
 

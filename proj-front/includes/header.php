@@ -32,7 +32,6 @@
     <link rel="stylesheet" href="assets/css/inventory/category.css">
     <link rel="stylesheet" href="assets/css/inventory/table.css">
     <link rel="stylesheet" href="assets/css/editprofile.css">
-    <link rel="stylesheet" href="assets/css/buy.css">
     <link rel="stylesheet" href="assets/css/product.css">
     <link rel="stylesheet" href="assets/css/medicine.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />

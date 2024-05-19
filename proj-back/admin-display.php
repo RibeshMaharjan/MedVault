@@ -2,7 +2,6 @@
 
     <div class="dashboard-content px-3 pt-4 ">
     <?php
-        alertmessage();
         $admin = getAll('tbl_admin');
         if(mysqli_num_rows($admin) > 0)
         {
@@ -62,6 +61,11 @@
     </div>
     <div class="container-fluid bg-white ">
         <div class="row px-3 pt-4">
+            <div class="row px-3">
+                <?php
+                    alertmessage();
+                ?>
+            </div>
             <div class="col"><h1 class="fw-normal mb-3">Admin Table</h1></div>
         </div>
         <?php
