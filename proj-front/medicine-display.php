@@ -60,12 +60,7 @@
         <?php include 'includes/dashboard.php'; ?>
         <div class="container-fluid p-4 bg-body-tertiary">
                     <?php
-                        // $medicine = getAll('user_medicine_tbl');
                         $medicine = getAllById('user_medicine_tbl', 'pharmacy_id', $user_id);
-                        // $query = "SELECT * FROM user_medicine_tbl";
-                        // $query ="SELECT * FROM user_medicine_tbl WHERE pharmacy_id='$user_id'";
-                        // $row = mysqli_query($conn, $query);
-
 
                         if($medicine['status'] == 200)
                         {
