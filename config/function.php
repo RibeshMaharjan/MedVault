@@ -140,12 +140,11 @@
         $result = mysqli_query($conn, $query);
 
         if($result){
-            if(mysqli_num_rows($result) == 1){
-                $row = mysqli_fetch_array( $result , MYSQLI_ASSOC);
+            if(mysqli_num_rows($result) >= 1){
                 $response = [
                     'status' => 200,
                     'message' => 'Data Fetched',
-                    'data' => $row
+                    'data' => $result
                 ];
                 return $response;
 

@@ -60,9 +60,14 @@
         <?php include 'includes/dashboard.php'; ?>
         <div class="container-fluid p-4 bg-body-tertiary">
                     <?php
-                        $medicine = getAll('user_medicine_tbl');
+                        // $medicine = getAll('user_medicine_tbl');
+                        $medicine = getAllById('user_medicine_tbl', 'pharmacy_id', $user_id);
+                        // $query = "SELECT * FROM user_medicine_tbl";
+                        // $query ="SELECT * FROM user_medicine_tbl WHERE pharmacy_id='$user_id'";
+                        // $row = mysqli_query($conn, $query);
 
-                        if(mysqli_num_rows($medicine) > 0)
+
+                        if($medicine['status'] == 200)
                         {
                     ?>
                             <div class="row p-4 bg-white">
@@ -90,7 +95,7 @@
                             </thead>
                             <tbody>
                     <?php 
-                        while($result = mysqli_fetch_assoc($medicine)){
+                        while($result = mysqli_fetch_array( $medicine['data'] , MYSQLI_ASSOC)){
                             ?> <tr>
                                     <?php
                                         $expirationDate = new DateTime($result['exp_date']);
