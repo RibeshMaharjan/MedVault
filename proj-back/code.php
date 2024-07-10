@@ -15,7 +15,8 @@
 
         if($admin_name != '' || $email != '' || $phone != '' || $password != '')
         {
-            $query = "INSERT INTO role VALUES('','$admin_name','$email','$password','admin')";
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+            $query = "INSERT INTO role VALUES('','$admin_name','$email','$passwordHash','admin')";
             // $data = mysqli_query($conn,$query);
 
             if ($conn->query($query) === TRUE) {
@@ -81,7 +82,8 @@
 
         if($admin_name != '' || $email != '' || $phone != '' || $password != '')
         {
-            $query = "INSERT INTO role VALUES('','$pharmacy_name','$email','$password','user')";
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+            $query = "INSERT INTO role VALUES('','$pharmacy_name','$email','$passwordHash','user')";
             // $query = "INSERT INTO tbl_pharmacy VALUES('','$pan','$pharmacy_name','$email','$phone','$address')";
             // $data = mysqli_query($conn,$query);
 
@@ -114,6 +116,22 @@
         $phone = $_POST['phone'];
         $address= $_POST['address'];
 
+        if(isset($_POST['password'])) {
+
+            $userid = $_SESSION['loggedInUser']['user_id'];
+            $password = $_POST['password'];
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+            $query = "UPDATE role SET
+                    password = '$passwordHash'
+                    WHERE email = '$email'";
+            $data = mysqli_query($conn,$query);
+            if($data){
+                redirect('pharmacy-display.php','User Data Updated Successcully');
+            }
+            else{
+                redirect('pharmacy-display.php','Could Not Update User Data');
+            }
+        }
         $query = "UPDATE tbl_pharmacy SET 
                     pan ='$pan',
                     pharmacy_name ='$pharmacy_name',

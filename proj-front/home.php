@@ -67,7 +67,7 @@
                 ?>
                 
             </div>
-            <div class="row bg-white p-4 g-2 mt-5 ">
+            <div class="row bg-white p-4 g-2 mt-5">
                     <h1 class="h3 fw-bold ">Capsule</h1>
                     <?php
                         $result = getRandom('tbl_medicine','capsule');

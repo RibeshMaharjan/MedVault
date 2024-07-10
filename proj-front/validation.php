@@ -14,7 +14,7 @@
 
         if($email != '' && $password != ''){
             
-            $query = "SELECT * FROM $admin_table WHERE email = '$email' AND password = '$password'";
+            $query = "SELECT * FROM $admin_table WHERE email = '$email'";
             $result = mysqli_query($conn,$query);
 
             if($result)
@@ -22,27 +22,33 @@
                 if(mysqli_num_rows($result) == 1)
                 {
                     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-                    if($row['role'] == 'admin')
-                    {
-                        $_SESSION['auth'] =true;
-                        $_SESSION['loggedInUserRole'] = $row['role'];
-                        $_SESSION['loggedInUser'] = [
-                            'name' => $row['name'],
-                            'user_id' =>  $row['user_id'],
-                            'email' => $row['email']
-                        ];
-                        redirect('../proj-back/admin.php','Logged In Successfully');
+                    if(password_verify($passwordInput, $row['password'])) {
+                        if($row['role'] == 'admin')
+                        {
+                            $_SESSION['auth'] =true;
+                            $_SESSION['loggedInUserRole'] = $row['role'];
+                            $_SESSION['loggedInUser'] = [
+                                'name' => $row['name'],
+                                'user_id' =>  $row['user_id'],
+                                'email' => $row['email']
+                            ];
+                            redirect('../proj-back/admin.php','Logged In Successfully');
+                        }
+                        else
+                        {
+                            $_SESSION['auth'] =true;
+                            $_SESSION['loggedInUserRole'] = $row['role'];
+                            $_SESSION['loggedInUser'] = [
+                                'name' => $row['name'],
+                                'user_id' =>  $row['user_id'],
+                                'email' => $row['email']
+                            ];
+                            redirect('home.php','Logged In Successfully');
+                        }
                     }
                     else
                     {
-                        $_SESSION['auth'] =true;
-                        $_SESSION['loggedInUserRole'] = $row['role'];
-                        $_SESSION['loggedInUser'] = [
-                            'name' => $row['name'],
-                            'user_id' =>  $row['user_id'],
-                            'email' => $row['email']
-                        ];
-                        redirect('home.php','Logged In Successfully');
+                        redirect('login.php','Invalid Email or Password');
                     }
                 }
                 else
@@ -63,7 +69,6 @@
         $emailInput = validate($_POST['email']);
         $passwordInput = validate($_POST['password']);
         $repasswordInput = validate($_POST['repassword']);
-        echo "hello";
 
         $name = filter_var($nameInput,FILTER_SANITIZE_STRING);
         $email = filter_var($emailInput,FILTER_SANITIZE_EMAIL);
@@ -75,7 +80,8 @@
         }
         if($email != '' && $password != ''){
             
-            $query = "INSERT INTO role VALUES('','$name','$email','$password','user')";
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+            $query = "INSERT INTO role VALUES('','$name','$email','$passwordHash','user')";
 
             if ($conn->query($query) === TRUE) {
                 // Retrieve the order_id generated for the newly inserted row
@@ -85,7 +91,7 @@
                 $sql_insert_order_address = "INSERT INTO tbl_pharmacy (pharmacy_id, pharmacy_name, email) VALUES('$user_id','$name','$email')";
             
                 if ($conn->query($sql_insert_order_address) === TRUE) {
-                    echo "Data inserted successfully into both tables";
+                    redirect('login.php','Registeration Successfull!');
                 } else {
                     echo "Error inserting data into order_address table: " . $conn->error;
                 }
