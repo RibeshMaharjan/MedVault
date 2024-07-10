@@ -27,6 +27,10 @@
                     <input type="text" class="input" value="<?=$pharmacy['data']['phone']?>" maxlength="10" name="phone">
                 </div>
                 <div class="input_field">
+                    <label for="password">Password</label>
+                    <input type="password" class="input"  name="password">
+                </div>
+                <div class="input_field">
                     <label for="address">Address</label>
                     <input type="text" class="input" value="<?=$pharmacy['data']['address']?>" name="address">
                 </div>
