@@ -421,3 +421,7 @@ body.showcart .body{
         display: none;
     }
 }
+.btn::hover{
+    color: green;
+    
+}

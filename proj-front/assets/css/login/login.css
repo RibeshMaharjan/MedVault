@@ -16,6 +16,10 @@ a{
     letter-spacing: 0.15em;
 }
 
+.menu-bar h4 {
+    font-size: 16px;
+}
+
 .nav-bar{
     display: flex;    
     /* background: linear-gradient(to right, rgb(141, 141, 247),rgb(0, 0, 130)); */

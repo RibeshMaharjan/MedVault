@@ -29,8 +29,9 @@
                             <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="category">
                                 <option selected value="Not Selected">Category</option>
                                 <?php
-                                $result = getAll('user_category_tbl');
-                                while($category = mysqli_fetch_assoc($result)){
+                                $query = "SELECT * FROM user_category_tbl WHERE pharmacy_id = '$user_id'";
+                                $categoryresult = mysqli_query($conn, $query);
+                                while($category = mysqli_fetch_assoc($categoryresult)){
                                     echo '<option value="'.$category['c_id'].'" >'.$category['category_name'].'</option>';
                                 }
                             ?>

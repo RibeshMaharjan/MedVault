@@ -15,17 +15,26 @@
             $newpassword= $_POST['newpassword'];
             $confirmnewpassword= $_POST['confirmnewpassword'];
 
-            $pharmacypassword = getById('role','user_id', $user_id);
+            // Passowrd validation
+            $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/'; 
 
-            if($oldpassword != $pharmacypassword['data']['password']){
+            if (!preg_match($pattern, $newpassword)) { 
+                redirect('../edit-profile.php','Invalid Password! At least one lowercase letter, one uppercase letter, one digit and Minimum length of 8 characters.');
+            }
+
+            $pharmacypassword = getById('role','email', $email);
+
+            password_verify($oldpassword, $pharmacypassword['data']['password']);
+            if(!password_verify($oldpassword, $pharmacypassword['data']['password'])){
                 redirect('../edit-profile.php','Incorrect Password!');
             }
             if($newpassword != $confirmnewpassword){
                 redirect('../edit-profile.php','Password Does not Match');
             }
 
+            $passwordHash = password_hash($newpassword, PASSWORD_DEFAULT);
             $passwordquery = "UPDATE role SET 
-                            password ='$newpassword' 
+                            password ='$passwordHash' 
                             WHERE user_id='$user_id'";
 
             $passworddata = mysqli_query($conn,$passwordquery);
@@ -33,6 +42,25 @@
             if(!$passworddata){
                 redirect('../edit-profile.php','Could Not Change Password');
             }
+        }
+
+        if(!is_numeric($pan)) {
+            redirect('../edit-profile.php','Invalid PAN Number');
+        }
+
+        // Name validation
+        if (!preg_match("/^[a-zA-Z-' ]*$/",$pharmacy_name)) {
+            redirect('../edit-profile.php','Only letters and white space allowed');
+        }
+
+        // Email validation
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            redirect('../edit-profile.php','Invalid email format');
+        }
+
+        // Phone number Validation
+        if(!preg_match('/^[0-9]{10}+$/', $phone)) {
+            redirect('../edit-profile.php','InValid Phone Number');
         }
 
         $query = "UPDATE tbl_pharmacy SET 

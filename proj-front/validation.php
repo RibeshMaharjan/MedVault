@@ -65,30 +65,51 @@
 
     if(isset($_POST['register']))
     {
-        $panInput = validate($_POST['pan']);
-        $nameInput = validate($_POST['name']);
-        $emailInput = validate($_POST['email']);
-        $passwordInput = validate($_POST['password']);
-        $repasswordInput = validate($_POST['repassword']);
+        $pan = $_POST['pan'];
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $repassword = $_POST['repassword'];
 
-        $pan = filter_var($panInput,FILTER_SANITIZE_STRING);
-        $name = filter_var($nameInput,FILTER_SANITIZE_STRING);
-        $email = filter_var($emailInput,FILTER_SANITIZE_EMAIL);
-        $password = filter_var($passwordInput,FILTER_SANITIZE_STRING,FILTER_FLAG_STRIP_HIGH);
-        $repassword = filter_var($repasswordInput,FILTER_SANITIZE_STRING,FILTER_FLAG_STRIP_HIGH);
+        if($email != '' || $password != '' || $pan != '' || $name != ''){
 
-        if($passwordInput != $repasswordInput){
-            redirect('login.php','Password Doesnot Match');
-        }
-        $query = "SELECT * FROM tbl_pharmacy";
-        $panresult = $conn->query($query);
-        while($row = mysqli_fetch_array($panresult, MYSQLI_ASSOC)){
-            if($pan == $row['pan']){
-                redirect('login.php','Pan Already Exist');
+            // PAN validation
+            if(!is_numeric($pan)) {
+                redirect('login.php','Invalid PAN Number');
             }
-        }
 
-        if($email != '' && $password != ''){
+            // Name validation
+            if (!preg_match("/^[a-zA-Z-' ]*$/",$name)) {
+                redirect('login.php','Only letters and white space allowed');
+            }
+
+            // Email validation
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                redirect('login.php','Invalid email format');
+            }
+
+            // Passowrd validation
+            $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/'; 
+
+            if (!preg_match($pattern, $password)) { 
+                redirect('login.php','Invalid Password');
+            }
+            
+            if($passwordInput != $repasswordInput){
+                redirect('login.php','Password Doesnot Match');
+            }
+            
+            $query = "SELECT * FROM tbl_pharmacy";
+            $panresult = $conn->query($query);
+            while($row = mysqli_fetch_array($panresult, MYSQLI_ASSOC)){
+                // pan repeat check
+                if($pan == $row['pan']){
+                    redirect('login.php','Pan Already Exist');
+                }
+                if($email == $row['email']){
+                    redirect('login.php','Email Already Exist');
+                }
+            }
             
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
             $query = "INSERT INTO role VALUES('','$name','$email','$passwordHash','user')";
@@ -108,42 +129,8 @@
             } else {
                 echo "Error inserting data into user_orders table: " . $conn->error;
             }
-
-            // if($result)
-            // {
-            //     if(mysqli_num_rows($result) == 1)
-            //     {
-            //         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-            //         if($row['role'] == 'admin')
-            //         {
-            //             $_SESSION['auth'] =true;
-            //             $_SESSION['loggedInUserRole'] = $row['role'];
-            //             $_SESSION['loggedInUser'] = [
-            //                 'name' => $row['name'],
-            //                 'email' => $row['email']
-            //             ];
-            //             redirect('../proj-back/admin.php','Logged In Successfully');
-            //         }
-            //         else
-            //         {
-            //             $_SESSION['auth'] =true;
-            //             $_SESSION['loggedInUserRole'] = $row['role'];
-            //             $_SESSION['loggedInUser'] = [
-            //                 'name' => $row['name'],
-            //                 'email' => $row['email']
-            //             ];
-            //             redirect('home.php','Logged In Successfully');
-            //         }
-            //     }
-            //     else
-            //     {
-            //         redirect('login.php','Invalid Email or Password');
-            //     }
-            // }
-            // else
-            // {
-            //     redirect('login.php','Something went Wrong');
-            // }
+        } else {
+            redirect('login.php','Fill all the Fields');
         }
     }
 

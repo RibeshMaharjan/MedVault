@@ -1,6 +1,5 @@
 <?php
     include_once('../config/function.php');
-    $upload_dir = '../uploaded_img/';
 
     // ADD ADMIN
     if(isset($_POST['add-admin'])){
@@ -13,8 +12,30 @@
         $formatted_Date = date("Y-m-d", strtotime($dob));
         $address= $_POST['address'];
 
-        if($admin_name != '' || $email != '' || $phone != '' || $password != '')
+        if($admin_name != '' || $email != '' || $phone != '' || $password != '' || $gender != '' || $address != '' || $email != '')
         {
+            // Name validation
+            if (!preg_match("/^[a-zA-Z-' ]*$/",$admin_name)) {
+                redirect('admin-create.php','Only letters and white space allowed');
+            }
+
+            // Email validation
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                redirect('admin-create.php','Invalid email format');
+            }
+
+            // Passowrd validation
+            $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/'; 
+
+            if (!preg_match($pattern, $password)) { 
+                redirect('admin-create.php','Invalid Password');
+            }
+
+            // Phone number Validation
+            if(!preg_match('/^[0-9]{10}+$/', $phone)) {
+                redirect('admin-create.php','InValid Phone Number');
+            }
+
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
             $query = "INSERT INTO role VALUES('','$admin_name','$email','$passwordHash','admin')";
             // $data = mysqli_query($conn,$query);
@@ -43,15 +64,29 @@
 
     // UPDATE ADMIN
     if(isset($_POST['update-admin'])){
-        $admin_name = validate($_POST['name']);
-        $email = validate($_POST['email']);
-        $gender = validate($_POST['gender']);
-        $phone = validate($_POST['phone']);
-        $dob = validate($_POST['birth']);
-        $formatted_Date = date("Y-m-d", strtotime($dob));
-        $address= validate($_POST['address']);
-
+        $admin_id = $_POST['update_id'];
+        $admin_name = $_POST['name'];
         $email = $_POST['email'];
+        $gender = $_POST['gender'];
+        $phone = $_POST['phone'];
+        $dob = $_POST['birth'];
+        $formatted_Date = date("Y-m-d", strtotime($dob));
+        $address= $_POST['address'];
+
+        // Name validation
+        if (!preg_match("/^[a-zA-Z-' ]*$/",$admin_name)) {
+            redirect('admin-create.php','Only letters and white space allowed');
+        }
+
+        // Email validation
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            redirect('admin-create.php','Invalid email format');
+        }
+
+        // Phone number Validation
+        if(!preg_match('/^[0-9]{10}+$/', $phone)) {
+            redirect('admin-create.php','InValid Phone Number');
+        }
 
         $query = "UPDATE tbl_admin SET 
                     name ='$admin_name',
@@ -60,7 +95,7 @@
                     phone ='$phone',
                     dob ='$formatted_Date',
                     address ='$address' 
-                    WHERE email='$email'";
+                    WHERE admin_id='$admin_id'";
         $data = mysqli_query($conn,$query);
 
         if($data){
@@ -80,8 +115,34 @@
         $phone = $_POST['phone'];
         $address= $_POST['address'];
 
-        if($admin_name != '' || $email != '' || $phone != '' || $password != '')
+        if($pan != '' || $pharmacy_name != '' || $email != '' || $phone != '' || $password != '' || $password != '')
         {
+            // PAN validation
+            if(!is_numeric($pan)) {
+                redirect('pharmacy-create.php','Invalid PAN Number');
+            }
+
+            // Name validation
+            if (!preg_match("/^[a-zA-Z-' ]*$/",$name)) {
+                redirect('pharmacy-create.php','Only letters and white space allowed');
+            }
+
+            // Email validation
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                redirect('pharmacy-create.php','Invalid email format');
+            }
+
+            // Passowrd validation
+            $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/'; 
+
+            if (!preg_match($pattern, $password)) { 
+                redirect('pharmacy-create.php','Invalid Password');
+            }
+            
+            if($passwordInput != $repasswordInput){
+                redirect('pharmacy-create.php','Password Doesnot Match');
+            }
+
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
             $query = "INSERT INTO role VALUES('','$pharmacy_name','$email','$passwordHash','user')";
             // $query = "INSERT INTO tbl_pharmacy VALUES('','$pan','$pharmacy_name','$email','$phone','$address')";
@@ -115,6 +176,32 @@
         $email = $_POST['email'];
         $phone = $_POST['phone'];
         $address= $_POST['address'];
+
+        // PAN validation
+        if(!is_numeric($pan)) {
+            redirect('pharmacy-create.php','Invalid PAN Number');
+        }
+
+        // Name validation
+        if (!preg_match("/^[a-zA-Z-' ]*$/",$name)) {
+            redirect('pharmacy-create.php','Only letters and white space allowed');
+        }
+
+        // Email validation
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            redirect('pharmacy-create.php','Invalid email format');
+        }
+
+        // Passowrd validation
+        $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/'; 
+
+        if (!preg_match($pattern, $password)) { 
+            redirect('pharmacy-create.php','Invalid Password');
+        }
+        
+        if($passwordInput != $repasswordInput){
+            redirect('pharmacy-create.php','Password Doesnot Match');
+        }
 
         if(isset($_POST['password'])) {
 
@@ -162,70 +249,30 @@
         $fileExt = explode('.',$imagename);
         $fileActualExt = strtolower(end($fileExt));
         $fileNameNew = uniqid('', true).".".$fileActualExt;
+        $fileError = $_FILES['images']['error'];
+        $fileSize = $_FILES['images']['size'];
 
-        $query = "INSERT INTO tbl_medicine (medicine_id,medicine_name,manufacturer,price,quantity,expiration_date,dosage, images) VALUES('','$medicine_name','$manufacturer_name','$price','$quantity','$formatted_Date','$dosage','../uploaded_img/$fileNameNew')";
-        $data = mysqli_query($conn,$query);
+        if (!preg_match("/^[a-zA-Z-' ]*$/",$medicine_name)) {
+            redirect('medicine-create.php','Only letters and white space allowed');
+        }
+
+        if (!preg_match("/^[a-zA-Z-' ]*$/",$manufacturer_name)) {
+            redirect('medicine-create.php','Only letters and white space allowed');
+        }
+
+        if(!is_numeric($price)) {
+            redirect('medicine-create.php','Invalid Price Number');
+        }
 
         // Image Add
-        $upload_dir = "../uploaded_img/";
-
-        // Create the directory if it doesn't exist
-        if (!file_exists($upload_dir)) {
-            mkdir($upload_dir, 0777, true);
+        $allowed = array('jpg', 'jpeg', 'png');
+        if (!in_array($fileActualExt, $allowed)) {
+            redirect('medicine-create.php','You cannot upload files of this type!');
         }
 
-        // Get the file details
-        $file_tmp = $_FILES['images']['tmp_name'];
-        $fileDestination = $upload_dir.$fileNameNew;
-
-        // Move the uploaded file to the desired directory
-        if(move_uploaded_file($file_tmp, $fileDestination)){
-            echo "Image $file_name uploaded successfully!<br>";
-        } else{
-            echo "Error uploading image $file_name!<br>";
-        }
-        // image add end
-
-        if($data){
-            redirect('medicine-create.php','Medicine Added Successfully');
-        }
-        else{
-            redirect('medicine-create.php','Could Not Add Medicine');
-        }
-    }
-
-    // UPDATE MEDICINE
-    if(isset($_POST['update-medicine'])){
-        $medicine_id = $_POST['update_id'];
-        $medicine_name = $_POST['name'];
-        $manufacturer_name = $_POST['manufacturername'];
-        $price = $_POST['price'];
-        $quantity = $_POST['quantity'];
-        $exp_date = validate($_POST['exp_date']);
-        $formatted_Date = date("Y-m-d", strtotime($exp_date));;
-        $dosage = $_POST['dosage'];
-
-        $query = "UPDATE tbl_medicine SET 
-                    medicine_name ='$medicine_name',
-                    manufacturer ='$manufacturer_name',
-                    price ='$price',
-                    quantity ='$quantity',
-                    expiration_date = '$formatted_Date',
-                    dosage = '$dosage'
-                    WHERE medicine_id='$medicine_id'";
-        $data = mysqli_query($conn,$query);
-
-        if(!empty($_FILES['images']['tmp_name'])) {
-            $imagename = $_FILES['images']['name'];
-            $fileExt = explode('.',$imagename);
-            $fileActualExt = strtolower(end($fileExt));
-            $fileNameNew = uniqid('', true).".".$fileActualExt;
-            $imagequery = "UPDATE tbl_medicine SET 
-                    images = '../uploaded_img/$fileNameNew'
-                    WHERE medicine_id='$medicine_id'";
-            $imagedata = mysqli_query($conn,$imagequery);
-        
-            $upload_dir = "../uploaded_img/";
+        if ($fileError === 0) {
+            if ($fileSize < 1000000) {
+                $upload_dir = "../uploaded_img/";
 
             // Create the directory if it doesn't exist
             if (!file_exists($upload_dir)) {
@@ -240,10 +287,107 @@
             if(move_uploaded_file($file_tmp, $fileDestination)){
                 echo "Image $file_name uploaded successfully!<br>";
             } else{
-                echo "Error uploading image $file_name!<br>";
+                redirect('medicine-create.php','Error uploading image');
             }
+            // image add end
+
+            $query = "INSERT INTO tbl_medicine (medicine_id,medicine_name,manufacturer,price,quantity,expiration_date,dosage, images) VALUES('','$medicine_name','$manufacturer_name','$price','$quantity','$formatted_Date','$dosage','../uploaded_img/$fileNameNew')";
+            $data = mysqli_query($conn,$query);
+
+            if($data){
+                redirect('medicine-create.php','Medicine Added Successfully');
+            }
+            else{
+                redirect('medicine-create.php','Could Not Add Medicine');
+            }
+            }else {
+                redirect('medicine-create.php','Your file is too big!');
+            }
+        }
+        else{
+            redirect('medicine-create.php','Could Not Add Medicine');
+        }
+
+        
     }
 
+    // UPDATE MEDICINE
+    if(isset($_POST['update-medicine'])){
+        $medicine_id = $_POST['update_id'];
+        $medicine_name = $_POST['name'];
+        $manufacturer_name = $_POST['manufacturername'];
+        $price = $_POST['price'];
+        $quantity = $_POST['quantity'];
+        $exp_date = validate($_POST['exp_date']);
+        $formatted_Date = date("Y-m-d", strtotime($exp_date));;
+        $dosage = $_POST['dosage'];
+        
+        if (!preg_match("/^[a-zA-Z-' ]*$/",$medicine_name)) {
+            redirect('medicine-create.php','Only letters and white space allowed');
+        }
+
+        if (!preg_match("/^[a-zA-Z-' ]*$/",$manufacturer_name)) {
+            redirect('medicine-create.php','Only letters and white space allowed');
+        }
+
+        if(!is_numeric($price)) {
+            redirect('medicine-create.php','Invalid Price Number');
+        }
+
+        if(!empty($_FILES['images']['tmp_name'])) {
+            $imagename = $_FILES['images']['name'];
+
+            $fileExt = explode('.',$imagename);
+            $fileActualExt = strtolower(end($fileExt));
+            $fileNameNew = uniqid('', true).".".$fileActualExt;
+            $fileError = $_FILES['images']['error'];
+            $fileSize = $_FILES['images']['size'];
+
+            $allowed = array('jpg', 'jpeg', 'png');
+            if (!in_array($fileActualExt, $allowed)) {
+                redirect('medicine-create.php','You cannot upload files of this type!');
+            }
+
+            if ($fileError === 0) {
+                if ($fileSize < 1000000) {
+                    $imagequery = "UPDATE tbl_medicine SET 
+                    images = '../uploaded_img/$fileNameNew'
+                    WHERE medicine_id='$medicine_id'";
+                    $imagedata = mysqli_query($conn,$imagequery);
+
+                    $upload_dir = "../uploaded_img/";
+
+                    // Create the directory if it doesn't exist
+                    if (!file_exists($upload_dir)) {
+                        mkdir($upload_dir, 0777, true);
+                    }
+
+                    // Get the file details
+                    $file_tmp = $_FILES['images']['tmp_name'];
+                    $fileDestination = $upload_dir.$fileNameNew;
+
+                    // Move the uploaded file to the desired directory
+                    if(move_uploaded_file($file_tmp, $fileDestination)){
+                        echo "Image $file_name uploaded successfully!<br>";
+                    } else{
+                        redirect('medicine-display.php','Error uploading image!');
+                    }
+                }else {
+                    redirect('medicine-display.php','Your file is too big!');
+                }
+            }else {
+                redirect('medicine-display.php','Could Not Update Image');
+            }
+        }
+        $query = "UPDATE tbl_medicine SET 
+                    medicine_name ='$medicine_name',
+                    manufacturer ='$manufacturer_name',
+                    price ='$price',
+                    quantity ='$quantity',
+                    expiration_date = '$formatted_Date',
+                    dosage = '$dosage'
+                    WHERE medicine_id='$medicine_id'";
+        $data = mysqli_query($conn,$query);
         if($data){
             redirect('medicine-display.php','Medicine Added Successfully');
         }
@@ -279,5 +423,4 @@
             echo "failed";
         }
     }
-
 ?>
