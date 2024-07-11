@@ -166,6 +166,7 @@
         $query = "INSERT INTO tbl_medicine (medicine_id,medicine_name,manufacturer,price,quantity,expiration_date,dosage, images) VALUES('','$medicine_name','$manufacturer_name','$price','$quantity','$formatted_Date','$dosage','../uploaded_img/$fileNameNew')";
         $data = mysqli_query($conn,$query);
 
+        // Image Add
         $upload_dir = "../uploaded_img/";
 
         // Create the directory if it doesn't exist
@@ -183,6 +184,7 @@
         } else{
             echo "Error uploading image $file_name!<br>";
         }
+        // image add end
 
         if($data){
             redirect('medicine-create.php','Medicine Added Successfully');

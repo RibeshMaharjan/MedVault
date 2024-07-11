@@ -23,10 +23,10 @@
 </head>
 <body>
     <div class="nav-bar">
-    <div class="logo">
-        <!-- <h1>MedVault</h1> -->
-        <img src="image/med-removebg.png" alt="logo">
-    </div>
+        <div class="logo">
+            <!-- <h1>MedVault</h1> -->
+            <img src="image/med-removebg.png" alt="logo">
+        </div>
         <!-- <a href="#" class="logo"><img src="logo.png" alt="logo"></a> -->
         <div  class="menu-bar">
             <a href="home.php"><h4>Home</h4></a>
@@ -41,22 +41,23 @@
     <div class="content">
         <div class="form">
             <div class="container" id="main">
-                <div class="sign-up">
+                <!-- Registration Form -->
+                <div class="sign-up" id="sign-up">
                     <form action="validation.php" method="POST" id="register_form">
                         <h1>Create Account</h1>
-                        <p>or use your email for Registration</p>
+                        <input type="text" name="pan" placeholder="pan" required>
                         <input type="text" name="name" placeholder="name" required>
                         <input type="email" name="email" placeholder="Email" required>
                         <input type="password" name="password" placeholder="Password" required>
                         <input type="password" name="repassword" placeholder="Re-Password" required>
-                        <!-- <button>Registration</button> -->
+                        <span class="acc-text">Already Have an account? <span id="sign-in2">Sign In</span></span>
                         <div class="button">
                             <input type="submit" name="register" value="Register" class="signInBtn">
                         </div>
                     </form>
                 </div>
-                <div class="sign-in">
-                
+                <!-- Login Form -->
+                <div class="sign-in" id="sign-in">
                     <form action="validation.php" method="POST" id="login_form">
                     <?php
                         if(isset($_SESSION['status'])){
@@ -70,8 +71,7 @@
                         <h1>Sign In</h1>
                         <input type="email" name="email" placeholder="Email" id="uname" required>
                         <input type="password" name="password" placeholder="Password" id="pass" required>
-                        <b style="color: red; display: none;" id="invalid">Password Inavlid!</b>
-                        <a href="#">Forgot your Password?</a>
+                        <span class="acc-text">Dont Have an account? <span id="sign-up2">Sign Up</span></span>
                         <div class="button">
                             <input type="submit" name="signIn" value="signIn" class="signInBtn">
                         </div>
@@ -97,7 +97,11 @@
     <script>
         const signUpButton = document.getElementById("signUp");
         const signInButton = document.getElementById("signIn");
+        const signUp2Button = document.getElementById("sign-up2");
+        const signIn2Button = document.getElementById("sign-in2");
         const main = document.getElementById("main");
+        const signup = document.getElementById("sign-up");
+        const signin = document.getElementById("sign-in");
 
         signUpButton.addEventListener('click', () => {
             main.classList.add("right-panel-active");
@@ -105,6 +109,14 @@
 
         signInButton.addEventListener('click', () => {
             main.classList.remove("right-panel-active");
+        });
+
+        signUp2Button.addEventListener('click', () => {
+            signup.classList.add("active");
+        });
+
+        signIn2Button.addEventListener('click', () => {
+            signup.classList.remove("active");
         });
     </script>
 </body>

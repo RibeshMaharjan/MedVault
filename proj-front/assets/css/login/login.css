@@ -141,3 +141,8 @@ body{
     justify-content: center;
     flex-direction: column;
 }
+
+.acc-text {
+    font-size: 14px;
+    color: #000;
+}

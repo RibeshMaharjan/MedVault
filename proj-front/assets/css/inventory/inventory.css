@@ -14,6 +14,12 @@
     padding: 50px;
 }
 
+@media (max-width:779px) {
+    .category-input {
+        width: 200px;
+    }
+}
+
 /* .dashboard{
     padding: 50px;
     height: fit-content;
