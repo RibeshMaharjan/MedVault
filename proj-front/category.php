@@ -33,14 +33,14 @@
                     </div>
                     <div class="row px-3 pb-4 w-50 ">
                         <form action="php/category-add.php" class="form" method="POST">
-                            <div class="mb-3">
+                            <div class="mb-3 category-input">
                                 <input class="form-control" type="text" placeholder="Category Name" name="category-name">
                             </div>
                             <input type="submit" value="Add" class="btn btn-danger" name="submit-category">
                         </form>
                     </div>
                 </div>
-                <div class="col-6 p-5 bg-white ms-auto ">
+                <div class="col-md-6 p-5 bg-white ms-md-auto ">
                     <?php
                         alertmessage();
                         $category = getAll('user_category_tbl');

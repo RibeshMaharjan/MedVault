@@ -25,6 +25,11 @@
     z-index: 1;
 }
 
+.sign-up.active{
+    opacity: 1;
+    z-index: 3;
+}
+
 .sign-in{
     width: 50%;
     z-index: 2;
@@ -202,3 +207,51 @@ form{
     transform: translateX(20%);
 }
 
+.acc-text {
+    display: none;
+}
+
+@media (max-width:779px) {
+
+    .nav-bar {
+        display: none;
+    }
+
+    .header {
+        display: none;
+    }
+
+    .content{
+        width: 100vw;
+        height: 100vh;
+        padding: 0;
+        inset: 0;
+        transform: translate(0, 0);
+    }
+
+    .form{
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        inset: 0;
+    }
+
+    .overlay-container {
+        display: none;
+    }
+
+    .sign-in {
+        width: 100%;
+    }
+
+    .sign-up {
+        width: 100%;
+    }
+
+    .acc-text {
+        display: block;
+    }
+
+}

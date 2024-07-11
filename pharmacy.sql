@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 23, 2024 at 01:44 PM
+-- Generation Time: Jul 10, 2024 at 05:49 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,18 +40,23 @@ CREATE TABLE `cart` (
 INSERT INTO `cart` (`pharmacy_id`, `medicine_id`, `quantity`) VALUES
 (89, 37, '2'),
 (89, 27, '1'),
-(89, 48, '1'),
+(89, 48, '2'),
 (89, 29, '5'),
 (89, 1, '11'),
 (89, 41, '3'),
-(89, 42, '2'),
+(89, 42, '3'),
 (89, 38, '2'),
 (89, 46, '1'),
 (89, 44, '1'),
 (89, 30, '1'),
 (89, 59, '1'),
 (325, 49, '1'),
-(325, 59, '1');
+(325, 59, '1'),
+(328, 41, '1'),
+(328, 40, '1'),
+(328, 29, '1'),
+(332, 28, '1'),
+(89, 40, '1');
 
 -- --------------------------------------------------------
 
@@ -81,26 +86,10 @@ INSERT INTO `inventory` (`medicine_id`, `medicine_name`, `manufacturer`, `price`
 (4, 'Clarithromycin Capsules', 'STU Healthcare', 24, 60, '2024-05-31', 'capsule', '../uploaded_img/../uploaded_img/65eb0d3768be66.79189083.Clarithromycin.jpg'),
 (5, 'Amoxicillin', 'PQR Pharmaceuticals', 10, 100, '2023-10-31', 'tablet', '../uploaded_img/../uploaded_img/65eaecb62e7f02.44627582.amoxicillin.jpg'),
 (6, 'Aspirin', 'LMN Pharma', 4, 500, '2023-09-30', 'tablet', '../uploaded_img/../uploaded_img/65eaecad7eb759.41173068.Aspirin.jpg'),
-(7, 'Omeprazole Capsules', 'JKL Healthcare', 23, 1, '2024-08-31', 'capsule', '../uploaded_img/../uploaded_img/65eb0d26e4d5b4.93937916.Omeprazole.jpg'),
-(8, 'Doxycycline Capsules', 'GHI Pharmaceuticals', 400, 1, '2024-09-30', 'capsule', '../uploaded_img/../uploaded_img/65eb07bce43668.94022795.Doxycycline.jpg'),
-(9, 'Cetirizine', 'RST Pharmaceuticals', 6, 50, '2023-08-31', 'tablet', '../uploaded_img/../uploaded_img/65eaeca68a4958.76086271.Cetirizine.jpg'),
-(10, 'Cetirizine', 'RST Pharmaceuticals', 6, 50, '2023-08-31', 'tablet', '../uploaded_img/../uploaded_img/65eaeca68a4958.76086271.Cetirizine.jpg'),
-(11, 'Paracetamol', 'ABC Pharmaceuticals', 600, 1, '2023-12-31', 'tablet', '../uploaded_img/../uploaded_img/65eafee5077664.30444530.paracetamol.jpg'),
-(12, 'Cetirizine', 'RST Pharmaceuticals', 6, 500, '2023-08-31', 'tablet', '../uploaded_img/../uploaded_img/65eaeca68a4958.76086271.Cetirizine.jpg'),
-(13, 'Cetirizine', 'RST Pharmaceuticals', 6, 100, '2023-08-31', 'tablet', '../uploaded_img/../uploaded_img/65eaeca68a4958.76086271.Cetirizine.jpg'),
-(14, 'Paracetamol', 'ABC Pharmaceuticals', 600, 10, '2023-12-31', 'tablet', '../uploaded_img/../uploaded_img/65eafee5077664.30444530.paracetamol.jpg'),
-(15, 'Cetirizine', 'RST Pharmaceuticals', 6, 20, '2023-08-31', 'tablet', '../uploaded_img/../uploaded_img/65eaeca68a4958.76086271.Cetirizine.jpg'),
-(16, 'Paracetamol', 'ABC Pharmaceuticals', 5, 1, '2024-05-30', 'tablet', '../uploaded_img/../uploaded_img/65eaec99384290.35758204.paracetamol.jpg'),
-(17, 'Paracetamol', 'ABC Pharmaceuticals', 600, 10, '2023-12-31', 'tablet', '../uploaded_img/../uploaded_img/65eafee5077664.30444530.paracetamol.jpg'),
-(18, 'Paracetamol', 'ABC Pharmaceuticals', 600, 1, '2023-12-31', 'tablet', '../uploaded_img/../uploaded_img/65eafee5077664.30444530.paracetamol.jpg'),
-(19, 'Paracetamol', 'ABC Pharmaceuticals', 600, 1, '2023-12-31', 'tablet', '../uploaded_img/../uploaded_img/65eafee5077664.30444530.paracetamol.jpg'),
-(20, 'Amoxicillin', 'PQR Pharmaceuticals', 10, 7, '2023-10-31', 'tablet', '../uploaded_img/../uploaded_img/65eaecb62e7f02.44627582.amoxicillin.jpg'),
-(21, 'Ibuprofen', 'XYZ Pharma', 8, 1, '2023-05-30', 'tablet', '../uploaded_img/../uploaded_img/65eaecbd752f19.98655829.ibuprofen.jpg'),
-(22, 'Doxycycline Capsules', 'GHI Pharmaceuticals', 400, 1, '2024-05-30', 'capsule', '../uploaded_img/../uploaded_img/65eb07bce43668.94022795.Doxycycline.jpg'),
-(23, 'Clarithromycin Capsules', 'STU Healthcare', 24, 1, '2024-05-31', 'capsule', '../uploaded_img/../uploaded_img/65eb0d3768be66.79189083.Clarithromycin.jpg'),
-(24, 'Ibuprofen', 'XYZ Healthcare', 16, 1, '2024-05-30', 'tablet', '../uploaded_img/../uploaded_img/65eaec80465a89.51523420.ibuprofen.jpg'),
-(25, 'Ibuprofen', 'XYZ Healthcare', 16, 100, '2024-05-30', 'tablet', '../uploaded_img/../uploaded_img/65eaec80465a89.51523420.ibuprofen.jpg'),
-(26, 'Metronidazole Capsules', 'VWX Pharma', 25, 1, '2024-04-30', 'capsule', '../uploaded_img/../uploaded_img/65eb0d405bbd10.95243484.Metronidazole.jpg');
+(7, 'Ciprofloxacin Capsules', 'ABC Pharmaceuticals', 16, 1, '2024-12-31', 'capsule', '../uploaded_img/../uploaded_img/65eb02f2829d12.92441478.ciprofloxacin.jpg'),
+(8, 'Paracetamol', 'ABC Pharmaceuticals', 600, 6, '2023-12-31', 'tablet', '../uploaded_img/../uploaded_img/65eafee5077664.30444530.paracetamol.jpg'),
+(9, 'Paracetamol', 'ABC Pharmaceuticals', 600, 6, '2023-12-31', 'tablet', '../uploaded_img/../uploaded_img/65eafee5077664.30444530.paracetamol.jpg'),
+(10, 'Paracetamol', 'ABC Pharmaceuticals', 600, 6, '2023-12-31', 'tablet', '../uploaded_img/../uploaded_img/65eafee5077664.30444530.paracetamol.jpg');
 
 -- --------------------------------------------------------
 
@@ -154,7 +143,13 @@ INSERT INTO `order_address` (`order_id`, `city`, `province`, `street`, `postal`)
 (43132, 'ktm', 'bagmati', 'samakhusi', 845),
 (57557, 'ktm', 'bagmati', 'samakhusi', 845),
 (94412, 'ktm', 'bagmati', 'samakhusi', 845),
-(17801, 'ktm', 'bagmati', 'samakhusi', 845);
+(17801, 'ktm', 'bagmati', 'samakhusi', 845),
+(43163, 'ktm', 'bagmati', 'samakhusi', 845),
+(88139, 'ktm', 'bagmati', 'samakhusi', 845),
+(96256, 'ktm', 'bagmati', 'samakhusi', 845),
+(62354, 'ktm', 'bagmati', 'samakhusi', 75454),
+(34788, 'ktm', 'bagmati', 'samakhusi', 75454),
+(14050, 'ktm', 'bagmati', 'samakhusi', 75454);
 
 -- --------------------------------------------------------
 
@@ -189,7 +184,8 @@ INSERT INTO `order_completed` (`order_id`, `user_id`, `medicine_id`, `invoice_nu
 (38, 89, 28, 80453203, 50, 1050, 'COMPLETED'),
 (56175, 89, 40, 2030077539, 50, 0, 'COMPLETED'),
 (47, 0, 38, 816609579, 500, 2000, 'COMPLETED'),
-(44, 0, 40, 628135818, 50, 300, 'COMPLETED');
+(44, 0, 40, 628135818, 50, 300, 'COMPLETED'),
+(14050, 332, 1, 1206274080, 6, 600, 'COMPLETED');
 
 -- --------------------------------------------------------
 
@@ -219,18 +215,23 @@ INSERT INTO `order_pending` (`order_id`, `user_id`, `medicine_id`, `invoice_numb
 (26388, 89, 44, 875518175, 1, 400, 'pending'),
 (33711, 89, 1, 569188370, 1, 600, 'pending'),
 (33949, 89, 40, 100604680, 100, 600, 'pending'),
+(34788, 332, 1, 1708154083, 6, 600, 'pending'),
 (43132, 89, 48, 80531716, 1, 24, 'pending'),
+(43163, 328, 41, 942736564, 1, 16, 'pending'),
 (48347, 89, 29, 870279301, 1, 5, 'pending'),
 (49549, 89, 37, 1700156350, 7, 70, 'pending'),
 (54304, 89, 40, 288672563, 500, 3000, 'pending'),
 (56305, 89, 1, 353150699, 10, 6000, 'pending'),
 (56319, 89, 40, 1697005780, 50, 0, 'pending'),
 (57557, 89, 27, 1195905562, 1, 16, 'pending'),
+(62354, 332, 1, 562888123, 6, 3600, 'pending'),
 (67086, 0, 44, 1267960450, 1, 400, 'pending'),
 (81577, 89, 1, 1664966557, 1, 600, 'pending'),
 (86966, 89, 1, 409718772, 10, 6000, 'pending'),
+(88139, 328, 41, 230033320, 1, 16, 'pending'),
 (93369, 89, 1, 2037273208, 1, 600, 'pending'),
-(94412, 325, 27, 363303791, 100, 1600, 'pending');
+(94412, 325, 27, 363303791, 100, 1600, 'pending'),
+(96256, 328, 41, 202471477, 1, 16, 'pending');
 
 -- --------------------------------------------------------
 
@@ -242,7 +243,7 @@ CREATE TABLE `role` (
   `user_id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `role` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -251,38 +252,26 @@ CREATE TABLE `role` (
 --
 
 INSERT INTO `role` (`user_id`, `name`, `email`, `password`, `role`) VALUES
-(18, 'Ribesh Majarjan', 'ribesh@admin.gmail.com', 'admintest', 'admin'),
-(89, 'Pharmacy', 'pharmacy@gmail.com', 'pharmacy', 'user'),
+(18, 'Ribesh Majarjan', 'ribesh@admin.gmail.com', '$2y$10$CwkK7YZ1ZjOtlU7GMaa4R.KlM8tZzOR0AsNls91/uLCrCTzZlZ8.e', 'admin'),
+(89, 'Pharmacy', 'pharmacy@gmail.com', '$2y$10$uFb7a4ektQAGS4GbIfn0LuETxc03PTCDoJMJmyFnUHbxlBRS1BhSm', 'user'),
 (90, 'ribesh', 'ribe@gmail.com', 'final', 'user'),
-(123, 'Rijan Bajracharya', 'rijan@admin.gmail.com', 'rijan123', 'admin'),
+(123, 'Rijan Bajracharya', 'rijan@admin.gmail.com', '$2y$10$5/iQmwkH4ETPbzQE.0Wb8OqAL.acnMFUuJ/kolA243PTe5t8il01G', 'admin'),
 (125, 'Remon', 'remon@admin.gmail.com', 'remon123', 'admin'),
 (126, 'Sujal', 'sujal@admin.gmail.com', 'sujal', 'admin'),
-(127, 'pharmacy123', 'pharmacy@gmail.com', 'pharmacy122345', 'user'),
 (129, 'test', 'test@gmail.com', 'test', 'user'),
 (130, 'test', 'test@admin.gmail.com', 'tes', 'admin'),
 (302, 'alerttest', 'alerttest@admin.gmail.com', 'alerttest', 'admin'),
 (303, 'asda', 'asd@admin.gmail.com', 'asd', 'admin'),
-(304, '', 'ribesh@admin.gmail.com', 'admintest', 'admin'),
-(305, '', 'ribesh@admin.gmail.com', 'admintest', 'admin'),
-(306, '', 'ribesh@admin.gmail.com', 'admintest', 'admin'),
-(307, '', 'ribesh@admin.gmail.com', 'admintest', 'admin'),
-(308, '', 'ribesh@admin.gmail.com', 'admintest', 'admin'),
-(309, '', 'ribesh@admin.gmail.com', 'admintest', 'admin'),
-(310, '', 'ribesh@admin.gmail.com', 'admintest', 'admin'),
-(311, '', 'ribesh@admin.gmail.com', 'admintest', 'admin'),
-(312, '', 'ribesh@admin.gmail.com', 'admintest', 'admin'),
-(313, '', 'ribesh@admin.gmail.com', 'admintest', 'admin'),
-(316, '', 'ribesh@admin.gmail.com', 'admintest', 'user'),
-(317, '', 'ribesh@admin.gmail.com', 'admintest', 'user'),
-(318, '', 'ribesh@admin.gmail.com', 'admintest', 'user'),
 (319, 'asdad', 'asdad@admin.gmail.com', 'asdad', 'user'),
-(320, '', 'ribesh@admin.gmail.com', 'admintest', 'user'),
-(321, '', 'ribesh@admin.gmail.com', 'admintest', 'user'),
-(322, '', 'ribesh@admin.gmail.com', 'admintest', 'admin'),
-(323, '', 'ribesh@admin.gmail.com', 'admintest', 'user'),
-(324, '', 'ribesh@admin.gmail.com', 'admintest', 'user'),
-(325, '123Assura', 'testsignup@gmail.com', 'testpw', 'user'),
-(326, 'paracetamol', 'paracetamol@admin.gmail.com', 'paracetamol', 'user');
+(325, '123Assura', 'testsignup@gmail.com', '$2y$10$JGLxe2vqP5E1YjVs9q7xFe0uD6Z6QWqigJxvqDW4tFQUcBQJedR/e', 'user'),
+(326, 'paracetamol', 'paracetamol@admin.gmail.com', 'paracetamol', 'user'),
+(327, 'hasd', 'hasded@gmail.com', '827ccb0eea8a706c4c34a16891f84e7b', 'user'),
+(328, 'by', 'by@gmail.com', '$2y$10$6IX6JCxHAFQpSSK.1AFSr.xY22Qic1YjxDOKsoy0ONqtyoLqnNwaq', 'user'),
+(329, '56789', '456789@gmail.com', '$2y$10$.tYTK7FYCl3Npw8jl9WDT.QX4NTZHybpm0tdNM3YIkVfJLQiI8YWO', 'user'),
+(330, 'admintest', 'admintest789@gmail.com', '$2y$10$2BkBKJVW7Zz8sX61ly.SKuqVNlzPKR/LJ7Ltd9MhHaBLRaASrShM.', 'user'),
+(331, 'asura', 'asura@gmail.com', '$2y$10$K2BvB2qzboNl6ELLwcK4x.HW4Gwac/tTP4Y24amtr/uwEG9pw3aFm', 'user'),
+(332, 'rujal', 'rujal123@gmail.com', '$2y$10$Jbp9WSQCIMW304TrTpAgB.HwWPgZnN/ejmJT5NvYiFTNq2pBVrBHi', 'user'),
+(333, 'pantest', 'pantest@gmail.com', '$2y$10$g5mGb.U8fhw3bkB/Un4m9u/igIayOdL/YxZ6dTSlLmX.QLP7IWcs2', 'user');
 
 -- --------------------------------------------------------
 
@@ -335,18 +324,7 @@ INSERT INTO `tbl_admin` (`admin_id`, `name`, `email`, `gender`, `phone`, `dob`, 
 (126, 'Sujal Maharjana', 'sujal@admin.gmail.com', 'male', '9845123654', '2003-05-14', 'sorakhutte'),
 (130, 'test', 'test@admin.gmail.com', 'male', 'test', '2024-05-23', 'test'),
 (302, 'alerttest', 'alerttest@admin.gmail.com', 'male', '9840545628', '2002-12-22', 'aalerttest'),
-(303, 'asda', 'asd@admin.gmail.com', 'male', '984054628', '2002-12-22', 'asd'),
-(304, '', 'ribesh@admin.gmail.com', 'Not Select', '', '1970-01-01', ''),
-(305, '', 'ribesh@admin.gmail.com', 'Not Select', '', '1970-01-01', ''),
-(306, '', 'ribesh@admin.gmail.com', 'Not Select', '', '1970-01-01', ''),
-(307, '', 'ribesh@admin.gmail.com', 'Not Select', '', '1970-01-01', ''),
-(308, '', 'ribesh@admin.gmail.com', 'Not Select', '', '1970-01-01', ''),
-(309, '', 'ribesh@admin.gmail.com', 'Not Select', '', '1970-01-01', ''),
-(310, '', 'ribesh@admin.gmail.com', 'Not Select', '', '1970-01-01', ''),
-(311, '', 'ribesh@admin.gmail.com', 'Not Select', '', '1970-01-01', ''),
-(312, '', 'ribesh@admin.gmail.com', 'Not Select', '', '1970-01-01', ''),
-(313, '', 'ribesh@admin.gmail.com', 'Not Select', '', '1970-01-01', ''),
-(322, '', 'ribesh@admin.gmail.com', 'Not Select', '', '1970-01-01', '');
+(303, 'asda', 'asd@admin.gmail.com', 'male', '984054628', '2002-12-22', 'asd');
 
 -- --------------------------------------------------------
 
@@ -412,16 +390,17 @@ CREATE TABLE `tbl_pharmacy` (
 
 INSERT INTO `tbl_pharmacy` (`pharmacy_id`, `pan`, `pharmacy_name`, `email`, `phone`, `address`) VALUES
 (89, 123456, 'Pharmacy', 'pharmacy@gmail.com', '1234567890', 'samakhusi'),
-(127, 2020202, 'pharmacy123', 'pharmacy@gmail.com', '9845612345', 'paknajol'),
 (129, 424242, 'test', 'test@gmail.com', '9840545629', 'thamel1'),
-(318, 0, '', 'ribesh@admin.gmail.com', '', ''),
 (319, 9845, 'asdad', 'asdad@admin.gmail.com', '9840545628', 'asdad'),
-(320, 0, '', 'ribesh@admin.gmail.com', '', ''),
-(321, 0, '', 'ribesh@admin.gmail.com', '', ''),
-(323, 0, '', 'ribesh@admin.gmail.com', '', ''),
-(324, 0, '', 'ribesh@admin.gmail.com', '', ''),
 (325, 98745621, '123Assura', 'testsignup@gmail.com', '9841564152', 'swoyambhu'),
-(326, 0, 'paracetamol', 'paracetamol@admin.gmail.com', '', '');
+(326, 0, 'paracetamol', 'paracetamol@admin.gmail.com', '', ''),
+(327, 0, 'hasd', 'hasded@gmail.com', '', ''),
+(328, 98415, 'by', 'by@gmail.com', '9841562145', 'thamel'),
+(329, 0, '56789', '456789@gmail.com', '', ''),
+(330, 0, 'admintest', 'admintest789@gmail.com', '', ''),
+(331, 0, 'asura', 'asura@gmail.com', '', ''),
+(332, 0, 'rujal', 'rujal123@gmail.com', '', ''),
+(333, 564578, 'pantest', 'pantest@gmail.com', '', '');
 
 -- --------------------------------------------------------
 
@@ -511,6 +490,7 @@ INSERT INTO `user_orders` (`order_id`, `user_id`, `medicine_id`, `invoice_number
 (40, 89, 28, 843474316, 50, 1050, '2024-03-16 08:14:20', 'COMPLETED'),
 (44, 0, 40, 628135818, 50, 300, '2024-05-19 06:29:30', 'COMPLETED'),
 (47, 0, 38, 816609579, 500, 2000, '2024-05-01 17:01:29', 'COMPLETED'),
+(14050, 332, 1, 1206274080, 6, 600, '2024-07-10 06:38:55', 'COMPLETED'),
 (16408, 89, 30, 720704263, 1, 8, '2024-05-17 05:56:12', 'pending'),
 (17801, 325, 49, 1161932613, 1, 25, '2024-06-13 08:37:29', 'pending'),
 (19743, 89, 40, 1872426216, 20, 120, '2024-05-01 17:15:56', 'pending'),
@@ -518,7 +498,9 @@ INSERT INTO `user_orders` (`order_id`, `user_id`, `medicine_id`, `invoice_number
 (26388, 89, 44, 875518175, 1, 400, '2024-05-19 06:46:05', 'pending'),
 (33711, 89, 1, 569188370, 1, 600, '2024-05-01 17:08:07', 'pending'),
 (33949, 89, 40, 100604680, 100, 600, '2024-05-01 17:13:07', 'pending'),
+(34788, 332, 1, 1708154083, 6, 600, '2024-07-09 06:43:09', 'pending'),
 (43132, 89, 48, 80531716, 1, 24, '2024-05-19 07:46:34', 'pending'),
+(43163, 328, 41, 942736564, 1, 16, '2024-07-09 06:22:15', 'pending'),
 (48347, 89, 29, 870279301, 1, 5, '2024-05-01 17:16:22', 'pending'),
 (49549, 89, 37, 1700156350, 7, 70, '2024-05-17 05:55:59', 'pending'),
 (54304, 89, 40, 288672563, 500, 3000, '2024-05-01 17:12:13', 'pending'),
@@ -526,11 +508,14 @@ INSERT INTO `user_orders` (`order_id`, `user_id`, `medicine_id`, `invoice_number
 (56305, 89, 1, 353150699, 10, 6000, '2024-05-01 17:17:38', 'pending'),
 (56319, 89, 40, 1697005780, 50, 0, '2024-05-01 17:05:10', 'pending'),
 (57557, 89, 27, 1195905562, 1, 16, '2024-05-19 08:20:49', 'pending'),
+(62354, 332, 1, 562888123, 6, 3600, '2024-07-09 06:37:52', 'pending'),
 (67086, 0, 44, 1267960450, 1, 400, '2024-04-30 10:34:51', 'pending'),
 (81577, 89, 1, 1664966557, 1, 600, '2024-05-01 17:19:12', 'pending'),
 (86966, 89, 1, 409718772, 10, 6000, '2024-05-01 17:14:50', 'pending'),
+(88139, 328, 41, 230033320, 1, 16, '2024-07-09 06:23:06', 'pending'),
 (93369, 89, 1, 2037273208, 1, 600, '2024-05-01 17:18:19', 'pending'),
-(94412, 325, 27, 363303791, 100, 1600, '2024-06-13 08:37:15', 'pending');
+(94412, 325, 27, 363303791, 100, 1600, '2024-06-13 08:37:15', 'pending'),
+(96256, 328, 41, 202471477, 1, 16, '2024-07-09 06:27:36', 'pending');
 
 -- --------------------------------------------------------
 
@@ -705,13 +690,13 @@ ALTER TABLE `user_sales_tbl`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `medicine_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `medicine_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=327;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=334;
 
 --
 -- AUTO_INCREMENT for table `settings`
@@ -741,7 +726,7 @@ ALTER TABLE `user_medicine_tbl`
 -- AUTO_INCREMENT for table `user_orders`
 --
 ALTER TABLE `user_orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94413;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96257;
 
 --
 -- AUTO_INCREMENT for table `user_order_tbl`

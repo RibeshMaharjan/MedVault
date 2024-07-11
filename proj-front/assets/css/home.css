@@ -415,3 +415,9 @@ body.showcart .body{
 .list-item .item{
     overflow: auto;
 }
+
+@media (max-width:779px) {
+    .carousel {
+        display: none;
+    }
+}

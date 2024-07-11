@@ -49,8 +49,8 @@
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="material-symbols-rounded" onclick="togglemenu()" style="font-size:2.5rem; cursor: pointer;color: black;">account_circle</span>
                 </a>
-                
-                <ul class="dropdown-menu mt-3 p-2">
+                <!-- User Profile dropdown menu -->
+                <ul class="dropdown-menu mt-3 p-2 profile-down">
                     <li><a class="dropdown-item mt-3" href="#">
                         <div class="user-info">
                             <span class="material-symbols-outlined">account_circle</span>
