@@ -88,6 +88,10 @@
             redirect('admin-create.php','InValid Phone Number');
         }
 
+        if($formatted_Date<date("Y/m/d")) {
+            redirect('medicine-create.php','Invalid Date');
+        }
+
         $query = "UPDATE tbl_admin SET 
                     name ='$admin_name',
                     email ='$email',
@@ -118,7 +122,7 @@
         if($pan != '' || $pharmacy_name != '' || $email != '' || $phone != '' || $password != '' || $password != '')
         {
             // PAN validation
-            if(!is_numeric($pan)) {
+            if(!is_numeric($pan) || $pan<=0) {
                 redirect('pharmacy-create.php','Invalid PAN Number');
             }
 
@@ -141,6 +145,10 @@
             
             if($passwordInput != $repasswordInput){
                 redirect('pharmacy-create.php','Password Doesnot Match');
+            }
+
+            if($formatted_Date<date("Y/m/d")) {
+                redirect('medicine-create.php','Invalid Date');
             }
 
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
@@ -260,9 +268,18 @@
             redirect('medicine-create.php','Only letters and white space allowed');
         }
 
-        if(!is_numeric($price)) {
+        if(!is_numeric($price) || $price<0) {
             redirect('medicine-create.php','Invalid Price Number');
         }
+        
+        if($quantity<0){
+            redirect('medicine-create.php','Invalid quantity Number');
+        }
+        if($formatted_Date<date("Y/m/d")) {
+            redirect('medicine-create.php','Invalid Date');
+        }
+
+
 
         // Image Add
         $allowed = array('jpg', 'jpeg', 'png');

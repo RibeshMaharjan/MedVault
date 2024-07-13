@@ -74,7 +74,7 @@
         if($email != '' || $password != '' || $pan != '' || $name != ''){
 
             // PAN validation
-            if(!is_numeric($pan)) {
+            if(!is_numeric($pan) || $pan <= 0) {
                 redirect('login.php','Invalid PAN Number');
             }
 
@@ -111,6 +111,7 @@
                 }
             }
             
+            // passwordhash
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
             $query = "INSERT INTO role VALUES('','$name','$email','$passwordHash','user')";
 
