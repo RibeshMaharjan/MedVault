@@ -15,9 +15,9 @@
         <li class=""><a href="#adminmenu" data-bs-toggle="collapse"  class="text-decoration-none px-3 py-2 d-block">
             <i class="fal fa-home icon"></i> Admin Management<i class="fa fa-caret-down float-end "></i></a>
             <ul class="nav collapse text-decoration-none px-3 py-2 flex-column" id="adminmenu" data-bs-parent="#adminmenu">
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="admin-create.php" data-display="adminform">Add Admins</a>
-                </li>
+                </li> -->
                 <li class="nav-item">
                     <a class="nav-link" href="admin-display.php" data-display="adminform">Display Admins</a>
                 </li>

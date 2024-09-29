@@ -48,7 +48,7 @@
                     }
                     else
                     {
-                        redirect('login.php','Invalid Email or Password');
+                        redirect('login.php','Invalid Password');
                     }
                 }
                 else
@@ -92,7 +92,7 @@
             $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/'; 
 
             if (!preg_match($pattern, $password)) { 
-                redirect('login.php','Invalid Password');
+                redirect('login.php','Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters');
             }
             
             if($passwordInput != $repasswordInput){

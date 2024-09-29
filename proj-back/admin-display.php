@@ -85,7 +85,7 @@
                     <th scope="col">PHONE</th>
                     <th scope="col">D.O.B</th>
                     <th scope="col">ADDRESS</th>
-                    <th scope="col">ACTION</th>
+                    <!-- <th scope="col">ACTION</th> -->
                 </tr>
             </thead>
             <tbody>
@@ -101,14 +101,14 @@
                                     
                                     <td><?= $result['dob'] ?></td>
                                     <td><?= $result['address'] ?></td>
-                                    <td class="row g-0 ">
+                                    <!-- <td class="row g-0 ">
                                         <div class="col">
                                         <a class="text-white text-decoration-none "><button class="btn btn-success btn-md px-3 py-2 my-2 admineditbtn"><i class="fa-solid fa-pen-to-square"></i></button></a>
                                         </div>
                                         <div class="col">
                                         <a class="text-white text-decoration-none " href="admin-delete.php?admin_id=<?=$result['admin_id']?>"  onclick="return confirm('You want to delete the data?')"><button class="btn btn-danger btn-md px-3 py-2 my-2 btn-md"><i class="fa-regular fa-trash-can"></i></button></a>
                                         </div>
-                                    </td>
+                                    </td> -->
                                 </tr>
                                 <?php
                         }
