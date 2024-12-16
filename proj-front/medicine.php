@@ -17,8 +17,8 @@
                         $product_image=$row['images'];
                         $product_price=$row [ 'price'];
                 ?>
-            <div class="col">
-                <div class="card" style="width: 15rem;">
+            <div class="mx-auto col-8 col-md-6 col-lg-3">
+                <div class="card">
                     <img src="<?=$product_image?>" class="card-img-top" style="height: 250px;" alt="<?=$product_name?>">
                     <div class="card-body h-100 ">
                     <div class="product-card " role="button" data-href="product.php?medicine_id=<?= $product_id ?>">

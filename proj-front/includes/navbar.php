@@ -26,6 +26,11 @@
             <button class="btn btn-outline-danger" type="submit" name="search">Search</button>
         </form>
         <div class="add-to-cart ms-5" >
+            <style>
+                .add-to-cart {
+                    max-width: 30px;
+                }
+            </style>
             <!-- <div class="add-to-cart" onclick="togglecart()"> -->
                 <?php
                     $user_id = $_SESSION['loggedInUser']['user_id'];

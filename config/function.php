@@ -91,7 +91,7 @@
 
         $table = validate($tableName);
 
-        $query = "SELECT * FROM $table WHERE dosage='$type' ORDER BY rand() LIMIT 5";
+        $query = "SELECT * FROM $table WHERE dosage='$type' ORDER BY rand() LIMIT 4";
         $result = mysqli_query($conn,$query);
         return  $result;
     }

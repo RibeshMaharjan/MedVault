@@ -19,7 +19,13 @@
     $array = explode(",", $message);
     $signaturemessage = "";
     foreach ($array as $value) {
-        $signaturemessage = $signaturemessage.$value.'='.$response[$value].',';
+        if ($value == 'total_amount') {
+            $amount = str_replace(',', '', $response[$value]);
+            $signaturemessage = $signaturemessage.$value.'='.$amount.',';
+        }
+        else {
+            $signaturemessage = $signaturemessage.$value.'='.$response[$value].',';
+        }
     }
     $signaturemessage = rtrim($signaturemessage, ',');
 
@@ -27,7 +33,6 @@
     $s = hash_hmac('sha256', "$signaturemessage", $secret, true);
     $signature = base64_encode($s);
 
-    echo '<br>';
     if ($signature == $response['signature']) {
         redirect('../../medicine.php','Your Order has been submitted.');
     }
