@@ -45,6 +45,9 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="analysis.php" data-display="adminform"><span class="material-symbols-outlined fs-6 icon">category</span>Analysis</a>
+                </li>
             </ul>
         </div>
         <div class="col-1">

@@ -1,15 +1,15 @@
 <?php
 
-    require '../config/function.php';
+require '../config/function.php';
 
-    if(isset($_SESSION['auth']))
-    {
-        redirect('../proj-back/admin.php','Already Logged In');
-    }
+if (isset($_SESSION['auth'])) {
+    redirect('../proj-back/admin.php', 'Already Logged In');
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="assets/css/login/toggle.css">
     <title>Document</title>
 </head>
+
 <body>
     <div class="nav-bar">
         <div class="logo">
@@ -28,10 +29,16 @@
             <img src="image/med-removebg.png" alt="logo">
         </div>
         <!-- <a href="#" class="logo"><img src="logo.png" alt="logo"></a> -->
-        <div  class="menu-bar">
-            <a href="home.php"><h4>Home</h4></a>
-            <a href="#login_form"><h4>Log In</h4></a>
-            <a href="#register_form"><h4>Registration</h4></a>
+        <div class="menu-bar">
+            <a href="home.php">
+                <h4>Home</h4>
+            </a>
+            <a href="#login_form">
+                <h4>Log In</h4>
+            </a>
+            <a href="#register_form">
+                <h4>Registration</h4>
+            </a>
         </div>
     </div>
     <div class="header">
@@ -45,7 +52,7 @@
                 <div class="sign-up" id="sign-up">
                     <form action="validation.php" method="POST" id="register_form">
                         <h1>Create Account</h1>
-                        <input type="text" name="pan" placeholder="pan" required>
+                        <!-- <input type="text" name="pan" placeholder="pan" required> -->
                         <input type="text" name="name" placeholder="name" required>
                         <input type="email" name="email" placeholder="Email" required>
                         <input type="password" name="password" placeholder="Password" required>
@@ -59,15 +66,15 @@
                 <!-- Login Form -->
                 <div class="sign-in" id="sign-in">
                     <form action="validation.php" method="POST" id="login_form">
-                    <?php
-                        if(isset($_SESSION['status'])){
-                            echo 
-                                '<div class="alert alert-success" role="alert">
-                                    '.$_SESSION['status'].'
+                        <?php
+                        if (isset($_SESSION['status'])) {
+                            echo
+                            '<div class="alert alert-success" role="alert">
+                                    ' . $_SESSION['status'] . '
                                 </div>';
                             unset($_SESSION['status']);
                         }
-                    ?>
+                        ?>
                         <h1>Sign In</h1>
                         <input type="email" name="email" placeholder="Email" id="uname" required>
                         <input type="password" name="password" placeholder="Password" id="pass" required>
@@ -120,63 +127,17 @@
         });
     </script>
 </body>
+
 </html>
 
-<?php
-    
-
-    // $servername = "localhost";
-    // $username   = "root";
-    // $password   = ""; 
-    // $dbname     = "pharmacy";
-    
-    // $connection = mysqli_connect($servername,$username,$password,$dbname);
-    // if($connection)
-    // {
-    //     echo "Connection ok<br>";
-    // }
-    // else
-    // {
-    //     echo "Connection fail".mysqli_connect_error();
-    // }
-
-    // if(isset($_POST['signIn'])){
-    //     $u_email = $_POST['email'];
-    //     $u_password = $_POST['password'];
-
-    //     if($u_email){
-    //         $query = "SELECT * FROM admin_table WHERE email = '$u_email' AND password = '$u_password'";
-    //         $data = mysqli_query($connection,$query);
-    //         $total = mysqli_num_rows($data);
-            
-    //         if($total == 1){
-
-    //             $_SESSION['auth'] = true;
-    //             $_SESSION['username'] = $u_email;
-    //             $_SESSION['password'] = $u_password;
-    //             header("location: ../proj-back/admin.php");
-    //         }else{
-    //             echo "
-    //             <script>
-    //                 alert('invalid');
-    //             </script>
-    //             ";
-    //         }
-    //     }
-        
-    // }
-?>
-
 <script>
-    function validation(){
+    function validation() {
         event.preventDefault();
         if (document.getElementById("uname").value == "") {
             alert("Username is empty.");
-        } 
-        else if (document.getElementById("pass").value == "") {
+        } else if (document.getElementById("pass").value == "") {
             alert("Password is empty.");
-        } 
-        else {
+        } else {
             document.querySelector("#login_form").submit();
         }
     }

@@ -3,6 +3,7 @@
 //Including Database configuration file.
 
 include '../config/function.php';
+$userId = $_SESSION['loggedInUser']['user_id'];
 
 //Getting value of "search" variable from "script.js".
 
@@ -14,7 +15,7 @@ if (isset($_POST['search'])) {
 
     //Search query.
 
-    $Query = "SELECT medicine_name FROM user_medicine_tbl WHERE medicine_name LIKE '%$Name%' LIMIT 5";
+    $Query = "SELECT medicine_name FROM user_medicine_tbl WHERE pharmacy_id = $userId AND medicine_name LIKE '%$Name%' LIMIT 5";
 
     //Query execution
 

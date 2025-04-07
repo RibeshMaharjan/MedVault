@@ -5,7 +5,6 @@
     $user_id = $_SESSION['loggedInUser']['user_id'];
     $user = getById('tbl_pharmacy','email',$user_email);
     echo $user['status'];
-    // echo $user['data']['pharmacy_id'];
 
     if(isset($_POST["add-order"])){
         $medicine_id = $_POST["m_id"];
@@ -13,23 +12,25 @@
         $quantity = $_POST["quantity"];
         $total = $_POST["total"];
         $date = $_POST["order_date"];
-        $status = "pending";
+        $status = "pending";  // Default to pending
         
-        $query = "INSERT INTO user_order_tbl (o_id, m_id,pharmacy_id, price, quantity, total_amount, status, order_date) VALUES ('','$medicine_id','$user_id','$price','$quantity','$total','$status','$date')";
-        // $data = mysqli_query($conn,$query);
+        // Only validate stock availability
+        $stockQuery = "SELECT in_stock FROM user_medicine_tbl WHERE m_id = '$medicine_id'";
+        $stockResult = mysqli_query($conn, $stockQuery);
+        $currentStock = mysqli_fetch_assoc($stockResult)['in_stock'];
 
-        if ($conn->query($query) === TRUE){
-            redirect('../order-display.php','Your Order has been submitted.');
-        } else {
-            echo "Error inserting data into user_orders table: " . $conn->error;
+        if($currentStock < $quantity) {
+            redirect('../order-create.php', 'Not enough stock available');
+            exit();
         }
 
-        // if($data){
-        //     echo "<br>stored";
-        //     // redirect('admin.php','data inserted');
-        // }   
-        // else{
-        //     echo "failed";
-        // }
+        $query = "INSERT INTO user_order_tbl (o_id, m_id, pharmacy_id, price, quantity, total_amount, status, order_date) 
+                 VALUES ('','$medicine_id','$user_id','$price','$quantity','$total','$status','$date')";
+
+        if ($conn->query($query) === TRUE){
+            redirect('../order-display.php','Order has been submitted.');
+        } else {
+            redirect('../order-display.php','Could not add order');
+        }
     }
 ?>

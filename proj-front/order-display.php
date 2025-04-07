@@ -96,10 +96,12 @@
                                         <td><?= $result['total_amount'] ?></td>
                                         <td><?= $result['status'] ?></td>
                                         <td><?= $result['order_date'] ?></td>
-                                    <td class="row g-0 ">
-                                        <div class="col">
-                                        <a class="text-white text-decoration-none "><button class="btn btn-success btn-md px-3 py-2 my-2 orderEditBtn"><i class="fa-solid fa-pen-to-square"></i></button></a>
-                                        </div>
+                                    <td class="row g-0">
+                                        <?=  $result['status'] == 'completed' ? '' :
+                                            '<div class="col">
+                                                <a class="text-white text-decoration-none "><button class="btn btn-success btn-md px-3 py-2 my-2 orderEditBtn"><i class="fa-solid fa-pen-to-square"></i></button></a>
+                                            </div>'
+                                        ?>
                                         <div class="col">
                                         <a class="text-white text-decoration-none " href="php/order-delete.php?o_id=<?=$result['o_id']?>"  onclick="return confirm('You want to delete the data?')"><button class="btn btn-danger btn-md px-3 py-2 my-2 btn-md"><i class="fa-regular fa-trash-can"></i></button></a>
                                         </div>
