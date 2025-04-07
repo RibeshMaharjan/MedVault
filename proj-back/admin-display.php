@@ -62,14 +62,13 @@
     <div class="container-fluid bg-white ">
         <div class="row px-3 pt-4">
             <div class="row px-3">
-                <?php
-                    alertmessage();
-                ?>
+                <div class="alert-container">
+                    <?php alertmessage(); ?>
+                </div>
             </div>
             <div class="col"><h1 class="fw-normal mb-3">Admin Table</h1></div>
         </div>
         <?php
-            alertmessage();
             $user_id = $_SESSION['loggedInUser']['user_id'];
             $cartquery = "SELECT * FROM cart WHERE pharmacy_id = '$user_id'" ; 
             $queryresult = mysqli_query($conn, $cartquery);

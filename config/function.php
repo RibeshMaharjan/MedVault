@@ -42,7 +42,7 @@
     function alertmessage(){
         if(isset($_SESSION['status'])){
             echo 
-                '<div class="alert alert-success w-25" role="alert">
+                '<div class="alert alert-success w-full" role="alert">
                     '.$_SESSION['status'].'
                 </div>';
             unset($_SESSION['status']);
@@ -212,6 +212,73 @@
             $total += $row['quantity'];
         }
         return $total;
+    }
+
+    // Pagination helper function
+    function getPaginatedResults($table, $conditions = '', $page = 1, $itemsPerPage = 10) {
+        global $conn;
+        
+        // Calculate offset
+        $offset = ($page - 1) * $itemsPerPage;
+        
+        // Get total records
+        $countQuery = "SELECT COUNT(*) as total FROM $table " . ($conditions ? "WHERE $conditions" : "");
+        $countResult = mysqli_query($conn, $countQuery);
+        $totalRecords = mysqli_fetch_assoc($countResult)['total'];
+        
+        // Get paginated records
+        $query = "SELECT * FROM $table " . 
+                 ($conditions ? "WHERE $conditions " : "") . 
+                 "LIMIT $itemsPerPage OFFSET $offset";
+        $result = mysqli_query($conn, $query);
+        
+        // Calculate total pages
+        $totalPages = ceil($totalRecords / $itemsPerPage);
+        
+        return [
+            'data' => $result,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalRecords' => $totalRecords,
+            'hasNextPage' => $page < $totalPages,
+            'hasPrevPage' => $page > 1
+        ];
+    }
+
+    // Generate pagination links
+    function generatePaginationLinks($currentPage, $totalPages, $urlPattern) {
+        $links = '';
+        $links .= '<nav aria-label="Page navigation" class="mt-4"><ul class="pagination justify-content-center">';
+        
+        // Previous button
+        $prevClass = $currentPage <= 1 ? ' disabled' : '';
+        $links .= sprintf(
+            '<li class="page-item%s"><a class="page-link" href="%s">Previous</a></li>',
+            $prevClass,
+            str_replace('{page}', $currentPage - 1, $urlPattern)
+        );
+        
+        // Page numbers
+        for ($i = 1; $i <= $totalPages; $i++) {
+            $activeClass = $i == $currentPage ? ' active' : '';
+            $links .= sprintf(
+                '<li class="page-item%s"><a class="page-link" href="%s">%d</a></li>',
+                $activeClass,
+                str_replace('{page}', $i, $urlPattern),
+                $i
+            );
+        }
+        
+        // Next button
+        $nextClass = $currentPage >= $totalPages ? ' disabled' : '';
+        $links .= sprintf(
+            '<li class="page-item%s"><a class="page-link" href="%s">Next</a></li>',
+            $nextClass,
+            str_replace('{page}', $currentPage + 1, $urlPattern)
+        );
+        
+        $links .= '</ul></nav>';
+        return $links;
     }
 
 ?>

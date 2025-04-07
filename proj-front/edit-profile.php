@@ -10,7 +10,6 @@
 			<!-- Form START -->
 			<form action="php/updateprofile.php" method="POST" class="file-upload mainrow">
 				<?php
-				alertmessage();
 				$user_id = $_SESSION['loggedInUser']['user_id'];
 
 				$pharmacy = getById('tbl_pharmacy', 'pharmacy_id', $user_id);

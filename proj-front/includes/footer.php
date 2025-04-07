@@ -134,5 +134,18 @@
                 });
             });
     </script>
+    <script>
+        $(document).ready(function() {
+            // Auto-hide alerts after 5 seconds
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 5000);
+
+            // Allow users to manually close alerts
+            $('.alert').click(function() {
+                $(this).fadeOut('slow');
+            });
+        });
+    </script>
     </body>
 </html>

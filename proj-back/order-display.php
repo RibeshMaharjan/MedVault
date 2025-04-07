@@ -1,6 +1,8 @@
 <?php include './includes/header.php'; ?>
-
-    <div class="dashboard-content px-3 pt-4 ">
+    <div class="main-container d-flex">
+        <?php include './includes/dashboard.php'; ?>
+            <div class="container-fluid p-4">
+                <div class="dashboard-content px-3 pt-4 ">
     <?php
         $orders = getAll('user_orders');
 
@@ -9,11 +11,6 @@
     ?>
     <div class="container-fluid bg-white ">
         <div class="row px-3 pt-4">
-            <div class="row px-3">
-                <?php
-                    alertmessage();
-                ?>
-            </div>
             <div class="col"><h1 class="fw-normal mb-3">Order Table</h1></div>
         </div>
         <div class="table-responsive px-3 pt-4 mb-5">

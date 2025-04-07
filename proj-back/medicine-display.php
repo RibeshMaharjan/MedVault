@@ -62,11 +62,6 @@
     </div>
     <div class="container-fluid bg-white ">
         <div class="row px-3 pt-4">
-            <div class="row px-3">
-                <?php
-                    alertmessage();
-                ?>
-            </div>
             <div class="col"><h1 class="fw-normal mb-3">Medicine Table</h1></div>
         </div>
         <div class="table-responsive px-3 pt-4 mb-5">

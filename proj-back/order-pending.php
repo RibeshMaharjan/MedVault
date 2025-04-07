@@ -2,7 +2,6 @@
 
     <div class="dashboard-content px-3 pt-4 ">
     <?php
-        alertmessage();
         $orders = getAll('order_pending');
 
         if(mysqli_num_rows($orders) > 0)
@@ -63,7 +62,6 @@
         <div class="table">
             <div class="display-element ordercompleted-table" id="order-orderdisplay"  style="display: block;">
                 <?php
-                    alertmessage();
                     $orders = getAll('order_pending');
 
                     if(mysqli_num_rows($orders) > 0)

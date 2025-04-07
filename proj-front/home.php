@@ -36,11 +36,6 @@
             <button id="nextbtn">&gt</button>
         </div> -->
         <div class="container ">
-            <div class="row pb-3">
-                <?php
-                        alertmessage();
-                ?>
-            </div>
             <div class="row bg-white p-4 g-3">
                     <h1 class="h3 fw-bold">Tablets</h1>
                     <?php

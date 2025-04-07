@@ -59,20 +59,21 @@
         </div>
         <?php include 'includes/dashboard.php'; ?>
         <div class="container-fluid p-4 bg-body-tertiary">
+            <div class="row pt-4 bg-white">
+                <h1 class="fw-normal mb-3">Medicine Table</h1>
+                <div class="table-responsiv pt-4 mb-5">
                     <?php
-                        $medicine = getAllById('user_medicine_tbl', 'pharmacy_id', $user_id);
-
-                        if($medicine['status'] == 200)
-                        {
+                        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                        $itemsPerPage = 10;
+                        $conditions = "pharmacy_id = '$user_id'";
+                        $paginatedResults = getPaginatedResults('user_medicine_tbl', $conditions, $page, $itemsPerPage);
+                        $medicine = $paginatedResults['data'];
                     ?>
-                            <div class="row p-4 bg-white">
-                                <div class="row px-3">
-                                    <?php
-                                        alertmessage();
-                                    ?>
+                            <div class="row bg-white">
+                                <div class="col">
+                                    <p class="text-muted">Showing <?= ($page-1)*$itemsPerPage + 1 ?> to <?= min($page*$itemsPerPage, $paginatedResults['totalRecords']) ?> of <?= $paginatedResults['totalRecords'] ?> entries</p>
                                 </div>
-                                <div class="col"><h1 class="fw-normal mb-3">Medicine Table</h1></div>
-                            <div class="bg-white table-responsive pt-4 mb-5">
+                            <div class="bg-white table-responsive pt-4">
                             <table class="table table-striped">
                             <thead class="table-danger">
                                 <tr>
@@ -90,8 +91,11 @@
                             </thead>
                             <tbody>
                     <?php 
-                        while($result = mysqli_fetch_array( $medicine['data'] , MYSQLI_ASSOC)){
-                            ?> <tr>
+                        if(mysqli_num_rows($medicine) > 0)
+                        {
+                            while($result = mysqli_fetch_assoc($medicine)){
+                    ?> 
+                                <tr>
                                     <?php
                                         $expirationDate = new DateTime($result['exp_date']);
                                         $today = new DateTime();
@@ -135,12 +139,19 @@
                             <?php
                             }
                         }
-                        else{
-                            echo "<h4 style='font-size: 26px; text-align: center;'>No Data Found!</h4>";
+                        else {
+                            echo "<tr><td colspan='9' class='text-center'>No Data Found!</td></tr>";
                         }
                     ?>
                         </tbody>
                         </table>
+                        <?php 
+                            echo generatePaginationLinks(
+                                $paginatedResults['currentPage'],
+                                $paginatedResults['totalPages'],
+                                '?page={page}'
+                            );
+                        ?>
                 </div>
                 </div>
     </div>

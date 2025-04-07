@@ -42,7 +42,6 @@
                 </div>
                 <div class="col-md-6 p-5 bg-white ms-md-auto ">
                     <?php
-                        alertmessage();
                         $category = getAll('user_category_tbl');
                         
                         if(mysqli_num_rows($category) > 0)
