@@ -3,9 +3,6 @@
             <div class="container-fluid bg-white">
                 <div class="row px-3 p-4">
                 <div class="row px-3">
-                        <?php
-                            alertmessage();
-                        ?>
                     </div>
                     <div class="col"><h1 class="fw-normal mb-3">Append Medicine From</h1></div>
                 </div>

@@ -1,51 +1,40 @@
 <?php
 
-//Including Database configuration file.
-
 include '../config/function.php';
-
-//Getting value of "search" variable from "script.js".
+$userId = $_SESSION['loggedInUser']['user_id'];
 
 if (isset($_POST['search'])) {
-
-//Search box value assigning to $Name variable.
-
     $Name = $_POST['search'];
-
-    //Search query.
-
-    $Query = "SELECT medicine_name FROM user_medicine_tbl WHERE medicine_name LIKE '%$Name%' LIMIT 5";
-
-    //Query execution
+    $Query = "SELECT m.*, m.in_stock as in_stock 
+              FROM user_medicine_tbl m 
+              WHERE m.pharmacy_id = $userId 
+              AND m.medicine_name LIKE '%$Name%' 
+              LIMIT 5";
 
     $ExecQuery = MySQLi_query($conn, $Query);
 
-    //Creating unordered list to display result.
-
-    echo '<ul class="dropdown-menu show">';
-
-    //Fetching result from database.
-
-    while ($Result = MySQLi_fetch_array($ExecQuery)) {
-
-        $res_name = $Result['medicine_name']; ?>
-
-    <!-- Creating unordered list items.
-
-            Calling javascript function named as "fill" found in "script.js" file.
-
-            By passing fetched result as parameter. -->
-            <li onclick='fill("<?php echo $res_name; ?>")'><a class="dropdown-item"><?php echo $Result['medicine_name']; ?></a></li>
-
-    <!-- Below php code is just for closing parenthesis. Don't be confused. -->
-
-    <?php
-
-}}
-
+    if (mysqli_num_rows($ExecQuery) > 0) {
+        echo '<ul class="list-group shadow-sm">';
+        while ($Result = MySQLi_fetch_array($ExecQuery)) {
+            ?>
+            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" 
+                onclick="fill('<?php echo $Result['medicine_name']; ?>')">
+                <div>
+                    <strong><?php echo $Result['medicine_name']; ?></strong>
+                    <small class="d-block text-muted">Price: Rs.<?php echo $Result['sell_price']; ?></small>
+                </div>
+                <span class="badge <?php echo ($Result['in_stock'] > 0) ? 'bg-success' : 'bg-danger'; ?> rounded-pill">
+                    Stock: <?php echo $Result['in_stock']; ?>
+                </span>
+            </li>
+            <?php
+        }
+        echo '</ul>';
+    } else {
+        echo '<div class="list-group-item text-center text-muted">No medicines found</div>';
+    }
+}
 ?>
-
-</ul>
 
 <?php 
 

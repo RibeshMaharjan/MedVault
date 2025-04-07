@@ -4,27 +4,20 @@
             <div class="container-fluid p-4 bg-body-tertiary">
                 <div class="row p-4 bg-white">
                     <div class="col">
-                        <div class="row px-3">
-                            <?php
-                                alertmessage();
-                            ?>
-                        </div>
                         <h1 class="fw-normal mb-3">Order Table</h1>
                     </div>
-                    <!-- Search box. -->
-                        <div class="row">
-                            <div class="col-xl-3">
-                                <form action="" id="order-suggest-form" method="post" class="d-flex ">
-                                    <input class="form-control me-4" type="text" id="search" name="medicine_name" placeholder="Search">
-                                    <button type="submit" class="btn btn-outline-danger">Add</button>
-                                </form>
-                                <div id="display">
+                    <!-- Enhanced Search box -->
+                    <div class="row mb-4">
+                        <div class="col-xl-4">
+                            <form action="" id="order-suggest-form" method="post" class="search-form">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="search" name="medicine_name" placeholder="Search medicine by name..." autocomplete="off">
+                                    <button type="submit" class="btn btn-danger">Add to Order</button>
                                 </div>
-                            </div>
+                            </form>
+                            <div id="display" class="dropdown-menu w-100"></div>
                         </div>
-                    <br>
-                    <!-- Suggestions will be displayed in below div. -->
-
+                    </div>
                     <div class="table-responsive pt-4 mb-5">
                     <form action="php/order-add.php" method="POST">
                         <table class="table table-striped">
@@ -45,8 +38,71 @@
                     </form>
                     </div>
                 </div>
-                </div>
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            // Real-time validation and total calculation when quantity changes
+            $(document).on('change', '.quantity-input', function() {
+                let row = $(this).closest('tr');
+                let price = parseFloat(row.find('.price-input').val());
+                let quantity = parseInt($(this).val());
+                let maxStock = parseInt($(this).attr('max'));
+                let submitBtn = row.find('.submit-order-btn');
+                let warningSpan = row.find('.quantity-warning');
+                
+                // Validate quantity
+                if (quantity < 1 || isNaN(quantity)) {
+                    $(this).val(1);
+                    quantity = 1;
+                }
+                
+                let total = price * quantity;
+                row.find('.total-input').val(total);
+                
+                // Show warning and disable button if quantity exceeds stock
+                if (quantity > maxStock) {
+                    warningSpan.html('<span class="text-danger">Quantity exceeds available stock!</span>');
+                    submitBtn.prop('disabled', true);
+                } else {
+                    warningSpan.html('');
+                    // Only enable if date is also valid
+                    let dateInput = row.find('.date-input');
+                    let selectedDate = new Date(dateInput.val());
+                    let today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    
+                    if (selectedDate >= today) {
+                        submitBtn.prop('disabled', false);
+                    }
+                }
+            });
+
+            // Validate date on change
+            $(document).on('change', '.date-input', function() {
+                let row = $(this).closest('tr');
+                let submitBtn = row.find('.submit-order-btn');
+                let selectedDate = new Date($(this).val());
+                let today = new Date();
+                today.setHours(0, 0, 0, 0);
+                let warningSpan = row.find('.date-warning');
+
+                if (selectedDate < today) {
+                    warningSpan.html('<span class="text-danger">Order date cannot be in the past!</span>');
+                    submitBtn.prop('disabled', true);
+                } else {
+                    warningSpan.html('');
+                    // Only enable if quantity is also valid
+                    let quantityInput = row.find('.quantity-input');
+                    let quantity = parseInt(quantityInput.val());
+                    let maxStock = parseInt(quantityInput.attr('max'));
+                    
+                    if (quantity <= maxStock && quantity > 0) {
+                        submitBtn.prop('disabled', false);
+                    }
+                }
+            });
+        });
+    </script>
 <?php include 'includes/footer.php'; ?>

@@ -10,12 +10,6 @@
                     $data = mysqli_fetch_array( $result , MYSQLI_ASSOC);
                     ?>
             <div class="row bg-white p-4 g-2">
-                <div class="row pb-3">
-                    <?php
-                            alertmessage();
-                    ?>
-                </div>
-
                 <h1 class="h3 fw-bold">Search Result for '<?= $name ?>'</h1>
                     
                 <div class="col">

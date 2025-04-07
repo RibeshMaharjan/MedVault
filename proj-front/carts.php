@@ -5,7 +5,6 @@
         <div class="col"><a class="text-white text-decoration-none float-end" href='php/remove-cart.php?removeall=1'  onclick="return confirm('You want to delete the data?')"><button class="btn btn-danger btn-danger-soft">Empty Cart</button></a></div>
     </div>
     <?php
-        alertmessage();
         $user_id = $_SESSION['loggedInUser']['user_id'];
         $cartquery = "SELECT * FROM cart WHERE pharmacy_id = '$user_id'" ; 
         $queryresult = mysqli_query($conn, $cartquery);

@@ -1,11 +1,5 @@
 <?php include './includes/header.php'; ?>
 <div class="container py-5">
-    <div class="row px-2 pb-3">
-        <?php
-                alertmessage();
-        ?>
-    </div>
-    
     <?php $result = getById('tbl_medicine', 'medicine_id', checkParamId('medicine_id'));
             ?>
     <div class="row">

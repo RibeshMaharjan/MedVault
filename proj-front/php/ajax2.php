@@ -1,73 +1,83 @@
 <?php
-    include_once '../../config/function.php';
+include '../../config/function.php';
 
-    if(isset($_POST['m_name']) && strlen($_POST['m_name']))
-    {
+// Handle order form search
+if(isset($_POST['m_name']) && strlen($_POST['m_name'])) {
     $medicine_name = $_POST['m_name'];
-    $results = getById('user_medicine_tbl','medicine_name',$medicine_name);
-
-        if ($results['status'] == 200) {
-            echo '
-            <tr>
-                <input type="hidden" name="m_id" value="'.$results['data']['m_id'].'">
-                <td id="m_name">'.$results['data']['medicine_name'].'</td>
+    $userId = $_SESSION['loggedInUser']['user_id'];
+    $results = mysqli_query($conn, "SELECT m.* 
+                                  FROM user_medicine_tbl m 
+                                  WHERE m.pharmacy_id = '$userId'
+                                  AND m.medicine_name = '$medicine_name'
+                                  LIMIT 1");
+    
+    if($result = mysqli_fetch_assoc($results)) {
+        echo '<tr>
                 <td>
-                    <input class="form-control" type="text" id="price" name="price" value="'.$results['data']['buy_price'].'">
-                </td>
-                <td id="s_qty">
-                    <input class="form-control" type="text" name="quantity" id="quantity" value="1">
-                </td>
-                <td>
-                    <input class="form-control" type="text" name="total" id="total" value="'.$results['data']['buy_price'].'">
+                    '.$result['medicine_name'].'
+                    <input type="hidden" name="m_id" value="'.$result['m_id'].'">
                 </td>
                 <td>
-                    <input class="form-control" type="date" name="order_date">
+                    <input type="number" class="form-control price-input" name="price" value="'.$result['buy_price'].'" readonly>
                 </td>
                 <td>
-                    <div class="button">
-                        <button type="submit" class="btn btn-danger px-3 py-2" name="add-order">Submit</button>
-                    </div>
+                    <input type="number" class="form-control quantity-input" name="quantity" value="1" min="1" max="'.$result['in_stock'].'" data-stock="'.$result['in_stock'].'">
+                    <small class="text-muted">Available: '.$result['in_stock'].'</small>
+                    <div class="quantity-warning"></div>
+                </td>
+                <td>
+                    <input type="number" class="form-control total-input" name="total" value="'.$result['buy_price'].'" readonly>
+                </td>
+                <td>
+                    <input type="date" class="form-control date-input" name="order_date" value="'.date('Y-m-d').'" required>
+                    <div class="date-warning"></div>
+                </td>
+                <td>
+                    <button type="submit" name="add-order" class="btn btn-danger submit-order-btn" data-bs-toggle="tooltip">Add Order</button>
                 </td>
             </tr>';
-        }else{
-            echo '<tr><td>product name not resgister in database</td></tr>';
-        }
-
-    // echo json_encode($html);
+    } else {
+        echo '<tr><td colspan="6" class="text-center">Medicine not found in database</td></tr>';
     }
+}
 
-    if(isset($_POST['m2_name']) && strlen($_POST['m2_name']))
-    {
+// Handle sales form search
+if(isset($_POST['m2_name']) && strlen($_POST['m2_name'])) {
     $medicine_name = $_POST['m2_name'];
-    $results = getById('user_medicine_tbl','medicine_name',$medicine_name);
-
-        if ($results['status'] == 200) {
-            echo '
-            <tr>
-                <input type="hidden" name="m_id" value="'.$results['data']['m_id'].'">
-                <td id="m_name">'.$results['data']['medicine_name'].'</td>
+    $userId = $_SESSION['loggedInUser']['user_id'];
+    $results = mysqli_query($conn, "SELECT m.* 
+                                  FROM user_medicine_tbl m 
+                                  WHERE m.pharmacy_id = '$userId'
+                                  AND m.medicine_name = '$medicine_name'
+                                  LIMIT 1");
+    
+    if($result = mysqli_fetch_assoc($results)) {
+        echo '<tr>
                 <td>
-                    <input class="form-control" type="text" id="price" name="sellprice" value="'.$results['data']['sell_price'].'">
-                </td>
-                <td id="s_qty">
-                    <input class="form-control" type="text" id="quantity" name="quantity" value="1">
-                </td>
-                <td>
-                    <input class="form-control" type="text" id="total" name="total" value="'.$results['data']['sell_price'].'">
+                    '.$result['medicine_name'].'
+                    <input type="hidden" name="m_id" value="'.$result['m_id'].'">
                 </td>
                 <td>
-                    <input class="form-control" type="date" name="sales_date">
+                    <input type="number" class="form-control price-input" name="sellprice" value="'.$result['sell_price'].'" readonly>
                 </td>
                 <td>
-                <div class="button">
-                        <button type="submit" class="btn btn-danger px-3 py-2" name="add-sales">Submit</button>
-                    </div>
+                    <input type="number" class="form-control quantity-input" name="quantity" value="1" min="1" max="'.$result['in_stock'].'" data-stock="'.$result['in_stock'].'">
+                    <small class="text-muted">Available: '.$result['in_stock'].'</small>
+                    <div class="quantity-warning"></div>
+                </td>
+                <td>
+                    <input type="number" class="form-control total-input" name="total" value="'.$result['sell_price'].'" readonly>
+                </td>
+                <td>
+                    <input type="date" class="form-control date-input" name="sales_date" value="'.date('Y-m-d').'" required>
+                    <div class="date-warning"></div>
+                </td>
+                <td>
+                    <button type="submit" name="add-sales" class="btn btn-danger submit-order-btn">Add Sale</button>
                 </td>
             </tr>';
-        }else{
-            echo '<tr><td>product name not resgister in database</td></tr>';
-        }
-
-    // echo json_encode($html);
+    } else {
+        echo '<tr><td colspan="6" class="text-center">Medicine not found in database</td></tr>';
     }
+}
 ?>

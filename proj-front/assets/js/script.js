@@ -12,138 +12,120 @@ $('#display').hide();
 
 }
 
+// Search functionality
 $(document).ready(function() {
-
-    //On pressing a key on "Search box" in "search.php" file. This function will be called.
-
+    // Instant search for medicine names
     $("#search").keyup(function() {
+        var name = $('#search').val();
+        
+        if (name === "") {
+            $("#display").html("").hide();
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "ajax.php",
+                data: {
+                    search: name
+                },
+                success: function(html) {
+                    $("#display").html(html).show();
+                }
+            });
+        }
+    });
 
-    //Assigning search box value to javascript variable named as "name".
-
-    var name = $('#search').val();
-
-    //Validating, if "name" is empty.
-
-    if (name == "") {
-
-        //Assigning empty value to "display" div in "search.php" file.
-
-        $("#display").html("");
-
-    }
-
-    //If name is not empty.
-
-    else {
-
-        //AJAX is called.
-
+    // Order suggest form
+    $('#order-suggest-form').submit(function(e) {
+        e.preventDefault();
+        var formData = {
+            'm_name': $('#search').val()
+        };
         $.ajax({
-
-            //AJAX type is "Post".
-
-            type: "POST",
-
-            //Data will be sent to "ajax.php".
-
-            url: "ajax.php",
-
-            //Data, that will be sent to "ajax.php".
-
-            data: {
-
-                //Assigning value of "name" into "search" variable.
-
-                search: name
-
-            },
-
-            //If result found, this funtion will be called.
-
+            type: 'POST',
+            url: 'php/ajax2.php',
+            data: formData,
             success: function(html) {
-
-                //Assigning result to "display" div in "search.php" file.
-
-                $("#display").html(html).show();
-
+                $('#product-info').html(html).show();
+                updateCalculations();
             }
-
         });
+    });
 
+    // Sales suggest form
+    $('#sales-suggest-form').submit(function(e) {
+        e.preventDefault();
+        var formData = {
+            'm2_name': $('#search').val()
+        };
+        $.ajax({
+            type: 'POST',
+            url: 'php/ajax2.php',
+            data: formData,
+            success: function(html) {
+                $('#product-info').html(html).show();
+                updateCalculations();
+            }
+        });
+    });
+
+    // Auto-calculate totals when quantity changes
+    $(document).on('input', '#quantity', function() {
+        updateCalculations();
+    });
+
+    // Helper function to update calculations
+    function updateCalculations() {
+        var price = $('#price').val();
+        var qty = $('#quantity').val();
+        var total = qty * price;
+        $('#total').val(total.toFixed(2));
     }
 
-});
+    // Filter form handling
+    $('.filter-form').on('submit', function(e) {
+        e.preventDefault();
+        var queryString = $(this).serialize();
+        window.location.href = window.location.pathname + '?' + queryString;
+    });
 
-$('#order-suggest-form').submit(function(e) {
-    console.log("Submitted");
-    var formData = {
-        'm_name' : $('#search').val()
-    };
-    // process the form
-    $.ajax({
-        type        : 'POST',
-        url         : 'php/ajax2.php',
-        data        : formData,
-
-        success: function(html) {
-            //Assigning result to "display" div in "search.php" file.
-            $('#product-info').html(html).show();
-            // total();
-            // $('.datePicker').datepicker('update', new Date());
+    // Date range validation
+    $('input[name="date_to"]').change(function() {
+        var dateFrom = $('input[name="date_from"]').val();
+        var dateTo = $(this).val();
+        
+        if (dateFrom && dateTo && dateFrom > dateTo) {
+            alert('End date must be after start date');
+            $(this).val('');
         }
     });
-    e.preventDefault();
-});
 
-$('#sales-suggest-form').submit(function(e) {
-    var formData = {
-        'm2_name' : $('#search').val()
-    };
-    // process the form
-    $.ajax({
-        type        : 'POST',
-        url         : 'php/ajax2.php',
-        data        : formData,
-
-        success: function(html) {
-
-            //Assigning result to "display" div in "search.php" file.
-            $('#product-info').html(html).show();
-            // total();
-            // $('.datePicker').datepicker('update', new Date());
+    // Amount range validation
+    $('input[name="amount_max"]').change(function() {
+        var minAmount = $('input[name="amount_min"]').val();
+        var maxAmount = $(this).val();
+        
+        if (minAmount && maxAmount && parseFloat(minAmount) > parseFloat(maxAmount)) {
+            alert('Maximum amount must be greater than minimum amount');
+            $(this).val('');
         }
     });
-    e.preventDefault();
+
+    // Reset button functionality
+    $('.reset-filters').click(function() {
+        $(this).closest('form').find('input, select').val('');
+        $(this).closest('form').submit();
+    });
 });
-    
 
-    $(document).on('input', '#quantity', function(){
-        var price = $('#price').val();
-        var qty = $('#quantity').val();
-        var total = qty * price ;
-            $('#total').val(total.toFixed(2));
-            console.log(total);
-    });
+// Sidebar toggle functionality
+$('.open-btn').on('click', function() {
+    $('.sidebar').addClass('active');
+    $('.open-btn').addClass('d-none');
+});
 
-    $(document).on('input', '#quantity', function(){
-        var price = $('#price').val();
-        var qty = $('#quantity').val();
-        var total = qty * price ;
-            $('#total').val(total.toFixed(2));
-            console.log(total);
-    });
-
-    $('.open-btn').on('click', function () {
-        $('.sidebar').addClass('active');
-        $('.open-btn').addClass('d-none');
-    });
-    
-    
-    $('.close-btn').on('click', function () {
-        $('.sidebar').removeClass('active');
-        $('.open-btn').removeClass('d-none');
-    })
-
+$('.close-btn').on('click', function() {
+    $('.sidebar').removeClass('active');
+    $('.open-btn').removeClass('d-none');
 });
 
 
