@@ -2,6 +2,11 @@
 
     include('../config/function.php');
 
+    // if(isset($_SESSION['auth']) || ($_SESSION['loggedInUserRole'] == 'admin')) {
+    //     redirect('../proj-back/admin.php','Please Log In First!');
+    // }
+
+
     if(!isset($_SESSION['auth'])){
         redirect('../proj-front/login.php','Please Log In First!');
     }else{

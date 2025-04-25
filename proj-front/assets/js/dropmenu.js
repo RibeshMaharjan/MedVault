@@ -23,6 +23,12 @@ $(document).ready(function () {
     });
 });
 
+function toggleNavMenu() {
+    const navDropdownMenu = document.querySelector(".dropdown-menu");
+
+    navDropdownMenu.classList.toggle("show");
+}
+
 
 const admin = document.querySelector("#admin");
 const user = document.querySelector("#user");
