@@ -1,6 +1,5 @@
 <?php include './includes/header.php'; ?>
     <div class="main-container d-flex">
-        <?php include './includes/dashboard.php'; ?>
             <div class="container-fluid p-4">
                 <div class="dashboard-content px-3 pt-4 ">
     <?php

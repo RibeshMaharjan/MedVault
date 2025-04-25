@@ -52,7 +52,7 @@
         <ul class="navbar-nav mx-5  mb-2 mb-lg-0">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="material-symbols-rounded" onclick="togglemenu()" style="font-size:2.5rem; cursor: pointer;color: black;">account_circle</span>
+                <span class="material-symbols-rounded" onclick="toggleNavMenu()" style="font-size:2.5rem; cursor: pointer;color: black;">account_circle</span>
                 </a>
                 <!-- User Profile dropdown menu -->
                 <ul class="dropdown-menu mt-3 p-2 profile-down">

@@ -3,7 +3,7 @@
 require '../config/function.php';
 
 if (isset($_SESSION['auth'])) {
-    redirect('../proj-back/admin.php', 'Already Logged In');
+    redirect('../proj-front/home.php', 'Already Logged In');
 }
 ?>
 
