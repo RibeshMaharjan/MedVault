@@ -32,6 +32,7 @@ if (isset($_POST['signIn'])) {
                     } else {
                         $_SESSION['auth'] = true;
                         $_SESSION['loggedInUserRole'] = $row['role'];
+                        $_SESSION['pharmacy_id'] = $row['user_id'];
                         $_SESSION['loggedInUser'] = [
                             'name' => $row['name'],
                             'user_id' =>  $row['user_id'],

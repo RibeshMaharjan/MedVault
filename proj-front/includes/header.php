@@ -146,6 +146,7 @@
     <title>MedVault</title>
 </head>
 <body>
+    <?php include 'verification-status.php'; ?>
     <div class="toast-container">
         <?php
         if(isset($_SESSION['status'])) {

@@ -32,6 +32,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="pharmacy-display.php" data-display="adminform">Display Customer</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="verify-pharmacies.php" data-display="adminform">Verify Pharmacies</a>
+                </li>
             </ul>
         </li>
         <li class=""><a href="#medicinemenu" data-bs-toggle="collapse"  class="text-decoration-none px-3 py-2 d-block">

@@ -1,95 +1,249 @@
-<?php include 'includes/header.php'; ?>
+<?php include 'includes/header.php'; 
 
-<div class="main-container">
+if (!isset($_SESSION['pharmacy_id'])) {
+    echo "<script>window.location.href='login.php';</script>";
+    exit();
+}
+
+$pharmacy_id = $_SESSION['pharmacy_id'];
+
+// Get pharmacy details
+$pharmacy_query = "SELECT * FROM tbl_pharmacy WHERE pharmacy_id = $pharmacy_id";
+$pharmacy_result = mysqli_query($conn, $pharmacy_query);
+$pharmacy_data = mysqli_fetch_assoc($pharmacy_result);
+
+// Handle form submission
+if(isset($_POST['update_profile'])) {
+    $pharmacy_name = mysqli_real_escape_string($conn, $_POST['pharmacy_name']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $phone = mysqli_real_escape_string($conn, $_POST['phone']);
+    $address = mysqli_real_escape_string($conn, $_POST['address']);
+    $pan = mysqli_real_escape_string($conn, $_POST['pan']);
+    
+    // Update profile information
+    $update_query = "UPDATE tbl_pharmacy SET 
+                    pharmacy_name = '$pharmacy_name',
+                    email = '$email',
+                    phone = '$phone',
+                    address = '$address',
+                    pan = '$pan'
+                    WHERE pharmacy_id = $pharmacy_id";
+    
+    mysqli_query($conn, $update_query);
+    
+    echo "<script>alert('Profile updated successfully!');</script>";
+    echo "<script>window.location.href='edit-profile.php';</script>";
+}
+
+// Handle verification form submission
+if(isset($_POST['submit_verification'])) {
+    $license_number = mysqli_real_escape_string($conn, $_POST['license_number']);
+    
+    // File upload for registration document
+    $reg_document = '';
+    if(isset($_FILES['reg_document']) && $_FILES['reg_document']['error'] == 0) {
+        $target_dir = "uploads/verification/";
+        
+        // Create directory if it doesn't exist
+        if (!file_exists($target_dir)) {
+            mkdir($target_dir, 0777, true);
+        }
+        
+        $file_extension = pathinfo($_FILES["reg_document"]["name"], PATHINFO_EXTENSION);
+        $new_filename = $pharmacy_id . "_" . time() . "." . $file_extension;
+        $target_file = $target_dir . $new_filename;
+        
+        if(move_uploaded_file($_FILES["reg_document"]["tmp_name"], $target_file)) {
+            $reg_document = $target_file;
+        } else {
+            $upload_error = true;
+        }
+    }
+    
+    // Update verification information
+    $verification_query = "UPDATE tbl_pharmacy SET 
+                          license_number = '$license_number',
+                          verification_request_date = NOW()";
+    
+    if(!empty($reg_document)) {
+        $verification_query .= ", reg_document = '$reg_document'";
+    }
+    
+    $verification_query .= " WHERE pharmacy_id = $pharmacy_id";
+    
+    if(mysqli_query($conn, $verification_query)) {
+        // Set a session alert instead of using JavaScript to reload
+        $_SESSION['status'] = "Verification request submitted successfully! Your request is now under review.";
+        echo "<script>window.location.href='edit-profile.php';</script>";
+        exit;
+    } else {
+        $verification_error = true;
+    }
+}
+?>
+
+<div class="main-container d-flex">
 	<?php include 'includes/dashboard.php'; ?>
 	<div class="container-fluid p-5 bg-body-tertiary">
-		<div class="row mb-4">
-			<div class="col">
-				<h2>My Profile</h2>
-				<nav aria-label="breadcrumb">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="view-inventory.php">Dashboard</a></li>
-						<li class="breadcrumb-item active">Profile</li>
-					</ol>
-				</nav>
+		<?php if(isset($verification_success)): ?>
+			<div class="alert alert-success alert-dismissible fade show" role="alert">
+				<strong>Verification request submitted successfully!</strong> Your verification request has been submitted and is under review by our team.
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 			</div>
-		</div>
+		<?php endif; ?>
 		
-		<!-- Form START -->
+		<?php if(isset($verification_error)): ?>
+			<div class="alert alert-danger alert-dismissible fade show" role="alert">
+				<strong>Error!</strong> There was a problem submitting your verification request. Please try again.
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		<?php endif; ?>
+		
+		<?php if(isset($upload_error)): ?>
+			<div class="alert alert-danger alert-dismissible fade show" role="alert">
+				<strong>Error!</strong> There was a problem uploading your document. Please try again.
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		<?php endif; ?>
+		
 		<div class="row">
-			<div class="col-12">
-				<form action="php/updateprofile.php" method="POST" class="file-upload">
-					<?php
-					$user_id = $_SESSION['loggedInUser']['user_id'];
-
-					$pharmacy = getById('tbl_pharmacy', 'pharmacy_id', $user_id);
-					$pharmacypassword = getById('role', 'user_id', $user_id);
-					if ($pharmacy['status'] == 200) {
-					?>
-						<div class="row">
-							<!-- Contact detail -->
-							<div class="col-md-6 mb-4">
-								<div class="card">
-									<div class="card-body">
-										<h4 class="card-title">Pharmacy Details</h4>
-										<div class="mb-3">
-											<label class="form-label">Pharmacy Name</label>
-											<input type="text" class="form-control" value="<?= $pharmacy['data']['pharmacy_name'] ?>" name="pharmacy_name" required>
-										</div>
-										<div class="mb-3">
-											<label class="form-label">Email</label>
-											<input type="email" class="form-control" value="<?= $pharmacy['data']['email'] ?>" name="email">
-										</div>
-										<div class="mb-3">
-											<label class="form-label">Phone</label>
-											<input type="text" class="form-control" value="<?= $pharmacy['data']['phone'] ?>" maxlength="10" name="phone">
-										</div>
-										<div class="mb-3">
-											<label class="form-label">Address</label>
-											<input type="text" class="form-control" value="<?= $pharmacy['data']['address'] ?>" name="address">
-										</div>
+			<div class="col-md-6 mb-4">
+				<div class="card">
+					<div class="card-header bg-danger text-white">
+						<h4>Edit Profile</h4>
+					</div>
+					<div class="card-body">
+						<form action="" method="post">
+							<div class="mb-3">
+								<label for="pharmacy_name" class="form-label">Pharmacy Name</label>
+								<input type="text" class="form-control" id="pharmacy_name" name="pharmacy_name" value="<?php echo $pharmacy_data['pharmacy_name']; ?>" required>
+							</div>
+							<div class="mb-3">
+								<label for="email" class="form-label">Email</label>
+								<input type="email" class="form-control" id="email" name="email" value="<?php echo $pharmacy_data['email']; ?>" required>
+							</div>
+							<div class="mb-3">
+								<label for="pan" class="form-label">PAN Number</label>
+								<input type="text" class="form-control" id="pan" name="pan" value="<?php echo $pharmacy_data['pan']; ?>" required>
+							</div>
+							<div class="mb-3">
+								<label for="phone" class="form-label">Phone</label>
+								<input type="text" class="form-control" id="phone" name="phone" value="<?php echo $pharmacy_data['phone']; ?>" required>
+							</div>
+							<div class="mb-3">
+								<label for="address" class="form-label">Address</label>
+								<input type="text" class="form-control" id="address" name="address" value="<?php echo $pharmacy_data['address']; ?>" required>
+							</div>
+							<button type="submit" name="update_profile" class="btn btn-danger">Update Profile</button>
+						</form>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-md-6 mb-4">
+				<div class="card">
+					<div class="card-header bg-danger text-white">
+						<h4>Verification Status</h4>
+					</div>
+					<div class="card-body">
+						<?php if($pharmacy_data['isverified'] == 1): ?>
+							<!-- Verified Status -->
+							<div class="verification-status verified">
+								<div class="status-icon mb-3">
+									<i class="fas fa-check-circle fa-3x text-success"></i>
+								</div>
+								<h5 class="text-success mb-3">Your pharmacy is verified!</h5>
+								<div class="verification-details">
+									<div class="detail-item d-flex justify-content-between mb-2">
+										<span class="fw-bold">Status:</span>
+										<span class="badge bg-success">Verified</span>
 									</div>
+									<div class="detail-item d-flex justify-content-between mb-2">
+										<span class="fw-bold">Verification Date:</span>
+										<span><?php echo date('F j, Y', strtotime($pharmacy_data['verification_date'])); ?></span>
+									</div>
+									<div class="detail-item d-flex justify-content-between mb-2">
+										<span class="fw-bold">License Number:</span>
+										<span><?php echo $pharmacy_data['license_number']; ?></span>
+									</div>
+									<?php if(!empty($pharmacy_data['verification_notes'])): ?>
+									<div class="detail-item mb-2">
+										<span class="fw-bold d-block mb-1">Notes:</span>
+										<div class="bg-light p-2 rounded"><?php echo $pharmacy_data['verification_notes']; ?></div>
+									</div>
+									<?php endif; ?>
 								</div>
 							</div>
-
-							<!-- Change password -->
-							<div class="col-md-6 mb-4">
-								<div class="card">
-									<div class="card-body">
-										<h4 class="card-title">Change Password</h4>
-										<div class="mb-3">
-											<label class="form-label">Old password *</label>
-											<input type="password" class="form-control" name="oldpassword">
-										</div>
-										<div class="mb-3">
-											<label class="form-label">New password *</label>
-											<input type="password" class="form-control" name="newpassword">
-										</div>
-										<div class="mb-3">
-											<label class="form-label">Confirm Password *</label>
-											<input type="password" class="form-control" name="confirmnewpassword">
-										</div>
+						<?php elseif(!empty($pharmacy_data['verification_request_date'])): ?>
+							<!-- Pending Verification Status -->
+							<div class="verification-status pending">
+								<div class="status-icon mb-3">
+									<i class="fas fa-clock fa-3x text-warning"></i>
+								</div>
+								<h5 class="text-warning mb-3">Verification in progress!</h5>
+								<div class="verification-details">
+									<div class="detail-item d-flex justify-content-between mb-2">
+										<span class="fw-bold">Status:</span>
+										<span class="badge bg-warning text-dark">Pending</span>
 									</div>
+									<div class="detail-item d-flex justify-content-between mb-2">
+										<span class="fw-bold">Request Date:</span>
+										<span><?php echo date('F j, Y', strtotime($pharmacy_data['verification_request_date'])); ?></span>
+									</div>
+									<div class="detail-item d-flex justify-content-between mb-2">
+										<span class="fw-bold">License Number:</span>
+										<span><?php echo $pharmacy_data['license_number']; ?></span>
+									</div>
+									<?php if(!empty($pharmacy_data['reg_document'])): ?>
+									<div class="detail-item d-flex justify-content-between mb-2">
+										<span class="fw-bold">Document:</span>
+										<a href="<?php echo $pharmacy_data['reg_document']; ?>" target="_blank" class="btn btn-sm btn-outline-secondary">View</a>
+									</div>
+									<?php endif; ?>
+									<?php if(!empty($pharmacy_data['verification_notes'])): ?>
+									<div class="detail-item mb-2">
+										<span class="fw-bold d-block mb-1">Notes:</span>
+										<div class="bg-light p-2 rounded"><?php echo $pharmacy_data['verification_notes']; ?></div>
+									</div>
+									<?php endif; ?>
+								</div>
+								<div class="alert alert-info mt-3">
+									<i class="fas fa-info-circle"></i> Your verification request is under review by our team. We'll notify you once it's approved.
 								</div>
 							</div>
-						</div>
-						
-						<!-- Submit button -->
-						<div class="row">
-							<div class="col-12">
-								<button type="submit" class="btn btn-danger px-4" name="update-profile">Update Profile</button>
+						<?php else: ?>
+							<!-- Not Verified Status -->
+							<div class="verification-status not-verified">
+								<div class="status-icon mb-3">
+									<i class="fas fa-exclamation-triangle fa-3x text-danger"></i>
+								</div>
+								<h5 class="text-danger mb-3">Not Verified!</h5>
+								<div class="alert alert-warning mb-3">
+									<i class="fas fa-info-circle"></i> Verification is required to access all features of the platform. Please submit your pharmacy's license details for verification.
+								</div>
+								
+								<form action="" method="post" enctype="multipart/form-data">
+									<div class="mb-3">
+										<label for="license_number" class="form-label">Pharmacy License Number</label>
+										<input type="text" class="form-control" id="license_number" name="license_number" required>
+									</div>
+									<div class="mb-3">
+										<label for="reg_document" class="form-label">Registration Document (PDF/Image)</label>
+										<input type="file" class="form-control" id="reg_document" name="reg_document" accept=".pdf,.jpg,.jpeg,.png" required>
+										<small class="text-muted">Upload your pharmacy registration certificate or license document.</small>
+									</div>
+									<button type="submit" name="submit_verification" class="btn btn-danger">Submit for Verification</button>
+								</form>
 							</div>
-						</div>
-					<?php
-					} else {
-						echo "<div class='alert alert-danger'>Error: " . $pharmacy['status'] . '</div>';
-					}
-					?>
-				</form> <!-- Form END -->
+						<?php endif; ?>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+<?php include 'includes/footer.php'; ?>
 
 <script>
     // Toggle sidebar for mobile view
