@@ -83,12 +83,105 @@
                 opacity: 1;
             }
         }
+        
+        /* Static sidebar and scrollable content */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 320px;
+            overflow-y: auto;
+            background-color: white;
+            z-index: 100;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .main-container {
+            min-height: 100vh;
+            display: block;
+        }
+        
+        .container-fluid {
+            margin-left: 320px;
+            padding-bottom: 30px;
+            min-height: 100vh;
+            width: calc(100% - 320px);
+            overflow-y: auto;
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 767px) {
+            .sidebar {
+                margin-left: -320px;
+                transition: all 0.3s;
+            }
+            
+            .sidebar.active {
+                margin-left: 0;
+            }
+            
+            .container-fluid {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        /* Toast styles */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 350px;
+        }
+        .toast {
+            margin-bottom: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease-in-out;
+            background-color: white;
+            border-left: 4px solid #198754;
+        }
     </style>
     <title>MedVault</title>
 </head>
 <body>
-    <div class="alert-container">
-        <?php alertmessage(); ?>
+    <div class="toast-container">
+        <?php
+        if(isset($_SESSION['status'])) {
+            echo '
+            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">MedVault</strong>
+                    <small>Just now</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    '.$_SESSION['status'].'
+                </div>
+            </div>';
+            unset($_SESSION['status']);
+        }
+        ?>
     </div>
-    <!-- include nav-bar -->
-    <?php include 'navbar.php'; ?>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-hide toasts after 5 seconds
+            const toasts = document.querySelectorAll('.toast.show');
+            toasts.forEach(toast => {
+                setTimeout(function() {
+                    toast.classList.remove('show');
+                }, 5000);
+            });
+            
+            // Make toasts dismissible
+            document.querySelectorAll('.toast .btn-close').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.toast').classList.remove('show');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

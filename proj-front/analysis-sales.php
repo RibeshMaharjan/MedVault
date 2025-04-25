@@ -637,5 +637,3 @@
         updateChartAndButtons('week');
     });
     </script>
-
-<?php include 'includes/footer.php'; ?>

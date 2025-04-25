@@ -37,7 +37,7 @@ if (isset($_POST['signIn'])) {
                             'user_id' =>  $row['user_id'],
                             'email' => $row['email']
                         ];
-                        redirect('home.php', 'Logged In Successfully');
+                        redirect('view-inventory.php', 'Logged In Successfully');
                     }
                 } else {
                     redirect('login.php', 'Invalid Password');

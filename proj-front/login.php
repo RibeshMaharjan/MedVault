@@ -3,7 +3,7 @@
 require '../config/function.php';
 
 if (isset($_SESSION['auth'])) {
-    redirect('../proj-front/home.php', 'Already Logged In');
+    redirect('../proj-front/view-inventory.php', 'Already Logged In');
 }
 ?>
 
@@ -20,6 +20,33 @@ if (isset($_SESSION['auth'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/login/toggle.css">
     <title>Document</title>
+    <style>
+        /* Toast styles */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 350px;
+        }
+        .toast {
+            margin-bottom: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease-in-out;
+            background-color: white;
+            border-left: 4px solid #198754;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -68,10 +95,19 @@ if (isset($_SESSION['auth'])) {
                     <form action="validation.php" method="POST" id="login_form">
                         <?php
                         if (isset($_SESSION['status'])) {
-                            echo
-                            '<div class="alert alert-success" role="alert">
-                                    ' . $_SESSION['status'] . '
-                                </div>';
+                            echo '
+                            <div class="toast-container position-fixed top-0 end-0 p-3">
+                                <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                                    <div class="toast-header">
+                                        <strong class="me-auto">MedVault</strong>
+                                        <small>Just now</small>
+                                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                    </div>
+                                    <div class="toast-body">
+                                        ' . $_SESSION['status'] . '
+                                    </div>
+                                </div>
+                            </div>';
                             unset($_SESSION['status']);
                         }
                         ?>
@@ -124,6 +160,24 @@ if (isset($_SESSION['auth'])) {
 
         signIn2Button.addEventListener('click', () => {
             signup.classList.remove("active");
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-hide toasts after 5 seconds
+            const toasts = document.querySelectorAll('.toast.show');
+            toasts.forEach(toast => {
+                setTimeout(function() {
+                    toast.classList.remove('show');
+                }, 5000);
+            });
+            
+            // Make toasts dismissible
+            document.querySelectorAll('.toast .btn-close').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.toast').classList.remove('show');
+                });
+            });
         });
     </script>
 </body>

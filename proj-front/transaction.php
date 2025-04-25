@@ -52,4 +52,3 @@
         </div>
     </div>
 <!-- include footer -->
-<?php include 'includes/footer.php'; ?>
