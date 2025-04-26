@@ -1,4 +1,4 @@
-<div class="container bg-white " style="height: 22rem;">
+<!-- <div class="container bg-white " style="height: 22rem;">
 <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 my-5 border-top" >
     <div class="col mb-3">
         <a class="navbar-brand" href="home.php"><img class="logo img-fluid " src="image/logo.png" alt="logo" ></a>
@@ -16,8 +16,8 @@
         <h5>Contact</h5>
         <ul class="nav flex-column mt-4">
             <li class="nav-item">Call Us</li>
-            <li class="nav-item h2 fw-semibold  my-3"><a href="#" class="nav-link p-0 text-danger"><img src="image/icons/contact.png" class="pe-2 " alt="contact"><?= webSetting('phone') ?? ''; ?></a></li>
-            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary"><img src="image/icons/email.png" class="pe-2 " alt="email"><?= webSetting('email') ?? ''; ?></a></li>
+            <li class="nav-item h2 fw-semibold  my-3"><a href="#" class="nav-link p-0 text-danger"><img src="image/icons/contact.png" class="pe-2 " alt="contact"><? // echo webSetting('phone') ?? ''; ?></a></li>
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary"><img src="image/icons/email.png" class="pe-2 " alt="email"><? //echo webSetting('email') ?? ''; ?></a></li>
             <li class="nav-item mt-2">Visit Us</li>
             <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Paknajol, Kathmandu <br>Lagan, Kathmandu</a></li>
         </ul>
@@ -32,7 +32,7 @@
         </ul>
         </div>
     </footer>
-</div>
+</div> -->
 <script
             src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
             integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
@@ -69,6 +69,25 @@
                     $('#sell_price').val(data [7]); 
                     $('#exp_date').val(data[9]);
                 });
+                
+                // Handle medicine delete button click
+                $('.medicineDeleteBtn').on('click', function() {
+                    // Get data from data attributes
+                    var id = $(this).data('id');
+                    var name = $(this).data('name');
+                    var category = $(this).data('category');
+                    var stock = $(this).data('stock');
+                    
+                    // Set values in the delete modal
+                    $('#delete_medicine_id').val(id);
+                    $('#delete_medicine_display_id').text(id);
+                    $('#delete_medicine_name').text(name);
+                    $('#delete_medicine_category').text(category);
+                    $('#delete_medicine_stock').text(stock);
+                    
+                    // Show the delete modal
+                    $('#medicineDeleteModal').modal('show');
+                });
             });
     </script>
     <script>
@@ -85,6 +104,21 @@
 
                     $('#update_id').val(data[0]);
                     $('#name').val(data[1]);
+                });
+                
+                // Handle category delete button click
+                $('.categoryDeleteBtn').on('click', function() {
+                    // Get data from data attributes
+                    var id = $(this).data('id');
+                    var name = $(this).data('name');
+                    
+                    // Set values in the delete modal
+                    $('#delete_category_id').val(id);
+                    $('#delete_category_display_id').text(id);
+                    $('#delete_category_name').text(name);
+                    
+                    // Show the delete modal
+                    $('#categoryDeleteModal').modal('show');
                 });
             });
     </script>
@@ -109,6 +143,25 @@
                     $('#status').val(data[6]);
                     $('#order_date').val(data[7]);
                 });
+                
+                // Handle order delete button click
+                $('.orderDeleteBtn').on('click', function() {
+                    // Get data from data attributes
+                    var id = $(this).data('id');
+                    var medicine = $(this).data('medicine');
+                    var quantity = $(this).data('quantity');
+                    var total = $(this).data('total');
+                    
+                    // Set values in the delete modal
+                    $('#delete_id').val(id);
+                    $('#delete_order_id').text(id);
+                    $('#delete_medicine').text(medicine);
+                    $('#delete_quantity').text(quantity);
+                    $('#delete_total').text(total);
+                    
+                    // Show the delete modal
+                    $('#orderDeleteModal').modal('show');
+                });
             });
     </script>
     <script>
@@ -131,6 +184,25 @@
                     $('#total').val(data[5]);
                     $('#status').val(data[6]);
                     $('#sales_date').val(data[7]);
+                });
+                
+                // Handle sales delete button click
+                $('.salesDeleteBtn').on('click', function() {
+                    // Get data from data attributes
+                    var id = $(this).data('id');
+                    var medicine = $(this).data('medicine');
+                    var quantity = $(this).data('quantity');
+                    var total = $(this).data('total');
+                    
+                    // Set values in the delete modal
+                    $('#delete_sales_id').val(id);
+                    $('#delete_sales_display_id').text(id);
+                    $('#delete_sales_medicine').text(medicine);
+                    $('#delete_sales_quantity').text(quantity);
+                    $('#delete_sales_total').text(total);
+                    
+                    // Show the delete modal
+                    $('#salesDeleteModal').modal('show');
                 });
             });
     </script>

@@ -1,5 +1,5 @@
 <?php
-require '../config/function.php';
+require './config/function.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,7 +54,7 @@ require '../config/function.php';
         }
 
         .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('image/hero-bg.jpg');
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('./proj-front/image/intro_bg.jpg');
             background-size: cover;
             background-position: center;
             color: white;
@@ -165,7 +165,7 @@ require '../config/function.php';
     <nav class="navbar navbar-expand-lg navbar-light navbar-custom sticky-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">
-                <img src="image/logo.png" alt="MedVault">
+                <img src="./proj-front/image/med-removebg.png" alt="MedVault">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -182,10 +182,10 @@ require '../config/function.php';
                         <a class="nav-link" href="#contact">Contact</a>
                     </li>
                     <li class="nav-item ms-lg-3">
-                        <a class="btn btn-outline-primary" href="login.php">Log In</a>
+                        <a class="btn btn-outline-primary" href="./proj-front/login.php">Log In</a>
                     </li>
                     <li class="nav-item ms-lg-2">
-                        <a class="btn btn-primary" href="login.php">Register</a>
+                        <a class="btn btn-primary" href="./proj-front/login.php">Register</a>
                     </li>
                 </ul>
             </div>
@@ -199,7 +199,7 @@ require '../config/function.php';
                 <div class="col-lg-7">
                     <h1 class="mb-4">Manage Your Pharmacy with Ease</h1>
                     <p class="mb-5">MedVault is a comprehensive pharmacy management system that helps you streamline inventory, track sales, manage orders, and analyze business performance all in one place.</p>
-                    <a href="login.php" class="btn btn-primary btn-lg px-4 me-3">Get Started</a>
+                    <a href="./proj-front/login.php" class="btn btn-primary btn-lg px-4 me-3">Get Started</a>
                     <a href="#features" class="btn btn-outline-light btn-lg px-4">Learn More</a>
                 </div>
             </div>
@@ -289,7 +289,7 @@ require '../config/function.php';
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-4 mb-lg-0">
-                    <img src="image/about-img.jpg" alt="About MedVault" class="img-fluid rounded-3 shadow">
+                    <img src="./proj-front/image/med.png" alt="About MedVault" class="img-fluid rounded-3 shadow">
                 </div>
                 <div class="col-lg-6">
                     <h2 class="fw-bold mb-4">About MedVault</h2>
@@ -307,7 +307,7 @@ require '../config/function.php';
                 <div class="col-lg-8">
                     <h2 class="fw-bold mb-4">Ready to Transform Your Pharmacy?</h2>
                     <p class="mb-5">Join thousands of pharmacies already using MedVault to streamline their operations and grow their business.</p>
-                    <a href="login.php" class="btn btn-primary btn-lg px-5 py-3">Get Started Today</a>
+                    <a href="./proj-front/login.php" class="btn btn-primary btn-lg px-5 py-3">Get Started Today</a>
                 </div>
             </div>
         </div>

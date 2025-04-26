@@ -1,6 +1,6 @@
 <?php include 'includes/header.php'; ?>
     <div class="main-container d-flex">
-        <!-- Modal -->
+        <!-- Edit Modal -->
         <div class="modal fade" id="salesEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -48,8 +48,39 @@
                 </div>
             </div>
         </div>
+
+        <!-- Delete Modal -->
+        <div class="modal fade" id="salesDeleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h1 class="modal-title fs-5" id="deleteModalLabel">Confirm Delete</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="php/sales-delete.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="delete_sales_id" id="delete_sales_id">
+                    <p>Are you sure you want to delete this sales record?</p>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>This action cannot be undone.
+                    </div>
+                    <div class="sales-details mt-3">
+                        <p><strong>Sales ID:</strong> <span id="delete_sales_display_id"></span></p>
+                        <p><strong>Medicine:</strong> <span id="delete_sales_medicine"></span></p>
+                        <p><strong>Quantity:</strong> <span id="delete_sales_quantity"></span></p>
+                        <p><strong>Total Amount:</strong> <span id="delete_sales_total"></span></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger" name="delete-sales">Delete Sales Record</button>
+                </div>
+                </form>
+                </div>
+            </div>
+        </div>
         <?php include 'includes/dashboard.php'; ?>
-        <div class="container-fluid p-4 bg-body-tertiary">
+        <div class="container-fluid p-5">
                     <?php
                         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
                         $itemsPerPage = 10;
@@ -84,7 +115,7 @@
                         $paginatedResults = getPaginatedResults('user_sales_tbl', $where_clause, $page, $itemsPerPage);
                         $sales = $paginatedResults['data'];
                     ?>
-                            <div class="row px-4 pt-4 bg-white">
+                            <div class="row pt-4 bg-white">
                                 <div class="col">
                                     <h1 class="fw-normal mb-3">Sales Table</h1>
                                 </div>
@@ -126,7 +157,7 @@
                                 <p class="text-muted">Showing <?= ($page-1)*$itemsPerPage + 1 ?> to <?= min($page*$itemsPerPage, $paginatedResults['totalRecords']) ?> of <?= $paginatedResults['totalRecords'] ?> entries</p>
                             </div>
 
-                            <div class="row table-responsive px-4 pt-4 mb-5 bg-white ">
+                            <div class="row pt-4 ps-2 mb-5 table-responsive bg-white ">
                             <table class="table table-striped">
                             <thead class="table-danger">
                                 <tr>
@@ -167,9 +198,23 @@
                                             <button class="btn btn-success btn-md px-3 py-2 my-2 salesEditBtn"><i class="fa-solid fa-pen-to-square"></i></button>
                                         </div>
                                         <div class="col">
-                                            <a class="text-white text-decoration-none" href="php/sales-delete.php?s_id=<?=$result['s_id']?>" onclick="return confirm('You want to delete the data?')">
-                                                <button class="btn btn-danger btn-md px-3 py-2 my-2"><i class="fa-regular fa-trash-can"></i></button>
-                                            </a>
+                                            <button class="btn btn-danger btn-md px-3 py-2 my-2 salesDeleteBtn" 
+                                                data-id="<?=$result['s_id']?>"
+                                                data-medicine="<?php
+                                                    $med_name = '';
+                                                    $medicineAll = getAll('user_medicine_tbl');
+                                                    while($medicine = mysqli_fetch_assoc($medicineAll)){
+                                                        if($medicine['m_id'] == $result['m_id']){
+                                                            $med_name = $medicine['medicine_name'];
+                                                            break;
+                                                        }
+                                                    }
+                                                    echo $med_name;
+                                                ?>"
+                                                data-quantity="<?=$result['quantity']?>"
+                                                data-total="<?=$result['total_amount']?>">
+                                                <i class="fa-regular fa-trash-can"></i>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -204,3 +249,4 @@
                     </div>
             </div>
         </div>
+<?php include 'includes/footer.php'; ?>

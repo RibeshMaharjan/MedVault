@@ -23,6 +23,33 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
 
     <title>Admin Dashboard</title>
+    <style>
+        /* Toast styles */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 350px;
+        }
+        .toast {
+            margin-bottom: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease-in-out;
+            background-color: white;
+            border-left: 4px solid #198754;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 <body>
 <div class="main-container d-flex">
@@ -61,5 +88,29 @@
                 </div>
             </nav>
 
+            <!-- Toast container for notifications -->
+            <div class="toast-container">
+                <?php alertmessage(); ?>
+            </div>
             
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Auto-hide toasts after 5 seconds
+                    const toasts = document.querySelectorAll('.toast.show');
+                    toasts.forEach(toast => {
+                        setTimeout(function() {
+                            toast.classList.remove('show');
+                        }, 5000);
+                    });
+                    
+                    // Make toasts dismissible
+                    document.querySelectorAll('.toast .btn-close').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            this.closest('.toast').classList.remove('show');
+                        });
+                    });
+                });
+            </script>
+</body>
+</html>
         

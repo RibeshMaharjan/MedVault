@@ -195,7 +195,7 @@ $verification_rate = ($total_count > 0) ? round(($verified_count / $total_count)
                                         <td><?php echo date('M d, Y', strtotime($row['verification_request_date'])); ?></td>
                                         <td>
                                             <?php if(!empty($row['reg_document'])): ?>
-                                                <a href="../proj-front/<?php echo $row['reg_document']; ?>" target="_blank" class="btn btn-sm btn-info">
+                                                <a href="../proj-front/<?php echo $row['reg_document']; ?>" target="_blank" class="btn btn-sm btn-secondary">
                                                     <i class="fas fa-file-alt me-1"></i> View
                                                 </a>
                                             <?php else: ?>
@@ -307,7 +307,7 @@ $verification_rate = ($total_count > 0) ? round(($verified_count / $total_count)
                                         <td><?php echo date('M d, Y', strtotime($row['verification_date'])); ?></td>
                                         <td>
                                             <?php if(!empty($row['reg_document'])): ?>
-                                                <a href="../proj-front/<?php echo $row['reg_document']; ?>" target="_blank" class="btn btn-sm btn-info">
+                                                <a href="../proj-front/<?php echo $row['reg_document']; ?>" target="_blank" class="btn btn-sm btn-secondary">
                                                     <i class="fas fa-file-alt me-1"></i> View
                                                 </a>
                                             <?php else: ?>

@@ -1,8 +1,8 @@
 <?php include 'includes/header.php'; ?>
     <div class="main-container d-flex">
         <?php include 'includes/dashboard.php'; ?>
-            <div class="container-fluid p-4 bg-body-tertiary">
-                <div class="row p-4 bg-white">
+            <div class="container-fluid p-5">
+                <div class="row pt-4 bg-white">
                     <div class="col">
                         <h1 class="fw-normal mb-3">Order Table</h1>
                     </div>
@@ -105,3 +105,4 @@
             });
         });
     </script>
+<?php include 'includes/footer.php'; ?>

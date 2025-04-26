@@ -1,3 +1,0 @@
-# Redirect from root to inventory dashboard
-RewriteEngine On
-RewriteRule ^$ proj-front/view-inventory.php [L,R=302] 

@@ -37,31 +37,6 @@
                 </li>
             </ul>
         </li>
-        <li class=""><a href="#medicinemenu" data-bs-toggle="collapse"  class="text-decoration-none px-3 py-2 d-block">
-            <span class="material-symbols-outlined fs-5 icon">inventory_2</span> Medicine Management<i class="fa fa-caret-down float-end "></i></a>
-            <ul class="nav collapse text-decoration-none px-3 py-2 flex-column" id="medicinemenu" data-bs-parent="#ordeermenu">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="medicine-create.php" data-display="adminform">Add Medicine</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="medicine-display.php" data-display="adminform">Display Medicine</a>
-                </li>
-            </ul>
-        </li>
-        <li class=""><a href="#ordermenu" data-bs-toggle="collapse"  class="text-decoration-none px-3 py-2 d-block">
-        <span class="material-symbols-outlined fs-5 icon">orders</span> Orders Management<i class="fa fa-caret-down float-end " aria-hidden="true"></i></a>
-            <ul class="nav collapse text-decoration-none px-3 py-2 flex-column" id="ordermenu" data-bs-parent="#ordermenu">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="order-display.php" data-display="adminform">Order Display</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="order-pending.php" data-display="adminform">Order Pending</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="order-approve.php" data-display="adminform">Order Completed</a>
-                </li>
-            </ul>
-        </li>
     </ul>
 
     <hr class="h-color mx-2">

@@ -108,9 +108,9 @@ if(isset($_POST['submit_verification'])) {
 		
 		<div class="row">
 			<div class="col-md-6 mb-4">
-				<div class="card">
+				<div class="card border-0 shadow">
 					<div class="card-header bg-danger text-white">
-						<h4>Edit Profile</h4>
+						<p class="fw-semibold fs-4 mb-0">Edit Profile</p>
 					</div>
 					<div class="card-body">
 						<form action="" method="post">
@@ -141,7 +141,7 @@ if(isset($_POST['submit_verification'])) {
 			</div>
 			
 			<div class="col-md-6 mb-4">
-				<div class="card">
+				<div class="card border-0 shadow">
 					<div class="card-header bg-danger text-white">
 						<h4>Verification Status</h4>
 					</div>
@@ -243,7 +243,7 @@ if(isset($_POST['submit_verification'])) {
 	</div>
 </div>
 
-<?php include 'includes/footer.php'; ?>
+
 
 <script>
     // Toggle sidebar for mobile view
@@ -265,3 +265,4 @@ if(isset($_POST['submit_verification'])) {
         }
     });
 </script>
+<?php include 'includes/footer.php'; ?>

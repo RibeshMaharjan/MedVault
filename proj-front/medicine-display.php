@@ -1,6 +1,6 @@
 <?php include 'includes/header.php'; ?>
     <div class="main-container d-flex">
-        <!-- Modal -->
+        <!-- Edit Modal -->
         <div class="modal fade" id="medicineeditmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -57,8 +57,39 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Delete Modal -->
+        <div class="modal fade" id="medicineDeleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h1 class="modal-title fs-5" id="deleteModalLabel">Confirm Delete</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="php/medicine-delete.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="delete_medicine_id" id="delete_medicine_id">
+                    <p>Are you sure you want to delete this medicine?</p>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>This action cannot be undone and will remove this medicine from your inventory.
+                    </div>
+                    <div class="medicine-details mt-3">
+                        <p><strong>Medicine ID:</strong> <span id="delete_medicine_display_id"></span></p>
+                        <p><strong>Medicine Name:</strong> <span id="delete_medicine_name"></span></p>
+                        <p><strong>Category:</strong> <span id="delete_medicine_category"></span></p>
+                        <p><strong>Current Stock:</strong> <span id="delete_medicine_stock"></span></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger" name="delete-medicine">Delete Medicine</button>
+                </div>
+                </form>
+                </div>
+            </div>
+        </div>
         <?php include 'includes/dashboard.php'; ?>
-        <div class="container-fluid p-4 bg-body-tertiary">
+        <div class="container-fluid p-5 ">
             <div class="row pt-4 bg-white">
                 <h1 class="fw-normal mb-3">Medicine Table</h1>
                 <div class="table-responsiv pt-4 mb-5">
@@ -132,7 +163,23 @@
                                         <a class="text-white text-decoration-none "><button class="btn btn-success btn-md px-3 py-2 my-2 medicineeditbtn"><i class="fa-solid fa-pen-to-square"></i></button></a>
                                         </div>
                                         <div class="col">
-                                        <a class="text-white text-decoration-none " href="php/medicine-delete.php?m_id=<?=$result['m_id']?>"  onclick="return confirm('You want to delete the data?')"><button class="btn btn-danger btn-md px-3 py-2 my-2 btn-md"><i class="fa-regular fa-trash-can"></i></button></a>
+                                        <button class="btn btn-danger btn-md px-3 py-2 my-2 medicineDeleteBtn"
+                                            data-id="<?=$result['m_id']?>"
+                                            data-name="<?=$result['medicine_name']?>"
+                                            data-category="<?php
+                                                $cat_name = '';
+                                                $categoryall = getAll('user_category_tbl');
+                                                while($category = mysqli_fetch_assoc($categoryall)){
+                                                    if($category['c_id'] == $result['c_id']){
+                                                        $cat_name = $category['category_name'];
+                                                        break;
+                                                    }
+                                                }
+                                                echo $cat_name;
+                                            ?>"
+                                            data-stock="<?=$result['in_stock']?>">
+                                            <i class="fa-regular fa-trash-can"></i>
+                                        </button>
                                         </div>
                                     </td>
                                     </tr>
@@ -156,5 +203,5 @@
                 </div>
     </div>
     </div>
-<!-- <?php include 'includes/footer.php'; ?> -->
+<?php include 'includes/footer.php'; ?>
 

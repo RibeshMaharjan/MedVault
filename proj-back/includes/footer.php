@@ -63,19 +63,52 @@
             $(document).ready(function () {
                 $('.pharmacyeditbtn').on('click', function() {
                     $('#pharmacyeditmodal').modal('show');
-                    $tr =$(this).closest('tr');
-
-                    var data = $tr.children("td").map(function() {
-                        return $(this).text();
-                    }).get();
-
-                    console.log(data);
-
-                    $('#pan').val(data[0]);
-                    $('#name').val(data[1]);
-                    $('#email').val(data[2]);
-                    $('#phone').val(data[3]);
-                    $('#address').val(data [4]); 
+                    
+                    // Get data from data attributes
+                    var id = $(this).data('id');
+                    var pan = $(this).data('pan');
+                    var name = $(this).data('name');
+                    var email = $(this).data('email');
+                    var phone = $(this).data('phone');
+                    var address = $(this).data('address');
+                    var isverified = $(this).data('isverified');
+                    var license = $(this).data('license');
+                    var document = $(this).data('document');
+                    var notes = $(this).data('notes');
+                    
+                    // Set values in form
+                    $('#pharmacy_id').val(id);
+                    $('#pan').val(pan);
+                    $('#name').val(name);
+                    $('#email').val(email);
+                    $('#phone').val(phone);
+                    $('#address').val(address);
+                    $('#isverified').val(isverified);
+                    $('#license_number').val(license);
+                    $('#verification_notes').val(notes);
+                    
+                    // Show current document if exists
+                    if(document) {
+                        $('#current_document').html('<a href="../proj-front/' + document + '" target="_blank" class="btn btn-sm btn-info"><i class="fas fa-file-alt me-1"></i> View Current Document</a>');
+                    } else {
+                        $('#current_document').html('<span class="text-muted">No document uploaded</span>');
+                    }
+                });
+                
+                // View document
+                $('.view-document').on('click', function() {
+                    var documentPath = $(this).data('document');
+                    var fileExt = documentPath.split('.').pop().toLowerCase();
+                    
+                    if(fileExt == 'pdf') {
+                        $('#documentViewer').html('<embed src="' + documentPath + '" width="100%" height="500px" type="application/pdf">');
+                    } else if(['jpg', 'jpeg', 'png'].includes(fileExt)) {
+                        $('#documentViewer').html('<img src="' + documentPath + '" class="img-fluid" alt="Registration Document">');
+                    } else {
+                        $('#documentViewer').html('<div class="alert alert-warning">Cannot preview this file type. <a href="' + documentPath + '" target="_blank">Download</a> instead.</div>');
+                    }
+                    
+                    $('#documentModal').modal('show');
                 });
             });
     </script>

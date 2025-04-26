@@ -1,10 +1,33 @@
 <?php
     require('../../config/function.php');
 
-    $paraResult = checkParamId('o_id');
-    if(is_numeric($paraResult)){
-        $order_id = validate($paraResult);
-
+    // Check if request is coming from modal form
+    if(isset($_POST['delete-order']) && isset($_POST['delete_id'])) {
+        $order_id = validate($_POST['delete_id']);
+        
+        // Process deletion
+        processOrderDeletion($order_id);
+    }
+    // Check if request is coming from direct link (backwards compatibility)
+    else if(isset($_GET['o_id'])) {
+        $paraResult = checkParamId('o_id');
+        if(is_numeric($paraResult)){
+            $order_id = validate($paraResult);
+            
+            // Process deletion
+            processOrderDeletion($order_id);
+        }else{
+            redirect('../order-display.php', $paraResult);
+        }
+    }
+    else {
+        redirect('../order-display.php', 'Invalid request');
+    }
+    
+    // Function to handle order deletion process
+    function processOrderDeletion($order_id) {
+        global $conn;
+        
         // Get order info before deletion
         $order = getById('user_order_tbl', 'o_id', $order_id);
         if($order['status'] == 200){
@@ -27,7 +50,5 @@
         }else{
             redirect('../order-display.php','Order not found');
         }
-    }else{
-        redirect('../order-display.php', $paraResult);
     }
 ?>

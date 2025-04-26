@@ -1,11 +1,11 @@
 <?php include './includes/header.php'; ?>
 <div class="main-container">
     <?php include 'includes/dashboard.php'; ?>
-    <div class="container-fluid p-5 bg-body-tertiary">
+    <div class="container-fluid p-5">
         <!-- Medicine Statistics -->
         <div class="row pt-4 mb-5">
             <div class="col-md-3">
-                <div class="card">
+                <div class="card border-0 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Total Medicine Types</h5>
                         <p class="card-text text-danger h3"><?= getTotalById("user_medicine_tbl","pharmacy_id",$user_id); ?></p>
@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card">
+                <div class="card border-0 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Total Categories</h5>
                         <p class="card-text text-danger h3"><?= getTotalById("user_category_tbl","pharmacy_id",$user_id); ?></p>
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card">
+                <div class="card border-0 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Low Stock Items</h5>
                         <?php
@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card">
+                <div class="card border-0 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Out of Stock</h5>
                         <?php
@@ -51,7 +51,7 @@
         <!-- Category-wise Medicine Distribution -->
         <div class="row mb-4">
             <div class="col-md-6">
-                <div class="card">
+                <div class="card border-0 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Medicine by Category</h5>
                         <div class="table-responsive">
@@ -88,7 +88,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card">
+                <div class="card border-0 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Low Stock Alert</h5>
                         <div class="table-responsive">
@@ -130,7 +130,7 @@
         <!-- Recent Activities -->
         <div class="row">
             <div class="col-12">
-                <div class="card">
+                <div class="card border-0 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Recent Activities</h5>
                         <div class="table-responsive">
@@ -211,4 +211,4 @@
             });
         }
     });
-</script>
+</script><?php include 'includes/footer.php'; ?>

@@ -1,6 +1,6 @@
 <?php include 'includes/header.php'; ?>
     <div class="main-container d-flex">
-        <!-- Modal -->
+        <!-- Edit Modal -->
         <div class="modal fade" id="orderEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -48,8 +48,39 @@
                 </div>
             </div>
         </div>
+
+        <!-- Delete Modal -->
+        <div class="modal fade" id="orderDeleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h1 class="modal-title fs-5" id="deleteModalLabel">Confirm Delete</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="php/order-delete.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="delete_id" id="delete_id">
+                    <p>Are you sure you want to delete this order?</p>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>This action cannot be undone.
+                    </div>
+                    <div class="order-details mt-3">
+                        <p><strong>Order ID:</strong> <span id="delete_order_id"></span></p>
+                        <p><strong>Medicine:</strong> <span id="delete_medicine"></span></p>
+                        <p><strong>Quantity:</strong> <span id="delete_quantity"></span></p>
+                        <p><strong>Total Amount:</strong> <span id="delete_total"></span></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger" name="delete-order">Delete Order</button>
+                </div>
+                </form>
+                </div>
+            </div>
+        </div>
         <?php include 'includes/dashboard.php'; ?>
-        <div class="container-fluid p-4 bg-body-tertiary">
+        <div class="container-fluid p-5">
             <?php
                 // Initialize pagination variables
                 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -88,7 +119,7 @@
                 $paginatedResults = getPaginatedResults('user_order_tbl', $where_clause, $page, $itemsPerPage);
                 $orders = $paginatedResults['data'];
             ?>
-            <div class="row px-4 pt-4 bg-white">
+            <div class="row pt-4 bg-white">
                 <div class="col">
                     <h1 class="fw-normal mb-3">Order Table</h1>
                 </div>
@@ -172,7 +203,23 @@
                                         </div>'
                                     ?>
                                     <div class="col">
-                                        <a class="text-white text-decoration-none " href="php/order-delete.php?o_id=<?=$result['o_id']?>" onclick="return confirm('You want to delete the data?')"><button class="btn btn-danger btn-md px-3 py-2 my-2 btn-md"><i class="fa-regular fa-trash-can"></i></button></a>
+                                        <button class="btn btn-danger btn-md px-3 py-2 my-2 orderDeleteBtn" 
+                                            data-id="<?=$result['o_id']?>"
+                                            data-medicine="<?php
+                                                $med_name = '';
+                                                $medicineAll = getAll('user_medicine_tbl');
+                                                while($medicine = mysqli_fetch_assoc($medicineAll)){
+                                                    if($medicine['m_id'] == $result['m_id']){
+                                                        $med_name = $medicine['medicine_name'];
+                                                        break;
+                                                    }
+                                                }
+                                                echo $med_name;
+                                            ?>"
+                                            data-quantity="<?=$result['quantity']?>"
+                                            data-total="<?=$result['total_amount']?>">
+                                            <i class="fa-regular fa-trash-can"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -207,3 +254,4 @@
             </div>
     </div>
     </div>
+    <?php include 'includes/footer.php'; ?>
