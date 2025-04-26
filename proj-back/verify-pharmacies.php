@@ -82,7 +82,7 @@ $total_count = $total_row['total'];
 $verification_rate = ($total_count > 0) ? round(($verified_count / $total_count) * 100) : 0;
 ?>
 
-<div class="dashboard-content px-3 pt-4">
+<div class="dashboard-content pt-3">
   <div class="container-fluid bg-white">
         <?php if(isset($_SESSION['success'])): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -100,14 +100,14 @@ $verification_rate = ($total_count > 0) ? round(($verified_count / $total_count)
             <?php unset($_SESSION['error']); ?>
         <?php endif; ?>
         
-        <div class="row px-3 pt-4">
+        <div class="row pt-3 ps-2">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark">Pharmacy Verification</h1>
                 <p class="text-muted">Manage verification requests</p>
             </div>
         </div>
 
-    <section class="content px-3 pt-4 mb-5">
+    <section class="content px-2 pt-3 mb-5">
         <!-- Summary Stats -->
         <div class="row mb-4">
             <div class="col-md-3 mb-3">

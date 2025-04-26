@@ -1,10 +1,10 @@
 <?php include './includes/header.php'; ?>
-        <div class="dashboard-content px-3 pt-4 ">
+        <div class="dashboard-content pt-3">
             <div class="container-fluid bg-white">
-                <div class="row px-3 p-4">
+                <div class="row pt-3 ps-2">
                     <div class="col"><h1 class="fw-normal mb-3">WebSite Settings</h1></div>
                 </div>
-                <div class="row px-3 pb-4">
+                <div class="row px-2 pt-3">
                     <form action="code.php" class="form" method="POST" id="form">
                         <?php
                             // $paraResult = checkParamId('id');

@@ -1,7 +1,7 @@
 <div class="sidebar" id="side_nav">
-    <div class="header-box px-2 pt-3 pb-4 d-flex justify-content-between my-3 ">
+    <div class="header-box px-0 px-md-2 pt-3 pb-4 d-flex justify-content-between my-0 my-md-3">
         <h1 class="fs-2"> <span
-                class="ms-3  ">MedVault</span></h1>
+                class="ms-3">MedVault</span></h1>
         <button class="btn d-md-none d-block close-btn px-1 py-0 text-dark">
             <i class="fal fa-stream"></i>
         </button>

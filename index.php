@@ -139,26 +139,13 @@ require './config/function.php';
             }
         }
     </style>
+    <link rel="stylesheet" href="proj-front/assets/css/toast.css">
+    <script src="proj-front/assets/js/toast.js" defer></script>
 </head>
 <body>
     <!-- Toast Container -->
     <div class="toast-container">
-        <?php
-        if(isset($_SESSION['status'])) {
-            echo '
-            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong class="me-auto">MedVault</strong>
-                    <small>Just now</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body">
-                    '.$_SESSION['status'].'
-                </div>
-            </div>';
-            unset($_SESSION['status']);
-        }
-        ?>
+        <?php alertmessage(); ?>
     </div>
     
     <!-- Navbar -->

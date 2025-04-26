@@ -39,6 +39,7 @@
     <link rel="stylesheet" href="assets/css/editprofile.css">
     <link rel="stylesheet" href="assets/css/product.css">
     <link rel="stylesheet" href="assets/css/medicine.css">
+    <link rel="stylesheet" href="assets/css/toast.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -55,6 +56,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/toast.js"></script>
     <!-- Including CSS file. -->
     <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
     
@@ -148,41 +150,7 @@
 <body>
     <?php include 'verification-status.php'; ?>
     <div class="toast-container">
-        <?php
-        if(isset($_SESSION['status'])) {
-            echo '
-            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong class="me-auto">MedVault</strong>
-                    <small>Just now</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body">
-                    '.$_SESSION['status'].'
-                </div>
-            </div>';
-            unset($_SESSION['status']);
-        }
-        ?>
+        <?php alertmessage(); ?>
     </div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Auto-hide toasts after 5 seconds
-            const toasts = document.querySelectorAll('.toast.show');
-            toasts.forEach(toast => {
-                setTimeout(function() {
-                    toast.classList.remove('show');
-                }, 5000);
-            });
-            
-            // Make toasts dismissible
-            document.querySelectorAll('.toast .btn-close').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    this.closest('.toast').classList.remove('show');
-                });
-            });
-        });
-    </script>
 </body>
 </html>

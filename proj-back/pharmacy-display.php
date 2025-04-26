@@ -1,6 +1,6 @@
 <?php include './includes/header.php'; ?>
 
-    <div class="dashboard-content px-3 pt-4">
+    <div class="dashboard-content pt-3">
     
     <!-- Edit Modal -->
     <div class="modal fade" id="pharmacyeditmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -93,7 +93,7 @@
 
     <!-- Main Content -->
     <div class="container-fluid bg-white">
-        <div class="row px-3 pt-4">
+        <div class="row pt-3 ps-2">
             <div class="col-md-6">
                 <h1 class="m-0 text-dark">Pharmacy Table</h1>
             </div>  
@@ -180,12 +180,12 @@
             $total_count = mysqli_fetch_assoc($total_count_result)['total'];
         ?>
 
-        <div class="px-3 pt-2 mb-3">
+        <div class="px-2 pt-2 mb-3">
             <p>Showing 1 to <?php echo $filtered_count; ?> of <?php echo $total_count; ?> entries</p>
         </div>
 
         <!-- Pharmacy Table -->
-        <div class="px-3">
+        <div class="px-2 pt-3">
             <div class="table-responsive bg-white">
                 <table class="table table-striped">
                     <thead class="table-danger">

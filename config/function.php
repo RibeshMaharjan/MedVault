@@ -209,6 +209,7 @@
         }
     }
 
+    // File has no purpose - E-commerce functionality has been removed from the project
     function countcartitem(){
         global $conn;
         $user_id = $_SESSION['loggedInUser']['user_id'];

@@ -19,6 +19,8 @@ if (isset($_SESSION['auth'])) {
     <link rel="stylesheet" href="assets/css/login/login.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/login/toggle.css">
+    <link rel="stylesheet" href="assets/css/toast.css">
+    <script src="assets/js/toast.js" defer></script>
     <title>Document</title>
     <style>
         /* Toast styles */
@@ -50,6 +52,10 @@ if (isset($_SESSION['auth'])) {
 </head>
 
 <body>
+    <div class="toast-container">
+        <?php alertmessage(); ?>
+    </div>
+    
     <div class="nav-bar">
         <div class="logo">
             <!-- <h1>MedVault</h1> -->
@@ -93,24 +99,6 @@ if (isset($_SESSION['auth'])) {
                 <!-- Login Form -->
                 <div class="sign-in" id="sign-in">
                     <form action="validation.php" method="POST" id="login_form">
-                        <?php
-                        if (isset($_SESSION['status'])) {
-                            echo '
-                            <div class="toast-container position-fixed top-0 end-0 p-3">
-                                <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                                    <div class="toast-header">
-                                        <strong class="me-auto">MedVault</strong>
-                                        <small>Just now</small>
-                                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                                    </div>
-                                    <div class="toast-body">
-                                        ' . $_SESSION['status'] . '
-                                    </div>
-                                </div>
-                            </div>';
-                            unset($_SESSION['status']);
-                        }
-                        ?>
                         <h1>Sign In</h1>
                         <input type="email" name="email" placeholder="Email" id="uname" required>
                         <input type="password" name="password" placeholder="Password" id="pass" required>
