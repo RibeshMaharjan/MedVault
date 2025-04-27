@@ -1,33 +1,43 @@
 <?php
-    require('../../config/function.php');
+    session_start();
+    require_once '../../config/function.php';
 
-    $paraResult = checkParamId('o_id');
-    if(is_numeric($paraResult)){
-        $order_id = validate($paraResult);
-
-        // Get order info before deletion
-        $order = getById('user_order_tbl', 'o_id', $order_id);
-        if($order['status'] == 200){
-            // If order was completed, restore inventory
-            if($order['data']['status'] == 'completed') {
-                $medicine_id = $order['data']['m_id'];
-                $quantity = $order['data']['quantity'];
-                $restoreQuery = "UPDATE user_medicine_tbl 
-                                SET in_stock = in_stock + $quantity 
-                                WHERE m_id = '$medicine_id'";
-                mysqli_query($conn, $restoreQuery);
+    if(isset($_POST['delete-order'])) {
+        $order_id = validate($_POST['delete_order_id']);
+        
+        // Get current user ID
+        $pharmacy_id = $_SESSION['loggedInUser']['user_id'];
+        
+        // Check if the order exists and belongs to the current user
+        $checkQuery = "SELECT * FROM user_order_tbl WHERE o_id = '$order_id' AND pharmacy_id = '$pharmacy_id'";
+        $checkResult = mysqli_query($conn, $checkQuery);
+        
+        if(mysqli_num_rows($checkResult) > 0) {
+            $orderData = mysqli_fetch_assoc($checkResult);
+            
+            // If the order was completed, we need to restore the stock
+            if($orderData['status'] == 'completed') {
+                $m_id = $orderData['m_id'];
+                $quantity = $orderData['quantity'];
+                
+                // Restore the stock (increase by order quantity)
+                $restoreStockQuery = "UPDATE user_medicine_tbl SET in_stock = in_stock + $quantity WHERE m_id = '$m_id' AND pharmacy_id = '$pharmacy_id'";
+                mysqli_query($conn, $restoreStockQuery);
             }
             
-            $orderdelete = deleteQuery('user_order_tbl', 'o_id', $order_id);
-            if($orderdelete){
-                redirect('../order-display.php','Order removed and inventory restored successfully');
-            }else{
-                redirect('../order-display.php','Something went wrong!');
+            // Delete the order
+            $query = "DELETE FROM user_order_tbl WHERE o_id = '$order_id' AND pharmacy_id = '$pharmacy_id'";
+            $result = mysqli_query($conn, $query);
+            
+            if($result) {
+                redirect('../order-display.php', 'Order deleted successfully.');
+            } else {
+                redirect('../order-display.php', 'Something went wrong when deleting the order.');
             }
-        }else{
-            redirect('../order-display.php','Order not found');
+        } else {
+            redirect('../order-display.php', 'Order not found or you do not have permission to delete it.');
         }
-    }else{
-        redirect('../order-display.php', $paraResult);
+    } else {
+        redirect('../order-display.php', 'Access denied.');
     }
 ?>

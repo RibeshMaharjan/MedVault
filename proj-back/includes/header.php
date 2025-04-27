@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="assets/css/new-sidebar.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link rel="stylesheet" href="../proj-front/assets/css/toast.css">
+    <script src="../proj-front/assets/js/toast.js" defer></script>
 
     <title>Admin Dashboard</title>
 </head>
@@ -28,7 +30,7 @@
 <div class="main-container d-flex">
     <?php include 'new-sidebar.php'; ?>
         <div class="container-fluid bg-body-tertiary">
-            <nav class="navbar navbar-expand-md bg-white rounded mx-3 mt-3 header">
+            <nav class="navbar navbar-expand-md bg-white rounded mt-3 header">
                 <div class="container-fluid">
                     <div class="d-flex justify-content-between d-md-none d-block">
                         <button class="btn px-1 py-0 open-btn me-2"><i class="fal fa-stream"></i></button>
@@ -61,5 +63,10 @@
                 </div>
             </nav>
 
-            
+            <!-- Toast container for notifications -->
+            <div class="toast-container">
+                <?php alertmessage(); ?>
+            </div>
+</body>
+</html>
         

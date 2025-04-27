@@ -39,6 +39,7 @@
     <link rel="stylesheet" href="assets/css/editprofile.css">
     <link rel="stylesheet" href="assets/css/product.css">
     <link rel="stylesheet" href="assets/css/medicine.css">
+    <link rel="stylesheet" href="assets/css/toast.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -55,6 +56,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/toast.js"></script>
     <!-- Including CSS file. -->
     <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
     
@@ -83,12 +85,70 @@
                 opacity: 1;
             }
         }
+        
+        /* Static sidebar and scrollable content */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 320px;
+            overflow-y: auto;
+            background-color: white;
+            z-index: 100;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .main-container {
+            min-height: 100vh;
+            display: block;
+        }
+        
+        .container-fluid {
+            margin-left: 320px;
+            padding-bottom: 30px;
+            min-height: 100vh;
+            width: calc(100% - 320px);
+            overflow-y: auto;
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 767px) {
+            .sidebar {
+                margin-left: -320px;
+                transition: all 0.3s;
+            }
+            
+            .sidebar.active {
+                margin-left: 0;
+            }
+            
+            .container-fluid {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        /* Toast styles */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 350px;
+        }
+        .toast {
+            margin-bottom: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease-in-out;
+            background-color: white;
+            border-left: 4px solid #198754;
+        }
     </style>
     <title>MedVault</title>
 </head>
 <body>
-    <div class="alert-container">
+    <?php include 'verification-status.php'; ?>
+    <div class="toast-container">
         <?php alertmessage(); ?>
     </div>
-    <!-- include nav-bar -->
-    <?php include 'navbar.php'; ?>

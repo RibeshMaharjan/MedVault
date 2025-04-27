@@ -1,10 +1,10 @@
 <?php include 'includes/header.php'; ?>
     <div class="main-container d-flex">
         <?php include 'includes/dashboard.php'; ?>
-        <div class="container-fluid p-5 bg-body-tertiary">
-            <div class="row mb-4">
+        <div class="container-fluid p-5">
+            <div class="row pt-4 mb-4">
                 <div class="col-md-6">
-                    <h2>Sales Analysis</h2>
+                    <h1 class="mb-3">Sales Analysis</h1>
                 </div>
                 <div class="col-md-6">
                     <div class="btn-group float-end" role="group">
@@ -18,7 +18,7 @@
             <!-- Charts Container -->
             <div class="row">
                 <div class="col-md-8 mb-4">
-                    <div class="card">
+                    <div class="card border-0 shadow">
                         <div class="card-body">
                             <h5 class="card-title">Sales Trend</h5>
                             <div id="chartContainer">
@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="row g-3">
-                        <div class="card">
+                        <div class="card border-0 shadow">
                             <div class="card-body">
                                 <h5 class="card-title">Statistics</h5>
                                 <div id="statsContainer">
@@ -38,7 +38,7 @@
                             </div>
                         </div>
                         <!-- Anomaly Detection Results -->
-                        <div class="card">
+                        <div class="card border-0 shadow">
                             <div class="card-body">
                                 <h5 class="card-title">Sales Anomalies</h5>
                                 <div id="anomalyContainer">
@@ -53,7 +53,7 @@
             <!-- Stock Recommendations -->
             <div class="row mb-4">
                 <div class="col-12">
-                    <div class="card">
+                    <div class="card border-0 shadow">
                         <div class="card-body">
                             <h5 class="card-title">Stock Recommendations</h5>
                             <div id="stockRecommendations">
@@ -637,5 +637,4 @@
         updateChartAndButtons('week');
     });
     </script>
-
 <?php include 'includes/footer.php'; ?>

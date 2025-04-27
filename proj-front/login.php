@@ -3,7 +3,7 @@
 require '../config/function.php';
 
 if (isset($_SESSION['auth'])) {
-    redirect('../proj-front/home.php', 'Already Logged In');
+    redirect('../proj-front/view-inventory.php', 'Already Logged In');
 }
 ?>
 
@@ -19,10 +19,43 @@ if (isset($_SESSION['auth'])) {
     <link rel="stylesheet" href="assets/css/login/login.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/login/toggle.css">
+    <link rel="stylesheet" href="assets/css/toast.css">
+    <script src="assets/js/toast.js" defer></script>
     <title>Document</title>
+    <style>
+        /* Toast styles */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 350px;
+        }
+        .toast {
+            margin-bottom: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease-in-out;
+            background-color: white;
+            border-left: 4px solid #198754;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <div class="toast-container">
+        <?php alertmessage(); ?>
+    </div>
+    
     <div class="nav-bar">
         <div class="logo">
             <!-- <h1>MedVault</h1> -->
@@ -66,15 +99,6 @@ if (isset($_SESSION['auth'])) {
                 <!-- Login Form -->
                 <div class="sign-in" id="sign-in">
                     <form action="validation.php" method="POST" id="login_form">
-                        <?php
-                        if (isset($_SESSION['status'])) {
-                            echo
-                            '<div class="alert alert-success" role="alert">
-                                    ' . $_SESSION['status'] . '
-                                </div>';
-                            unset($_SESSION['status']);
-                        }
-                        ?>
                         <h1>Sign In</h1>
                         <input type="email" name="email" placeholder="Email" id="uname" required>
                         <input type="password" name="password" placeholder="Password" id="pass" required>
@@ -124,6 +148,24 @@ if (isset($_SESSION['auth'])) {
 
         signIn2Button.addEventListener('click', () => {
             signup.classList.remove("active");
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-hide toasts after 5 seconds
+            const toasts = document.querySelectorAll('.toast.show');
+            toasts.forEach(toast => {
+                setTimeout(function() {
+                    toast.classList.remove('show');
+                }, 5000);
+            });
+            
+            // Make toasts dismissible
+            document.querySelectorAll('.toast .btn-close').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.toast').classList.remove('show');
+                });
+            });
         });
     </script>
 </body>

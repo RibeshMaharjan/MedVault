@@ -1,7 +1,7 @@
 <div class="sidebar" id="side_nav">
-    <div class="header-box px-2 pt-3 pb-4 d-flex justify-content-between my-3 ">
+    <div class="header-box px-0 px-md-2 pt-3 pb-4 d-flex justify-content-between my-0 my-md-3">
         <h1 class="fs-2"> <span
-                class="ms-3  ">MedVault</span></h1>
+                class="ms-3">MedVault</span></h1>
         <button class="btn d-md-none d-block close-btn px-1 py-0 text-dark">
             <i class="fal fa-stream"></i>
         </button>
@@ -32,30 +32,8 @@
                 <li class="nav-item">
                     <a class="nav-link" href="pharmacy-display.php" data-display="adminform">Display Customer</a>
                 </li>
-            </ul>
-        </li>
-        <li class=""><a href="#medicinemenu" data-bs-toggle="collapse"  class="text-decoration-none px-3 py-2 d-block">
-            <span class="material-symbols-outlined fs-5 icon">inventory_2</span> Medicine Management<i class="fa fa-caret-down float-end "></i></a>
-            <ul class="nav collapse text-decoration-none px-3 py-2 flex-column" id="medicinemenu" data-bs-parent="#ordeermenu">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="medicine-create.php" data-display="adminform">Add Medicine</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="medicine-display.php" data-display="adminform">Display Medicine</a>
-                </li>
-            </ul>
-        </li>
-        <li class=""><a href="#ordermenu" data-bs-toggle="collapse"  class="text-decoration-none px-3 py-2 d-block">
-        <span class="material-symbols-outlined fs-5 icon">orders</span> Orders Management<i class="fa fa-caret-down float-end " aria-hidden="true"></i></a>
-            <ul class="nav collapse text-decoration-none px-3 py-2 flex-column" id="ordermenu" data-bs-parent="#ordermenu">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="order-display.php" data-display="adminform">Order Display</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="order-pending.php" data-display="adminform">Order Pending</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="order-approve.php" data-display="adminform">Order Completed</a>
+                    <a class="nav-link" href="verify-pharmacies.php" data-display="adminform">Verify Pharmacies</a>
                 </li>
             </ul>
         </li>

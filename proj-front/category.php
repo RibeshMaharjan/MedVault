@@ -1,6 +1,6 @@
 <?php include 'includes/header.php'; ?>
     <div class="main-container d-flex">
-        <!-- Modal -->
+        <!-- Edit Modal -->
         <div class="modal fade" id="categoryEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -24,14 +24,43 @@
                 </div>
             </div>
         </div>
-        <?php include 'includes/dashboard.php'; ?>
-        <div class="container-fluid p-5 bg-body-tertiary ">
-            <div class="row g-5 ">
-                <div class="col p-5 bg-white">
-                    <div class="row px-3 p-4">
-                        <div class="col"><h1 class="fw-normal mb-3 fs-3">Add Category</h1></div>
+        
+        <!-- Delete Modal -->
+        <div class="modal fade" id="categoryDeleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h1 class="modal-title fs-5" id="deleteModalLabel">Confirm Delete</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="php/category-delete.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="delete_category_id" id="delete_category_id">
+                    <p>Are you sure you want to delete this category?</p>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>This action cannot be undone. All medicines in this category will need to be reassigned.
                     </div>
-                    <div class="row px-3 pb-4 w-50 ">
+                    <div class="category-details mt-3">
+                        <p><strong>Category ID:</strong> <span id="delete_category_display_id"></span></p>
+                        <p><strong>Category Name:</strong> <span id="delete_category_name"></span></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger" name="delete-category">Delete Category</button>
+                </div>
+                </form>
+                </div>
+            </div>
+        </div>
+        <?php include 'includes/dashboard.php'; ?>
+        <div class="container-fluid p-5">
+            <div class="row pt-4 g-5">
+                <div class="col bg-white">
+                    <div class="row">
+                        <div class="col"><h1 class="fw-normal mb-3">Add Category</h1></div>
+                    </div>
+                    <div class="row pt-4 pb-4 w-50 ">
                         <form action="php/category-add.php" class="form" method="POST">
                             <div class="mb-3 category-input">
                                 <input class="form-control" type="text" placeholder="Category Name" name="category-name">
@@ -40,7 +69,7 @@
                         </form>
                     </div>
                 </div>
-                <div class="col-md-6 p-5 bg-white ms-md-auto ">
+                <div class="col-md-6 pt-4 bg-white ms-md-auto ">
                     <?php
                         $category = getAll('user_category_tbl');
                         
@@ -64,22 +93,16 @@
                             <tr>
                                 <td><?= $result['c_id'] ?></td>
                                 <td><?= $result['category_name'] ?></td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col">
-                                            <a class="text-white text-decoration-none ">
-                                                <button class="btn btn-success btn-md px-3 py-2 my-2 categoryEditBtn">
-                                                    <i class="fa-solid fa-pen-to-square"></i>
-                                                </button>
-                                            </a>
-                                        </div>
-                                        <div class="col">
-                                            <div class="btn btn-danger btn-md px-3 py-2 my-2 btn-md" style="background-color: red;" id="button">
-                                            <a class="text-light " href="php/category-delete.php?c_id=<?=$result["c_id"]?>" id="button"
-                                                onclick="return confirm('You want to delete the data?')"
-                                                ><i class="fa-regular fa-trash-can"></i></a>
-                                            </div>
-                                        </div>
+                                <td class="row g-0">
+                                    <div class="col">
+                                        <button class="btn btn-success btn-md px-3 py-2 my-2 categoryEditBtn"><i class="fa-solid fa-pen-to-square"></i></button>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn btn-danger btn-md px-3 py-2 my-2 categoryDeleteBtn"
+                                            data-id="<?=$result['c_id']?>"
+                                            data-name="<?=$result['category_name']?>">
+                                            <i class="fa-regular fa-trash-can"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
