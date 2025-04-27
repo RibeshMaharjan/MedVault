@@ -29,10 +29,23 @@ if(isset($_POST['update_profile'])) {
                     pan = '$pan'
                     WHERE pharmacy_id = $pharmacy_id";
     
-    mysqli_query($conn, $update_query);
-    
-    echo "<script>alert('Profile updated successfully!');</script>";
-    echo "<script>window.location.href='edit-profile.php';</script>";
+    if(mysqli_query($conn, $update_query)) {
+        // Also update the role table for consistency
+        $update_role_query = "UPDATE role SET 
+                            name = '$pharmacy_name',
+                            email = '$email'
+                            WHERE user_id = $pharmacy_id";
+        mysqli_query($conn, $update_role_query);
+        
+        // Set success message in session for toast
+        $_SESSION['status'] = "Profile updated successfully!";
+        echo "<script>window.location.href='edit-profile.php';</script>";
+        exit;
+    } else {
+        $_SESSION['status'] = "Error updating profile. Please try again.";
+        echo "<script>window.location.href='edit-profile.php';</script>";
+        exit;
+    }
 }
 
 // Handle verification form submission
@@ -72,7 +85,7 @@ if(isset($_POST['submit_verification'])) {
     $verification_query .= " WHERE pharmacy_id = $pharmacy_id";
     
     if(mysqli_query($conn, $verification_query)) {
-        // Set a session alert instead of using JavaScript to reload
+        // Set a session alert for toast message
         $_SESSION['status'] = "Verification request submitted successfully! Your request is now under review.";
         echo "<script>window.location.href='edit-profile.php';</script>";
         exit;

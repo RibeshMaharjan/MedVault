@@ -266,14 +266,48 @@
             str_replace('{page}', $currentPage - 1, $urlPattern)
         );
         
-        // Page numbers
-        for ($i = 1; $i <= $totalPages; $i++) {
+        // Page numbers with ellipsis
+        $visiblePages = 2; // Number of pages to show before and after current page
+        
+        // Always show first page
+        if ($currentPage > $visiblePages + 1) {
+            $links .= sprintf(
+                '<li class="page-item"><a class="page-link" href="%s">1</a></li>',
+                str_replace('{page}', 1, $urlPattern)
+            );
+            
+            // Add ellipsis if needed
+            if ($currentPage > $visiblePages + 2) {
+                $links .= '<li class="page-item disabled"><a class="page-link" href="#">...</a></li>';
+            }
+        }
+        
+        // Show pages around current page
+        $startPage = max(1, $currentPage - $visiblePages);
+        $endPage = min($totalPages, $currentPage + $visiblePages);
+        
+        for ($i = $startPage; $i <= $endPage; $i++) {
             $activeClass = $i == $currentPage ? ' active' : '';
             $links .= sprintf(
                 '<li class="page-item%s"><a class="page-link" href="%s">%d</a></li>',
                 $activeClass,
                 str_replace('{page}', $i, $urlPattern),
                 $i
+            );
+        }
+        
+        // Show last pages with ellipsis
+        if ($currentPage < $totalPages - $visiblePages) {
+            // Add ellipsis if needed
+            if ($currentPage < $totalPages - $visiblePages - 1) {
+                $links .= '<li class="page-item disabled"><a class="page-link" href="#">...</a></li>';
+            }
+            
+            // Always show last page
+            $links .= sprintf(
+                '<li class="page-item"><a class="page-link" href="%s">%d</a></li>',
+                str_replace('{page}', $totalPages, $urlPattern),
+                $totalPages
             );
         }
         

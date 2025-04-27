@@ -152,5 +152,3 @@
     <div class="toast-container">
         <?php alertmessage(); ?>
     </div>
-</body>
-</html>

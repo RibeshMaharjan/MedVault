@@ -9,8 +9,8 @@
         processMedicineDeletion($medicine_id);
     }
     // Check if request is coming from direct link (backwards compatibility)
-    else if(isset($_GET['m_id'])) {
-        $paraResult = checkParamId('m_id');
+    else if(isset($_GET['medicine_id'])) {
+        $paraResult = checkParamId('medicine_id');
         if(is_numeric($paraResult)){
             $medicine_id = validate($paraResult);
             
@@ -37,6 +37,7 @@
         
         if($sales_count > 0 || $order_count > 0) {
             // Medicine has related records - show warning
+            $_SESSION['status'] = "Cannot delete: This medicine has related sales or order records";
             redirect('../medicine-display.php', 'Cannot delete: This medicine has related sales or order records');
             return;
         }
@@ -46,12 +47,18 @@
         if($medicine['status'] == 200){
             $medicinedelete = deleteQuery('user_medicine_tbl', 'm_id', $medicine_id);
             if($medicinedelete){
-                redirect('../medicine-display.php','Medicine deleted successfully');
+                $_SESSION['status'] = "Medicine deleted successfully";
+                $_SESSION['status_code'] = "success";
+                redirect('../medicine-display.php', 'Medicine deleted successfully');
             }else{
-                redirect('../medicine-display.php','Something went wrong!');
+                $_SESSION['status'] = "Something went wrong!";
+                $_SESSION['status_code'] = "error";
+                redirect('../medicine-display.php', 'Something went wrong!');
             }
         }else{
-            redirect('../medicine-display.php','Medicine not found');
+            $_SESSION['status'] = "Medicine not found";
+            $_SESSION['status_code'] = "error";
+            redirect('../medicine-display.php', 'Medicine not found');
         }
     }
 ?>
