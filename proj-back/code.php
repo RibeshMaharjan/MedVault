@@ -112,22 +112,46 @@
 
     // ADD PHARMACY
     if(isset($_POST['add-user'])){
-        $pan = $_POST['pan'];
         $pharmacy_name = $_POST['name'];
         $email = $_POST['email'];
         $password = $_POST['password'];
         $phone = $_POST['phone'];
         $address= $_POST['address'];
+        $isverified = $_POST['isverified'];
+        $verification_notes = $_POST['verification_notes'];
+        $pan = isset($_POST['pan']) ? $_POST['pan'] : '';
+        
+        // Handle file upload for registration document
+        $reg_document = '';
+        if(isset($_FILES['reg_document']) && $_FILES['reg_document']['error'] == 0) {
+            $upload_dir = '../uploads/verification/';
+            
+            // Create the directory if it doesn't exist
+            if (!file_exists($upload_dir)) {
+                mkdir($upload_dir, 0777, true);
+            }
+            
+            $filename = time() . '_' . $_FILES['reg_document']['name'];
+            $file_tmp = $_FILES['reg_document']['tmp_name'];
+            $fileDestination = $upload_dir . $filename;
+            
+            // Move the uploaded file
+            if(move_uploaded_file($file_tmp, $fileDestination)) {
+                $reg_document = 'uploads/verification/' . $filename;
+            }
+        }
 
-        if($pan != '' || $pharmacy_name != '' || $email != '' || $phone != '' || $password != '' || $password != '')
+        if($pharmacy_name != '' || $email != '' || $password != '')
         {
-            // PAN validation
-            if(!is_numeric($pan) || $pan<=0) {
-                redirect('pharmacy-create.php','Invalid PAN Number');
+            if($pan != '') {
+                // PAN validation
+                if(!is_numeric($pan) || $pan<=0) {
+                    redirect('pharmacy-create.php','Invalid PAN Number');
+                }
             }
 
             // Name validation
-            if (!preg_match("/^[a-zA-Z-' ]*$/",$name)) {
+            if (!preg_match("/^[a-zA-Z-' ]*$/",$pharmacy_name)) {
                 redirect('pharmacy-create.php','Only letters and white space allowed');
             }
 
@@ -143,78 +167,127 @@
                 redirect('pharmacy-create.php','Invalid Password');
             }
             
-            if($passwordInput != $repasswordInput){
-                redirect('pharmacy-create.php','Password Doesnot Match');
-            }
-
-            if($formatted_Date<date("Y/m/d")) {
-                redirect('medicine-create.php','Invalid Date');
-            }
+       
 
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-            $query = "INSERT INTO role VALUES('','$pharmacy_name','$email','$passwordHash','user')";
-            // $query = "INSERT INTO tbl_pharmacy VALUES('','$pan','$pharmacy_name','$email','$phone','$address')";
-            // $data = mysqli_query($conn,$query);
+            $query = "INSERT INTO role (`name`,`email`,`password`,`role`) VALUES('$pharmacy_name','$email','$passwordHash','user')";
 
             if ($conn->query($query) === TRUE) {
-                // Retrieve the order_id generated for the newly inserted row
+                // Retrieve the user_id generated for the newly inserted row
                 $pharmacy_id = $conn->insert_id;
+                
+                // Set verification dates based on status
+                $verification_request_date = 'NULL';
+                $verification_date = 'NULL';
+                
+                if($isverified == 0) {
+                    $verification_request_date = "'" . date('Y-m-d H:i:s') . "'";
+                } else if($isverified == 1) {
+                    $verification_request_date = "'" . date('Y-m-d H:i:s') . "'";
+                    $verification_date = "'" . date('Y-m-d H:i:s') . "'";
+                }
             
-                // Insert data into the order_address table using the retrieved order_id
-                $sql_insert_order_address = "INSERT INTO tbl_pharmacy (pharmacy_id,pan, pharmacy_name, email, phone,address)VALUES('$pharmacy_id','$pan','$pharmacy_name','$email','$phone','$address')";
+                // Insert data into the tbl_pharmacy table with verification details
+                $sql_insert = "INSERT INTO tbl_pharmacy (pharmacy_id, pan, pharmacy_name, email, phone, address, 
+                isverified, reg_document, verification_request_date, verification_date, verification_notes) 
+                VALUES('$pharmacy_id', '$pan', '$pharmacy_name', '$email', '$phone', '$address', 
+                '$isverified', '$reg_document', $verification_request_date, $verification_date, '$verification_notes')";
             
-                if ($conn->query($sql_insert_order_address) === TRUE) {
-                    redirect('pharmacy-create.php', "Pharmacy Added successfully");
+                if ($conn->query($sql_insert) === TRUE) {
+                    redirect('pharmacy-display.php', "Pharmacy Added successfully");
                 } else {
-                    echo "Error inserting data into order_address table: " . $conn->error;
+                    echo "Error inserting data into tbl_pharmacy table: " . $conn->error;
                 }
             } else {
-                echo "Error inserting data into user_orders table: " . $conn->error;
+                echo "Error inserting data into role table: " . $conn->error;
             }
         }
         else{
-            redirect('pharmacy-create.php', 'Please fill all fields!');
+            redirect('pharmacy-create.php', 'Please fill all required fields!');
         }
     }
 
     // Update Pharmacy
     if(isset($_POST['update-pharmacy'])){
-        $pan = $_POST['pan'];
+        $pharmacy_id = $_POST['pharmacy_id'];
         $pharmacy_name = $_POST['pharmacy_name'];
         $email = $_POST['email'];
         $phone = $_POST['phone'];
         $address= $_POST['address'];
+        $isverified = $_POST['isverified'];
+        $verification_notes = $_POST['verification_notes'];
+        $pan = isset($_POST['pan']) ? $_POST['pan'] : '';
+        
+        // Handle file upload for updated registration document
+        $reg_document_update = '';
+        if(isset($_FILES['reg_document']) && $_FILES['reg_document']['error'] == 0) {
+            $upload_dir = '../uploads/verification/';
+            
+            // Create the directory if it doesn't exist
+            if (!file_exists($upload_dir)) {
+                mkdir($upload_dir, 0777, true);
+            }
+            
+            $filename = time() . '_' . $_FILES['reg_document']['name'];
+            $file_tmp = $_FILES['reg_document']['tmp_name'];
+            $fileDestination = $upload_dir . $filename;
+            
+            // Move the uploaded file
+            if(move_uploaded_file($file_tmp, $fileDestination)) {
+                $reg_document_update = "reg_document = 'uploads/verification/$filename',";
+            }
+        }
 
-        // PAN validation
-        if(!is_numeric($pan)) {
-            redirect('pharmacy-create.php','Invalid PAN Number');
+        if($pan != '') {
+            // PAN validation
+            if(!is_numeric($pan)) {
+                redirect('pharmacy-edit.php?id='.$pharmacy_id,'Invalid PAN Number');
+            }
         }
 
         // Name validation
-        if (!preg_match("/^[a-zA-Z-' ]*$/",$name)) {
-            redirect('pharmacy-create.php','Only letters and white space allowed');
+        if (!preg_match("/^[a-zA-Z-' ]*$/",$pharmacy_name)) {
+            redirect('pharmacy-edit.php?id='.$pharmacy_id,'Only letters and white space allowed');
         }
 
         // Email validation
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            redirect('pharmacy-create.php','Invalid email format');
+            redirect('pharmacy-edit.php?id='.$pharmacy_id,'Invalid email format');
         }
 
+        // Set verification dates based on status change
+        $verification_date_update = '';
+        
+        // Get current verification status
+        $check_query = "SELECT isverified FROM tbl_pharmacy WHERE pharmacy_id='$pharmacy_id'";
+        $result = mysqli_query($conn, $check_query);
+        if($result && mysqli_num_rows($result) > 0) {
+            $current_status = mysqli_fetch_assoc($result)['isverified'];
+            
+            // If status changed from unverified to verified, update verification date
+            if($current_status == 0 && $isverified == 1) {
+                $verification_date_update = "verification_date = '".date('Y-m-d H:i:s')."',";
+            }
+        }
 
         $query = "UPDATE tbl_pharmacy SET 
-                    pan ='$pan',
-                    pharmacy_name ='$pharmacy_name',
-                    email ='$email',
-                    phone ='$phone',
-                    address ='$address' 
-                    WHERE pan='$pan'";
+                    pan = '$pan',
+                    pharmacy_name = '$pharmacy_name',
+                    email = '$email',
+                    phone = '$phone',
+                    address = '$address',
+                    isverified = '$isverified',
+                    $reg_document_update
+                    $verification_date_update
+                    verification_notes = '$verification_notes'
+                    WHERE pharmacy_id='$pharmacy_id'";
         $data = mysqli_query($conn,$query);
 
         if($data){
-            redirect('pharmacy-display.php','User Data Updated Successcully');
+            redirect('pharmacy-display.php','Pharmacy Data Updated Successfully');
         }
         else{
-            redirect('pharmacy-display.php','Could Not Update User Data');
+            redirect('pharmacy-edit.php?id='.$pharmacy_id,'Could Not Update Pharmacy Data');
         }
     }
 

@@ -17,10 +17,6 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="mb-3">
-                                            <label for="pan" class="form-label">PAN Number *</label>
-                                            <input class="form-control" type="text" aria-label="default input example" name="pan" required>
-                                        </div>
-                                        <div class="mb-3">
                                             <label for="name" class="form-label">Pharmacy Name *</label>
                                             <input type="text" class="form-control" aria-describedby="" name="name" required>
                                         </div>
