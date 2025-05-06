@@ -59,19 +59,6 @@
                 </div>
             </div>
 
-            <!-- Order Timeline -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="card border-0 shadow">
-                        <div class="card-body">
-                            <h5 class="card-title">Recent Orders Timeline</h5>
-                            <div id="orderTimeline">
-                                <!-- Timeline will be populated by JavaScript -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -179,8 +166,6 @@
         // Update top orders
         updateTopOrders(data.topOrders);
 
-        // Update timeline
-        updateOrderTimeline(data.recentOrders);
     }
 
     function updateStats(stats) {
@@ -208,27 +193,6 @@
         
         html += '</tbody></table></div>';
         document.getElementById('topOrders').innerHTML = html;
-    }
-
-    function updateOrderTimeline(recentOrders) {
-        let html = '<div class="table-responsive"><table class="table">';
-        html += '<thead><tr><th>Date</th><th>Medicine</th><th>Quantity</th><th>Status</th><th>Amount</th></tr></thead><tbody>';
-        
-        recentOrders.forEach(order => {
-            const statusClass = order.status === 'completed' ? 'text-white bg-danger' : 'text-dark bg-warning';
-            html += `
-                <tr>
-                    <td>${order.date}</td>
-                    <td>${order.medicine_name}</td>
-                    <td>${order.quantity}</td>
-                    <td><span class="badge ${statusClass}">${order.status}</span></td>
-                    <td>Rs. ${order.amount}</td>
-                </tr>
-            `;
-        });
-        
-        html += '</tbody></table></div>';
-        document.getElementById('orderTimeline').innerHTML = html;
     }
 
     // Initialize with last week's data

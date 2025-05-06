@@ -3,7 +3,7 @@
         <div class="col">
             <!-- Logo at the top of sidebar -->
             <div class="text-center mb-3">
-                <img src="image/logo.png" alt="logo" style="max-height: 60px;">
+                <img src="image/logo.png" alt="logo" style="max-height: 120px;">
             </div>
             
             <div class="d-flex justify-content-between ms-3">

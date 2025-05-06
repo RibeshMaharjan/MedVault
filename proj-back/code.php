@@ -200,33 +200,7 @@
             redirect('pharmacy-create.php','Invalid email format');
         }
 
-        // Passowrd validation
-        $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/'; 
 
-        if (!preg_match($pattern, $password)) { 
-            redirect('pharmacy-create.php','Invalid Password');
-        }
-        
-        if($passwordInput != $repasswordInput){
-            redirect('pharmacy-create.php','Password Doesnot Match');
-        }
-
-        if(isset($_POST['password'])) {
-
-            $userid = $_SESSION['loggedInUser']['user_id'];
-            $password = $_POST['password'];
-            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-            $query = "UPDATE role SET
-                    password = '$passwordHash'
-                    WHERE email = '$email'";
-            $data = mysqli_query($conn,$query);
-            if($data){
-                redirect('pharmacy-display.php','User Data Updated Successcully');
-            }
-            else{
-                redirect('pharmacy-display.php','Could Not Update User Data');
-            }
-        }
         $query = "UPDATE tbl_pharmacy SET 
                     pan ='$pan',
                     pharmacy_name ='$pharmacy_name',

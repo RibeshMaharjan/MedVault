@@ -50,8 +50,8 @@
         }
 
         // Insert the order
-        $query = "INSERT INTO user_order_tbl (o_id, m_id, pharmacy_id, price, quantity, total_amount, status, order_date) 
-                 VALUES ('','$medicine_id','$user_id','$price','$quantity','$total','$status','$date')";
+        $query = "INSERT INTO user_order_tbl (m_id, pharmacy_id, price, quantity, total_amount, status, order_date) 
+                 VALUES ('$medicine_id','$user_id','$price','$quantity','$total','$status','$date')";
 
         if ($conn->query($query)) {
             // Update stock count

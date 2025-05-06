@@ -177,8 +177,7 @@ $verification_rate = ($total_count > 0) ? round(($verified_count / $total_count)
                                     <th>ID</th>
                                     <th>NAME</th>
                                     <th>PHARMACY NAME</th>
-                                    <th>PAN</th>
-                                    <th>LICENSE NUMBER</th>
+                                    <th>PAN NUMBER</th>
                                     <th>REQUEST DATE</th>
                                     <th>DOCUMENT</th>
                                     <th>ACTIONS</th>
@@ -191,7 +190,6 @@ $verification_rate = ($total_count > 0) ? round(($verified_count / $total_count)
                                         <td><?php echo $row['name']; ?></td>
                                         <td><?php echo $row['pharmacy_name']; ?></td>
                                         <td><?php echo $row['pan']; ?></td>
-                                        <td><?php echo $row['license_number']; ?></td>
                                         <td><?php echo date('M d, Y', strtotime($row['verification_request_date'])); ?></td>
                                         <td>
                                             <?php if(!empty($row['reg_document'])): ?>
@@ -199,7 +197,7 @@ $verification_rate = ($total_count > 0) ? round(($verified_count / $total_count)
                                                     <i class="fas fa-file-alt me-1"></i> View
                                                 </a>
                                             <?php else: ?>
-                                                <span class="badge bg-secondary">No Document</span>
+                                                <span class="badge bg-secondary rounded-pill p-2">No Document</span>
                                             <?php endif; ?>
                                         </td>
                                         <td>
@@ -289,8 +287,7 @@ $verification_rate = ($total_count > 0) ? round(($verified_count / $total_count)
                                     <th>ID</th>
                                     <th>NAME</th>
                                     <th>PHARMACY NAME</th>
-                                    <th>PAN</th>
-                                    <th>LICENSE NUMBER</th>
+                                    <th>PAN NUMBER</th>
                                     <th>VERIFICATION DATE</th>
                                     <th>DOCUMENT</th>
                                     <th>NOTES</th>
@@ -303,7 +300,6 @@ $verification_rate = ($total_count > 0) ? round(($verified_count / $total_count)
                                         <td><?php echo $row['name']; ?></td>
                                         <td><?php echo $row['pharmacy_name']; ?></td>
                                         <td><?php echo $row['pan']; ?></td>
-                                        <td><?php echo $row['license_number']; ?></td>
                                         <td><?php echo date('M d, Y', strtotime($row['verification_date'])); ?></td>
                                         <td>
                                             <?php if(!empty($row['reg_document'])): ?>
@@ -311,7 +307,7 @@ $verification_rate = ($total_count > 0) ? round(($verified_count / $total_count)
                                                     <i class="fas fa-file-alt me-1"></i> View
                                                 </a>
                                             <?php else: ?>
-                                                <span class="badge bg-secondary">No Document</span>
+                                                <span class="badge bg-secondary rounded-pill p-2">No Document</span>
                                             <?php endif; ?>
                                         </td>
                                         <td><?php echo $row['verification_notes']; ?></td>

@@ -84,21 +84,6 @@ while ($row = mysqli_fetch_assoc($top_orders_result)) {
     $top_orders[] = $row;
 }
 
-// Get recent orders
-$recent_orders_query = "SELECT o.order_date, m.medicine_name, o.quantity, o.status, o.total_amount
-                       FROM user_order_tbl o
-                       JOIN user_medicine_tbl m ON o.m_id = m.m_id
-                       WHERE o.pharmacy_id = '$user_id'
-                       ORDER BY o.order_date DESC
-                       LIMIT 10";
-$recent_orders_result = mysqli_query($conn, $recent_orders_query);
-
-$recent_orders = [];
-while ($row = mysqli_fetch_assoc($recent_orders_result)) {
-    $row['date'] = date('M d, Y', strtotime($row['order_date']));
-    $recent_orders[] = $row;
-}
-
 // Prepare response
 $response = [
     'dates' => $dates,
@@ -112,8 +97,7 @@ $response = [
         'todayOrders' => $stats_result['today_orders'],
         'pendingOrders' => $stats_result['pending_orders']
     ],
-    'topOrders' => $top_orders,
-    'recentOrders' => $recent_orders
+    'topOrders' => $top_orders
 ];
 
 header('Content-Type: application/json');

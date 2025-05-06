@@ -25,8 +25,8 @@
         }
 
         // Insert the sale
-        $query = "INSERT INTO user_sales_tbl (s_id, m_id, pharmacy_id, price, quantity, total_amount, status, sales_date) 
-                 VALUES ('','$medicine_id','$user_id','$sell_price','$quantity','$total','$status','$date')";
+        $query = "INSERT INTO user_sales_tbl (m_id, pharmacy_id, price, quantity, total_amount, status, sales_date) 
+                 VALUES ('$medicine_id','$user_id','$sell_price','$quantity','$total','$status','$date')";
 
         if ($conn->query($query) === TRUE) {
             redirect('../sales-display.php','Sale added successfully');

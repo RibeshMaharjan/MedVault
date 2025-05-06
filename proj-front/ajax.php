@@ -23,7 +23,7 @@ if (isset($_POST['search'])) {
                     <strong><?php echo $Result['medicine_name']; ?></strong>
                     <small class="d-block text-muted">Price: Rs.<?php echo $Result['sell_price']; ?></small>
                 </div>
-                <span class="badge <?php echo ($Result['in_stock'] > 0) ? 'bg-success' : 'bg-danger'; ?> rounded-pill">
+                <span class="badge <?php echo ($Result['in_stock'] > 0) ? 'bg-success' : 'bg-danger'; ?>  rounded-pill p-2">
                     Stock: <?php echo $Result['in_stock']; ?>
                 </span>
             </li>

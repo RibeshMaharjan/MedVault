@@ -191,7 +191,7 @@
                                     <td><?= $result['price'] ?></td>
                                     <td><?= $result['quantity'] ?></td>
                                     <td><?= $result['total_amount'] ?></td>
-                                    <td><span class="badge <?= $result['status'] == 'completed' ? 'bg-success' : 'bg-warning' ?>"><?= $result['status'] ?></span></td>
+                                    <td><span class="badge <?= $result['status'] == 'completed' ? 'bg-success' : 'bg-warning' ?> rounded-pill p-2"><?= $result['status'] ?></span></td>
                                     <td><?= $result['sales_date'] ?></td>
                                     <td class="row g-0">
                                         <div class="col">

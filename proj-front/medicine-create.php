@@ -9,30 +9,38 @@
                     <div class="col"><h1 class="fw-normal mb-3">Append Medicine From</h1></div>
                 </div>
                 <div class="row px-3 pb-4">
-                    <form action="code.php" class="form" method="POST" id="form" autocomplete="off" enctype="multipart/form-data">
+                    <form action="php/medicine-add.php" class="form" method="POST" id="form" autocomplete="off" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="name" class="form-label">Medicine Name</label>
                             <input class="form-control" type="text" placeholder="Medicine Name" aria-label="default input example" name="name">
                         </div>
                         <div class="mb-3">
-                            <label for="manufacturername" class="form-label">Manufacturere</label>
-                            <input type="text" class="form-control" placeholder="Manufacturere" name="manufacturername">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" placeholder="Medicine description" name="description"></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="price" class="form-label">Price</label>
-                            <input type="text" class="form-control" placeholder="Price" name="price">
+                            <label for="category" class="form-label">Category</label>
+                            <select class="form-select" name="category">
+                                <option value="">Select Category</option>
+                                <?php
+                                    $categories = getAll('user_category_tbl');
+                                    while($cat = mysqli_fetch_assoc($categories)){
+                                        echo '<option value="'.$cat['c_id'].'">'.$cat['category_name'].'</option>';
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Buy Price</label>
+                            <input type="text" class="form-control" placeholder="Buy Price" name="buy_price">
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Sell Price</label>
+                            <input type="text" class="form-control" placeholder="Sell Price" name="sell_price">
                         </div>
                         <div class="mb-3">
                             <label for="quantity" class="form-label">Quantity</label>
                             <input type="number" class="form-control" placeholder="Quantity" name="quantity">
-                        </div>
-                        <div class="mb-3">
-                            <label for="dosage" class="form-label">Dosage</label>
-                            <select class="form-select" id="floatingSelect" name="dosage">
-                                <option selected value="Not Selected">Dosage</option>
-                                <option value="tablet">Tablet</option>
-                                <option value="capsule">Capsule</option>
-                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="exp_date" class="form-label">Expiration Date</label>

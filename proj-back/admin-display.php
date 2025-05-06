@@ -15,9 +15,6 @@
         </div>
         <?php
             $user_id = $_SESSION['loggedInUser']['user_id'];
-            // File has no purpose - Cart query from removed e-commerce functionality
-            // $cartquery = "SELECT * FROM cart WHERE pharmacy_id = '$user_id'" ; 
-            // $queryresult = mysqli_query($conn, $cartquery);
         ?>
         <div class="table-responsive px-2 pt-3 mb-5">
         <table class="table table-striped">

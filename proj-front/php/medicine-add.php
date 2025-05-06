@@ -17,7 +17,7 @@
             redirect('../medicine-create.php','Fill All the Field');
         }
 
-        $query = "INSERT INTO user_medicine_tbl (m_id,pharmacy_id,medicine_name,medicine_desc,c_id,in_stock,buy_price,sell_price,exp_date) VALUES('','$user_id','$medicine_name','$description','$category','$instock','$buy_price','$sell_price','$formatted_Date')";
+        $query = "INSERT INTO user_medicine_tbl (pharmacy_id,medicine_name,medicine_desc,c_id,in_stock,buy_price,sell_price,exp_date) VALUES('$user_id','$medicine_name','$description','$category','$instock','$buy_price','$sell_price','$formatted_Date')";
         $data = mysqli_query($conn,$query);
 
         if($data){

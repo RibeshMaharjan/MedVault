@@ -2,7 +2,7 @@
 
 require '../config/function.php';
 
-$admin_table = 'role';
+$user_table = 'role';
 
 if (isset($_POST['signIn'])) {
     $emailInput = validate($_POST['email']);
@@ -13,7 +13,7 @@ if (isset($_POST['signIn'])) {
 
     if ($email != '' && $password != '') {
 
-        $query = "SELECT * FROM $admin_table WHERE email = '$email'";
+        $query = "SELECT * FROM $user_table WHERE email = '$email'";
         $result = mysqli_query($conn, $query);
 
         if ($result) {
@@ -32,7 +32,6 @@ if (isset($_POST['signIn'])) {
                     } else {
                         $_SESSION['auth'] = true;
                         $_SESSION['loggedInUserRole'] = $row['role'];
-                        $_SESSION['pharmacy_id'] = $row['user_id'];
                         $_SESSION['loggedInUser'] = [
                             'name' => $row['name'],
                             'user_id' =>  $row['user_id'],
@@ -83,7 +82,7 @@ if (isset($_POST['register'])) {
             redirect('login.php', 'Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters');
         }
 
-        if ($passwordInput != $repasswordInput) {
+        if ($password != $repassword) {
             redirect('login.php', 'Password Doesnot Match');
         }
 
@@ -101,7 +100,7 @@ if (isset($_POST['register'])) {
 
         // passwordhash
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-        $query = "INSERT INTO role VALUES('','$name','$email','$passwordHash','user')";
+        $query = "INSERT INTO role (`name`, `email`, `password`, `role`) VALUES('$name','$email','$passwordHash','user')";
 
         if ($conn->query($query) === TRUE) {
             // Retrieve the order_id generated for the newly inserted row

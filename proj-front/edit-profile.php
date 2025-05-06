@@ -1,11 +1,11 @@
 <?php include 'includes/header.php'; 
 
-if (!isset($_SESSION['pharmacy_id'])) {
+if (!isset($_SESSION['loggedInUser']['user_id'])) {
     echo "<script>window.location.href='login.php';</script>";
     exit();
 }
 
-$pharmacy_id = $_SESSION['pharmacy_id'];
+$pharmacy_id = $_SESSION['loggedInUser']['user_id'];
 
 // Get pharmacy details
 $pharmacy_query = "SELECT * FROM tbl_pharmacy WHERE pharmacy_id = $pharmacy_id";
@@ -18,7 +18,6 @@ if(isset($_POST['update_profile'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $phone = mysqli_real_escape_string($conn, $_POST['phone']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
-    $pan = mysqli_real_escape_string($conn, $_POST['pan']);
     
     // Update profile information
     $update_query = "UPDATE tbl_pharmacy SET 
@@ -26,7 +25,6 @@ if(isset($_POST['update_profile'])) {
                     email = '$email',
                     phone = '$phone',
                     address = '$address',
-                    pan = '$pan'
                     WHERE pharmacy_id = $pharmacy_id";
     
     if(mysqli_query($conn, $update_query)) {
@@ -50,7 +48,7 @@ if(isset($_POST['update_profile'])) {
 
 // Handle verification form submission
 if(isset($_POST['submit_verification'])) {
-    $license_number = mysqli_real_escape_string($conn, $_POST['license_number']);
+    $pan = mysqli_real_escape_string($conn, $_POST['pan']);
     
     // File upload for registration document
     $reg_document = '';
@@ -75,7 +73,7 @@ if(isset($_POST['submit_verification'])) {
     
     // Update verification information
     $verification_query = "UPDATE tbl_pharmacy SET 
-                          license_number = '$license_number',
+                          pan = '$pan',
                           verification_request_date = NOW()";
     
     if(!empty($reg_document)) {
@@ -97,7 +95,7 @@ if(isset($_POST['submit_verification'])) {
 
 <div class="main-container d-flex">
 	<?php include 'includes/dashboard.php'; ?>
-	<div class="container-fluid p-5 bg-body-tertiary">
+	<div class="container-fluid p-5">
 		<?php if(isset($verification_success)): ?>
 			<div class="alert alert-success alert-dismissible fade show" role="alert">
 				<strong>Verification request submitted successfully!</strong> Your verification request has been submitted and is under review by our team.
@@ -119,8 +117,8 @@ if(isset($_POST['submit_verification'])) {
 			</div>
 		<?php endif; ?>
 		
-		<div class="row">
-			<div class="col-md-6 mb-4">
+		<div class="row pt-4 mb-5">
+			<div class="col-md-6">
 				<div class="card border-0 shadow">
 					<div class="card-header bg-danger text-white">
 						<p class="fw-semibold fs-4 mb-0">Edit Profile</p>
@@ -134,10 +132,6 @@ if(isset($_POST['submit_verification'])) {
 							<div class="mb-3">
 								<label for="email" class="form-label">Email</label>
 								<input type="email" class="form-control" id="email" name="email" value="<?php echo $pharmacy_data['email']; ?>" required>
-							</div>
-							<div class="mb-3">
-								<label for="pan" class="form-label">PAN Number</label>
-								<input type="text" class="form-control" id="pan" name="pan" value="<?php echo $pharmacy_data['pan']; ?>" required>
 							</div>
 							<div class="mb-3">
 								<label for="phone" class="form-label">Phone</label>
@@ -156,7 +150,8 @@ if(isset($_POST['submit_verification'])) {
 			<div class="col-md-6 mb-4">
 				<div class="card border-0 shadow">
 					<div class="card-header bg-danger text-white">
-						<h4>Verification Status</h4>
+						<p class="fw-semibold fs-4 mb-0">Verification Status</p>
+
 					</div>
 					<div class="card-body">
 						<?php if($pharmacy_data['isverified'] == 1): ?>
@@ -169,15 +164,15 @@ if(isset($_POST['submit_verification'])) {
 								<div class="verification-details">
 									<div class="detail-item d-flex justify-content-between mb-2">
 										<span class="fw-bold">Status:</span>
-										<span class="badge bg-success">Verified</span>
+										<span class="badge bg-success rounded-pill p-2">Verified</span>
 									</div>
 									<div class="detail-item d-flex justify-content-between mb-2">
 										<span class="fw-bold">Verification Date:</span>
 										<span><?php echo date('F j, Y', strtotime($pharmacy_data['verification_date'])); ?></span>
 									</div>
 									<div class="detail-item d-flex justify-content-between mb-2">
-										<span class="fw-bold">License Number:</span>
-										<span><?php echo $pharmacy_data['license_number']; ?></span>
+										<span class="fw-bold">Pan Number:</span>
+										<span><?php echo $pharmacy_data['pan']; ?></span>
 									</div>
 									<?php if(!empty($pharmacy_data['verification_notes'])): ?>
 									<div class="detail-item mb-2">
@@ -197,15 +192,15 @@ if(isset($_POST['submit_verification'])) {
 								<div class="verification-details">
 									<div class="detail-item d-flex justify-content-between mb-2">
 										<span class="fw-bold">Status:</span>
-										<span class="badge bg-warning text-dark">Pending</span>
+										<span class="badge bg-warning text-dark rounded-pill p-2">Pending</span>
 									</div>
 									<div class="detail-item d-flex justify-content-between mb-2">
 										<span class="fw-bold">Request Date:</span>
 										<span><?php echo date('F j, Y', strtotime($pharmacy_data['verification_request_date'])); ?></span>
 									</div>
 									<div class="detail-item d-flex justify-content-between mb-2">
-										<span class="fw-bold">License Number:</span>
-										<span><?php echo $pharmacy_data['license_number']; ?></span>
+										<span class="fw-bold">Pan Number:</span>
+										<span><?php echo $pharmacy_data['pan']; ?></span>
 									</div>
 									<?php if(!empty($pharmacy_data['reg_document'])): ?>
 									<div class="detail-item d-flex justify-content-between mb-2">
@@ -232,18 +227,18 @@ if(isset($_POST['submit_verification'])) {
 								</div>
 								<h5 class="text-danger mb-3">Not Verified!</h5>
 								<div class="alert alert-warning mb-3">
-									<i class="fas fa-info-circle"></i> Verification is required to access all features of the platform. Please submit your pharmacy's license details for verification.
+									<i class="fas fa-info-circle"></i> Verification is required to access all features of the platform. Please submit your pharmacy's pan details for verification.
 								</div>
 								
 								<form action="" method="post" enctype="multipart/form-data">
 									<div class="mb-3">
-										<label for="license_number" class="form-label">Pharmacy License Number</label>
-										<input type="text" class="form-control" id="license_number" name="license_number" required>
+										<label for="pan" class="form-label">Pharmacy Pan Number</label>
+										<input type="text" class="form-control" id="pan" name="pan" required>
 									</div>
 									<div class="mb-3">
 										<label for="reg_document" class="form-label">Registration Document (PDF/Image)</label>
 										<input type="file" class="form-control" id="reg_document" name="reg_document" accept=".pdf,.jpg,.jpeg,.png" required>
-										<small class="text-muted">Upload your pharmacy registration certificate or license document.</small>
+										<small class="text-muted">Upload your pharmacy registration certificate or pan document.</small>
 									</div>
 									<button type="submit" name="submit_verification" class="btn btn-danger">Submit for Verification</button>
 								</form>

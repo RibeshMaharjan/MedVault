@@ -17,10 +17,6 @@
                     <h5><i class="fas fa-store-alt me-2 text-danger"></i>Basic Information</h5>
                     <input type="hidden" name="pharmacy_id" id="pharmacy_id">
                     <div class="mb-3">
-                        <label for="pan" class="form-label">PAN Number</label>
-                        <input type="text" class="form-control" id="pan" name="pan">
-                    </div>
-                    <div class="mb-3">
                         <label for="name" class="form-label">Pharmacy Name</label>
                         <input type="text" class="form-control" id="name" name="pharmacy_name">
                     </div>
@@ -40,8 +36,8 @@
                 <div class="col-md-6">
                     <h5><i class="fas fa-check-circle me-2 text-success"></i>Verification Information</h5>
                     <div class="mb-3">
-                        <label for="license_number" class="form-label">License Number</label>
-                        <input type="text" class="form-control" id="license_number" name="license_number">
+                        <label for="pan" class="form-label">PAN Number</label>
+                        <input type="text" class="form-control" id="pan" name="pan">
                     </div>
                     <div class="mb-3">
                         <label for="reg_document" class="form-label">Registration Document</label>
@@ -72,6 +68,7 @@
         </div>
     </div>
     </div>
+    
 
     <!-- View Document Modal -->
     <div class="modal fade" id="documentModal" tabindex="-1" aria-hidden="true">
@@ -190,13 +187,12 @@
                 <table class="table table-striped">
                     <thead class="table-danger">
                         <tr>
-                            <th scope="col">PAN</th>
                             <th scope="col">PHARMACY NAME</th>
                             <th scope="col">USER NAME</th>
                             <th scope="col">EMAIL</th>
                             <th scope="col">PHONE</th>
                             <th scope="col">STATUS</th>
-                            <th scope="col">LICENSE</th>
+                            <th scope="col">PAN</th>
                             <th scope="col">ACTION</th>
                         </tr>
                     </thead>
@@ -209,25 +205,24 @@
                                 
                                 if($result['isverified'] == 1) {
                                     $verification_status = 'Verified';
-                                    $status_badge = '<span class="badge bg-success">Verified</span>';
+                                    $status_badge = '<span class="badge bg-success rounded-pill p-2">Verified</span>';
                                 } elseif(!empty($result['verification_request_date'])) {
                                     $verification_status = 'Pending';
-                                    $status_badge = '<span class="badge bg-warning text-dark">Pending</span>';
+                                    $status_badge = '<span class="badge bg-warning text-dark rounded-pill p-2">Pending</span>';
                                 } else {
                                     $verification_status = 'Not Verified';
-                                    $status_badge = '<span class="badge bg-danger">Not Verified</span>';
+                                    $status_badge = '<span class="badge bg-danger rounded-pill p-2">Not Verified</span>';
                                 }
                                 ?>
                                 <tr>
-                                    <td><?=$result['pan']?></td>
                                     <td><?=$result['pharmacy_name']?></td>
                                     <td><?=$result['name']?></td>
                                     <td><?=$result['email']?></td>
                                     <td><?=$result['phone']?></td>
                                     <td><?=$status_badge?></td>
                                     <td>
-                                        <?php if(!empty($result['license_number'])): ?>
-                                            <?=$result['license_number']?>
+                                        <?php if(!empty($result['pan'])): ?>
+                                            <?=$result['pan']?>
                                             <?php if(!empty($result['reg_document'])): ?>
                                                 <a href="javascript:void(0)" class="ms-2 text-danger view-document" data-document="../proj-front/<?=$result['reg_document']?>" title="View Document">
                                                     <i class="fas fa-file-alt"></i>
@@ -247,7 +242,6 @@
                                                 data-phone="<?=$result['phone']?>"
                                                 data-address="<?=$result['address']?>"
                                                 data-isverified="<?=$result['isverified']?>"
-                                                data-license="<?=$result['license_number']?>"
                                                 data-document="<?=$result['reg_document']?>"
                                                 data-notes="<?=$result['verification_notes']?>">
                                                 <i class="fas fa-edit"></i>

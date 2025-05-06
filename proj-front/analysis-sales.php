@@ -163,7 +163,7 @@
         try {
             console.log(`Fetching sales data for period: ${period}`);
             // Use the full path to the PHP file
-            const response = await fetch(`/MedVault/proj-front/php/get_sales_data.php?period=${period}`);
+            const response = await fetch(`php/get_sales_data.php?period=${period}`);
             
             if (!response.ok) {
                 console.error(`Error fetching data: ${response.status} ${response.statusText}`);
@@ -533,15 +533,15 @@
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Total Units in Stock
-                            <span class="badge bg-primary rounded-pill">${inventory.totalStock || 0} units</span>
+                            <span class="badge bg-primary rounded-pill p-2">${inventory.totalStock || 0} units</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Low Stock Items
-                            <span class="badge bg-warning rounded-pill">${inventory.lowStockCount || 0} items</span>
+                            <span class="badge bg-warning rounded-pill p-2">${inventory.lowStockCount || 0} items</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Out of Stock Items
-                            <span class="badge bg-danger rounded-pill">${inventory.outOfStockCount || 0} items</span>
+                            <span class="badge bg-danger rounded-pill p-2">${inventory.outOfStockCount || 0} items</span>
                         </li>
                     </ul>
                 </div>
@@ -550,15 +550,15 @@
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Safety Stock Level
-                            <span class="badge bg-primary rounded-pill">${recommendations.safetyStock} units</span>
+                            <span class="badge bg-primary rounded-pill p-2">${recommendations.safetyStock} units</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Reorder Point
-                            <span class="badge bg-warning rounded-pill">${recommendations.reorderPoint} units</span>
+                            <span class="badge bg-warning rounded-pill p-2">${recommendations.reorderPoint} units</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Maximum Stock Level
-                            <span class="badge bg-info rounded-pill">${recommendations.maxStock} units</span>
+                            <span class="badge bg-info rounded-pill p-2">${recommendations.maxStock} units</span>
                         </li>
                     </ul>
                 </div>
@@ -567,11 +567,11 @@
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Average Daily Sales
-                            <span class="badge bg-secondary rounded-pill">${recommendations.averageDailySales} units</span>
+                            <span class="badge bg-secondary rounded-pill p-2">${recommendations.averageDailySales} units</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Stock Coverage
-                            <span class="badge ${(inventory.totalStock || 0) >= recommendations.safetyStock ? 'bg-success' : 'bg-danger'} rounded-pill">
+                            <span class="badge ${(inventory.totalStock || 0) >= recommendations.safetyStock ? 'bg-success' : 'bg-danger'} rounded-pill p-2">
                                 ${recommendations.averageDailySales > 0 ? Math.round((inventory.totalStock || 0) / recommendations.averageDailySales) : 0} days
                             </span>
                         </li>
@@ -604,7 +604,7 @@
                                         <td>${item.medicine_name}</td>
                                         <td>${item.in_stock}</td>
                                         <td>
-                                            <span class="badge ${item.in_stock === 0 ? 'bg-danger' : 'bg-warning'}">
+                                            <span class="badge ${item.in_stock === 0 ? 'bg-danger' : 'bg-warning'} rounded-pill p-2">
                                                 ${item.in_stock === 0 ? 'Out of Stock' : 'Low Stock'}
                                             </span>
                                         </td>

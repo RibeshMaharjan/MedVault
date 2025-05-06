@@ -1,7 +1,7 @@
 <?php
 // Check verification status
-if(isset($_SESSION['pharmacy_id'])) {
-    $pharmacy_id = $_SESSION['pharmacy_id'];
+if(isset($_SESSION['loggedInUser']['user_id'])) {
+    $pharmacy_id = $_SESSION['loggedInUser']['user_id'];
     $verify_check = mysqli_query($conn, "SELECT isverified, verification_request_date FROM tbl_pharmacy WHERE pharmacy_id = $pharmacy_id");
     $verify_data = mysqli_fetch_assoc($verify_check);
     

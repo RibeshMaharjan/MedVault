@@ -50,8 +50,8 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="mb-3">
-                                            <label for="license_number" class="form-label">License Number</label>
-                                            <input type="text" class="form-control" name="license_number">
+                                            <label for="pan" class="form-label">Pan Number</label>
+                                            <input type="text" class="form-control" name="pan">
                                         </div>
                                         <div class="mb-3">
                                             <label for="reg_document" class="form-label">Registration Document</label>
