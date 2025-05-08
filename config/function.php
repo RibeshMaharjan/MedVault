@@ -20,6 +20,11 @@
         exit(0);
     }
 
+    function setErrorMessage($message)
+    {
+        $_SESSION['status'] = $message;
+    }
+
     function webSetting($columnname){
         $setting = getById('settings','id',1);
         if($setting['status'] == 200){

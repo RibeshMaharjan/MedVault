@@ -8,10 +8,14 @@
 
         $pharmacy = getById('tbl_pharmacy','email', $pharmacyemail);
         if($pharmacy['status'] == 200){
+            $conn->begin_transaction();
             $pharmacydelete = deleteQuery('tbl_pharmacy','email', $pharmacyemail);
-            if($pharmacydelete){
+            $roledelete = deleteQuery('role','email', $pharmacyemail);
+            if($pharmacydelete && $roledelete){
+                $conn->commit();
                 redirect('pharmacy-display.php','User Deleted Successfully');
             }else{
+                $conn->rollback();
                 redirect('pharmacy-display.php','Something Went Wrong!');
             }
         }else{

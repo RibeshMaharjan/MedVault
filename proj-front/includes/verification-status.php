@@ -4,7 +4,7 @@ if(isset($_SESSION['loggedInUser']['user_id'])) {
     $pharmacy_id = $_SESSION['loggedInUser']['user_id'];
     $verify_check = mysqli_query($conn, "SELECT isverified, verification_request_date FROM tbl_pharmacy WHERE pharmacy_id = $pharmacy_id");
     $verify_data = mysqli_fetch_assoc($verify_check);
-    
+
     if($verify_data['isverified'] == 0) {
         if(empty($verify_data['verification_request_date'])) {
             // Not verified and no request - show a persistent notification

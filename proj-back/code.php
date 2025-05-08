@@ -112,7 +112,7 @@
 
     // ADD PHARMACY
     if(isset($_POST['add-user'])){
-        $pharmacy_name = $_POST['name'];
+        $pharmacy_name = validate($_POST['name']);
         $email = $_POST['email'];
         $password = $_POST['password'];
         $phone = $_POST['phone'];
@@ -120,38 +120,11 @@
         $isverified = $_POST['isverified'];
         $verification_notes = $_POST['verification_notes'];
         $pan = isset($_POST['pan']) ? $_POST['pan'] : '';
-        
-        // Handle file upload for registration document
-        $reg_document = '';
-        if(isset($_FILES['reg_document']) && $_FILES['reg_document']['error'] == 0) {
-            $upload_dir = '../uploads/verification/';
-            
-            // Create the directory if it doesn't exist
-            if (!file_exists($upload_dir)) {
-                mkdir($upload_dir, 0777, true);
-            }
-            
-            $filename = time() . '_' . $_FILES['reg_document']['name'];
-            $file_tmp = $_FILES['reg_document']['tmp_name'];
-            $fileDestination = $upload_dir . $filename;
-            
-            // Move the uploaded file
-            if(move_uploaded_file($file_tmp, $fileDestination)) {
-                $reg_document = 'uploads/verification/' . $filename;
-            }
-        }
 
-        if($pharmacy_name != '' || $email != '' || $password != '')
+        if($pharmacy_name != '' && $email != '' && $password != '')
         {
-            if($pan != '') {
-                // PAN validation
-                if(!is_numeric($pan) || $pan<=0) {
-                    redirect('pharmacy-create.php','Invalid PAN Number');
-                }
-            }
-
             // Name validation
-            if (!preg_match("/^[a-zA-Z-' ]*$/",$pharmacy_name)) {
+            if (!preg_match("/^[a-zA-Z-' ]*$/", $pharmacy_name)) {
                 redirect('pharmacy-create.php','Only letters and white space allowed');
             }
 
@@ -161,45 +134,100 @@
             }
 
             // Passowrd validation
-            $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/'; 
+            $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/';
 
-            if (!preg_match($pattern, $password)) { 
+            if (!preg_match($pattern, $password)) {
                 redirect('pharmacy-create.php','Invalid Password');
             }
-            
-       
 
-            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-            $query = "INSERT INTO role (`name`,`email`,`password`,`role`) VALUES('$pharmacy_name','$email','$passwordHash','user')";
+            $conn->begin_transaction();
+            try {
+                $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+                $query = "INSERT INTO role (`name`,`email`,`password`,`role`) VALUES('$pharmacy_name','$email','$passwordHash','user')";
 
-            if ($conn->query($query) === TRUE) {
-                // Retrieve the user_id generated for the newly inserted row
-                $pharmacy_id = $conn->insert_id;
-                
-                // Set verification dates based on status
-                $verification_request_date = 'NULL';
-                $verification_date = 'NULL';
-                
-                if($isverified == 0) {
-                    $verification_request_date = "'" . date('Y-m-d H:i:s') . "'";
-                } else if($isverified == 1) {
-                    $verification_request_date = "'" . date('Y-m-d H:i:s') . "'";
-                    $verification_date = "'" . date('Y-m-d H:i:s') . "'";
-                }
-            
-                // Insert data into the tbl_pharmacy table with verification details
-                $sql_insert = "INSERT INTO tbl_pharmacy (pharmacy_id, pan, pharmacy_name, email, phone, address, 
-                isverified, reg_document, verification_request_date, verification_date, verification_notes) 
-                VALUES('$pharmacy_id', '$pan', '$pharmacy_name', '$email', '$phone', '$address', 
-                '$isverified', '$reg_document', $verification_request_date, $verification_date, '$verification_notes')";
-            
-                if ($conn->query($sql_insert) === TRUE) {
-                    redirect('pharmacy-display.php', "Pharmacy Added successfully");
+                if ($conn->query($query) === TRUE) {
+                    // Retrieve the user_id generated for the newly inserted row
+                    $pharmacy_id = $conn->insert_id;
+
+                    // Set verification dates based on status
+                    $verification_request_date = 'NULL';
+                    $verification_date = 'NULL';
+                    $reg_document = '';
+
+                    if($isverified == 1) {
+                        $verification_request_date = "'" . date('Y-m-d H:i:s') . "'";
+                        $verification_date = "'" . date('Y-m-d H:i:s') . "'";
+
+                        if($pan != '') {
+                            $conn->rollback();
+                            redirect('pharmacy-create.php','Pan Number is required for verification');
+                        }
+
+                        // PAN validation
+                        if(!is_numeric($pan) || $pan <= 0) {
+                            $conn->rollback();
+                            redirect('pharmacy-create.php','Invalid PAN Number');
+                        }
+
+                        // Handle file upload for registration document
+                        if(isset($_FILES['reg_document']) && $_FILES['reg_document']['error'] == 0) {
+                            $upload_dir = '../uploads/verification/';
+                            $fileExt = explode('.', $_FILES['reg_document']['name']);
+                            $fileActualExt = strtolower(end($fileExt));
+                            $allowedExts = array("jpg", "jpeg", "png", "pdf");;
+
+                            if(!in_array($fileActualExt, $allowedExts)) {
+                                $conn->rollback();
+                                redirect('pharmacy-create.php', "You can only upload files with the following extensions: jpg, jpeg, png, pdf.");
+                            }
+
+                            if($_FILES['reg_document']['size'] > 5000000) {
+                                $conn->rollback();
+                                redirect('pharmacy-create.php', "File size must be less than 5 MB.");
+                            }
+
+                            // Create the directory if it doesn't exist
+                            if (!file_exists($upload_dir)) {
+                                mkdir($upload_dir, 0777, true);
+                            }
+
+                            $filename = time() . '_' . $_FILES['reg_document']['name'];
+                            $file_tmp = $_FILES['reg_document']['tmp_name'];
+                            $fileDestination = $upload_dir . $filename;
+
+                            // Move the uploaded file
+                            if(!move_uploaded_file($file_tmp, $fileDestination)) {
+                                $conn->rollback();
+                                redirect('pharmacy-create.php', "There was an error uploading your file.");
+                            }
+
+                            $reg_document = 'uploads/verification/' . $filename;
+                        } else {
+                            $conn->rollback();
+                            redirect('pharmacy-create.php', "Please select a file to upload.");
+                        }
+                    }
+
+                    // Insert data into the tbl_pharmacy table with verification details
+                    $sql_insert = "INSERT INTO tbl_pharmacy (pharmacy_id, pan, pharmacy_name, email, phone, address, 
+                    isverified, reg_document, verification_request_date, verification_date, verification_notes) 
+                    VALUES('$pharmacy_id', '$pan', '$pharmacy_name', '$email', '$phone', '$address', 
+                    '$isverified', '$reg_document', $verification_request_date, $verification_date, '$verification_notes')";
+
+                    if ($conn->query($sql_insert) === TRUE) {
+                        $conn->commit();
+                        redirect('pharmacy-display.php', "Pharmacy Added successfully");
+                    } else {
+                        $conn->rollback();
+                        redirect('pharmacy-create.php', 'Failed to add pharmacy!');
+                    }
                 } else {
-                    echo "Error inserting data into tbl_pharmacy table: " . $conn->error;
+                    $conn->rollback();
+                    redirect('pharmacy-create.php', 'Failed to add pharmacy!');
                 }
-            } else {
-                echo "Error inserting data into role table: " . $conn->error;
+            } catch (Exception $e) {
+                $conn->rollback();
+                redirect('pharmacy-create.php', 'Failed to add pharmacy!');
             }
         }
         else{

@@ -5,10 +5,14 @@ require '../config/function.php';
 $user_table = 'role';
 
 if (isset($_POST['signIn'])) {
-    $emailInput = validate($_POST['email']);
+    $email = validate($_POST['email']);
     $passwordInput = validate($_POST['password']);
 
-    $email = filter_var($emailInput, FILTER_SANITIZE_EMAIL);
+    // Email validation
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+       redirect('login.php', 'Invalid email format');
+    }
+
     $password = filter_var($passwordInput, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
 
     if ($email != '' && $password != '') {
@@ -43,10 +47,10 @@ if (isset($_POST['signIn'])) {
                     redirect('login.php', 'Invalid Password');
                 }
             } else {
-                redirect('login.php', 'Invalid Email or Password');
+                redirect('login.php', 'Email does not exist');
             }
         } else {
-            redirect('login.php', 'Invalid Email');
+            redirect('login.php', 'Email does not exist');
         }
     }
 }
@@ -59,11 +63,6 @@ if (isset($_POST['register'])) {
     $repassword = $_POST['repassword'];
 
     if ($email != '' || $password != '' /* || $pan != '' */ || $name != '') {
-
-        // PAN validation
-        // if(!is_numeric($pan) || $pan <= 0) {
-        //     redirect('login.php','Invalid PAN Number');
-        // }
 
         // Name validation
         if (!preg_match("/^[a-zA-Z-' ]*$/", $name)) {
@@ -86,17 +85,12 @@ if (isset($_POST['register'])) {
             redirect('login.php', 'Password Doesnot Match');
         }
 
-        $query = "SELECT * FROM tbl_pharmacy";
-        // $panresult = $conn->query($query);
-        // while ($row = mysqli_fetch_array($panresult, MYSQLI_ASSOC)) {
-        //     // pan repeat check
-        //     if ($pan == $row['pan']) {
-        //         redirect('login.php', 'Pan Already Exist');
-        //     }
-        //     if ($email == $row['email']) {
-        //         redirect('login.php', 'Email Already Exist');
-        //     }
-        // }
+        // check if email already exist
+        $query = "SELECT * FROM tbl_pharmacy WHERE email = '$email'";
+        $emailExistResult = $conn->query(($query));
+        if(mysqli_num_rows($emailExistResult)) {
+            redirect('login.php', 'Email already exist');
+        }
 
         // passwordhash
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
@@ -110,7 +104,7 @@ if (isset($_POST['register'])) {
             $sql_insert = "INSERT INTO tbl_pharmacy (pharmacy_id, pharmacy_name, email) VALUES('$user_id', '$name','$email')";
 
             if ($conn->query($sql_insert) === TRUE) {
-                redirect('login.php', 'Registeration Successfull!');
+                redirect('login.php', 'Registration Successful!');
             } else {
                 echo "Error inserting data into order_address table: " . $conn->error;
             }
