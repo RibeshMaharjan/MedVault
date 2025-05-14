@@ -1,5 +1,6 @@
 <?php
 include_once('../../config/function.php');
+global $conn;
 
 // Get the logged in user's ID
 $user_id = $_SESSION['loggedInUser']['user_id'];
@@ -91,7 +92,7 @@ switch($period) {
 // Process data according to interval
 for($i = 0; $i < count($all_data); $i += $interval) {
     $dates[] = date('M d', strtotime($all_data[$i]['date']));
-    
+
     // For intervals > 1, average the values in between
     $avg_amount = 0;
     $points_counted = 0;
@@ -105,99 +106,123 @@ for($i = 0; $i < count($all_data); $i += $interval) {
 // Calculate average sale for anomaly detection
 $averageSale = $count > 0 ? $total_amount / $count : 0;
 
-// Calculate future predictions
+// Calculate future predictions using weighted moving average
 function calculatePredictions($amounts, $dates, $period = 'week') {
+    // If no historical data, return empty arrays
     if (empty($amounts)) {
         return [[], []];
     }
 
-    // Set parameters based on period
+    // Step 1: Determine how many days to predict based on selected period
     switch($period) {
         case 'week':
-            $window_size = 7;
-            $days_to_predict = 7;
-            $prediction_interval = 1;
+            $days_to_predict = 7;      // Predict next 7 days for weekly view
+            $prediction_interval = 1;  // Show every day
             break;
         case 'month':
-            $window_size = 7;
-            $days_to_predict = 30;
-            $prediction_interval = 1; // Changed to 1 for smoother predictions
+            $days_to_predict = 30;     // Predict next 30 days for monthly view
+            $prediction_interval = 1;  // Show every day
             break;
         case '3months':
-            $window_size = 30;
-            $days_to_predict = 90;
-            $prediction_interval = 3;
+            $days_to_predict = 90;     // Predict next 90 days for quarterly view
+            $prediction_interval = 3;  // Show every 3 days to avoid overcrowding
             break;
         default:
-            $window_size = 7;
             $days_to_predict = 7;
             $prediction_interval = 1;
     }
 
-    // Calculate base level from last 7 non-zero values
-    $non_zero_values = array_filter($amounts, function($value) { return $value > 0; });
-    $recent_values = array_slice($non_zero_values, -7);
-    $base_level = !empty($recent_values) ? array_sum($recent_values) / count($recent_values) : 0;
+    // Step 2: Set up parameters for weighted moving average
+    $window_size = 5;  // Window size: number of recent data points to consider (5 days in this case)
 
-    // Calculate trend from non-zero values
-    $trend = 0;
-    if (count($non_zero_values) > 1) {
-        $values_array = array_values($non_zero_values);
-        $trend = ($values_array[count($values_array)-1] - $values_array[0]) / count($values_array);
-    }
+    // Weights give more importance to recent values
+    // For example: 40% to most recent, 30% to second most recent, etc.
+    $weights = [0.4, 0.3, 0.15, 0.1, 0.05]; 
 
-    // Calculate weekly pattern
-    $day_totals = array_fill(0, 7, 0);
-    $day_counts = array_fill(0, 7, 0);
-    
-    for ($i = 0; $i < count($amounts); $i++) {
-        if ($amounts[$i] > 0) {  // Only consider non-zero values
-            $day_of_week = date('w', strtotime($dates[$i]));
-            $day_totals[$day_of_week] += $amounts[$i];
-            $day_counts[$day_of_week]++;
-        }
-    }
-
-    // Calculate average for each day of week
-    $day_averages = array_fill(0, 7, $base_level);  // Default to base_level
-    for ($i = 0; $i < 7; $i++) {
-        if ($day_counts[$i] > 0) {
-            $day_averages[$i] = $day_totals[$i] / $day_counts[$i];
-        }
-    }
-
-    // Generate predictions
+    // Step 3: Prepare arrays for prediction results
     $predicted_dates = [];
     $predicted_amounts = [];
-    $last_date = end($dates);
+    $last_date = end($dates);  // Get the most recent date from historical data
 
-    for ($i = 1; $i <= $days_to_predict; $i++) {
+    // Make a copy of historical amounts to use for predictions
+    $prediction_data = $amounts;
+
+    // Step 4: Generate predictions starting from today (i=0) and then one day at a time
+    for ($i = 0; $i <= $days_to_predict; $i++) {
+        // Calculate the date (for i=0, this is today's date)
         $next_date = date('Y-m-d', strtotime($last_date . " +$i days"));
-        $day_of_week = date('w', strtotime($next_date));
-        
-        // Use day of week average as base prediction
-        $prediction = $day_averages[$day_of_week];
-        
-        // Apply trend with dampening
-        $dampening = 1 / (1 + ($i / 30));  // Gradual dampening over time
-        $prediction += $trend * $i * $dampening;
-        
-        // Add small random variation (±5%)
-        $variation = $prediction * (mt_rand(-5, 5) / 100);
-        $prediction += $variation;
-        
-        // Ensure prediction stays within reasonable bounds
-        $max_value = max($amounts);
-        $min_value = min(array_filter($amounts, function($value) { return $value > 0; }));
-        $prediction = max($min_value * 0.7, min($max_value * 1.3, $prediction));
 
+        if ($i == 0) {
+            // For today, use the last actual sales value
+            $prediction = end($amounts);
+        } else {
+            // For future days, calculate prediction using weighted moving average
+            $prediction = calculateWeightedMovingAverage($prediction_data, $window_size, $weights);
+
+            // Add this prediction to our data for calculating the next day's prediction
+            // This allows each prediction to influence future predictions
+            $prediction_data[] = $prediction;
+        }
+
+        // Only add to results at specified intervals (to avoid overcrowding the chart)
         if ($i % $prediction_interval == 0) {
             $predicted_dates[] = date('M d', strtotime($next_date));
             $predicted_amounts[] = round($prediction, 2);
         }
     }
 
+    // Return the predicted dates and amounts
     return [$predicted_dates, $predicted_amounts];
+}
+
+// Helper function to calculate weighted moving average
+function calculateWeightedMovingAverage($data, $window_size, $weights = null) {
+    // Step 1: Check if all values are zero, if so return a small default value
+    // This prevents a flat zero forecast line
+    $all_zeros = true;
+    foreach ($data as $value) {
+        if ($value > 0) {
+            $all_zeros = false;
+            break;
+        }
+    }
+
+    if ($all_zeros) {
+        return 10; // Return a small default value
+    }
+
+    // Step 2: Set up default weights if none provided
+    // For example, with window_size = 3, weights might be [0.5, 0.3, 0.2]
+    // This gives more importance to recent values
+    if ($weights === null) {
+        // Create simple decreasing weights
+        $weights = [];
+        for ($i = 0; $i < $window_size; $i++) {
+            $weights[$i] = $window_size - $i;
+        }
+    }
+
+    // Step 3: Get the most recent data points (up to window_size)
+    $data_length = count($data);
+    $recent_data = array_slice($data, max(0, $data_length - $window_size));
+    $recent_count = count($recent_data);
+
+    // Step 4: If we don't have enough data points, adjust the weights array
+    if ($recent_count < $window_size) {
+        $weights = array_slice($weights, 0, $recent_count);
+    }
+
+    // Step 5: Calculate the weighted sum and the sum of weights
+    $weighted_sum = 0;
+    $weight_sum = 0;
+
+    for ($i = 0; $i < $recent_count; $i++) {
+        $weighted_sum += $recent_data[$i] * $weights[$i];
+        $weight_sum += $weights[$i];
+    }
+
+    // Step 6: Calculate and return the weighted average
+    return $weighted_sum / $weight_sum;
 }
 
 // Helper function to calculate historical volatility

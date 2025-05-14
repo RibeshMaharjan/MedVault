@@ -69,9 +69,9 @@
                 <li class="nav-item <?= $analysis_sales_active ?>">
                     <a class="nav-link" aria-current="page" href="analysis-sales.php" data-display="adminform"><span class="material-symbols-outlined fs-6 icon">category</span>Sales Analysis</a>
                 </li>
-                <li class="nav-item <?= $analysis_order_active ?>">
+                <!--<li class="nav-item <?php /*= $analysis_order_active */?>">
                     <a class="nav-link" aria-current="page" href="analysis-order.php" data-display="adminform"><span class="material-symbols-outlined fs-6 icon">category</span>Order Analysis</a>
-                </li>
+                </li>-->
                 <li class="nav-item <?= $profile_active ?>">
                     <a class="nav-link" aria-current="page" href="edit-profile.php" data-display="adminform"><span class="material-symbols-outlined fs-6 icon">person</span>Profile</a>
                 </li>

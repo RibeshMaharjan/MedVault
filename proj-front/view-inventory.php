@@ -24,6 +24,7 @@
                 <div class="card border-0 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Low Stock Items</h5>
+                        <!--  Low stock items count -->
                         <?php
                             $lowStockQuery = "SELECT COUNT(*) as count FROM user_medicine_tbl WHERE pharmacy_id = '$user_id' AND in_stock <= 10";
                             $lowStockResult = mysqli_query($conn, $lowStockQuery);
