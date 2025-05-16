@@ -12,7 +12,12 @@
         $total = $_POST["total"];
         $date = $_POST["order_date"];
         $status = "pending";
-        
+
+        if($medicine_id == '' && $price ='' && $quantity ='' && $total ='' && $date ='' && $status ='') {
+            redirect('../order-create.php', 'Fill all the fields.');
+            exit();
+        }
+
         // Validate inputs
         if (!is_numeric($quantity) || $quantity <= 0) {
             redirect('../order-create.php', 'Invalid quantity');
@@ -24,23 +29,28 @@
             exit();
         }
 
-        // Validate date
-        $order_date = strtotime($date);
-        $current_date = strtotime(date('Y-m-d'));
-        if ($order_date < $current_date) {
-            redirect('../order-create.php', 'Order date cannot be in the past');
+        if (!is_numeric($total) || $total <= 0) {
+            redirect('../order-create.php', 'Invalid total');
             exit();
         }
+//
+//        // Validate date
+//        $order_date = strtotime($date);
+//        $current_date = strtotime(date('Y-m-d'));
+//        if ($order_date < $current_date) {
+//            redirect('../order-create.php', 'Order date cannot be in the past');
+//            exit();
+//        }
         
-        // Check stock availability
-        $stockQuery = "SELECT in_stock FROM user_medicine_tbl WHERE m_id = '$medicine_id'";
-        $stockResult = mysqli_query($conn, $stockQuery);
-        $currentStock = mysqli_fetch_assoc($stockResult)['in_stock'];
-
-        if($currentStock < $quantity) {
-            redirect('../order-create.php', 'Not enough stock available. Only ' . $currentStock . ' units in stock.');
-            exit();
-        }
+//        // Check stock availability
+//        $stockQuery = "SELECT in_stock FROM user_medicine_tbl WHERE m_id = '$medicine_id'";
+//        $stockResult = mysqli_query($conn, $stockQuery);
+//        $currentStock = mysqli_fetch_assoc($stockResult)['in_stock'];
+//
+//        if($currentStock < $quantity) {
+//            redirect('../order-create.php', 'Not enough stock available. Only ' . $currentStock . ' units in stock.');
+//            exit();
+//        }
 
         // Validate total amount
         $calculated_total = $price * $quantity;
@@ -56,7 +66,7 @@
         if ($conn->query($query)) {
             // Update stock count
             $updateStock = "UPDATE user_medicine_tbl 
-                          SET in_stock = in_stock - $quantity 
+                          SET in_stock = in_stock + $quantity 
                           WHERE m_id = '$medicine_id'";
             
             if ($conn->query($updateStock)) {

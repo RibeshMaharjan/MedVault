@@ -10,9 +10,38 @@
         $buy_price = $_POST['buy_price'];
         $sell_price = $_POST['sell_price'];
         $exp_date = $_POST['exp_date'];
+        $formatted_Date = date("Y-m-d", strtotime($exp_date));
 
-        if(!$medicine_name || !$medicine_desc || !$category || !$in_stock || !$buy_price || !$sell_price) {
-            redirect('../medicine-display.php', 'Please fill all required fields');
+        if($category == '' && $medicine_name ='' && $description ='' && $instock ='' && $buy_price ='' && $sell_price ='' && $exp_date =''){
+            redirect('../medicine-display.php','Fill All the Field');
+            exit();
+        }
+
+        if(!preg_match("/^[a-zA-Z0-9_-]*$/", $medicine_name)) {
+            redirect('../medicine-display.php','Medicine name can only contain letters, numbers, hyphens and underscores.');
+            exit();
+        }
+
+        if (!preg_match("/^[0-9]+$/", $in_stock)) {
+            redirect('../medicine-display.php','Quantity can only contain numbers.');
+            exit();
+        }
+
+        if (!preg_match("/^[0-9]+$/", $buy_price)) {
+            redirect('../medicine-display.php','Buy price can only contain numbers.');
+            exit();
+        }
+
+        if (!preg_match("/^[0-9]+$/", $sell_price)) {
+            redirect('../medicine-display.php','Sell price can only contain numbers.');
+            exit();
+        }
+
+        $today = new DateTime();
+        $oneMonthLater = (clone $today)->modify('+1 month')->format('Y-m-d');
+
+        if ($formatted_Date <= $oneMonthLater) {
+            redirect('../medicine-display.php', 'Expiry date must be more than one month from today.');
             exit();
         }
 
@@ -23,7 +52,7 @@
                     in_stock = '$in_stock',
                     buy_price = '$buy_price',
                     sell_price = '$sell_price',
-                    exp_date = '$exp_date'
+                    exp_date = '$formatted_Date'
                     WHERE m_id='$medicine_id'";
         $data = mysqli_query($conn,$query);
 

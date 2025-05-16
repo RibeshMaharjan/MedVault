@@ -15,6 +15,31 @@
         $currentStatusResult = mysqli_query($conn, $currentStatusQuery);
         $currentStatus = mysqli_fetch_assoc($currentStatusResult)['status'];
 
+        if($medicine_id == '' && $price ='' && $quantity ='' && $total ='' && $date ='' && $status ='') {
+           redirect('../sales-display.php', 'Fill all the fields.');
+           exit();
+        }
+
+        if($currentStock < $quantity) {
+           redirect('../sales-display.php', 'Not enough stock available');
+           exit();
+        }
+
+        if (!is_numeric($quantity) || $quantity <= 0) {
+           redirect('../order-display.php', 'Invalid quantity');
+           exit();
+        }
+
+        if (!is_numeric($price) || $price <= 0) {
+           redirect('../order-display.php', 'Invalid price');
+           exit();
+        }
+
+        if (!is_numeric($total) || $total <= 0) {
+           redirect('../order-create.php', 'Invalid total');
+           exit();
+        }
+
         $query = "UPDATE user_sales_tbl SET 
                     m_id = '$medicine_id',
                     price = '$price',

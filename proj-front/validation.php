@@ -62,16 +62,58 @@ if (isset($_POST['register'])) {
     $password = $_POST['password'];
     $repassword = $_POST['repassword'];
 
-    if ($email != '' || $password != '' /* || $pan != '' */ || $name != '') {
+    if ($email != '' && $password != '' /* || $pan != '' */ && $name != '') {
 
-        // Name validation
-        if (!preg_match("/^[a-zA-Z-' ]*$/", $name)) {
-            redirect('login.php', 'Only letters and white space allowed');
+        $name = preg_replace('/\s+/', ' ', $name);
+        //    $_SESSION['fullname'] = $fullName;
+
+        // Check if empty
+        if (empty($name)) {
+            redirect('login.php', 'Full name is required');
         }
 
-        // Email validation
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            redirect('login.php', 'Invalid email format');
+        // Check length
+        if (strlen($name) < 3) {
+            redirect('login.php', 'Full name must be at least 3 characters');
+        }
+
+        // Check format: only letters, spaces, hyphens, apostrophes
+        if (!preg_match("/^[a-zA-Z\s]+$/", $fullName)) {
+            redirect('login.php', 'Full name can only contain letters, spaces');
+        }
+
+        if (empty($email)) {
+            redirect('login.php', 'Email is required');
+        }
+
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            redirect('login.php', 'Invalid email');
+        }
+
+        $query = "SELECT * FROM tbl_pharmacy WHERE email = '$email'";
+        $emailExistResult = $conn->query(($query));
+        if(mysqli_num_rows($emailExistResult)) {
+           redirect('login.php', 'Email already exist');
+        }
+
+        if (empty($uname)) {
+            redirect('login.php', 'Username is required.');
+        }
+
+        if (strlen($uname) < 3 || strlen($uname) > 50) {
+            $_SESSION['formError']['uname'] = "Username must be between 3 and 50 characters.";
+            return;
+        }
+
+        if(!preg_match("/^[a-zA-Z0-9_-]*$/", $uname)) {
+            $_SESSION['formError']['uname'] = 'Full name can only contain letters, numbers, hyphens and underscores.';
+            return;
+        }
+
+        $query = "SELECT * FROM tbl_pharmacy WHERE users_name = '$uname'";
+        $usernameExistResult = $conn->query(($query));
+        if(mysqli_num_rows($usernameExistResult)) {
+           redirect('login.php', 'Username already exist.');
         }
 
         // Passowrd validation
@@ -82,14 +124,7 @@ if (isset($_POST['register'])) {
         }
 
         if ($password != $repassword) {
-            redirect('login.php', 'Password Doesnot Match');
-        }
-
-        // check if email already exist
-        $query = "SELECT * FROM tbl_pharmacy WHERE email = '$email'";
-        $emailExistResult = $conn->query(($query));
-        if(mysqli_num_rows($emailExistResult)) {
-            redirect('login.php', 'Email already exist');
+            redirect('login.php', 'Password does not Match');
         }
 
         // passwordhash

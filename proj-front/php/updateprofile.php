@@ -9,6 +9,7 @@
         $phone = $_POST['phone'];
         $address= $_POST['address'];
 
+        // Password validation
         if($_POST['oldpassword'] != ''){
 
             $oldpassword= $_POST['oldpassword'];
@@ -44,6 +45,45 @@
             }
         }
 
+        if($pharmacy_name == '' && $email == '' && $phone == '' && $address == ''){
+            redirect('../edit-profile.php','Fill All the Fields');
+            exit();
+        }
+
+        if($pharmacy_name == ''){
+            redirect('../edit-profile.php','Pharmacy Name is Required');
+            exit();
+        }
+
+        if($email == ''){
+            redirect('../edit-profile.php','Email is Required');
+            exit();
+        }
+
+        if($phone == ''){
+            redirect('../edit-profile.php','Phone Number is Required');
+            exit();
+        }
+
+        if($address == ''){
+            redirect('../edit-profile.php','Address is Required');
+            exit();
+        }
+
+        if($pan == ''){
+            redirect('../edit-profile.php','PAN Number is Required');
+            exit();
+        }
+
+        $email_check = "SELECT * FROM tbl_pharmacy WHERE email='$email'";
+        $email_check_result = mysqli_query($conn, $email_check);
+        $email_check_row = mysqli_fetch_assoc($email_check_result);
+        $email_check_count = mysqli_num_rows($email_check_result);
+        if($email_check_count > 0 && $email_check_row['email'] != $email){
+            redirect('../edit-profile.php','Email Already Exists');
+            exit();
+        }
+
         if(!is_numeric($pan)) {
             redirect('../edit-profile.php','Invalid PAN Number');
         }
@@ -58,9 +98,14 @@
             redirect('../edit-profile.php','Invalid email format');
         }
 
-        // Phone number Validation
-        if(!preg_match('/^[0-9]{10}+$/', $phone)) {
+        // Pan number Validation
+        if(!preg_match('/^[0-9]{p}+$/', $phone)) {
             redirect('../edit-profile.php','InValid Phone Number');
+        }
+
+        // Phone number Validation
+        if(!preg_match('/^[0-9]{10}+$/', $pan)) {
+            redirect('../edit-profile.php','InValid Pan Number');
         }
 
         $query = "UPDATE tbl_pharmacy SET 

@@ -32,21 +32,21 @@
                     $stockData = mysqli_fetch_assoc($stockResult);
                     $currentStock = $stockData['in_stock'];
                     
-                    // Check if we have enough stock
-                    if($currentStock < $quantity) {
-                        redirect('../order-display.php', 'Not enough stock to complete this order.');
-                        exit();
-                    }
+//                    // Check if we have enough stock
+//                    if($currentStock < $quantity) {
+//                        redirect('../order-display.php', 'Not enough stock to complete this order.');
+//                        exit();
+//                    }
                     
-                    // Update stock (decrease by order quantity)
-                    $updateStockQuery = "UPDATE user_medicine_tbl SET in_stock = in_stock - $quantity WHERE m_id = '$m_id' AND pharmacy_id = '$pharmacy_id'";
+                    // Update stock (increase by order quantity)
+                    $updateStockQuery = "UPDATE user_medicine_tbl SET in_stock = in_stock + $quantity WHERE m_id = '$m_id' AND pharmacy_id = '$pharmacy_id'";
                     mysqli_query($conn, $updateStockQuery);
                 }
             }
             // If changing from completed to pending, restore stock
             else if($oldStatus == 'completed' && $status != 'completed') {
-                // Restore stock (increase by order quantity)
-                $restoreStockQuery = "UPDATE user_medicine_tbl SET in_stock = in_stock + {$orderData['quantity']} WHERE m_id = '$m_id' AND pharmacy_id = '$pharmacy_id'";
+                // Restore stock (decrease by order quantity)
+                $restoreStockQuery = "UPDATE user_medicine_tbl SET in_stock = in_stock - {$orderData['quantity']} WHERE m_id = '$m_id' AND pharmacy_id = '$pharmacy_id'";
                 mysqli_query($conn, $restoreStockQuery);
             }
             
