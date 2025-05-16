@@ -90,8 +90,8 @@
                 let warningSpan = row.find('.date-warning');
 
                 if (selectedDate < today) {
-                    warningSpan.html('<span class="text-danger">Sale date cannot be in the past!</span>');
-                    submitBtn.prop('disabled', true);
+                    // warningSpan.html('<span class="text-danger">Sale date cannot be in the past!</span>');
+                    // submitBtn.prop('disabled', true);
                 } else {
                     warningSpan.html('');
                     // Only enable if quantity is also valid

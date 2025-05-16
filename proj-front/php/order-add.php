@@ -65,18 +65,18 @@
 
         if ($conn->query($query)) {
             // Update stock count
-            $updateStock = "UPDATE user_medicine_tbl 
-                          SET in_stock = in_stock + $quantity 
-                          WHERE m_id = '$medicine_id'";
+//            $updateStock = "UPDATE user_medicine_tbl
+//                          SET in_stock = in_stock + $quantity
+//                          WHERE m_id = '$medicine_id'";
             
-            if ($conn->query($updateStock)) {
+//            if ($conn->query($updateStock)) {
                 redirect('../order-display.php', 'Order has been submitted successfully');
-            } else {
-                // If stock update fails, rollback the order
-                $last_id = $conn->insert_id;
-                mysqli_query($conn, "DELETE FROM user_order_tbl WHERE o_id = '$last_id'");
-                redirect('../order-create.php', 'Error updating stock');
-            }
+//            } else {
+//                // If stock update fails, rollback the order
+//                $last_id = $conn->insert_id;
+//                mysqli_query($conn, "DELETE FROM user_order_tbl WHERE o_id = '$last_id'");
+//                redirect('../order-create.php', 'Error updating stock');
+//            }
         } else {
             redirect('../order-create.php', 'Could not add order: ' . $conn->error);
         }

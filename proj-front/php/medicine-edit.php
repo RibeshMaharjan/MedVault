@@ -37,6 +37,11 @@
             exit();
         }
 
+        if($buy_price >= $sell_price){
+          redirect('../medicine-display.php','Buy price must be greater than sell price.');
+          exit();
+        }
+
         $today = new DateTime();
         $oneMonthLater = (clone $today)->modify('+1 month')->format('Y-m-d');
 
