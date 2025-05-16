@@ -33,7 +33,7 @@
             redirect('../medicine-create.php','Sell price can only contain numbers.');
         }
 
-        if($buy_price <= $sell_price){
+        if($buy_price >= $sell_price){
             redirect('../medicine-create.php','Buy price must be greater than sell price.');
         }
 
