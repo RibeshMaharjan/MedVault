@@ -96,25 +96,6 @@ if (isset($_POST['register'])) {
            redirect('login.php', 'Email already exist');
         }
 
-        if (empty($uname)) {
-            redirect('login.php', 'Username is required.');
-        }
-
-        if (strlen($uname) < 3 || strlen($uname) > 50) {
-            $_SESSION['formError']['uname'] = "Username must be between 3 and 50 characters.";
-            return;
-        }
-
-        if(!preg_match("/^[a-zA-Z0-9_-]*$/", $uname)) {
-            $_SESSION['formError']['uname'] = 'Username can only contain letters, numbers, hyphens and underscores.';
-            return;
-        }
-
-        $query = "SELECT * FROM tbl_pharmacy WHERE users_name = '$uname'";
-        $usernameExistResult = $conn->query(($query));
-        if(mysqli_num_rows($usernameExistResult)) {
-           redirect('login.php', 'Username already exist.');
-        }
 
         // Passowrd validation
         $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/';
