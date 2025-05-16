@@ -99,7 +99,7 @@
         }
 
         // Pan number Validation
-        if(!preg_match('/^[0-9]{p}+$/', $phone)) {
+        if(!preg_match('/^[0-9]{9}+$/', $phone)) {
             redirect('../edit-profile.php','InValid Phone Number');
         }
 

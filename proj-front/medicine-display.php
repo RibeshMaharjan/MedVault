@@ -22,6 +22,11 @@
 
         // Build conditions
         $conditions = [];
+        // Add condition to only show medicines for the current logged-in user
+        if(isset($_SESSION['loggedInUser']['user_id'])) {
+            $user_id = $_SESSION['loggedInUser']['user_id'];
+            $conditions[] = "pharmacy_id = '$user_id'";
+        }
         if ($search) {
             $conditions[] = "medicine_name LIKE '%$search%'";
         }
@@ -81,8 +86,11 @@
                 <select class="form-select" id="category" name="category">
                     <option value="">Select Category</option>
                     <?php
-                        $categories = getAll('user_category_tbl');
-                        while($cat = mysqli_fetch_assoc($categories)){
+//                        $categories = getAll('user_category_tbl');
+                        $query = "SELECT * FROM user_category_tbl WHERE pharmacy_id = $user_id";
+                        $result = mysqli_query($conn,$query);
+
+                        while($cat = mysqli_fetch_assoc($result)){
                             echo '<option value="'.$cat['c_id'].'">'.$cat['category_name'].'</option>';
                         }
                     ?>
@@ -105,7 +113,7 @@
                 <input type="date" class="form-control" id="exp_date" name="exp_date">
             </div>
         </div>
-        
+
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-danger" name="update-medicine">Save changes</button>
@@ -165,8 +173,12 @@
                         <select class="form-select" name="category">
                             <option value="">All Categories</option>
                             <?php
-                                $categories = getAll('user_category_tbl');
-                                while($cat = mysqli_fetch_assoc($categories)){
+//                                $categories = getAll('user_category_tbl');
+
+                                $query = "SELECT * FROM user_category_tbl WHERE pharmacy_id = $user_id";
+                                $result = mysqli_query($conn,$query);
+
+                                while($cat = mysqli_fetch_assoc($result)){
                                     $selected = ($category_filter == $cat['c_id']) ? 'selected' : '';
                                     echo '<option value="'.$cat['c_id'].'" '.$selected.'>'.$cat['category_name'].'</option>';
                                 }
@@ -231,10 +243,10 @@
                             <?php
                             $expirationDate = new DateTime($result['exp_date']);
                             $today = new DateTime();
-    
+
                             $interval = $today->diff($expirationDate);
                             $daysDifference = $interval->format('%a');
-    
+
                             if ($daysDifference < 30) {
                                 // Do something if the expiration date is less than 30 days from today
                                 echo "<td class='bg-danger text-light '>{$result['m_id']}</td>";
@@ -243,12 +255,13 @@
                                 echo "<td>{$result['m_id']}</td>";
                             }
                             ?>
-                                
+
                             <td><?= $result['medicine_name'] ?></td>
                             <td><?= $result['medicine_desc'] ?></td>
                             <td>
                                 <?php 
                                     $category = getById('user_category_tbl', 'c_id', $result['c_id']);
+
                                     echo ($category['status'] == 200) ? $category['data']['category_name'] : 'Unknown';
                                 ?>
                             </td>
@@ -308,7 +321,7 @@
                 'stock_max' => $stock_max
             ]);
             $pagination_url = '?page={page}' . ($filter_params ? '&' . $filter_params : '');
-                
+
             echo generatePaginationLinks(
                 $paginatedResults['currentPage'],
                 $paginatedResults['totalPages'],
@@ -317,7 +330,7 @@
         ?>
         </div>
     </div>
-    
+
     </div>
 
 <script>
@@ -325,7 +338,7 @@
     $(document).ready(function () {
         $('.medicineeditbtn').on('click', function () {
             $('#medicineeditmodal').modal('show');
-            
+
             // Get data from button attributes
             var id = $(this).data('id');
             var name = $(this).data('name');
@@ -335,12 +348,12 @@
             var buyprice = $(this).data('buyprice');
             var sellprice = $(this).data('sellprice');
             var expdate = $(this).data('expdate');
-            
+
             // Debug to console
             console.log("Category:", category);
             console.log("Buy Price:", buyprice);
             console.log("Sell Price:", sellprice);
-            
+
             // Set values in the form - with timeout to ensure modal is fully loaded
             setTimeout(function() {
                 $('#update_id').val(id);
@@ -350,7 +363,7 @@
                 $('#in_stock').val(instock);
                 $('#buy_price').val(buyprice);
                 $('#sell_price').val(sellprice);
-                
+
                 // Format expiration date properly for date input (YYYY-MM-DD)
                 if (expdate) {
                     var dateObj = new Date(expdate);
@@ -373,12 +386,12 @@
     $(document).ready(function () {
         $('.medicineDeleteBtn').on('click', function () {
             $('#medicineDeleteModal').modal('show');
-            
+
             var id = $(this).data('id');
             var name = $(this).data('name');
             var description = $(this).data('description');
             var instock = $(this).data('instock');
-            
+
             $('#delete_medicine_id').val(id);
             $('#delete_medicine_display_id').text(id);
             $('#delete_medicine_name').text(name);

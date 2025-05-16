@@ -72,7 +72,10 @@
                 <div class="col-md-6 pt-4 bg-white ms-md-auto ">
                     <?php
                         $category = getAll('user_category_tbl');
-                        
+                        $user_id = $_SESSION['loggedInUser']['user_id'];
+
+                        $query = "SELECT * FROM user_category_tbl WHERE pharmacy_id = $user_id";
+                        $result = mysqli_query($conn,$query);
                         if(mysqli_num_rows($category) > 0)
                         {
                     ?>
