@@ -23,11 +23,15 @@
                             <select class="form-select" name="category">
                                 <option value="">Select Category</option>
                                 <?php
-                                    $categories = getAll('user_category_tbl');
-                                    while($cat = mysqli_fetch_assoc($categories)){
-                                        echo '<option value="'.$cat['c_id'].'">'.$cat['category_name'].'</option>';
-                                    }
-                                ?>
+                                //                                    $categories = getAll('user_category_tbl');
+                                                                    $user_id = $_SESSION['loggedInUser']['user_id'];
+
+                                                                    $query = "SELECT * FROM user_category_tbl WHERE pharmacy_id = $user_id";
+                                                                    $result = mysqli_query($conn,$query);
+                                                                    while($cat = mysqli_fetch_assoc($result)){
+                                                                        echo '<option value="'.$cat['c_id'].'">'.$cat['category_name'].'</option>';
+                                                                    }
+                                                                ?>
                             </select>
                         </div>
                         <div class="mb-3">

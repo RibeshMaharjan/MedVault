@@ -4,9 +4,9 @@
     require 'conn.php';
 
     function validate($inputdata){
-        
+
         global $conn;
-        
+
         $validatedData = mysqli_real_escape_string($conn, $inputdata);
         return trim($validatedData);
     }
@@ -230,24 +230,24 @@
     // Pagination helper function
     function getPaginatedResults($table, $conditions = '', $page = 1, $itemsPerPage = 10) {
         global $conn;
-        
+
         // Calculate offset
         $offset = ($page - 1) * $itemsPerPage;
-        
+
         // Get total records
         $countQuery = "SELECT COUNT(*) as total FROM $table " . ($conditions ? "WHERE $conditions" : "");
         $countResult = mysqli_query($conn, $countQuery);
         $totalRecords = mysqli_fetch_assoc($countResult)['total'];
-        
+
         // Get paginated records
         $query = "SELECT * FROM $table " . 
                  ($conditions ? "WHERE $conditions " : "") . 
                  "LIMIT $itemsPerPage OFFSET $offset";
         $result = mysqli_query($conn, $query);
-        
+
         // Calculate total pages
         $totalPages = ceil($totalRecords / $itemsPerPage);
-        
+
         return [
             'data' => $result,
             'currentPage' => $page,
@@ -262,7 +262,7 @@
     function generatePaginationLinks($currentPage, $totalPages, $urlPattern) {
         $links = '';
         $links .= '<nav aria-label="Page navigation" class="mt-4"><ul class="pagination justify-content-center">';
-        
+
         // Previous button
         $prevClass = $currentPage <= 1 ? ' disabled' : '';
         $links .= sprintf(
@@ -270,27 +270,27 @@
             $prevClass,
             str_replace('{page}', $currentPage - 1, $urlPattern)
         );
-        
+
         // Page numbers with ellipsis
         $visiblePages = 2; // Number of pages to show before and after current page
-        
+
         // Always show first page
         if ($currentPage > $visiblePages + 1) {
             $links .= sprintf(
                 '<li class="page-item"><a class="page-link" href="%s">1</a></li>',
                 str_replace('{page}', 1, $urlPattern)
             );
-            
+
             // Add ellipsis if needed
             if ($currentPage > $visiblePages + 2) {
                 $links .= '<li class="page-item disabled"><a class="page-link" href="#">...</a></li>';
             }
         }
-        
+
         // Show pages around current page
         $startPage = max(1, $currentPage - $visiblePages);
         $endPage = min($totalPages, $currentPage + $visiblePages);
-        
+
         for ($i = $startPage; $i <= $endPage; $i++) {
             $activeClass = $i == $currentPage ? ' active' : '';
             $links .= sprintf(
@@ -300,14 +300,14 @@
                 $i
             );
         }
-        
+
         // Show last pages with ellipsis
         if ($currentPage < $totalPages - $visiblePages) {
             // Add ellipsis if needed
             if ($currentPage < $totalPages - $visiblePages - 1) {
                 $links .= '<li class="page-item disabled"><a class="page-link" href="#">...</a></li>';
             }
-            
+
             // Always show last page
             $links .= sprintf(
                 '<li class="page-item"><a class="page-link" href="%s">%d</a></li>',
@@ -315,7 +315,7 @@
                 $totalPages
             );
         }
-        
+
         // Next button
         $nextClass = $currentPage >= $totalPages ? ' disabled' : '';
         $links .= sprintf(
@@ -323,9 +323,38 @@
             $nextClass,
             str_replace('{page}', $currentPage + 1, $urlPattern)
         );
-        
+
         $links .= '</ul></nav>';
         return $links;
+    }
+
+    // Check if pharmacy is verified
+    function isPharmacyVerified() {
+        global $conn;
+
+        // Check if user is logged in
+        if(!isset($_SESSION['loggedInUser']['user_id'])) {
+            return false;
+        }
+
+        $pharmacy_id = $_SESSION['loggedInUser']['user_id'];
+        $query = "SELECT isverified FROM tbl_pharmacy WHERE pharmacy_id = $pharmacy_id";
+        $result = mysqli_query($conn, $query);
+
+        if($result && mysqli_num_rows($result) > 0) {
+            $data = mysqli_fetch_assoc($result);
+            return $data['isverified'] == 1;
+        }
+
+        return false;
+    }
+
+    // Redirect if pharmacy is not verified
+    function redirectIfNotVerified($redirect_url = 'dashboard.php') {
+        if(!isPharmacyVerified()) {
+            redirect($redirect_url, 'Access denied. Your account must be verified to use this feature. Please complete your verification in profile settings.');
+            exit();
+        }
     }
 
 ?>
