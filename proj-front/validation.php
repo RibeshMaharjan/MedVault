@@ -78,7 +78,7 @@ if (isset($_POST['register'])) {
         }
 
         // Check format: only letters, spaces, hyphens, apostrophes
-        if (!preg_match("/^[a-zA-Z\s]+$/", $fullName)) {
+        if (!preg_match("/^[a-zA-Z\s]+$/", $name)) {
             redirect('login.php', 'Full name can only contain letters, spaces');
         }
 
@@ -106,7 +106,7 @@ if (isset($_POST['register'])) {
         }
 
         if(!preg_match("/^[a-zA-Z0-9_-]*$/", $uname)) {
-            $_SESSION['formError']['uname'] = 'Full name can only contain letters, numbers, hyphens and underscores.';
+            $_SESSION['formError']['uname'] = 'Username can only contain letters, numbers, hyphens and underscores.';
             return;
         }
 
