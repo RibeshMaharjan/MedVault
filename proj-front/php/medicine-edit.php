@@ -17,7 +17,7 @@
             exit();
         }
 
-        if(!preg_match("/^[a-zA-Z0-9_-]*$/", $medicine_name)) {
+        if(!preg_match("/^[a-zA-Z0-9-_' ]*$/", $medicine_name)) {
             redirect('../medicine-display.php','Medicine name can only contain letters, numbers, hyphens and underscores.');
             exit();
         }

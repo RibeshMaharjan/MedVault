@@ -168,15 +168,15 @@
         if (period === 'month') {
             daysToPredict = 30;
         } else if (period === '3months') {
-            daysToPredict = 30; // Just show 1 month of predictions for 3 months view
+            daysToPredict = 30; // Show 1 month of predictions for 3 months view
         }
 
         // Create a simple increasing trend for empty predictions
         // to avoid flat zero line and make the forecast visible
-        const baseValue = 10; // Start with a small value
-        const increment = 2;  // Small increment for each day
+        const baseValue = 0; // Start with a small value
+        const increment = 0;  // Small increment for each day
 
-        // Add future dates with small increasing values instead of zeros
+        // Add future dates with small increasing values instead-of-zeros
         // Start with i=0 to include today's date in predictions
         for (let i = 0; i <= daysToPredict; i++) {
             const date = new Date(today);

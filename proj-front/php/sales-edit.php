@@ -20,10 +20,10 @@
            exit();
         }
 
-        if($currentStock < $quantity) {
-           redirect('../sales-display.php', 'Not enough stock available');
-           exit();
-        }
+//        if($currentStatusResult < $quantity) {
+//           redirect('../sales-display.php', 'Not enough stock available');
+//           exit();
+//        }
 
         if (!is_numeric($quantity) || $quantity <= 0) {
            redirect('../order-display.php', 'Invalid quantity');

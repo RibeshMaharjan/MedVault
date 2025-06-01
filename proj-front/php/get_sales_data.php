@@ -68,9 +68,9 @@ $all_data = [];
 while($row = mysqli_fetch_assoc($result)) {
     $all_data[] = [
         'date' => $row['sale_date'],
-        'amount' => (float)$row['daily_total']
+        'amount' => $row['daily_total']
     ];
-    $total_amount += (float)$row['daily_total'];
+    $total_amount += $row['daily_total'];
     if ($row['daily_total'] > 0) {
         $count++;
     }
@@ -97,7 +97,7 @@ for($i = 0; $i < count($all_data); $i += $interval) {
     $avg_amount = 0;
     $points_counted = 0;
     for($j = 0; $j < $interval && ($i + $j) < count($all_data); $j++) {
-        $avg_amount += $all_data[$i + $j]['amount'];
+        $avg_amount += round($all_data[$i + $j]['amount']);
         $points_counted++;
     }
     $amounts[] = $points_counted > 0 ? $avg_amount / $points_counted : 0;
@@ -105,6 +105,18 @@ for($i = 0; $i < count($all_data); $i += $interval) {
 
 // Calculate average sale for anomaly detection
 $averageSale = $count > 0 ? $total_amount / $count : 0;
+
+function generateDecayingWeights($size, $decayRate = 0.85) {
+    $weights = [];
+    $total = 0;
+    for ($i = 0; $i < $size; $i++) {
+        $weight = pow($decayRate, $i); // Steeper decay
+        $weights[] = $weight;
+        $total += $weight;
+    }
+    // Normalize
+    return array_map(fn($w) => $w / $total, $weights);
+}
 
 // Calculate future predictions using weighted moving average
 function calculatePredictions($amounts, $dates, $period = 'week') {
@@ -116,28 +128,39 @@ function calculatePredictions($amounts, $dates, $period = 'week') {
     // Step 1: Determine how many days to predict based on selected period
     switch($period) {
         case 'week':
+            $window_size = 5;
+//            $weights = [0.35, 0.26, 0.2, 0.13, 0.06];
+//            $weights = [0.06, 0.13, 0.2, 0.26, 0.35];
+            $weights = [0.05, 0.1, 0.15, 0.3, 0.4];
+
             $days_to_predict = 7;      // Predict next 7 days for weekly view
             $prediction_interval = 1;  // Show every day
             break;
         case 'month':
+            $window_size = 15;
+//            $weights = [0.01, 0.01, 0.02, 0.02, 0.03, 0.04, 0.05, 0.05, 0.06, 0.06, 0.08, 0.09, 0.12, 0.16, 0.2];
+            $weights = [
+                0.19, 0.16, 0.14, 0.12, 0.10,
+                0.09, 0.07, 0.06, 0.05, 0.04,
+                0.03, 0.02, 0.02, 0.01, 0.01
+            ];
             $days_to_predict = 30;     // Predict next 30 days for monthly view
             $prediction_interval = 1;  // Show every day
             break;
         case '3months':
-            $days_to_predict = 90;     // Predict next 90 days for quarterly view
+            $window_size = 15;
+//            $weights = [0.01, 0.01, 0.02, 0.02, 0.03, 0.04, 0.05, 0.05, 0.06, 0.06, 0.08, 0.09, 0.12, 0.16, 0.2];
+            $weights = [
+                0.19, 0.16, 0.14, 0.12, 0.10,
+                0.09, 0.07, 0.06, 0.05, 0.04,
+                0.03, 0.02, 0.02, 0.01, 0.01
+            ];$days_to_predict = 90;     // Predict next 90 days for quarterly view
             $prediction_interval = 3;  // Show every 3 days to avoid overcrowding
             break;
         default:
             $days_to_predict = 7;
             $prediction_interval = 1;
     }
-
-    // Step 2: Set up parameters for weighted moving average
-    $window_size = 5;  // Window size: number of recent data points to consider (5 days in this case)
-
-    // Weights give more importance to recent values
-    // For example: 40% to most recent, 30% to second most recent, etc.
-    $weights = [0.4, 0.3, 0.15, 0.1, 0.05]; 
 
     // Step 3: Prepare arrays for prediction results
     $predicted_dates = [];
@@ -148,7 +171,7 @@ function calculatePredictions($amounts, $dates, $period = 'week') {
     $prediction_data = $amounts;
 
     // Step 4: Generate predictions starting from today (i=0) and then one day at a time
-    for ($i = 0; $i <= $days_to_predict; $i++) {
+    for ($i = 1; $i <= $days_to_predict; $i++) {
         // Calculate the date (for i=0, this is today's date)
         $next_date = date('Y-m-d', strtotime($last_date . " +$i days"));
 
@@ -159,15 +182,17 @@ function calculatePredictions($amounts, $dates, $period = 'week') {
             // For future days, calculate prediction using weighted moving average
             $prediction = calculateWeightedMovingAverage($prediction_data, $window_size, $weights);
 
-            // Add this prediction to our data for calculating the next day's prediction
-            // This allows each prediction to influence future predictions
+            // Add slight variation using historical volatility
+//            $volatility = calculateVolatility($amounts);
+//            $prediction *= (1 + (mt_rand(-1000, 1000) / 1000) * $volatility);
+
             $prediction_data[] = $prediction;
         }
 
         // Only add to results at specified intervals (to avoid overcrowding the chart)
         if ($i % $prediction_interval == 0) {
             $predicted_dates[] = date('M d', strtotime($next_date));
-            $predicted_amounts[] = round($prediction, 2);
+            $predicted_amounts[] = round($prediction);
         }
     }
 
@@ -188,7 +213,7 @@ function calculateWeightedMovingAverage($data, $window_size, $weights = null) {
     }
 
     if ($all_zeros) {
-        return 10; // Return a small default value
+        return 0; // Return a small default value
     }
 
     // Step 2: Set up default weights if none provided
@@ -246,9 +271,9 @@ list($predicted_dates, $predicted_amounts) = calculatePredictions($amounts, $dat
 header('Content-Type: application/json');
 echo json_encode([
     'dates' => $dates,
-    'amounts' => $amounts,
+    'amounts' => array_map('round', $amounts),
     'averageSale' => $averageSale,
     'predictedDates' => $predicted_dates,
-    'predictedAmounts' => $predicted_amounts
+    'predictedAmounts' => array_map('round', $predicted_amounts),
 ]);
 ?>

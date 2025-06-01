@@ -11,13 +11,13 @@
         $buy_price = $_POST['buy_price'];
         $sell_price = $_POST['sell_price'];
         $exp_date = $_POST['exp_date'];
-            $formatted_Date = date("Y-m-d", strtotime($exp_date));
+        $formatted_Date = date("Y-m-d", strtotime($exp_date));
 
         if($category == '' && $medicine_name ='' && $description ='' && $instock ='' && $buy_price ='' && $sell_price ='' && $exp_date =''){
             redirect('../medicine-create.php','Fill All the Field');
         }
 
-        if(!preg_match("/^[a-zA-Z0-9_-]*$/", $medicine_name)) {
+        if(!preg_match("/^[a-zA-Z0-9-' ]*$/", $medicine_name)) {
             redirect('../medicine-create.php','Medicine name can only contain letters, numbers, hyphens and underscores.');
         }
 

@@ -89,7 +89,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card border-0 shadow">
+                <div class="row card border-0 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Low Stock Alert</h5>
                         <div class="table-responsive">
@@ -116,6 +116,46 @@
                                             echo "<tr>
                                                     <td>{$row['medicine_name']}</td>
                                                     <td>{$row['in_stock']}</td>
+                                                    <td>{$status}</td>
+                                                </tr>";
+                                        }
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3 card border-0 shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Expired Stock Alert</h5>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Medicine Name</th>
+                                        <th>Current Stock</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                        $today = new DateTime();
+                                        $todayDate = $today->format('Y-m-d');
+                                        $oneMonthLater = (clone $today)->modify('+1 month')->format('Y-m-d');
+
+                                        $lowStockDetailQuery = "SELECT medicine_name, exp_date 
+                                                            FROM user_medicine_tbl 
+                                                            WHERE pharmacy_id = '$user_id' 
+                                                            AND exp_date <= '$oneMonthLater'
+                                                            ORDER BY exp_date ASC";
+                                        $lowStockDetailResult = mysqli_query($conn, $lowStockDetailQuery);
+                                        while($row = mysqli_fetch_assoc($lowStockDetailResult)) {
+                                            $status = $row['exp_date'] <= $todayDate ?
+                                                '<span class="badge bg-danger">Expired</span>' :
+                                                '<span class="badge bg-warning">About to Expire</span>';
+                                            echo "<tr>
+                                                    <td>{$row['medicine_name']}</td>
+                                                    <td>{$row['exp_date']}</td>
                                                     <td>{$status}</td>
                                                 </tr>";
                                         }
