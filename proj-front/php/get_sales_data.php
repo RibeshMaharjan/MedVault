@@ -6,24 +6,24 @@ global $conn;
 $user_id = $_SESSION['loggedInUser']['user_id'];
 
 // Get the period from query parameter
-$period = $_GET['period'] ?? 'week';
+$period = $_GET['period'] ?? '5days';
 
 // Calculate the start date and end date based on period
 $end_date = date('Y-m-d');
 $start_date = '';
 
 switch($period) {
-    case 'week':
-        $start_date = date('Y-m-d', strtotime('-7 days'));
+    case '5days':
+        $start_date = date('Y-m-d', strtotime('-5 days'));
         break;
-    case 'month':
-        $start_date = date('Y-m-d', strtotime('-30 days'));
+    case '12days':
+        $start_date = date('Y-m-d', strtotime('-12 days'));
         break;
-    case '3months':
-        $start_date = date('Y-m-d', strtotime('-90 days'));
+    case '15days':
+        $start_date = date('Y-m-d', strtotime('-15 days'));
         break;
     default:
-        $start_date = date('Y-m-d', strtotime('-7 days'));
+        $start_date = date('Y-m-d', strtotime('-5 days'));
 }
 
 // Query to get daily sales totals with date filling
@@ -79,11 +79,11 @@ while($row = mysqli_fetch_assoc($result)) {
 // Determine interval based on period
 $interval = 1;
 switch($period) {
-    case '3months':
-        $interval = 3;
+    case '15days':
+        $interval = 1;
         break;
-    case 'month':
-        $interval = 1; // Changed from 2 to 1 to show more frequent data points
+    case '12days':
+        $interval = 1;
         break;
     default:
         $interval = 1;
@@ -115,11 +115,11 @@ function generateDecayingWeights($size, $decayRate = 0.85) {
         $total += $weight;
     }
     // Normalize
-    return array_map(fn($w) => $w / $total, $weights);
+    return array_map(function($w) use ($total) { return $w / $total; }, $weights);
 }
 
 // Calculate future predictions using weighted moving average
-function calculatePredictions($amounts, $dates, $period = 'week') {
+function calculatePredictions($amounts, $dates, $period = '5days') {
     // If no historical data, return empty arrays
     if (empty($amounts)) {
         return [[], []];
@@ -127,38 +127,31 @@ function calculatePredictions($amounts, $dates, $period = 'week') {
 
     // Step 1: Determine how many days to predict based on selected period
     switch($period) {
-        case 'week':
+        case '5days':
+            $window_size = 3;
+            $weights = [0.2, 0.3, 0.5];
+
+            $days_to_predict = 5;      // Predict next 5 days
+            $prediction_interval = 1;  // Show every day
+            break;
+        case '12days':
             $window_size = 5;
-//            $weights = [0.35, 0.26, 0.2, 0.13, 0.06];
-//            $weights = [0.06, 0.13, 0.2, 0.26, 0.35];
             $weights = [0.05, 0.1, 0.15, 0.3, 0.4];
 
-            $days_to_predict = 7;      // Predict next 7 days for weekly view
+            $days_to_predict = 12;     // Predict next 12 days
             $prediction_interval = 1;  // Show every day
             break;
-        case 'month':
-            $window_size = 15;
-//            $weights = [0.01, 0.01, 0.02, 0.02, 0.03, 0.04, 0.05, 0.05, 0.06, 0.06, 0.08, 0.09, 0.12, 0.16, 0.2];
+        case '15days':
+            $window_size = 7;
             $weights = [
-                0.19, 0.16, 0.14, 0.12, 0.10,
-                0.09, 0.07, 0.06, 0.05, 0.04,
-                0.03, 0.02, 0.02, 0.01, 0.01
+                0.05, 0.05, 0.1, 0.1, 0.15,
+                0.25, 0.3
             ];
-            $days_to_predict = 30;     // Predict next 30 days for monthly view
+            $days_to_predict = 15;     // Predict next 15 days
             $prediction_interval = 1;  // Show every day
-            break;
-        case '3months':
-            $window_size = 15;
-//            $weights = [0.01, 0.01, 0.02, 0.02, 0.03, 0.04, 0.05, 0.05, 0.06, 0.06, 0.08, 0.09, 0.12, 0.16, 0.2];
-            $weights = [
-                0.19, 0.16, 0.14, 0.12, 0.10,
-                0.09, 0.07, 0.06, 0.05, 0.04,
-                0.03, 0.02, 0.02, 0.01, 0.01
-            ];$days_to_predict = 90;     // Predict next 90 days for quarterly view
-            $prediction_interval = 3;  // Show every 3 days to avoid overcrowding
             break;
         default:
-            $days_to_predict = 7;
+            $days_to_predict = 5;
             $prediction_interval = 1;
     }
 

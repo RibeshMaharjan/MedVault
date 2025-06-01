@@ -8,9 +8,9 @@
                 </div>
                 <div class="col-md-6">
                     <div class="btn-group float-end" role="group">
-                        <button type="button" class="btn btn-outline-danger" id="weekBtn" onclick="updateChartAndButtons('week')">Last Week</button>
-                        <button type="button" class="btn btn-outline-danger" id="monthBtn" onclick="updateChartAndButtons('month')">Last Month</button>
-                        <button type="button" class="btn btn-outline-danger" id="threeMonthsBtn" onclick="updateChartAndButtons('3months')">Last 3 Months</button>
+                        <button type="button" class="btn btn-outline-danger" id="fiveDaysBtn" onclick="updateChartAndButtons('5days')">5 Days</button>
+                        <button type="button" class="btn btn-outline-danger" id="twelveDaysBtn" onclick="updateChartAndButtons('12days')">12 Days</button>
+                        <button type="button" class="btn btn-outline-danger" id="fifteenDaysBtn" onclick="updateChartAndButtons('15days')">15 Days</button>
                     </div>
                 </div>
             </div>
@@ -95,9 +95,9 @@
 
         // Add active class to selected button
         const buttonMap = {
-            'week': 'weekBtn',
-            'month': 'monthBtn',
-            '3months': 'threeMonthsBtn'
+            '5days': 'fiveDaysBtn',
+            '12days': 'twelveDaysBtn',
+            '15days': 'fifteenDaysBtn'
         };
 
         const button = document.getElementById(buttonMap[period]);
@@ -148,11 +148,11 @@
         const predictedAmounts = [];
 
         // Generate past dates based on period
-        let daysInPast = 7; // default for 'week'
-        if (period === 'month') {
-            daysInPast = 30;
-        } else if (period === '3months') {
-            daysInPast = 90;
+        let daysInPast = 5; // default for '5days'
+        if (period === '12days') {
+            daysInPast = 12;
+        } else if (period === '15days') {
+            daysInPast = 15;
         }
 
         // Add past dates with zero values
@@ -164,11 +164,11 @@
         }
 
         // Generate future predictions based on period
-        let daysToPredict = 7; // default for 'week'
-        if (period === 'month') {
-            daysToPredict = 30;
-        } else if (period === '3months') {
-            daysToPredict = 30; // Show 1 month of predictions for 3 months view
+        let daysToPredict = 5; // default for '5days'
+        if (period === '12days') {
+            daysToPredict = 12;
+        } else if (period === '15days') {
+            daysToPredict = 15;
         }
 
         // Create a simple increasing trend for empty predictions
@@ -239,11 +239,11 @@
         }
 
         // Determine prediction period based on selected timeframe
-        let daysToForecast = 7; // Default for 'week'
-        if (period === 'month') {
-            daysToForecast = 30;
-        } else if (period === '3months') {
-            daysToForecast = 30; // Show 1 month of predictions for 3 months view
+        let daysToForecast = 5; // Default for '5days'
+        if (period === '12days') {
+            daysToForecast = 12;
+        } else if (period === '15days') {
+            daysToForecast = 15;
         }
 
         // Ensure we have the right number of predicted dates/amounts
@@ -445,18 +445,18 @@
     }
 
 
-    // Initialize with last week's data
+    // Initialize with 5 days data
     document.addEventListener('DOMContentLoaded', () => {
         console.log("DOM fully loaded");
 
-        // Set initial active state for 'week' button
-        const weekBtn = document.getElementById('weekBtn');
-        if (weekBtn) {
-            weekBtn.classList.add('active');
+        // Set initial active state for '5days' button
+        const fiveDaysBtn = document.getElementById('fiveDaysBtn');
+        if (fiveDaysBtn) {
+            fiveDaysBtn.classList.add('active');
         }
 
-        // Initialize chart with last week's data
-        updateChartAndButtons('week');
+        // Initialize chart with 5 days data
+        updateChartAndButtons('5days');
     });
     </script>
 <?php include 'includes/footer.php'; ?>
