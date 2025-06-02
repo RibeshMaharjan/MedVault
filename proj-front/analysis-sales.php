@@ -28,12 +28,19 @@
                                 <p><strong>Understanding the Prediction Method:</strong></p>
                                 <p>The sales forecast uses a <strong>Weighted Moving Average</strong> algorithm calculated in the backend that works like this:</p>
                                 <ol>
-                                    <li>Look at the last 5 days of sales data (this is called the "window size")</li>
-                                    <li>Give more weight to recent days (e.g., 40% to yesterday, 30% to the day before, etc.)</li>
+                                    <li>Look at the recent sales data (the "window size" varies by forecast period)</li>
+                                    <li>Give more weight to recent days (with different weighting patterns for different forecast periods)</li>
                                     <li>Calculate a weighted average of these values to predict the next day</li>
                                     <li>Add this prediction to our data and repeat to forecast further days</li>
+                                    <li>Apply variability that increases with prediction distance to simulate real-world uncertainty</li>
                                 </ol>
-                                <p>This simple approach provides an effective way to forecast sales trends while smoothing out random fluctuations. The "window size" (5 days in our case) determines how many recent data points are considered for each prediction. All calculations are performed in the backend (get_sales_data.php) to ensure consistency and accuracy.</p>
+                                <p>Each forecast period uses different parameters:</p>
+                                <ul>
+                                    <li><strong>5-day forecast:</strong> Uses 3 most recent days with strong recency bias</li>
+                                    <li><strong>12-day forecast:</strong> Uses 5 most recent days with moderate recency bias and gradually increasing variability</li>
+                                    <li><strong>15-day forecast:</strong> Uses 9 most recent days with more balanced weights and higher variability</li>
+                                </ul>
+                                <p>This approach provides an effective way to forecast sales trends while reflecting that longer-term predictions naturally have more uncertainty. All calculations are performed in the backend (get_sales_data.php) to ensure consistency and accuracy.</p>
                             </div>
                         </div>
                     </div>

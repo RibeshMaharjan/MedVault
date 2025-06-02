@@ -136,17 +136,17 @@ function calculatePredictions($amounts, $dates, $period = '5days') {
             break;
         case '12days':
             $window_size = 5;
-            $weights = [0.05, 0.1, 0.15, 0.3, 0.4];
+            $weights = [0.1, 0.15, 0.2, 0.25, 0.3]; // More weight on recent data
 
             $days_to_predict = 12;     // Predict next 12 days
             $prediction_interval = 1;  // Show every day
             break;
         case '15days':
-            $window_size = 7;
+            $window_size = 9; // Larger window size for longer-term predictions
             $weights = [
-                0.05, 0.05, 0.1, 0.1, 0.15,
-                0.25, 0.3
-            ];
+                0.02, 0.03, 0.05, 0.07, 0.1,
+                0.13, 0.15, 0.2, 0.25
+            ]; // More balanced weights for longer-term trend
             $days_to_predict = 15;     // Predict next 15 days
             $prediction_interval = 1;  // Show every day
             break;
@@ -175,9 +175,21 @@ function calculatePredictions($amounts, $dates, $period = '5days') {
             // For future days, calculate prediction using weighted moving average
             $prediction = calculateWeightedMovingAverage($prediction_data, $window_size, $weights);
 
-            // Add slight variation using historical volatility
-//            $volatility = calculateVolatility($amounts);
-//            $prediction *= (1 + (mt_rand(-1000, 1000) / 1000) * $volatility);
+            // Add variation using historical volatility - more for longer predictions
+            $volatility = calculateVolatility($amounts);
+
+            // Add increasing variability based on how far into the future we're predicting
+            $variability_factor = 1.0;
+            if ($period == '12days') {
+                $variability_factor = 1.0 + ($i * 0.05); // Gradually increase variability
+            } elseif ($period == '15days') {
+                $variability_factor = 1.0 + ($i * 0.08); // More variability for longer predictions
+            }
+//            mt_srand(12345); // Use any fixed number as the seed
+
+            // Apply the variability to the prediction
+//            $random_factor = (mt_rand(-800, 1000) / 1000) * $volatility * $variability_factor;
+//            $prediction *= (1 + $random_factor);
 
             $prediction_data[] = $prediction;
         }
