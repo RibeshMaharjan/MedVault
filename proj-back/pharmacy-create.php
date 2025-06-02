@@ -175,7 +175,7 @@
 ?>
 
 <?php include './includes/header.php'; ?>
-        <div class="dashboard-content pt-3">
+        <div class="dashboard-content bg-white py-3 mh-100 overflow-auto">
             <div class="container-fluid bg-white">
                 <div class="row pt-3 ps-2">
                     <div class="col-sm-6 mb-2">

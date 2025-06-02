@@ -3,3 +3,19 @@
     color: white;
     border-color: #dc3545;
 }
+
+.pagination>li>a,
+.pagination>li>span {
+    /*border: 1px solid red;*/
+    color: #000;
+}
+
+.pagination>li>a:hover {
+    color: red;
+}
+
+.pagination>li.active>a {
+    background: red;
+    color: #fff;
+    border: 1px solid red;
+}

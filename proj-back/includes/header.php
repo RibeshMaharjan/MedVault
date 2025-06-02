@@ -29,7 +29,7 @@
 <body>
 <div class="main-container d-flex">
     <?php include 'new-sidebar.php'; ?>
-        <div class="container-fluid bg-body-tertiary">
+        <div class="container-fluid bg-body-tertiary mh-100 overflow-auto">
             <nav class="navbar navbar-expand-md bg-white rounded mt-3 header">
                 <div class="container-fluid">
                     <div class="d-flex justify-content-between d-md-none d-block">
@@ -67,6 +67,6 @@
             <div class="toast-container">
                 <?php alertmessage(); ?>
             </div>
-</body>
-</html>
+<!--</body>-->
+<!--</html>-->
         

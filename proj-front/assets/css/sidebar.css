@@ -69,7 +69,7 @@ hr.h-color{
 
 @media(max-width: 767px){
 #side_nav{
-    margin-left: -280px;
+    margin-left: -320px;
     position: absolute;
     min-height: 100vh;
     z-index: 1;

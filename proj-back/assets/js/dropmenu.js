@@ -55,17 +55,18 @@ order.addEventListener('click', () => {
     }
 });
 function showList(id) {
-// Get the list element and its list items
-var list = document.getElementById(id);
-var listItems = list.getElementsByTagName('li');
-list.classList.toggle("show");
-// Initialize the total height variable
-var totalHeight = 0;
-
-// Loop through the list items and calculate their heights
-for (var i = 0; i < listItems.length; i++) {
-    totalHeight += listItems[i].offsetHeight;
+    // Get the list element and its list items
+    var list = document.getElementById(id);
+    var listItems = list.getElementsByTagName('li');
+    list.classList.toggle("show");
+    // Initialize the total height variable
+    var totalHeight = 0;
+    
+    // Loop through the list items and calculate their heights
+    for (var i = 0; i < listItems.length; i++) {
+        totalHeight += listItems[i].offsetHeight;
+    }
+    
+    // Set the height of the list element to the total height of its list items
+    list.style.height = list.classList.contains('show') ? totalHeight + 'px' : '50px';
 }
-
-// Set the height of the list element to the total height of its list items
-list.style.height = list.classList.contains('show') ? totalHeight + 'px' : '50px';}

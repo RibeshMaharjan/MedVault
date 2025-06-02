@@ -95,7 +95,8 @@ if(isset($_POST['submit_verification'])) {
 
 <div class="main-container d-flex">
 	<?php include 'includes/dashboard.php'; ?>
-	<div class="container-fluid p-5">
+  <div class="container-fluid p-2 p-md-3 p-lg-5 max-vh-100 overflow-auto" style="max-height: 100vh; !important;">
+      <?php include 'includes/navbar.php'; ?>
 		<?php if(isset($verification_success)): ?>
 			<div class="alert alert-success alert-dismissible fade show" role="alert">
 				<strong>Verification request submitted successfully!</strong> Your verification request has been submitted and is under review by our team.
@@ -118,7 +119,7 @@ if(isset($_POST['submit_verification'])) {
 		<?php endif; ?>
 		
 		<div class="row pt-4 mb-5">
-			<div class="col-md-6">
+			<div class="col-lg-6 mb-4">
 				<div class="card border-0 shadow">
 					<div class="card-header bg-danger text-white">
 						<p class="fw-semibold fs-4 mb-0">Edit Profile</p>
@@ -147,7 +148,7 @@ if(isset($_POST['submit_verification'])) {
 				</div>
 			</div>
 			
-			<div class="col-md-6 mb-4">
+			<div class="col-lg-6 mb-4">
 				<div class="card border-0 shadow">
 					<div class="card-header bg-danger text-white">
 						<p class="fw-semibold fs-4 mb-0">Verification Status</p>
@@ -250,27 +251,4 @@ if(isset($_POST['submit_verification'])) {
 		</div>
 	</div>
 </div>
-
-
-
-<script>
-    // Toggle sidebar for mobile view
-    document.addEventListener('DOMContentLoaded', function() {
-        const openBtn = document.querySelector('.open-btn');
-        const closeBtn = document.querySelector('.close-btn');
-        const sidebar = document.querySelector('.sidebar');
-        
-        if (openBtn) {
-            openBtn.addEventListener('click', function() {
-                sidebar.classList.add('active');
-            });
-        }
-        
-        if (closeBtn) {
-            closeBtn.addEventListener('click', function() {
-                sidebar.classList.remove('active');
-            });
-        }
-    });
-</script>
 <?php include 'includes/footer.php'; ?>

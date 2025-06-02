@@ -1,7 +1,9 @@
 <?php include 'includes/header.php'; ?>
     <div class="main-container d-flex">
         <?php include 'includes/dashboard.php'; ?>
-            <div class="container-fluid p-5">
+
+        <div class="container-fluid p-2 p-md-3 p-lg-5 max-vh-100 overflow-auto" style="max-height: 100vh; !important;">
+            <?php include 'includes/navbar.php'; ?>
                 <div class="row pt-4 bg-white">
                     <div class="col">
                         <h1 class="fw-normal mb-3">Sales Form</h1>
@@ -12,7 +14,7 @@
                             <form action="" id="sales-suggest-form" method="post" class="search-form">
                                 <div class="input-group">
                                     <input class="form-control" type="text" id="search" name="medicine_name" placeholder="Search medicine by name..." autocomplete="off">
-                                    <button type="submit" class="btn btn-danger">Add to Sale</button>
+                                    <button type="submit" class="btn btn-danger z-0">Add to Sale</button>
                                 </div>
                             </form>
                             <div id="display" class="dropdown-menu w-100"></div>

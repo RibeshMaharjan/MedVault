@@ -54,7 +54,8 @@
             </div>
         </div>
         <?php include 'includes/dashboard.php'; ?>
-        <div class="container-fluid p-5">
+        <div class="container-fluid p-2 p-md-3 p-lg-5 max-vh-100 overflow-auto" style="max-height: 100vh; !important;">
+            <?php include 'includes/navbar.php'; ?>
             <div class="row pt-4 g-5">
                 <div class="col bg-white">
                     <div class="row">
@@ -69,7 +70,7 @@
                         </form>
                     </div>
                 </div>
-                <div class="col-md-6 pt-4 bg-white ms-md-auto ">
+                <div class="col-lg-6 pt-4 bg-white ms-lg-auto ">
                     <?php
                         $category = getAll('user_category_tbl');
                         $user_id = $_SESSION['loggedInUser']['user_id'];
@@ -83,18 +84,19 @@
                     <table class="table table-striped">
                         <thead class="table-danger">
                             <tr>
-                                <th>C.ID</th>
+                                <th>S.No</th>
                                 <th>Category Name</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
+                                $i = 1;
                                 while($result = mysqli_fetch_assoc( $category ) ){
                                     if($result['pharmacy_id'] == $user_id){
                             ?>
                             <tr>
-                                <td><?= $result['c_id'] ?></td>
+                                <td><?= $i ?></td>
                                 <td><?= $result['category_name'] ?></td>
                                 <td class="row g-0">
                                     <div class="col">
@@ -110,6 +112,7 @@
                                 </td>
                             </tr>
                             <?php
+                                    $i++;
                                 }
                             }
                         }

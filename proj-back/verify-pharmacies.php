@@ -82,7 +82,7 @@ $total_count = $total_row['total'];
 $verification_rate = ($total_count > 0) ? round(($verified_count / $total_count) * 100) : 0;
 ?>
 
-<div class="dashboard-content pt-3">
+<div class="dashboard-content bg-white py-3">
   <div class="container-fluid bg-white">
         <?php if(isset($_SESSION['success'])): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">

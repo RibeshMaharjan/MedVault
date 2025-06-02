@@ -45,9 +45,31 @@
             crossorigin="anonymous"
         ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="assets/js/script.js"></script>
     <script src="assets/js/app.js"></script>
     <script src="assets/js/dropmenu.js"></script>
     <script src="assets/js/subtotal.js"></script>
+
+    <script>
+        // Toggle sidebar for mobile view
+        document.addEventListener('DOMContentLoaded', function() {
+            const openBtn = document.querySelector('.open-btn');
+            const closeBtn = document.querySelector('.close-btn');
+            const sidebar = document.querySelector('.sidebar');
+
+            if (openBtn) {
+                openBtn.addEventListener('click', function() {
+                    sidebar.classList.add('active');
+                });
+            }
+
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    sidebar.classList.remove('active');
+                });
+            }
+        });
+    </script>
     <script>
             $(document).ready(function () {
                 $('.medicineeditbtn').on('click', function() {

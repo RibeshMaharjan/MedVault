@@ -1,6 +1,6 @@
 <?php include './includes/header.php'; ?>
 
-    <div class="dashboard-content pt-3">
+    <div class="dashboard-content bg-white py-3">
     <?php
         $admin = getAll('tbl_admin');
         if(mysqli_num_rows($admin) > 0)

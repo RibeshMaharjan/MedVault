@@ -80,7 +80,8 @@
             </div>
         </div>
         <?php include 'includes/dashboard.php'; ?>
-        <div class="container-fluid p-5">
+        <div class="container-fluid max-vh-100 overflow-auto" style="max-height: 100vh; !important;">
+            <?php include 'includes/navbar.php'; ?>
             <?php
                 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
                 $itemsPerPage = 10;

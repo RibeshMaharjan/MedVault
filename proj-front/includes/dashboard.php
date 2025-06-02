@@ -1,17 +1,11 @@
-<div class="sidebar pt-3" id="side_nav">
-    <div class="row">
-        <div class="col">
+<div class="sidebar py-3 min-vh-100" id="side_nav">
+    <div class="row h-100 ps-2">
+        <div class="col d-flex flex-column">
             <!-- Logo at the top of sidebar -->
             <div class="text-center mb-3">
                 <img src="image/logo.png" alt="logo" style="max-height: 120px;">
             </div>
-
-            <div class="d-flex justify-content-between ms-3">
-                <button class="btn d-md-none d-block close-btn px-1 py-0 text-dark">
-                    <i class="fal fa-stream"></i>
-                </button>
-            </div>
-            <ul class="nav flex-column mt-2 mt-sm-0 list-unstyled px-2" id="menu">
+            <ul class="nav flex-column mt-2 mt-sm-0 list-unstyled px-2 flex-grow-1" id="menu">
                 <?php 
                 $current_page = basename($_SERVER['PHP_SELF']);
                 $dashboard_active = ($current_page == 'view-inventory.php') ? 'active' : '';
@@ -112,19 +106,20 @@
                         <span class="material-symbols-outlined fs-6 icon">person</span>Profile
                     </a>
                 </li>
+                <!-- Logout button positioned at bottom of sidebar -->
+              <div class="flex-grow-1 d-flex w-100 my-3">
+                <div class="w-100 mt-auto">
+                    <a href="../proj-back/logout.php" class="btn btn-danger w-100 py-2 d-flex align-items-center justify-content-center shadow-sm">
+                        <span class="material-symbols-outlined me-2">logout</span>
+                        <span class="fw-medium">Sign Out</span>
+                    </a>
+                </div>
+              </div>
             </ul>
-
-            <!-- Logout button positioned at bottom of sidebar -->
-            <div class="position-absolute bottom-0 w-100 mb-3 px-3">
-                <a href="../proj-back/logout.php" class="btn btn-danger w-100 py-2 d-flex align-items-center justify-content-center shadow-sm">
-                    <span class="material-symbols-outlined me-2">logout</span>
-                    <span class="fw-medium">Sign Out</span>
-                </a>
-            </div>
         </div>
         <div class="col-1">
-            <div class="d-flex justify-content-between d-md-none d-block float-end ">
-                <button class="btn px-1 py-0 open-btn me-2"><i class="fal fa-stream"></i></button>
+            <div class="d-flex justify-content-between d-md-none d-block float-end">
+                <button class="btn px-1 py-0 close-btn me-2"><i class="fal fa-stream"></i></button>
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 <?php include './includes/header.php'; ?>
 
-    <div class="dashboard-content pt-3">
+    <div class="dashboard-content bg-white py-3">
     
     <!-- Edit Modal -->
     <div class="modal fade" id="pharmacyeditmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

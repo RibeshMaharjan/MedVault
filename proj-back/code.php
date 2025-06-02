@@ -1,7 +1,7 @@
 <?php
     include_once('../config/function.php');
 
-    // ADD ADMIN
+   /* // ADD ADMIN
     if(isset($_POST['add-admin'])){
         $admin_name = $_POST['name'];
         $email = $_POST['email'];
@@ -233,7 +233,7 @@
         else{
             redirect('pharmacy-create.php', 'Please fill all required fields!');
         }
-    }
+    }*/
 
     // Update Pharmacy
     if(isset($_POST['update-pharmacy'])){
@@ -319,7 +319,7 @@
         }
     }
 
-    // ADD MEDICINE
+    /*// ADD MEDICINE
     if(isset($_POST['add-medicine'])){
         $medicine_name = $_POST['name'];
         $manufacturer_name = $_POST['manufacturername'];
@@ -346,7 +346,7 @@
         if(!is_numeric($price) || $price<0) {
             redirect('medicine-create.php','Invalid Price Number');
         }
-        
+
         if($quantity<0){
             redirect('medicine-create.php','Invalid quantity Number');
         }
@@ -400,7 +400,7 @@
             redirect('medicine-create.php','Could Not Add Medicine');
         }
 
-        
+
     }
 
     // UPDATE MEDICINE
@@ -413,7 +413,7 @@
         $exp_date = validate($_POST['exp_date']);
         $formatted_Date = date("Y-m-d", strtotime($exp_date));;
         $dosage = $_POST['dosage'];
-        
+
         if (!preg_match("/^[a-zA-Z-' ]*$/",$medicine_name)) {
             redirect('medicine-create.php','Only letters and white space allowed');
         }
@@ -442,7 +442,7 @@
 
             if ($fileError === 0) {
                 if ($fileSize < 1000000) {
-                    $imagequery = "UPDATE tbl_medicine SET 
+                    $imagequery = "UPDATE tbl_medicine SET
                     images = '../uploaded_img/$fileNameNew'
                     WHERE medicine_id='$medicine_id'";
                     $imagedata = mysqli_query($conn,$imagequery);
@@ -471,7 +471,7 @@
                 redirect('medicine-display.php','Could Not Update Image');
             }
         }
-        $query = "UPDATE tbl_medicine SET 
+        $query = "UPDATE tbl_medicine SET
                     medicine_name ='$medicine_name',
                     manufacturer ='$manufacturer_name',
                     price ='$price',
@@ -498,13 +498,13 @@
         $settingId = validate($_POST['settingId']);
 
         if($settingId == 1){
-            $query = "UPDATE settings SET 
+            $query = "UPDATE settings SET
                         title='$title',
                         small_description ='$smalldescription',
                         sub_title ='$subtitle',
                         sub_description ='$subdescription',
                         phone ='$phone',
-                        email ='$email' 
+                        email ='$email'
                         WHERE id=1";
             $result = mysqli_query($conn,$query);
         }
@@ -514,5 +514,5 @@
         }else {
             echo "failed";
         }
-    }
+    }*/
 ?>

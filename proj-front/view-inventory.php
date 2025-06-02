@@ -1,10 +1,11 @@
 <?php include './includes/header.php'; ?>
 <div class="main-container">
     <?php include 'includes/dashboard.php'; ?>
-    <div class="container-fluid p-5">
+    <div class="container-fluid max-vh-100 overflow-auto" style="max-height: 100vh; !important;">
+        <?php include 'includes/navbar.php'; ?>
         <!-- Medicine Statistics -->
-        <div class="row pt-4 mb-5">
-            <div class="col-md-3">
+        <div class="row pt-4 mb-3">
+            <div class="col-lg-3 mb-3">
                 <div class="card border-0 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Total Medicine Types</h5>
@@ -12,7 +13,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-lg-3 mb-3">
                 <div class="card border-0 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Total Categories</h5>
@@ -20,7 +21,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-lg-3 mb-3">
                 <div class="card border-0 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Low Stock Items</h5>
@@ -34,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-lg-3 mb-3">
                 <div class="card border-0 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Out of Stock</h5>
@@ -50,8 +51,8 @@
         </div>
 
         <!-- Category-wise Medicine Distribution -->
-        <div class="row mb-4">
-            <div class="col-md-6">
+        <div class="row mb-3">
+            <div class="col-lg-6 mb-3">
                 <div class="card border-0 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Medicine by Category</h5>
@@ -88,8 +89,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="row card border-0 shadow">
+            <div class="col-lg-6">
+                <div class="card border-0 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Low Stock Alert</h5>
                         <div class="table-responsive">
@@ -110,8 +111,8 @@
                                                             ORDER BY in_stock ASC";
                                         $lowStockDetailResult = mysqli_query($conn, $lowStockDetailQuery);
                                         while($row = mysqli_fetch_assoc($lowStockDetailResult)) {
-                                            $status = $row['in_stock'] == 0 ? 
-                                                '<span class="badge bg-danger">Out of Stock</span>' : 
+                                            $status = $row['in_stock'] == 0 ?
+                                                '<span class="badge bg-danger">Out of Stock</span>' :
                                                 '<span class="badge bg-warning">Low Stock</span>';
                                             echo "<tr>
                                                     <td>{$row['medicine_name']}</td>
@@ -125,7 +126,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-3 card border-0 shadow">
+                <div class="mt-3 card border-0 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Expired Stock Alert</h5>
                         <div class="table-responsive">
@@ -232,24 +233,4 @@
         </div>
     </div>
 </div>
-
-<script>
-    // Toggle sidebar for mobile view
-    document.addEventListener('DOMContentLoaded', function() {
-        const openBtn = document.querySelector('.open-btn');
-        const closeBtn = document.querySelector('.close-btn');
-        const sidebar = document.querySelector('.sidebar');
-        
-        if (openBtn) {
-            openBtn.addEventListener('click', function() {
-                sidebar.classList.add('active');
-            });
-        }
-        
-        if (closeBtn) {
-            closeBtn.addEventListener('click', function() {
-                sidebar.classList.remove('active');
-            });
-        }
-    });
-</script><?php include 'includes/footer.php'; ?>
+<?php include 'includes/footer.php'; ?>

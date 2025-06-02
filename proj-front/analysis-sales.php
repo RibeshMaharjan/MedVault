@@ -1,23 +1,24 @@
 <?php include 'includes/header.php'; ?>
     <div class="main-container d-flex">
         <?php include 'includes/dashboard.php'; ?>
-        <div class="container-fluid p-5">
+        <div class="container-fluid p-2 p-md-3 p-lg-5 max-vh-100 overflow-auto" style="max-height: 100vh; !important;">
+            <?php include 'includes/navbar.php'; ?>
             <div class="row pt-4 mb-4">
                 <div class="col-md-6">
                     <h1 class="mb-3">Sales Analysis</h1>
                 </div>
                 <div class="col-md-6">
                     <div class="btn-group float-end" role="group">
-                        <button type="button" class="btn btn-outline-danger" id="fiveDaysBtn" onclick="updateChartAndButtons('5days')">5 Days</button>
-                        <button type="button" class="btn btn-outline-danger" id="twelveDaysBtn" onclick="updateChartAndButtons('12days')">12 Days</button>
-                        <button type="button" class="btn btn-outline-danger" id="fifteenDaysBtn" onclick="updateChartAndButtons('15days')">15 Days</button>
+                        <button type="button" class="btn btn-outline-danger z-0" id="fiveDaysBtn" onclick="updateChartAndButtons('5days')">5 Days</button>
+                        <button type="button" class="btn btn-outline-danger z-0" id="twelveDaysBtn" onclick="updateChartAndButtons('12days')">12 Days</button>
+                        <button type="button" class="btn btn-outline-danger z-0" id="fifteenDaysBtn" onclick="updateChartAndButtons('15days')">15 Days</button>
                     </div>
                 </div>
             </div>
 
             <!-- Charts Container -->
             <div class="row">
-                <div class="col-md-8 mb-4">
+                <div class="col-lg-8 mb-4">
                     <div class="card border-0 shadow">
                         <div class="card-body">
                             <h5 class="card-title">Sales Trend</h5>
@@ -45,9 +46,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="row g-3">
-                        <div class="card border-0 shadow">
+                <div class="col-lg-4 mb-4">
+                        <div class="card border-0 shadow mb-4">
                             <div class="card-body">
                                 <h5 class="card-title">Statistics</h5>
                                 <div id="statsContainer">
@@ -64,7 +64,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
 
@@ -73,6 +72,31 @@
 
     <!-- Add Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Responsive styles for chart container */
+        #chartContainer {
+            position: relative;
+            height: 50vh; /* Use viewport height for better responsiveness */
+            min-height: 300px; /* Minimum height to ensure visibility */
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        /* Adjust chart container height based on screen size */
+        @media (max-width: 768px) {
+            #chartContainer {
+                height: 60vh; /* Taller on mobile for better visibility */
+                min-height: 250px;
+            }
+
+            /* Make sure the chart title and labels are visible on small screens */
+            #salesChart {
+                max-width: 100%;
+                overflow-x: auto;
+            }
+        }
+    </style>
 
     <script>
     let salesChart = null;
@@ -267,8 +291,8 @@
                 data.amounts[data.amounts.length - 1] : 0;
 
             // Use a small base value and increment for predictions
-            const baseValue = 10;
-            const increment = 2;
+            const baseValue = 0;
+            const increment = 0;
 
             for (let i = predictedDates.length; i < daysToForecast; i++) {
                 const nextDate = new Date();
@@ -290,8 +314,8 @@
 
         if (allZeros && data.predictedAmounts.length > 0) {
             console.log("All prediction amounts are zero, replacing with non-zero values");
-            const baseValue = 10;
-            const increment = 2;
+            const baseValue = 0;
+            const increment = 0;
             for (let i = 0; i < data.predictedAmounts.length; i++) {
                 data.predictedAmounts[i] = baseValue + ((i + 1) * increment);
             }
@@ -338,7 +362,11 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
+                    maintainAspectRatio: false,
+                    aspectRatio: function() {
+                        // Dynamically adjust aspect ratio based on screen width
+                        return window.innerWidth < 768 ? 1 : 2;
+                    },
                     interaction: {
                         intersect: false,
                         mode: 'index'
@@ -346,9 +374,37 @@
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Sales History and Future Forecast'
+                            text: 'Sales History and Future Forecast',
+                            font: {
+                                size: function() {
+                                    return window.innerWidth < 768 ? 14 : 16;
+                                }
+                            }
+                        },
+                        legend: {
+                            labels: {
+                                // Adjust legend font size for small screens
+                                font: {
+                                    size: function() {
+                                        return window.innerWidth < 768 ? 11 : 12;
+                                    }
+                                },
+                                boxWidth: function() {
+                                    return window.innerWidth < 768 ? 30 : 40;
+                                }
+                            }
                         },
                         tooltip: {
+                            titleFont: {
+                                size: function() {
+                                    return window.innerWidth < 768 ? 12 : 14;
+                                }
+                            },
+                            bodyFont: {
+                                size: function() {
+                                    return window.innerWidth < 768 ? 11 : 13;
+                                }
+                            },
                             callbacks: {
                                 label: function(context) {
                                     let label = context.dataset.label || '';
@@ -368,13 +424,48 @@
                             beginAtZero: true,
                             title: {
                                 display: true,
-                                text: 'Sales Amount (Rs.)'
+                                text: 'Sales Amount (Rs.)',
+                                font: {
+                                    size: function() {
+                                        return window.innerWidth < 768 ? 11 : 13;
+                                    }
+                                }
+                            },
+                            ticks: {
+                                font: {
+                                    size: function() {
+                                        return window.innerWidth < 768 ? 10 : 12;
+                                    }
+                                },
+                                // Limit the number of ticks on small screens
+                                maxTicksLimit: function() {
+                                    return window.innerWidth < 768 ? 5 : 10;
+                                }
                             }
                         },
                         x: {
                             title: {
                                 display: true,
-                                text: 'Date'
+                                text: 'Date',
+                                font: {
+                                    size: function() {
+                                        return window.innerWidth < 768 ? 11 : 13;
+                                    }
+                                }
+                            },
+                            ticks: {
+                                font: {
+                                    size: function() {
+                                        return window.innerWidth < 768 ? 9 : 11;
+                                    }
+                                },
+                                // Show fewer labels on small screens
+                                maxRotation: 45,
+                                autoSkip: true,
+                                maxTicksLimit: function() {
+                                    return window.innerWidth < 768 ? 
+                                        (window.innerWidth < 480 ? 5 : 8) : 15;
+                                }
                             }
                         }
                     }

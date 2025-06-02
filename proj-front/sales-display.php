@@ -80,7 +80,8 @@
             </div>
         </div>
         <?php include 'includes/dashboard.php'; ?>
-        <div class="container-fluid p-5">
+        <div class="container-fluid p-2 p-md-3 p-lg-5 max-vh-100 overflow-auto" style="max-height: 100vh; !important;">
+            <?php include 'includes/navbar.php'; ?>
                     <?php
                         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
                         $itemsPerPage = 10;
@@ -124,29 +125,29 @@
                                 <div class="row mb-4">
                                     <div class="col-12">
                                         <form method="GET" class="row g-3">
-                                            <div class="col-md-3">
+                                            <div class="col-lg-3">
                                                 <input type="text" class="form-control" name="search" placeholder="Search medicine..." value="<?= htmlspecialchars($search) ?>">
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-lg-2">
                                                 <select class="form-select" name="status">
                                                     <option value="">All Status</option>
                                                     <option value="pending" <?= $status_filter == 'pending' ? 'selected' : '' ?>>Pending</option>
                                                     <option value="completed" <?= $status_filter == 'completed' ? 'selected' : '' ?>>Completed</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-lg-2">
                                                 <input type="date" class="form-control" name="date_from" value="<?= htmlspecialchars($date_from) ?>" placeholder="From Date">
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-lg-2">
                                                 <input type="date" class="form-control" name="date_to" value="<?= htmlspecialchars($date_to) ?>" placeholder="To Date">
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-lg-3">
                                                 <div class="input-group">
                                                     <input type="number" class="form-control" name="amount_min" placeholder="Min Amount" value="<?= htmlspecialchars($amount_min) ?>">
                                                     <input type="number" class="form-control" name="amount_max" placeholder="Max Amount" value="<?= htmlspecialchars($amount_max) ?>">
                                                 </div>
                                             </div>
-                                            <div class="col-md-12">
+                                            <div class="col-lg-12">
                                                 <button type="submit" class="btn btn-danger">Filter</button>
                                                 <a href="sales-display.php" class="btn btn-secondary">Reset</a>
                                             </div>

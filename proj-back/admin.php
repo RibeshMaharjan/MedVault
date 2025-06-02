@@ -1,9 +1,9 @@
 <?php include './includes/header.php'; ?>
-    <div class="main-container d-flex">
+    <div class="main-container d-flex h-auto">
         <div class="container-fluid p-0 pt-3">
             <div class="dashboard-content bg-white py-3">
                 <div class="row px-3 mb-5">
-                    <div class="col col-md-3">
+                    <div class="col col-12 mb-3 mb-md-0 col-md-3">
                         <div class="card border-0 shadow-lg">
                             <div class="card-body">
                                 <h5 class="card-title ">Total Admins</h5>

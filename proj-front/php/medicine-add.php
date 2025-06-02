@@ -4,25 +4,34 @@
     $user_id = $_SESSION['loggedInUser']['user_id'];
 
     if(isset($_POST['add-medicine'])){
-        $medicine_name = $_POST['name'];
-        $description = $_POST['description'];
+        $medicine_name = trim($_POST['name']);
+        $description = trim($_POST['description']);
         $category = $_POST['category'];
-        $instock = $_POST['quantity'];
-        $buy_price = $_POST['buy_price'];
-        $sell_price = $_POST['sell_price'];
+        $instock = trim($_POST['quantity']);
+        $buy_price = trim($_POST['buy_price']);
+        $sell_price = trim($_POST['sell_price']);
         $exp_date = $_POST['exp_date'];
+
+        $_SESSION['form_data'] = [
+            'name' => $medicine_name,
+            'description' => $description,
+            'category' => $category,
+            'quantity' => $instock,
+            'buy_price' => $buy_price,
+            'sell_price' => $sell_price,
+            'exp_date' => $exp_date
+        ];
+
+//        $_SESSION['form_data'] = $_POST;
+
         $formatted_Date = date("Y-m-d", strtotime($exp_date));
 
-        if($category == '' && $medicine_name ='' && $description ='' && $instock ='' && $buy_price ='' && $sell_price ='' && $exp_date =''){
+        if($category == '' || $medicine_name ='' || $description ='' || $instock ='' || $buy_price ='' || $sell_price ='' || $exp_date =''){
             redirect('../medicine-create.php','Fill All the Field');
         }
 
         if(!preg_match("/^[a-zA-Z0-9-' ]*$/", $medicine_name)) {
             redirect('../medicine-create.php','Medicine name can only contain letters, numbers, hyphens and underscores.');
-        }
-
-        if (!preg_match("/^[0-9]+$/", $instock)) {
-            redirect('../medicine-create.php','Quantity can only contain numbers.');
         }
 
         if (!preg_match("/^[0-9]+$/", $buy_price)) {
@@ -35,6 +44,10 @@
 
         if($buy_price >= $sell_price){
             redirect('../medicine-create.php','Buy price must be greater than sell price.');
+        }
+
+        if (!preg_match("/^[0-9]+$/", $instock)) {
+            redirect('../medicine-create.php','Quantity can only contain numbers.');
         }
 
         $today = new DateTime();

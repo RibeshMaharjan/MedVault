@@ -1,6 +1,5 @@
 <?php include './includes/header.php'; ?>
-
-    <div class="dashboard-content px-3 pt-4 ">
+    <div class="dashboard-content">
     <?php include 'includes/dashboard.php'; ?>
 
     <?php
@@ -157,19 +156,21 @@
         }
     ?>
 
-    <div class="container-fluid bg-white ">
-        <div class="row px-3 pt-4">
+
+    <div class="container-fluid max-vh-100 overflow-auto" style="max-height: 100vh; !important;">
+          <?php include 'includes/navbar.php'; ?>
+        <div class="row mt-2 mt-md-0 p-0 px-md-3 p-md-4">
             <div class="col"><h1 class="fw-normal mb-3">Medicine Table</h1></div>
         </div>
 
         <!-- Filter Form -->
-        <div class="row mb-4 px-3">
+        <div class="row p-0 px-lg-3 pb-lg-4">
             <div class="col-12">
                 <form method="GET" class="row g-3">
-                    <div class="col-md-3">
+                    <div class="col-lg-3">
                         <input type="text" class="form-control" name="search" placeholder="Search medicine name..." value="<?= htmlspecialchars($search) ?>">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-lg-2">
                         <select class="form-select" name="category">
                             <option value="">All Categories</option>
                             <?php
@@ -185,31 +186,31 @@
                             ?>
                         </select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-lg-2">
                         <input type="date" class="form-control" name="exp_date_from" value="<?= htmlspecialchars($exp_date_from) ?>" placeholder="From Date">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-lg-2">
                         <input type="date" class="form-control" name="exp_date_to" value="<?= htmlspecialchars($exp_date_to) ?>" placeholder="To Date">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-lg-3">
                         <div class="input-group">
                             <input type="number" class="form-control" name="buy_price_min" placeholder="Min Buy Price" value="<?= htmlspecialchars($buy_price_min) ?>">
                             <input type="number" class="form-control" name="buy_price_max" placeholder="Max Buy Price" value="<?= htmlspecialchars($buy_price_max) ?>">
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-lg-3">
                         <div class="input-group">
                             <input type="number" class="form-control" name="sell_price_min" placeholder="Min Sell Price" value="<?= htmlspecialchars($sell_price_min) ?>">
                             <input type="number" class="form-control" name="sell_price_max" placeholder="Max Sell Price" value="<?= htmlspecialchars($sell_price_max) ?>">
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-lg-3">
                         <div class="input-group">
                             <input type="number" class="form-control" name="stock_min" placeholder="Min Stock" value="<?= htmlspecialchars($stock_min) ?>">
                             <input type="number" class="form-control" name="stock_max" placeholder="Max Stock" value="<?= htmlspecialchars($stock_max) ?>">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-lg-6">
                         <button type="submit" class="btn btn-danger">Filter</button>
                         <a href="medicine-display.php" class="btn btn-secondary">Reset</a>
                     </div>
@@ -217,9 +218,9 @@
             </div>
         </div>
 
-        <p class="text-muted px-3">Showing <?= ($page-1)*$itemsPerPage + 1 ?> to <?= min($page*$itemsPerPage, $paginatedResults['totalRecords']) ?> of <?= $paginatedResults['totalRecords'] ?> entries</p>
+        <p class="text-muted mt-2 px-3">Showing <?= ($page-1)*$itemsPerPage + 1 ?> to <?= min($page*$itemsPerPage, $paginatedResults['totalRecords']) ?> of <?= $paginatedResults['totalRecords'] ?> entries</p>
 
-        <div class="table-responsive px-3 pt-4 mb-5">
+        <div class="table-responsive px-0 pt-0 px-md-3 pt-md-4 mb-5">
         <table class="table table-striped">
             <thead class="table-danger">
                 <tr>
