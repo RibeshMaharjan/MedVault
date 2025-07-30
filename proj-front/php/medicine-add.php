@@ -26,7 +26,8 @@
 
         $formatted_Date = date("Y-m-d", strtotime($exp_date));
 
-        if($category == '' || $medicine_name ='' || $description ='' || $instock ='' || $buy_price ='' || $sell_price ='' || $exp_date =''){
+        if($category == '' || $medicine_name == '' || $description == '' || $instock == '' || $buy_price == '' ||
+                $sell_price == '' || $exp_date == ''){
             redirect('../medicine-create.php','Fill All the Field');
         }
 
@@ -61,7 +62,7 @@
         $data = mysqli_query($conn,$query);
 
         if($data){
-            redirect('../medicine-create.php','Medicine Added Successfully');
+            redirect('../medicine-display.php','Medicine Added Successfully');
         }
         else{
             redirect('../medicine-create.php','Could Not Add Medicine');

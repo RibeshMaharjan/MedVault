@@ -14,16 +14,16 @@
     if(isset($_POST['add-user'])) {
         $_SESSION['form_data'] = $_POST;
 
-        $pharmacy_name = validate($_POST['name']);
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+        $pharmacy_name = trim($_POST['name']);
+        $email = trim($_POST['email']);
+        $password = trim($_POST['password']);
         $phone = $_POST['phone'];
         $address = $_POST['address'];
         $isverified = $_POST['isverified'];
         $verification_notes = $_POST['verification_notes'];
         $pan = isset($_POST['pan']) ? $_POST['pan'] : '';
 
-        if (empty($pharmacy_name) && empty($email) && empty($password)){
+        if ($pharmacy_name != "" && $email != "" && $password != ""){
             $pharmacy_name = preg_replace('/\s+/', ' ', $pharmacy_name);
 
             // Check if empty
@@ -71,7 +71,7 @@
                 redirect('pharmacy-create.php','Invalid PAN Number');
             }
 
-            if(isset($_POST['pan'])) {
+            if($pan != '') {
                 // check if pan already exists
                 $query = "SELECT * FROM tbl_pharmacy WHERE pan = '$pan'";
                 $panExistResult = $conn->query($query);

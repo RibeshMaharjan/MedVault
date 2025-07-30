@@ -24,7 +24,7 @@ if(isset($_POST['update_profile'])) {
                     pharmacy_name = '$pharmacy_name',
                     email = '$email',
                     phone = '$phone',
-                    address = '$address',
+                    address = '$address'
                     WHERE pharmacy_id = $pharmacy_id";
     
     if(mysqli_query($conn, $update_query)) {
