@@ -1,0 +1,5 @@
+.btn-group .btn.active {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}

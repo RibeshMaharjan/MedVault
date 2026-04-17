@@ -1,0 +1,80 @@
+.footer{
+    display: flex;
+    height: 400px;
+    width: 100%;
+    background-color: black;
+    /* margin-top: 50px; */
+
+    padding: 50px 10% 50px 10%;
+    justify-content: space-between;
+}
+
+.footer .contact-column{
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    height: 200px;
+    padding: 10px 10px;
+}
+
+.footer .contact-column img{
+    background-color: white;
+    border-radius: 5px;
+    margin-right: 5px;
+    height: 30px;
+    object-fit: scale-down;
+}
+
+.footer .contact-column li{
+    display: flex;
+
+    align-items: center;
+    
+    font-size: large;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.footer .menu-column{
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    height: fit-content;
+    padding: 10px 10px;
+
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.footer .menu-column li{
+    font-size: larger;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.footer .feedback-column{
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    height: max-content;
+    padding: 10px 20px 25px 10px;
+
+    justify-content: space-between;
+}
+
+.footer .feedback-column #feedback-btn{
+    position: relative;
+    height: 40px;
+    width: 250px;
+    left: 50%;
+    transform: translate(-50%);
+    font-size: 15px;
+
+    cursor: pointer;
+    background-color: skyblue;
+    color: white;
+}
+
+.feedback-column textarea{
+    width: 100%;
+}

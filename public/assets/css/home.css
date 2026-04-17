@@ -1,0 +1,427 @@
+*{
+    font-family: "Poppins";
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+a{
+    text-decoration: none;
+    color: white;
+}
+
+.carousel-item{
+    height: 32rem;
+}
+
+
+/* card css */
+.card .card-body .product-card a{
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+.intro{
+    background: url(../../image/banner1.jpg);
+    background-size: cover;
+    background-position: center;
+
+    color: black;
+    position: relative;
+
+    width: 100%;
+    min-height: 600px;
+    padding: 5%;
+    text-align: left;
+}
+
+.intro .text{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 5%;
+    width: 50%;
+}
+
+.intro .text h1{
+    font-size: 50px;
+}
+
+.intro .text p{
+    font-size: 18px;
+}
+
+.body{
+    margin: 0;
+    padding: 5%;
+    display: flex;
+    height: fit-content;
+
+    flex-direction: column;
+    justify-content: space-between;
+
+    transition: transform .5s;
+}
+
+.body .content{
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    width: 100%;
+    gap: 100px;
+    margin-bottom: 50px;
+}
+
+.body .content .tablet-section,
+.body .content .capsule-section{
+    height: 100%;
+    width: 100%;
+    padding: 3% 4%;
+    box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.body .content .title-section{
+    position: relative;
+    height: fit-content;
+    width: fit-content;
+}
+
+.body .content .product-section{
+    display: grid;
+    grid-template-columns: 
+        repeat(auto-fit, minmax(350px, 1fr));
+    margin-top: 50px;
+    padding: 50px;
+    height: 100%;
+    width: 100%;
+    gap: 150px;
+    box-sizing: border-box;
+}
+.body .content .product-section{
+    margin-top: 0px;
+}
+
+.body .content .product-section .products{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 450px;
+    padding: 5%;
+    overflow: hidden;
+
+    border-radius: 15px;
+    box-sizing: border-box;
+    box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.303);
+
+    transition: transform .2s;
+}
+
+.body .content .product-section .products:hover{
+    transform: scale(1.04);
+}
+
+.body .content .product-section .products .image{
+    height: 70%;
+    width: 100%;
+}
+
+.body .content .product-section .products .image img{
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.body .content .product-section .products .name{
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    height: auto;
+    width: 100%;
+    min-height: 10px;
+    overflow: hidden;
+}
+
+.body .content .product-section .products .price{
+    display: flex;
+    justify-content: space-between;
+}
+.body .content .product-section .products .price p{
+    color: springgreen;
+}
+
+.body .content .product-section .products .price a{
+    color: rgba(0, 0, 0, 0.7);
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.body .content .product-section .products .price span{
+    color: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+    font-size: 14px;
+}
+
+
+/* .name span{
+    display: block;
+} */
+
+/* .body .content .product-section .products .buttons{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 10%;
+    gap: 20px;
+    width: 100%;
+    padding: 10px 30px;
+    box-sizing: border-box;
+} */
+
+/* .body .content .product-section .products .buttons #preview_btn,
+.body .content .product-section .products .buttons #cart_btn{
+    display: block;
+    height: 50px;
+    width: 100%;
+    background-color: white;
+
+    border: 2px solid skyblue;
+    border-radius: 10px;
+    outline: none;
+
+    cursor: pointer;
+    transition: transfrom 5s, box-shadow .5s;
+} */
+
+.body .content .product-section .products .buttons #preview_btn:hover,
+.body .content .product-section .products .buttons #cart_btn:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #33FFFC;
+}
+
+/* .body .content .product-section .products .buttons #cart_btn{
+    display: block;
+    position: relative;
+    top: 15px;
+    height: 50px;
+    width: 100%;
+    background-color: white;
+
+    border: 3px solid skyblue;
+    border-radius: 50px;
+    outline: none;
+
+    cursor: pointer;
+    transition: transfrom 5s, box-shadow .5s;
+}
+
+.body .content .product-section .products .buttons #cart_btn:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #33FFFC;
+} */
+
+/* .body .content .capsule-section{
+    height: fit-content;
+    width: 100;
+    margin-top: 80px;
+    padding: 40px;
+
+    box-sizing: border-box;
+    box-shadow: 10px 10px 50px rgba(0, 0, 0, 0.303);
+} */
+
+.body .callback-form{
+    height: 920px;
+    max-height: fit-content;
+    width: 100%;
+    margin-top: 50px;
+    padding: 40px;
+}
+
+.body .callback-form .section{
+    margin-top: 30px;
+    position: relative;
+    height: 80%;
+}
+
+.body .callback-form form{
+    position: absolute;
+    display: flex;
+    width: 40%;
+    height: 100%;
+    flex-direction: column;
+
+    align-items: baseline;
+
+    top: 0;
+    left: 0;
+
+    justify-content: baseline;
+}
+
+.form-section label{
+    font-size: larger;
+    font-weight: 500;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.form-section input,
+.form-section .select,
+.form-section textarea{
+    font-size: larger;
+    width: 100%;
+    padding: 5px 10px;
+    margin: 5px 50px 30px 0;
+    outline: none;
+    border: none;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.form-section input,
+.form-section .select {
+    height: 50px;
+}
+
+.form-section #callback-btn{
+    margin-top: 20px;
+    height: 50px;
+    width: 150px;
+    background-color: black;
+    color: white;
+    
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.body .callback-form .info-section{
+    background-image: url(../../image/intro_bg.jpg);
+    background-size: cover;
+    background-position: center;
+    
+    position: relative;
+    isolation: isolate;
+    width: 55%;
+    height: 80%;
+
+    top: 35px;
+    left: 100%;
+    transform: translateX(-100%);
+    margin-left: 50px;
+
+    text-align: center;
+}
+/* 
+.body .callback-form .info-section::after{
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background-color: black;
+    opacity: .7;
+} */
+
+.info-section .text{
+    position: absolute;
+    top: 50%;
+    transform: translate(0,-50%);
+    color: white;
+    font-weight: bolder;
+    padding: 100px;
+}
+
+/* shopping-list-css */
+.shopping-list{
+    width: 400px;
+    background-color: #353432;
+    color: #fff;
+    position: fixed;
+    inset: 0 -400px 0 auto;
+    z-index: 999;
+    display: grid;
+    grid-template-rows: 70px 1fr 70px;
+    transition: inset .5s;
+}
+
+body.showcart .shopping-list{
+    inset: 0 0 0 auto;
+}
+
+body.showcart .body{
+    transform: translateX(-250px);
+}
+.shopping-list h1{
+    padding: 20px;
+    margin: 0;
+    font-weight: 300;
+}
+
+.shopping-list .cartbuttons{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.shopping-list .cartbuttons button{
+    background-color: yellow;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.shopping-list .cartbuttons .close{
+    background-color: #eee;
+}
+
+.shopping-list .list-item .item img{
+    width: 100%;
+}
+
+.shopping-list .list-item .item{
+    display: grid;
+    grid-template-columns: 70px 150px 50px 1fr;
+    gap: 10px;
+    align-items: center;
+    text-align: center;
+}
+
+.shopping-list .quantity span{
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    background-color: #eee;
+    color: black;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.shopping-list .quantity span:nth-child(2){
+    background-color: transparent;
+    color: #fff;
+}
+
+.list-item .item:nth-child(even){
+    background-color: #eee1;
+}
+
+.list-item .item{
+    overflow: auto;
+}
+
+@media (max-width:779px) {
+    .carousel {
+        display: none;
+    }
+}
+.btn::hover{
+    color: green;
+    
+}

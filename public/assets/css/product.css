@@ -1,0 +1,105 @@
+/* .container {
+    margin: 50px auto;
+    padding: 2rem;
+    height: 600px;
+    width: 80%;
+    display: grid;
+    grid-template-columns: 600px 1fr;
+    gap: 5%;
+    background-color: white;
+} */
+/* .image{
+    height: 100%;
+}
+
+.image img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.product-info{
+    padding: 1.5rem;
+    height: 95%;
+}
+
+.product-info .info{
+    height: 90%;
+    width: 100%;
+}
+
+.product-info h1{
+    font-size: 40px;
+    font-weight: bolder;
+    margin-bottom: 30px;
+}
+
+.product-info p{
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.product-info .info .quantity button{
+    height: 10%;
+    width: 20px;
+    background-color: white;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.product-info .info .quantity{
+    display: flex;
+}
+.product-info .info .quantity #quantity{
+    height: 20px;
+    width: 20px;
+    font-size: 16px;
+    font-weight: 500;
+    border: 1px solid black;
+    text-align: center;
+    padding: 0 0px 0px 5px;
+}
+
+.product-info #description{
+    padding-top: 10px;
+    height: 40%;
+    width: 100%;
+}
+
+.product-info .buttons{
+    height: 20%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+
+.product-info .buttons button{
+    height: 70px;
+    width: 45%;
+    background-color: rgb(4, 63, 201);
+    color: aliceblue;
+    border: none;
+    outline: none;
+    font-size: 20px;
+}
+
+.product-info .buttons button{
+    height: 70px;
+    width: 45%;
+    background-color: #20bbdb;
+    color: aliceblue;
+    border: none;
+    outline: none;
+    font-size: 20px;
+    transition: transform .2s;
+}
+
+.product-info .buttons button:hover{
+    cursor: pointer;
+    transform: scale(1.1);
+} */

@@ -1,0 +1,98 @@
+/* .payment{
+    display: flex;
+    flex-direction: column;
+    margin: 50px auto;
+    padding: 2rem 4rem 4rem;
+    height: auto;
+    width: 80%;
+    gap: 10%;
+    background-color: white;
+}
+
+.payment .about-product{
+    display: flex;
+    gap: 100px;
+    height: 200px;
+    width: 100%;
+    margin-bottom: 5%;
+}
+
+.payment .about-product img{
+    height: 100%;
+}
+
+.payment .about-product .product-detail p{
+    padding: 20px;
+    font-size: larger;
+    font-weight: 500;
+}
+
+.payment-form{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    position: relative;
+    padding-bottom: 5rem;
+}
+
+.payment .payment-heading{
+    font-size: 2rem;
+    margin-bottom: 4rem;
+}
+
+.payment .payment-form .payment-inputfield{
+    font-weight: 500;
+    display: flex;
+    padding: .5rem 0rem;
+    width: 100%;
+}
+
+.payment .payment-form  .payment-inputfield label{
+    width: 200px;
+    padding: 10px 0px;
+}
+
+.payment .payment-form  .payment-inputfield .input,
+.payment .payment-form  .payment-inputfield .input{
+    position: relative;
+    width: 70%;
+    padding: 10px 40px 10px 10px;
+    margin-left: 15px;
+    border: none;
+    outline: none;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.payment .payment-form .payment-inputfield select{
+    
+    border: 1px solid black;
+    width: 70%;
+    height: 50px;
+    padding: 10px 40px 10px 10px;
+    margin-left: 15px;
+    border: none;
+    outline: none;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.payment .payment-form .btn{
+    position: absolute;
+    right: 30px;
+    bottom: 0;
+    background-color: white;
+    width: 180px;
+    padding: 10px 10px 10px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.payment .payment-form .btn:hover{
+    background-image: linear-gradient(to right, #5d90d2, rgb(60, 71, 196));
+}
+
+#sub-total{
+    font-size: 20px;
+    font-weight:  bold;
+} */

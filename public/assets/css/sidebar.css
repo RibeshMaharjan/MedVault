@@ -1,0 +1,81 @@
+.content{
+    min-height: 100vh;
+    width: 100%;
+}
+
+:root {
+    --sidebarlength: 320px;
+}
+
+.sidebar{
+    background: white;
+    min-width: var(--sidebarlength);
+    max-width: var(--sidebarlength);
+    transition: all 0.3s;
+    /* color: white; */
+    position: relative;
+    padding-bottom: 70px; /* Add space for the logout button */
+    overflow-y: hidden; /* Remove scrollwheel */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+hr.h-color{
+    background: #eee;
+}
+
+.sidebar li{
+    min-height: 3rem;
+    line-height: 3rem;
+}
+
+.sidebar li .icon{
+    width: 10%;
+}
+
+.sidebar li.active{
+    background: rgb(220, 53, 69);
+    border-radius: 8px;
+}
+
+.sidebar li.active a, .sidebar li.active a:hover {
+    color: white;
+}
+
+.sidebar li a{
+    color: black;
+}
+
+.sidebar li a:hover{
+    color: rgb(220, 53, 69);
+}
+
+/* Styling for the logout button */
+.sidebar .btn-danger {
+    transition: all 0.3s;
+    border-radius: 8px;
+}
+
+.sidebar .btn-danger:hover {
+    background-color: #bb2d3b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+@media(max-width: 767px){
+#side_nav{
+    margin-left: -280px;
+    position: absolute;
+    min-height: 100vh;
+    z-index: 1;
+
+}
+#side_nav.active{
+    margin-left: 0;
+    }
+}

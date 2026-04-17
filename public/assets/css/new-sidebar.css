@@ -1,0 +1,54 @@
+:root {
+    --sidebarlength: 320px;
+}
+
+.sidebar{
+    background: white;
+    min-width: var(--sidebarlength);
+    max-width: var(--sidebarlength);
+    transition: all 0.3s;
+    /* color: white; */
+}
+
+hr.h-color{
+    background: #eee;
+}
+
+.sidebar li{
+    min-height: 3rem;
+    line-height: 3rem;
+}
+
+.sidebar li .icon{
+    width: 10%;
+}
+
+.sidebar li.active{
+    background: rgb(220, 53, 69);
+    border-radius: 8px;
+}
+
+.sidebar li.active a, .sidebar li.active a:hover {
+color: white;
+}
+
+.sidebar li a{
+    color: black;
+}
+
+.sidebar li a:hover{
+    color: rgb(220, 53, 69);
+}
+
+@media(max-width: 767px){
+#side_nav{
+    margin-left: calc(-1 * var(--sidebarlength));
+    position: absolute;
+    min-height: 100vh;
+    z-index: 1;
+
+}
+#side_nav.active{
+    margin-left: 0;
+    }
+}

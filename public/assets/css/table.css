@@ -1,0 +1,122 @@
+.container .body .admin-table,
+.container .body .user-table,
+.container .body .medicine-table,
+.container .body .order-table{
+    width: 100%;
+    height: fit-content;
+    padding: 2rem 4rem 4rem;
+    /* border: 1px solid rgba(0, 0, 0, 0.2); */
+    border-radius: 20px;
+    box-shadow: 10px 10px 50px rgba(0, 0, 0, 0.2);
+    border: none;
+    box-sizing: border-box;
+}
+
+.content-table{
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    min-width: 400px;
+    /* table-layout: auto; */
+    width: 100%;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+}
+
+.content-table thead tr{
+    position: sticky;
+    background-color: rgb(0, 81, 255);
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;
+}
+
+.content-table th, 
+.content-table td{
+    padding: 15px 15px;
+    height: 60px;
+    /* table-layout: fixed; */
+    border-right: 1px solid black;
+}
+
+.content-table tbody tr{
+    border-bottom: 1px solid #dddddd;
+}
+
+.content-table thead tr th:last-child{
+    width: 260px;
+}
+
+.content-table tbody tr td #status{
+    /* background-color: gray; */
+    height: 30px; width: 100px;
+    text-align: center;
+    margin-left: 25px;
+    line-height: 30px;
+    border-radius: 20px;
+    color: white;
+}
+
+.content-table tbody tr td:last-child{
+    width: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 1rem;
+}
+
+
+.content-table tbody tr:nth-of-type(even){
+    background-color: #f3f3f3;
+}
+
+.content-table tbody tr:last-of-type {
+    border-bottom: 2px solid rgb(0, 81, 255);
+}
+
+.content-table tbody tr:hover{
+    /* font-weight: bold; */
+    color: rgb(0, 81, 255);
+}
+
+.content-table tbody td span{
+    margin-right: 1rem;
+    color: black;
+    background-color: white;
+    border: 2.5px solid black;
+    border-radius: 10px;
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+    font-size: 20px;
+    padding: 4px;
+    transition: transform  .2s;
+}
+
+.content-table tbody td .button{
+    background-color: cornflowerblue;
+    width: 100px;
+    height: auto;
+    padding: 10px 10px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    text-align: center;
+    cursor: pointer;
+    transition: transform .2s;
+}
+
+.content-table tbody td .button:hover{
+    transform: scale(1.1);
+}
+
+.content-table tbody td #button{
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+}
+
+.content-table tbody td span:hover{
+    transform: scale(1.2);
+    background-color: limegreen;
+    color: white;
+}

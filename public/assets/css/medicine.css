@@ -1,0 +1,18 @@
+/* .body{
+    display: flex;
+    flex-direction: row;
+} */
+.filter{
+    position: relative;
+    height: 80dvh;
+    width : 15%;
+    background-color: bisque;
+    left: 0;
+    top: 0;
+}
+
+.product-section .price #preview_btn{
+    border: none;
+    background-color: white;
+    cursor: pointer;
+}

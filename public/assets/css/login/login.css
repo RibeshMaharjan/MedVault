@@ -1,0 +1,152 @@
+*{
+    font-family: "Poppins";
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+a{
+    color: #fff;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 0.15em;
+}
+
+.menu-bar h4 {
+    font-size: 16px;
+}
+
+.nav-bar{
+    display: flex;    
+    /* background: linear-gradient(to right, rgb(141, 141, 247),rgb(0, 0, 130)); */
+    padding: 0px 300px 0px 300px;
+    height: 100px;
+    width: 100%;
+    top: 0px;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    /* border-bottom: 3px solid rgb(10, 94, 203); */
+}
+
+.logo{
+    height: 80px;
+    width: 20%;
+    margin-left: -150px;
+}
+.logo img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.menu-bar{
+    display: flex;
+    height: 50px;
+    width: 30%;
+    margin: 15px 30px;
+    gap: 50px;
+    align-items: center;
+    justify-content: center;
+}
+.menu-bar a {
+    color: #fff;
+    text-transform: uppercase;
+    text-decoration: none;
+
+    display: inline-block;
+    padding: 10px 5px;
+    position: relative;
+}
+
+.menu-bar a:after {    
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 2px;
+    left: 50%;
+    position: absolute;
+    background: #fff;
+    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+    width: 0;
+}
+.menu-bar a:hover:after { 
+    width: 100%; 
+    left: 0; 
+}
+
+body{
+    height: fit-content;
+    background: url(login_img/imagmed.jpg) no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    position: relative;
+}
+
+.header{
+    display: flex;
+    position: absolute;
+    height: fit-content;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
+    top: 300px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.header h3{
+    position: absolute;
+    color: aliceblue;
+    text-align: center;
+    font-size: 50px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    line-height: 5px;
+}
+
+.header p{
+    color: aliceblue;
+    text-align: center;
+    font-size: 80px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.content{
+    display: flex;
+    position: absolute;
+    /* background: rgb(141, 141, 247); */
+    padding: 50px 20px 50px 50px;
+    height: 90vh;
+    width: 100%;
+    top: 600px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    align-items: center;
+    justify-content: center;
+}
+
+.form{
+    display: flex;
+    position: absolute;
+    /* background: rgb(141, 141, 247); */
+    background-size: cover;
+    padding: 50px 20px;
+    height: 80vh;
+    width: 70%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.acc-text {
+    font-size: 14px;
+    color: #000;
+}
