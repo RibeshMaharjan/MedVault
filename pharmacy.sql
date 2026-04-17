@@ -405,11 +405,11 @@ INSERT INTO `tbl_medicine` (`medicine_id`, `medicine_name`, `medicine_descriptio
 
 CREATE TABLE `tbl_pharmacy` (
   `pharmacy_id` int(11) NOT NULL,
-  `pan` int(11) NOT NULL,
+  `pan` int(11) DEFAULT NULL,
   `pharmacy_name` varchar(100) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `phone` varchar(10) NOT NULL,
-  `address` varchar(50) NOT NULL
+  `phone` varchar(10) DEFAULT NULL,
+  `address` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -603,7 +603,7 @@ CREATE TABLE `user_sales_tbl` (
 --
 
 INSERT INTO `user_sales_tbl` (`s_id`, `m_id`, `pharmacy_id`, `price`, `quantity`, `total_amount`, `status`, `sales_date`) VALUES
-(10, 22, 89, 60, 10, 600, 'completed', '2025-12-07'),
+(9, 22, 89, 60, 10, 600, 'completed', '2025-12-07'),
 (10, 22, 89, 60, 10, 600, 'completed', '2024-10-01'),
 (11, 22, 89, 60, 8, 480, 'completed', '2024-10-03'),
 (12, 22, 89, 60, 12, 720, 'completed', '2024-10-05'),
