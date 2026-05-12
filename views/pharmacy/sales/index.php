@@ -92,6 +92,7 @@
                             <div class="col">
                                 <button class="btn btn-success btn-md px-3 py-2 my-2 salesEditBtn"
                                     data-id="<?= $s['s_id'] ?>" data-mid="<?= $s['m_id'] ?>"
+                                    data-medname="<?= htmlspecialchars($s['medicine_name'] ?? '') ?>"
                                     data-price="<?= $s['price'] ?>" data-quantity="<?= $s['quantity'] ?>"
                                     data-total="<?= $s['total_amount'] ?>" data-status="<?= $s['status'] ?>"
                                     data-date="<?= $s['sales_date'] ?>">
@@ -127,6 +128,7 @@ $(document).ready(function() {
         $('#salesEditForm').attr('action', '/pharmacy/sales/' + id);
         $('#update_id').val(id);
         $('#m_id').val($(this).data('mid'));
+        $('#name').val($(this).data('medname'));
         $('#price').val($(this).data('price'));
         $('#quantity').val($(this).data('quantity'));
         $('#total').val($(this).data('total'));
