@@ -1,0 +1,56 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="iXe1XswcZ-wPk9QQqjwd">
+    <mxGraphModel dx="970" dy="673" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="NFJrPIZUKomn4d3nVEuv-14" parent="1" style="ellipse;fillColor=strokeColor;fontColor=light-dark(#333333,#cccccc);" value="" vertex="1">
+          <mxGeometry height="14" width="14" x="140" y="63" as="geometry" />
+        </mxCell>
+        <mxCell id="NFJrPIZUKomn4d3nVEuv-15" parent="1" style="rounded=1;arcSize=20;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="pending" vertex="1">
+          <mxGeometry height="40" width="73" x="248" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="NFJrPIZUKomn4d3nVEuv-16" parent="1" style="rounded=1;arcSize=20;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="completed" vertex="1">
+          <mxGeometry height="40" width="90" x="681" y="84" as="geometry" />
+        </mxCell>
+        <mxCell id="NFJrPIZUKomn4d3nVEuv-17" parent="1" style="ellipse;shape=endState;fillColor=strokeColor;fontColor=light-dark(#333333,#cccccc);" value="" vertex="1">
+          <mxGeometry height="14" width="14" x="970" y="63" as="geometry" />
+        </mxCell>
+        <mxCell id="NFJrPIZUKomn4d3nVEuv-18" edge="1" parent="1" source="NFJrPIZUKomn4d3nVEuv-14" style="curved=1;startArrow=none;;fillColor=none;;exitX=1;exitY=0.46;entryX=0.01;entryY=0.49;rounded=0;" target="NFJrPIZUKomn4d3nVEuv-15" value="create">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NFJrPIZUKomn4d3nVEuv-19" edge="1" parent="1" source="NFJrPIZUKomn4d3nVEuv-15" style="curved=1;startArrow=none;;fillColor=none;;exitX=1.01;exitY=0.49;entryX=0;entryY=0.3;rounded=0;" target="NFJrPIZUKomn4d3nVEuv-16" value="approve [stock available] / deduct stock">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="556" y="76" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NFJrPIZUKomn4d3nVEuv-20" edge="1" parent="1" source="NFJrPIZUKomn4d3nVEuv-16" style="curved=1;startArrow=none;;fillColor=none;;exitX=0;exitY=0.67;entryX=1.01;entryY=0.8;rounded=0;" target="NFJrPIZUKomn4d3nVEuv-15" value="revert / restore stock">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="556" y="132" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NFJrPIZUKomn4d3nVEuv-21" edge="1" parent="1" source="NFJrPIZUKomn4d3nVEuv-15" style="curved=1;startArrow=none;;fillColor=none;;exitX=1.01;exitY=0.17;entryX=-0.01;entryY=0.26;rounded=0;" target="NFJrPIZUKomn4d3nVEuv-17" value="delete">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="556" y="20" />
+              <mxPoint x="871" y="20" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NFJrPIZUKomn4d3nVEuv-22" edge="1" parent="1" source="NFJrPIZUKomn4d3nVEuv-16" style="curved=1;startArrow=none;;fillColor=none;;exitX=1;exitY=0.49;entryX=-0.01;entryY=0.66;rounded=0;" target="NFJrPIZUKomn4d3nVEuv-17" value="delete / restore stock">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="871" y="104" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

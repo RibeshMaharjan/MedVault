@@ -1,0 +1,87 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="-6i5XF_f0NuI3ooBhLEG">
+    <mxGraphModel dx="1697" dy="1178" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="yLdhY2bYTVrowv3VV_md-1" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);fontSize=17;" value="Docker Host" vertex="1">
+          <mxGeometry height="679" width="647" x="20" y="157" as="geometry" />
+        </mxCell>
+        <mxCell id="yLdhY2bYTVrowv3VV_md-2" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);fontSize=17;" value="Container — phpmyadmin" vertex="1">
+          <mxGeometry height="128" width="223" x="40" y="311" as="geometry" />
+        </mxCell>
+        <mxCell id="yLdhY2bYTVrowv3VV_md-3" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);fontSize=17;" value="Container — db" vertex="1">
+          <mxGeometry height="152" width="210" x="47" y="513" as="geometry" />
+        </mxCell>
+        <mxCell id="yLdhY2bYTVrowv3VV_md-4" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);fontSize=17;" value="Container — app" vertex="1">
+          <mxGeometry height="483" width="363" x="283" y="182" as="geometry" />
+        </mxCell>
+        <mxCell id="yLdhY2bYTVrowv3VV_md-5" parent="1" style="rounded=1;whiteSpace=wrap;arcSize=50;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);fontSize=14;" value="Client Device&#xa;Web Browser" vertex="1">
+          <mxGeometry height="63" width="126" x="238" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="yLdhY2bYTVrowv3VV_md-6" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);fontSize=17;" value="Apache + mod_rewrite" vertex="1">
+          <mxGeometry height="54" width="221" x="330" y="207" as="geometry" />
+        </mxCell>
+        <mxCell id="yLdhY2bYTVrowv3VV_md-7" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);fontSize=17;" value="PHP 8.2&#xa;pdo_mysql · composer" vertex="1">
+          <mxGeometry height="78" width="222" x="329" y="336" as="geometry" />
+        </mxCell>
+        <mxCell id="yLdhY2bYTVrowv3VV_md-8" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);fontSize=17;" value="Project root&#xa;bind-mounted at /var/www/html" vertex="1">
+          <mxGeometry height="102" width="260" x="352" y="538" as="geometry" />
+        </mxCell>
+        <mxCell id="yLdhY2bYTVrowv3VV_md-9" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);fontSize=17;" value="MySQL 8.0" vertex="1">
+          <mxGeometry height="54" width="140" x="82" y="562" as="geometry" />
+        </mxCell>
+        <mxCell id="yLdhY2bYTVrowv3VV_md-10" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);fontSize=17;" value="phpMyAdmin" vertex="1">
+          <mxGeometry height="54" width="153" x="75" y="348" as="geometry" />
+        </mxCell>
+        <mxCell id="yLdhY2bYTVrowv3VV_md-11" parent="1" style="shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;strokeWidth=2;whiteSpace=wrap;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);fontSize=17;" value="Volume&#xa;mysql_data" vertex="1">
+          <mxGeometry height="96" width="97" x="103" y="715" as="geometry" />
+        </mxCell>
+        <mxCell id="yLdhY2bYTVrowv3VV_md-12" edge="1" parent="1" source="yLdhY2bYTVrowv3VV_md-5" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=1;entryX=0.5;entryY=0;rounded=0;fontSize=17;" target="yLdhY2bYTVrowv3VV_md-6" value="HTTP — port 8000">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="440" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yLdhY2bYTVrowv3VV_md-13" edge="1" parent="1" source="yLdhY2bYTVrowv3VV_md-5" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.96;entryX=0.5;entryY=0;rounded=0;fontSize=17;" target="yLdhY2bYTVrowv3VV_md-10" value="HTTP — port 8080">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="152" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yLdhY2bYTVrowv3VV_md-14" edge="1" parent="1" source="yLdhY2bYTVrowv3VV_md-6" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;fontSize=17;" target="yLdhY2bYTVrowv3VV_md-7" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yLdhY2bYTVrowv3VV_md-15" edge="1" parent="1" source="yLdhY2bYTVrowv3VV_md-7" style="curved=1;startArrow=none;endArrow=block;exitX=0.61;exitY=1;entryX=0.5;entryY=0;rounded=0;fontSize=17;" target="yLdhY2bYTVrowv3VV_md-8" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="482" y="439" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yLdhY2bYTVrowv3VV_md-16" edge="1" parent="1" source="yLdhY2bYTVrowv3VV_md-7" style="curved=1;startArrow=none;endArrow=block;exitX=0.39;exitY=1;entryX=1;entryY=0.1;rounded=0;fontSize=17;" target="yLdhY2bYTVrowv3VV_md-9" value="PDO — port 3306">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="398" y="439" />
+              <mxPoint x="398" y="513" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yLdhY2bYTVrowv3VV_md-17" edge="1" parent="1" source="yLdhY2bYTVrowv3VV_md-10" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;fontSize=17;" target="yLdhY2bYTVrowv3VV_md-9" value="port 3306">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yLdhY2bYTVrowv3VV_md-18" edge="1" parent="1" source="yLdhY2bYTVrowv3VV_md-9" style="curved=1;startArrow=none;endArrow=none;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;fontSize=17;" target="yLdhY2bYTVrowv3VV_md-11" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

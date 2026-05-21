@@ -1,0 +1,56 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="sxnnETdPMhN2UUEX2zQO">
+    <mxGraphModel dx="917" dy="637" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="XMGaSypjs7l50VGof96_-1" parent="1" style="ellipse;fillColor=strokeColor;fontColor=light-dark(#333333,#cccccc);" value="" vertex="1">
+          <mxGeometry height="14" width="14" x="20" y="63" as="geometry" />
+        </mxCell>
+        <mxCell id="XMGaSypjs7l50VGof96_-2" parent="1" style="rounded=1;arcSize=20;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="pending" vertex="1">
+          <mxGeometry height="40" width="73" x="129" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="XMGaSypjs7l50VGof96_-3" parent="1" style="rounded=1;arcSize=20;strokeWidth=2;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="completed" vertex="1">
+          <mxGeometry height="40" width="90" x="405" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="XMGaSypjs7l50VGof96_-4" parent="1" style="ellipse;shape=endState;fillColor=strokeColor;fontColor=light-dark(#333333,#cccccc);" value="" vertex="1">
+          <mxGeometry height="14" width="14" x="694" y="51" as="geometry" />
+        </mxCell>
+        <mxCell id="XMGaSypjs7l50VGof96_-5" edge="1" parent="1" source="XMGaSypjs7l50VGof96_-1" style="curved=1;startArrow=none;;fillColor=none;;exitX=1;exitY=0.46;entryX=0.01;entryY=0.49;rounded=0;" target="XMGaSypjs7l50VGof96_-2" value="record">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XMGaSypjs7l50VGof96_-6" edge="1" parent="1" source="XMGaSypjs7l50VGof96_-2" style="curved=1;startArrow=none;;fillColor=none;;exitX=1;exitY=0.49;entryX=0;entryY=0.32;rounded=0;" target="XMGaSypjs7l50VGof96_-3" value="finalise / deduct stock">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="304" y="70" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XMGaSypjs7l50VGof96_-7" edge="1" parent="1" source="XMGaSypjs7l50VGof96_-3" style="curved=1;startArrow=none;;fillColor=none;;exitX=0;exitY=0.66;entryX=1;entryY=0.78;rounded=0;" target="XMGaSypjs7l50VGof96_-2" value="revert / restore stock">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="304" y="114" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XMGaSypjs7l50VGof96_-8" edge="1" parent="1" source="XMGaSypjs7l50VGof96_-2" style="curved=1;startArrow=none;;fillColor=none;;exitX=1;exitY=0.16;entryX=-0.02;entryY=0.32;rounded=0;" target="XMGaSypjs7l50VGof96_-4" value="delete">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="304" y="20" />
+              <mxPoint x="594" y="20" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XMGaSypjs7l50VGof96_-9" edge="1" parent="1" source="XMGaSypjs7l50VGof96_-3" style="curved=1;startArrow=none;;fillColor=none;;exitX=1;exitY=0.49;entryX=-0.02;entryY=0.66;rounded=0;" target="XMGaSypjs7l50VGof96_-4" value="delete / restore stock">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="594" y="92" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

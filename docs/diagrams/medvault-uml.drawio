@@ -1,0 +1,1096 @@
+<mxfile host="app.diagrams.net" type="device">
+  <diagram name="Class Diagram" id="class">
+    <mxGraphModel dx="1600" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="MedVault — Class Diagram" style="text;html=1;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="10" width="480" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="model" value="«abstract»&#10;Model" style="swimlane;fontStyle=4;fontSize=12;rounded=0;whiteSpace=wrap;html=1;startSize=44;verticalAlign=top;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;align=center;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="640" y="60" width="320" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="model_attrs" value="# table : string&#10;# primaryKey : string&#10;# db : PDO" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="model">
+          <mxGeometry y="44" width="320" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="model_methods" value="+ findAll(conditions, params) : array&#10;+ findById(id, idCol) : array&#10;+ findAllBy(col, value) : array&#10;+ findOneBy(col, value) : array&#10;+ count(conditions, params) : int&#10;+ insert(data) : int&#10;+ update(id, data, idCol) : bool&#10;+ delete(id, idCol) : bool&#10;+ paginate(page, perPage, ...) : array&#10;# query(sql, params) : PDOStatement" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="model">
+          <mxGeometry y="100" width="320" height="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="user" value="User" style="swimlane;fontSize=12;fontStyle=1;rounded=0;whiteSpace=wrap;html=1;startSize=26;verticalAlign=top;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;align=center;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="40" y="440" width="240" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="user_attrs" value="# table = &quot;role&quot;&#10;# primaryKey = &quot;user_id&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="user">
+          <mxGeometry y="26" width="240" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="user_methods" value="+ findByEmail(email) : array&#10;+ create(name, email, hash, role) : int" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="user">
+          <mxGeometry y="68" width="240" height="92" as="geometry" />
+        </mxCell>
+
+        <mxCell id="admin" value="Admin" style="swimlane;fontSize=12;fontStyle=1;rounded=0;whiteSpace=wrap;html=1;startSize=26;verticalAlign=top;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;align=center;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="40" y="640" width="240" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="admin_attrs" value="# table = &quot;tbl_admin&quot;&#10;# primaryKey = &quot;admin_id&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="admin">
+          <mxGeometry y="26" width="240" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="admin_methods" value="(inherits CRUD from Model)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=10;fontStyle=2;" vertex="1" parent="admin">
+          <mxGeometry y="68" width="240" height="32" as="geometry" />
+        </mxCell>
+
+        <mxCell id="setting" value="Setting" style="swimlane;fontSize=12;fontStyle=1;rounded=0;whiteSpace=wrap;html=1;startSize=26;verticalAlign=top;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;align=center;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="40" y="780" width="240" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="setting_attrs" value="# table = &quot;settings&quot;&#10;# primaryKey = &quot;id&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="setting">
+          <mxGeometry y="26" width="240" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="setting_methods" value="(inherits CRUD from Model)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=10;fontStyle=2;" vertex="1" parent="setting">
+          <mxGeometry y="68" width="240" height="32" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pharmacy" value="Pharmacy" style="swimlane;fontSize=12;fontStyle=1;rounded=0;whiteSpace=wrap;html=1;startSize=26;verticalAlign=top;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;align=center;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="680" y="440" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="pharmacy_attrs" value="# table = &quot;tbl_pharmacy&quot;&#10;# primaryKey = &quot;pharmacy_id&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="pharmacy">
+          <mxGeometry y="26" width="240" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="pharmacy_methods" value="+ createMinimal(id, name, email) : bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="pharmacy">
+          <mxGeometry y="68" width="240" height="52" as="geometry" />
+        </mxCell>
+
+        <mxCell id="category" value="Category" style="swimlane;fontSize=12;fontStyle=1;rounded=0;whiteSpace=wrap;html=1;startSize=26;verticalAlign=top;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;align=center;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="320" y="640" width="280" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="category_attrs" value="# table = &quot;user_category_tbl&quot;&#10;# primaryKey = &quot;c_id&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="category">
+          <mxGeometry y="26" width="280" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="category_methods" value="+ findByPharmacy(pharmacyId) : array&#10;+ create(pharmacyId, name) : int&#10;+ hasMedicines(categoryId) : int" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="category">
+          <mxGeometry y="68" width="280" height="92" as="geometry" />
+        </mxCell>
+
+        <mxCell id="medicine" value="UserMedicine" style="swimlane;fontSize=12;fontStyle=1;rounded=0;whiteSpace=wrap;html=1;startSize=26;verticalAlign=top;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;align=center;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="440" width="280" height="340" as="geometry" />
+        </mxCell>
+        <mxCell id="medicine_attrs" value="# table = &quot;user_medicine_tbl&quot;&#10;# primaryKey = &quot;m_id&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="medicine">
+          <mxGeometry y="26" width="280" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="medicine_methods" value="+ findByPharmacy(pharmacyId, ...) : array&#10;+ paginateByPharmacy(pharmacyId, ...) : array&#10;+ countByPharmacy(pharmacyId, ...) : int&#10;+ create(data) : int&#10;+ search(pharmacyId, term, limit) : array&#10;+ updateStock(id, delta) : bool&#10;+ getCategoryDistribution(pharmacyId) : array&#10;+ getLowStock(pharmacyId, threshold) : array&#10;+ getRecentActivities(pharmacyId, limit) : array&#10;+ hasRelatedRecords(medicineId) : array" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="medicine">
+          <mxGeometry y="68" width="280" height="272" as="geometry" />
+        </mxCell>
+
+        <mxCell id="order" value="Order" style="swimlane;fontSize=12;fontStyle=1;rounded=0;whiteSpace=wrap;html=1;startSize=26;verticalAlign=top;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;align=center;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="640" y="640" width="280" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="order_attrs" value="# table = &quot;user_order_tbl&quot;&#10;# primaryKey = &quot;o_id&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="order">
+          <mxGeometry y="26" width="280" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="order_methods" value="+ findByPharmacy(pharmacyId, ...) : array&#10;+ paginateByPharmacy(pharmacyId, ...) : array&#10;+ findByIdAndPharmacy(orderId, ...) : array&#10;+ deleteByPharmacy(orderId, ...) : bool&#10;+ updateByPharmacy(orderId, ...) : bool&#10;+ getDailyOrders(pharmacyId, ...) : array&#10;+ getStatusDistribution(pharmacyId, ...) : array&#10;+ getStats(pharmacyId, ...) : array&#10;+ getTopOrdered(pharmacyId, ...) : array&#10;+ getRecentOrders(pharmacyId, ...) : array" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="order">
+          <mxGeometry y="68" width="280" height="252" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sale" value="Sale" style="swimlane;fontSize=12;fontStyle=1;rounded=0;whiteSpace=wrap;html=1;startSize=26;verticalAlign=top;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;align=center;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="960" y="640" width="280" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="sale_attrs" value="# table = &quot;user_sales_tbl&quot;&#10;# primaryKey = &quot;s_id&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="sale">
+          <mxGeometry y="26" width="280" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="sale_methods" value="+ paginateByPharmacy(pharmacyId, ...) : array&#10;+ findByIdAndPharmacy(saleId, ...) : array&#10;+ deleteByPharmacy(saleId, ...) : bool&#10;+ updateByPharmacy(saleId, ...) : bool&#10;+ getSalesData(pharmacyId, start, end) : array" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="sale">
+          <mxGeometry y="68" width="280" height="152" as="geometry" />
+        </mxCell>
+
+        <mxCell id="inh_user" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;entryX=0.25;entryY=1;" edge="1" parent="1" source="user" target="model">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inh_admin" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;entryX=0.18;entryY=1;" edge="1" parent="1" source="admin" target="model">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inh_setting" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;entryX=0.12;entryY=1;" edge="1" parent="1" source="setting" target="model">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inh_pharmacy" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="pharmacy" target="model">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inh_category" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;entryX=0.62;entryY=1;" edge="1" parent="1" source="category" target="model">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inh_medicine" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;entryX=0.75;entryY=1;" edge="1" parent="1" source="medicine" target="model">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inh_order" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;entryX=0.82;entryY=1;" edge="1" parent="1" source="order" target="model">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inh_sale" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;entryX=0.9;entryY=1;" edge="1" parent="1" source="sale" target="model">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="comp_cat" value="owns" style="endArrow=none;startArrow=diamondThin;startFill=1;startSize=14;html=1;exitX=0;exitY=0.6;entryX=1;entryY=0.2;startSize=16;" edge="1" parent="1" source="pharmacy" target="category">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="comp_cat_m1" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="comp_cat">
+          <mxGeometry x="-0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="comp_cat_m2" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="comp_cat">
+          <mxGeometry x="0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+
+        <mxCell id="comp_med" value="stocks" style="endArrow=none;startArrow=diamondThin;startFill=1;startSize=14;html=1;exitX=1;exitY=0.4;entryX=0;entryY=0.15;" edge="1" parent="1" source="pharmacy" target="medicine">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_med_m1" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="comp_med">
+          <mxGeometry x="-0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="comp_med_m2" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="comp_med">
+          <mxGeometry x="0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+
+        <mxCell id="comp_order" value="receives" style="endArrow=none;startArrow=diamondThin;startFill=1;startSize=14;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="pharmacy" target="order">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_order_m1" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="comp_order">
+          <mxGeometry x="-0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="comp_order_m2" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="comp_order">
+          <mxGeometry x="0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+
+        <mxCell id="comp_sale" value="records" style="endArrow=none;startArrow=diamondThin;startFill=1;startSize=14;html=1;exitX=1;exitY=0.85;entryX=0;entryY=0.2;" edge="1" parent="1" source="pharmacy" target="sale">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_sale_m1" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="comp_sale">
+          <mxGeometry x="-0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="comp_sale_m2" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="comp_sale">
+          <mxGeometry x="0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+
+        <mxCell id="agg_cat_med" value="classifies" style="endArrow=none;startArrow=diamondThin;startFill=0;startSize=14;html=1;exitX=1;exitY=0.4;entryX=0;entryY=0.7;" edge="1" parent="1" source="category" target="medicine">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="agg_cat_m1" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="agg_cat_med">
+          <mxGeometry x="-0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+        <mxCell id="agg_cat_m2" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="agg_cat_med">
+          <mxGeometry x="0.7" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+
+        <mxCell id="assoc_med_order" value="ordered_as" style="endArrow=none;html=1;exitX=0;exitY=0.7;entryX=1;entryY=0.3;" edge="1" parent="1" source="medicine" target="order">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc_med_sale" value="sold_as" style="endArrow=none;html=1;exitX=0;exitY=0.95;entryX=1;entryY=0.4;" edge="1" parent="1" source="medicine" target="sale">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend" value="&lt;b&gt;Legend&lt;/b&gt;&lt;br/&gt;━━▷ generalisation (inheritance)&lt;br/&gt;◆━━ composition (filled diamond at the whole)&lt;br/&gt;◇━━ aggregation (hollow diamond at the whole)&lt;br/&gt;━━ plain association&lt;br/&gt;Multiplicity shown as &quot;1&quot; and &quot;0..*&quot; at line ends" style="text;html=1;align=left;verticalAlign=top;strokeColor=#000000;fillColor=#f5f5f5;rounded=0;spacingLeft=8;spacingTop=6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1000" width="500" height="120" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Object Diagram" id="object">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="MedVault — Object Diagram&#10;Scenario: HealthFirst Pharmacy mid-day snapshot" style="text;html=1;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="10" width="720" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p1" value="&lt;u&gt;p1 : Pharmacy&lt;/u&gt;" style="swimlane;fontSize=12;fontStyle=0;rounded=0;whiteSpace=wrap;html=1;startSize=30;verticalAlign=top;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;align=center;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="480" y="80" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="p1_v" value="pharmacy_id = 1&#10;name = &quot;HealthFirst&quot;&#10;email = &quot;ops@healthfirst.np&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="p1">
+          <mxGeometry y="30" width="240" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c1" value="&lt;u&gt;c1 : Category&lt;/u&gt;" style="swimlane;fontSize=12;fontStyle=0;rounded=0;whiteSpace=wrap;html=1;startSize=30;verticalAlign=top;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;align=center;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="480" y="280" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_v" value="c_id = 10&#10;pharmacy_id = 1&#10;name = &quot;Antibiotics&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="c1">
+          <mxGeometry y="30" width="240" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="m1" value="&lt;u&gt;m1 : UserMedicine&lt;/u&gt;" style="swimlane;fontSize=12;fontStyle=0;rounded=0;whiteSpace=wrap;html=1;startSize=30;verticalAlign=top;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;align=center;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="120" y="480" width="260" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="m1_v" value="m_id = 101&#10;pharmacy_id = 1&#10;c_id = 10&#10;medicine_name = &quot;Amoxicillin 500mg&quot;&#10;in_stock = 48" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="m1">
+          <mxGeometry y="30" width="260" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="m2" value="&lt;u&gt;m2 : UserMedicine&lt;/u&gt;" style="swimlane;fontSize=12;fontStyle=0;rounded=0;whiteSpace=wrap;html=1;startSize=30;verticalAlign=top;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;align=center;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="820" y="480" width="260" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="m2_v" value="m_id = 102&#10;pharmacy_id = 1&#10;c_id = 10&#10;medicine_name = &quot;Azithromycin 250mg&quot;&#10;in_stock = 20" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="m2">
+          <mxGeometry y="30" width="260" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="o1" value="&lt;u&gt;o1 : Order&lt;/u&gt;" style="swimlane;fontSize=12;fontStyle=0;rounded=0;whiteSpace=wrap;html=1;startSize=30;verticalAlign=top;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;align=center;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="120" y="720" width="260" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="o1_v" value="o_id = 501&#10;pharmacy_id = 1&#10;m_id = 101&#10;quantity = 50&#10;status = &quot;pending&quot;&#10;total_amount = 4500&#10;order_date = &quot;2026-05-21&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="o1">
+          <mxGeometry y="30" width="260" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s1" value="&lt;u&gt;s1 : Sale&lt;/u&gt;" style="swimlane;fontSize=12;fontStyle=0;rounded=0;whiteSpace=wrap;html=1;startSize=30;verticalAlign=top;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;align=center;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="820" y="720" width="260" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="s1_v" value="s_id = 701&#10;pharmacy_id = 1&#10;m_id = 102&#10;quantity = 2&#10;status = &quot;completed&quot;&#10;total_amount = 180&#10;sales_date = &quot;2026-05-21&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="s1">
+          <mxGeometry y="30" width="260" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lk_pc" value="owns" style="endArrow=none;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="p1" target="c1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lk_cm1" value="classifies" style="endArrow=none;html=1;exitX=0;exitY=0.7;entryX=1;entryY=0.3;" edge="1" parent="1" source="c1" target="m1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lk_cm2" value="classifies" style="endArrow=none;html=1;exitX=1;exitY=0.7;entryX=0;entryY=0.3;" edge="1" parent="1" source="c1" target="m2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lk_pm1" value="stocks" style="endArrow=none;html=1;exitX=0;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" source="p1" target="m1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lk_pm2" value="stocks" style="endArrow=none;html=1;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" source="p1" target="m2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lk_mo" value="ordered_as" style="endArrow=none;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="m1" target="o1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lk_ms" value="sold_as" style="endArrow=none;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="m2" target="s1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="note" value="&lt;b&gt;Notation&lt;/b&gt;&lt;br/&gt;Instance name is underlined as &lt;i&gt;name : Class&lt;/i&gt;.&lt;br/&gt;Attribute = value pairs only, no methods.&lt;br/&gt;Links carry no multiplicity (concrete to concrete)." style="text;html=1;align=left;verticalAlign=top;strokeColor=#000000;fillColor=#f5f5f5;rounded=0;spacingLeft=8;spacingTop=6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="380" height="90" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="State — Order" id="state-order">
+    <mxGraphModel dx="900" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Order Lifecycle" style="text;html=1;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="20" width="340" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="init" value="" style="ellipse;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="60" y="200" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pending" value="pending" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontSize=14;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="180" y="180" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="completed" value="completed" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontSize=14;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="540" y="180" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="final1" value="" style="ellipse;fillColor=none;strokeColor=#000000;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="220" y="420" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="final1_inner" value="" style="ellipse;fillColor=#000000;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="230" y="430" width="20" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="final2" value="" style="ellipse;fillColor=none;strokeColor=#000000;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="610" y="420" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="final2_inner" value="" style="ellipse;fillColor=#000000;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="620" y="430" width="20" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_init_pending" value="create" style="endArrow=open;endFill=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;fontSize=12;" edge="1" parent="1" source="init" target="pending">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_pending_completed" value="approve [stock available] / deduct stock" style="endArrow=open;endFill=0;html=1;exitX=1;exitY=0.4;entryX=0;entryY=0.4;fontSize=11;" edge="1" parent="1" source="pending" target="completed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_completed_pending" value="revert / restore stock" style="endArrow=open;endFill=0;html=1;exitX=0;exitY=0.7;entryX=1;entryY=0.7;fontSize=11;" edge="1" parent="1" source="completed" target="pending">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_pending_final" value="delete" style="endArrow=open;endFill=0;html=1;exitX=0.4;exitY=1;entryX=0.5;entryY=0;fontSize=12;" edge="1" parent="1" source="pending" target="final1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_completed_final" value="delete / restore stock" style="endArrow=open;endFill=0;html=1;exitX=0.4;exitY=1;entryX=0.5;entryY=0;fontSize=11;" edge="1" parent="1" source="completed" target="final2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend" value="&lt;b&gt;Notation&lt;/b&gt;&lt;br/&gt;● initial pseudostate&lt;br/&gt;◉ activity final (bull's-eye)&lt;br/&gt;⬜ state (rounded rectangle)&lt;br/&gt;Transition label: event [guard] / action" style="text;html=1;align=left;verticalAlign=top;strokeColor=#000000;fillColor=#f5f5f5;rounded=0;spacingLeft=8;spacingTop=6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="540" width="380" height="100" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="State — Sale" id="state-sale">
+    <mxGraphModel dx="900" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Sale Lifecycle" style="text;html=1;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="20" width="340" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="init" value="" style="ellipse;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="60" y="200" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pending" value="pending" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontSize=14;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="180" y="180" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="completed" value="completed" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontSize=14;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="540" y="180" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="final1" value="" style="ellipse;fillColor=none;strokeColor=#000000;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="220" y="420" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="final1_inner" value="" style="ellipse;fillColor=#000000;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="230" y="430" width="20" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="final2" value="" style="ellipse;fillColor=none;strokeColor=#000000;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="610" y="420" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="final2_inner" value="" style="ellipse;fillColor=#000000;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="620" y="430" width="20" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_init_pending" value="record" style="endArrow=open;endFill=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;fontSize=12;" edge="1" parent="1" source="init" target="pending">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_pending_completed" value="finalise / deduct stock" style="endArrow=open;endFill=0;html=1;exitX=1;exitY=0.4;entryX=0;entryY=0.4;fontSize=11;" edge="1" parent="1" source="pending" target="completed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_completed_pending" value="revert / restore stock" style="endArrow=open;endFill=0;html=1;exitX=0;exitY=0.7;entryX=1;entryY=0.7;fontSize=11;" edge="1" parent="1" source="completed" target="pending">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_pending_final" value="delete" style="endArrow=open;endFill=0;html=1;exitX=0.4;exitY=1;entryX=0.5;entryY=0;fontSize=12;" edge="1" parent="1" source="pending" target="final1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_completed_final" value="delete / restore stock" style="endArrow=open;endFill=0;html=1;exitX=0.4;exitY=1;entryX=0.5;entryY=0;fontSize=11;" edge="1" parent="1" source="completed" target="final2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="State — Session" id="state-session">
+    <mxGraphModel dx="900" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Authentication Session Lifecycle" style="text;html=1;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="20" width="460" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="init" value="" style="ellipse;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="60" y="180" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="guest" value="Guest" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontSize=14;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="160" y="160" width="160" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="auth" value="Authenticated" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fontSize=14;fontStyle=1;fillColor=#ffffff;verticalAlign=top;spacingTop=6;" vertex="1" parent="1">
+          <mxGeometry x="460" y="80" width="380" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="auth_init" value="" style="ellipse;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="490" y="200" width="24" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="admin" value="Admin" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontSize=12;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="580" y="140" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pharmacy" value="Pharmacy" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontSize=12;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="580" y="240" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_init_guest" value="" style="endArrow=open;endFill=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;fontSize=11;" edge="1" parent="1" source="init" target="guest">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t_guest_auth" value="login [credentials valid]" style="endArrow=open;endFill=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.4;fontSize=11;" edge="1" parent="1" source="guest" target="auth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t_auth_guest" value="logout" style="endArrow=open;endFill=0;html=1;exitX=0;exitY=0.8;entryX=1;entryY=0.8;fontSize=11;" edge="1" parent="1" source="auth" target="guest">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t_guest_self" value="login [credentials invalid] / show error" style="endArrow=open;endFill=0;html=1;exitX=0.25;exitY=0;entryX=0.75;entryY=0;fontSize=10;" edge="1" parent="1" source="guest" target="guest">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="200" y="100" />
+              <mxPoint x="280" y="100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="t_authinit_admin" value="role = admin" style="endArrow=open;endFill=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;fontSize=10;" edge="1" parent="1" source="auth_init" target="admin">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t_authinit_pharmacy" value="role = user" style="endArrow=open;endFill=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;fontSize=10;" edge="1" parent="1" source="auth_init" target="pharmacy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Sequence — Login" id="seq-login">
+    <mxGraphModel dx="1400" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Sequence — Login Flow" style="text;html=1;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="10" width="400" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="user" value="User" style="shape=umlActor;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="60" width="40" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="user_ll" value="" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;dropTarget=0;" vertex="1" parent="1">
+          <mxGeometry x="60" y="120" width="80" height="780" as="geometry" />
+        </mxCell>
+
+        <mxCell id="router" value="Router" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;dropTarget=0;size=40;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="80" width="140" height="820" as="geometry" />
+        </mxCell>
+        <mxCell id="auth" value="AuthController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;dropTarget=0;size=40;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="80" width="160" height="820" as="geometry" />
+        </mxCell>
+        <mxCell id="usermod" value="UserModel" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;dropTarget=0;size=40;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="80" width="140" height="820" as="geometry" />
+        </mxCell>
+        <mxCell id="db" value="Database" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;dropTarget=0;size=40;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="820" y="80" width="140" height="820" as="geometry" />
+        </mxCell>
+        <mxCell id="session" value="Session" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;dropTarget=0;size=40;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="80" width="140" height="820" as="geometry" />
+        </mxCell>
+
+        <mxCell id="m1" value="1: submit login(email, password)" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=11;" edge="1" parent="1" source="user_ll" target="router">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="180" as="sourcePoint" />
+            <mxPoint x="270" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" value="2: dispatch /login" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=11;" edge="1" parent="1" source="router" target="auth">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="270" y="220" as="sourcePoint" />
+            <mxPoint x="480" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" value="3: findByEmail(email)" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=11;" edge="1" parent="1" source="auth" target="usermod">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="480" y="270" as="sourcePoint" />
+            <mxPoint x="690" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" value="4: read by email" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=11;" edge="1" parent="1" source="usermod" target="db">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="690" y="310" as="sourcePoint" />
+            <mxPoint x="890" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" value="5: user record" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;fontSize=11;" edge="1" parent="1" source="db" target="usermod">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="890" y="350" as="sourcePoint" />
+            <mxPoint x="690" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" value="6: user" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;fontSize=11;" edge="1" parent="1" source="usermod" target="auth">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="690" y="390" as="sourcePoint" />
+            <mxPoint x="480" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" value="7: verify password (self call)" style="html=1;verticalAlign=bottom;endArrow=block;curved=1;fontSize=11;" edge="1" parent="1" source="auth" target="auth">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="480" y="430" as="sourcePoint" />
+            <mxPoint x="480" y="470" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="540" y="430" />
+              <mxPoint x="540" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="alt_frame" value="alt" style="shape=umlFrame;whiteSpace=wrap;html=1;width=60;fontSize=11;fontStyle=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="400" y="500" width="760" height="320" as="geometry" />
+        </mxCell>
+
+        <mxCell id="alt_valid" value="[credentials valid]" style="text;html=1;align=left;fontStyle=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="410" y="530" width="200" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="m8" value="8: setAuth(user, role)" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=11;" edge="1" parent="1" source="auth" target="session">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="480" y="560" as="sourcePoint" />
+            <mxPoint x="1090" y="560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" value="9: ok" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;fontSize=11;" edge="1" parent="1" source="session" target="auth">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1090" y="600" as="sourcePoint" />
+            <mxPoint x="480" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10" value="10: redirect to dashboard" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;fontSize=11;" edge="1" parent="1" source="auth" target="user_ll">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="480" y="640" as="sourcePoint" />
+            <mxPoint x="100" y="640" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="alt_div" style="endArrow=none;html=1;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="670" as="sourcePoint" />
+            <mxPoint x="1160" y="670" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="alt_invalid" value="[credentials invalid]" style="text;html=1;align=left;fontStyle=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="410" y="680" width="200" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="m11" value="11: store error" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=11;" edge="1" parent="1" source="auth" target="session">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="480" y="720" as="sourcePoint" />
+            <mxPoint x="1090" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m12" value="12: redirect to login" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;fontSize=11;" edge="1" parent="1" source="auth" target="user_ll">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="480" y="770" as="sourcePoint" />
+            <mxPoint x="100" y="770" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Sequence — Create Medicine" id="seq-medicine">
+    <mxGraphModel dx="1400" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Sequence — Create Medicine" style="text;html=1;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="10" width="500" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="user" value="Pharmacy User" style="shape=umlActor;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="60" width="40" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="user_ll" value="" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;dropTarget=0;" vertex="1" parent="1">
+          <mxGeometry x="60" y="120" width="80" height="800" as="geometry" />
+        </mxCell>
+
+        <mxCell id="router" value="Router" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;dropTarget=0;size=40;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="80" width="140" height="840" as="geometry" />
+        </mxCell>
+        <mxCell id="mw" value="PharmacyMiddleware" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;dropTarget=0;size=40;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="80" width="180" height="840" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl" value="MedicineController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;dropTarget=0;size=40;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="80" width="180" height="840" as="geometry" />
+        </mxCell>
+        <mxCell id="session" value="Session" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;dropTarget=0;size=40;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="820" y="80" width="140" height="840" as="geometry" />
+        </mxCell>
+        <mxCell id="medmod" value="UserMedicine" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;dropTarget=0;size=40;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="80" width="160" height="840" as="geometry" />
+        </mxCell>
+        <mxCell id="db" value="Database" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;dropTarget=0;size=40;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="80" width="140" height="840" as="geometry" />
+        </mxCell>
+
+        <mxCell id="m1" value="1: submit new medicine" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=11;" edge="1" parent="1" source="user_ll" target="router">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="180" as="sourcePoint" />
+            <mxPoint x="270" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" value="2: authorise request" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=11;" edge="1" parent="1" source="router" target="mw">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="270" y="220" as="sourcePoint" />
+            <mxPoint x="470" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="alt_frame" value="alt" style="shape=umlFrame;whiteSpace=wrap;html=1;width=60;fontSize=11;fontStyle=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="380" y="250" width="970" height="600" as="geometry" />
+        </mxCell>
+
+        <mxCell id="alt_unauth" value="[not authenticated]" style="text;html=1;align=left;fontStyle=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="390" y="280" width="200" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="m3" value="3: redirect to login" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;fontSize=11;" edge="1" parent="1" source="mw" target="user_ll">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="470" y="320" as="sourcePoint" />
+            <mxPoint x="100" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="alt_div" style="endArrow=none;html=1;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="380" y="360" as="sourcePoint" />
+            <mxPoint x="1350" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="alt_ok" value="[authorised]" style="text;html=1;align=left;fontStyle=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="390" y="370" width="200" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="m4" value="4: continue" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;fontSize=11;" edge="1" parent="1" source="mw" target="router">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="470" y="410" as="sourcePoint" />
+            <mxPoint x="270" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" value="5: store(form data)" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=11;" edge="1" parent="1" source="router" target="ctrl">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="270" y="450" as="sourcePoint" />
+            <mxPoint x="690" y="450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" value="6: get current pharmacy" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=11;" edge="1" parent="1" source="ctrl" target="session">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="690" y="490" as="sourcePoint" />
+            <mxPoint x="890" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" value="7: pharmacy id" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;fontSize=11;" edge="1" parent="1" source="session" target="ctrl">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="890" y="530" as="sourcePoint" />
+            <mxPoint x="690" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" value="8: validate input (self call)" style="html=1;verticalAlign=bottom;endArrow=block;curved=1;fontSize=11;" edge="1" parent="1" source="ctrl" target="ctrl">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="690" y="570" as="sourcePoint" />
+            <mxPoint x="690" y="610" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="760" y="570" />
+              <mxPoint x="760" y="610" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" value="9: insert(data with pharmacy id)" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=11;" edge="1" parent="1" source="ctrl" target="medmod">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="690" y="650" as="sourcePoint" />
+            <mxPoint x="1080" y="650" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10" value="10: persist record" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=11;" edge="1" parent="1" source="medmod" target="db">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1080" y="690" as="sourcePoint" />
+            <mxPoint x="1270" y="690" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m11" value="11: new id" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;fontSize=11;" edge="1" parent="1" source="db" target="medmod">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1270" y="730" as="sourcePoint" />
+            <mxPoint x="1080" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m12" value="12: medicine id" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;fontSize=11;" edge="1" parent="1" source="medmod" target="ctrl">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1080" y="770" as="sourcePoint" />
+            <mxPoint x="690" y="770" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m13" value="13: store success message" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=11;" edge="1" parent="1" source="ctrl" target="session">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="690" y="810" as="sourcePoint" />
+            <mxPoint x="890" y="810" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m14" value="14: redirect to list" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;fontSize=11;" edge="1" parent="1" source="ctrl" target="user_ll">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="690" y="840" as="sourcePoint" />
+            <mxPoint x="100" y="840" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Activity — Order Approval" id="activity">
+    <mxGraphModel dx="900" dy="1300" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Activity — Order Approval Workflow" style="text;html=1;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="10" width="460" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="init" value="" style="ellipse;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="430" y="60" width="40" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="submit" value="Submit status update&#10;(new status = completed)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontSize=12;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="350" y="140" width="200" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="auth_check" value="Authenticated as&#10;pharmacy user?" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="370" y="250" width="160" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="redirect_login" value="Redirect to login" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontSize=12;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="60" y="270" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="end_unauth_outer" value="" style="ellipse;fillColor=none;strokeColor=#000000;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="120" y="370" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="end_unauth_inner" value="" style="ellipse;fillColor=#000000;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="135" y="385" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="load" value="Load order scoped&#10;by pharmacy_id" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontSize=12;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="350" y="400" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="exists_check" value="Order belongs to&#10;this pharmacy?" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="370" y="490" width="160" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="notfound" value="Show flash —&#10;Order not found" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontSize=12;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="60" y="510" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="end_nf_outer" value="" style="ellipse;fillColor=none;strokeColor=#000000;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="120" y="610" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="end_nf_inner" value="" style="ellipse;fillColor=#000000;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="135" y="625" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="stock_check" value="Linked medicine&#10;has enough stock?" style="rhombus;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="370" y="640" width="160" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="nostock" value="Show flash —&#10;Not enough stock" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontSize=12;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="660" y="660" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="end_ns_outer" value="" style="ellipse;fillColor=none;strokeColor=#000000;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="720" y="760" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="end_ns_inner" value="" style="ellipse;fillColor=#000000;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="735" y="775" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="deduct" value="Deduct quantity&#10;from medicine in_stock" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontSize=12;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="350" y="780" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="persist" value="Persist order&#10;status = completed" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontSize=12;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="350" y="870" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="success" value="Show flash —&#10;Order updated" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontSize=12;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="350" y="960" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="end_ok_outer" value="" style="ellipse;fillColor=none;strokeColor=#000000;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="420" y="1060" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="end_ok_inner" value="" style="ellipse;fillColor=#000000;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="435" y="1075" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" style="endArrow=open;endFill=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="init" target="submit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="endArrow=open;endFill=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="submit" target="auth_check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="no" style="endArrow=open;endFill=0;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;fontSize=11;" edge="1" parent="1" source="auth_check" target="redirect_login">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" style="endArrow=open;endFill=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="redirect_login" target="end_unauth_outer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="yes" style="endArrow=open;endFill=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;fontSize=11;" edge="1" parent="1" source="auth_check" target="load">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" style="endArrow=open;endFill=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="load" target="exists_check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" value="no" style="endArrow=open;endFill=0;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;fontSize=11;" edge="1" parent="1" source="exists_check" target="notfound">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" style="endArrow=open;endFill=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="notfound" target="end_nf_outer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" value="yes" style="endArrow=open;endFill=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;fontSize=11;" edge="1" parent="1" source="exists_check" target="stock_check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" value="no" style="endArrow=open;endFill=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;fontSize=11;" edge="1" parent="1" source="stock_check" target="nostock">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" style="endArrow=open;endFill=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="nostock" target="end_ns_outer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" value="yes" style="endArrow=open;endFill=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;fontSize=11;" edge="1" parent="1" source="stock_check" target="deduct">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" style="endArrow=open;endFill=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="deduct" target="persist">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" style="endArrow=open;endFill=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="persist" target="success">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" style="endArrow=open;endFill=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="success" target="end_ok_outer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Component Diagram" id="component">
+    <mxGraphModel dx="1200" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1300" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Component Diagram" style="text;html=1;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="10" width="440" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="browser" value="«external»&#10;Web Browser" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#f5f5f5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="500" y="60" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="boundary" value="MedVault — application boundary" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;verticalAlign=top;fontSize=12;fontStyle=2;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="80" y="160" width="1040" height="1080" as="geometry" />
+        </mxCell>
+
+        <mxCell id="views" value="«component»&#10;Views (auth · admin · pharmacy · landing)" style="shape=component;align=center;spacingLeft=30;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="140" y="200" width="320" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="fc" value="«component»&#10;Front Controller&#10;(public/index.php)" style="shape=component;align=center;spacingLeft=30;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="540" y="200" width="240" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="router" value="«component»&#10;Router" style="shape=component;align=center;spacingLeft=30;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="820" y="200" width="200" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="auth_mw" value="«component»&#10;AuthMiddleware" style="shape=component;align=center;spacingLeft=30;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="120" y="360" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="admin_mw" value="«component»&#10;AdminMiddleware" style="shape=component;align=center;spacingLeft=30;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="360" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="pharm_mw" value="«component»&#10;PharmacyMiddleware" style="shape=component;align=center;spacingLeft=30;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="640" y="360" width="240" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="auth_ctrl" value="«component»&#10;AuthController" style="shape=component;align=center;spacingLeft=30;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="120" y="500" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="admin_ctrls" value="«component»&#10;Admin Controllers" style="shape=component;align=center;spacingLeft=30;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="500" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="pharm_ctrls" value="«component»&#10;Pharmacy Controllers" style="shape=component;align=center;spacingLeft=30;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="640" y="500" width="240" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="land_ctrl" value="«component»&#10;LandingController" style="shape=component;align=center;spacingLeft=30;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="920" y="500" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="domain" value="«component»&#10;Domain Models&#10;(User · Pharmacy · Admin · Category ·&#10;UserMedicine · Order · Sale · Setting)" style="shape=component;align=center;spacingLeft=30;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="240" y="640" width="700" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="app_boot" value="«component»&#10;App (bootstrapper)" style="shape=component;align=center;spacingLeft=30;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="120" y="800" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="base_ctrl" value="«component»&#10;Controller (abstract)" style="shape=component;align=center;spacingLeft=30;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="360" y="800" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="base_mod" value="«component»&#10;Model (abstract)" style="shape=component;align=center;spacingLeft=30;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="600" y="800" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="sess" value="«component»&#10;Session" style="shape=component;align=center;spacingLeft=30;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="840" y="800" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="dbcomp" value="«component»&#10;Database (PDO singleton)" style="shape=component;align=center;spacingLeft=30;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="360" y="940" width="280" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="presentation_label" value="Presentation Layer" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="100" y="230" width="40" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="http_label" value="HTTP Boundary" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="230" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="mw_label" value="Middleware" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="900" y="395" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="app_label" value="Application Layer" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="940" y="450" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="dom_label" value="Domain Layer" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="940" y="680" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="core_label" value="Framework Core" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="940" y="830" width="120" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="mysql_art" value="«artifact»&#10;MySQL&#10;schema — pharmacy" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="420" y="1100" width="160" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="br_fc" style="endArrow=open;endFill=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="browser" target="fc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fc_boot" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="fc" target="app_boot">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="boot_router" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="app_boot" target="router">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="router_mw1" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="router" target="auth_mw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="router_mw2" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="router" target="admin_mw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="router_mw3" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="router" target="pharm_mw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mw_ctrls1" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="auth_mw" target="auth_ctrl">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mw_ctrls2" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="admin_mw" target="admin_ctrls">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mw_ctrls3" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="pharm_mw" target="pharm_ctrls">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_dom1" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="auth_ctrl" target="domain">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_dom2" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="admin_ctrls" target="domain">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_dom3" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="pharm_ctrls" target="domain">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_dom4" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="land_ctrl" target="domain">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_base" style="endArrow=open;endFill=0;html=1;dashed=1;" edge="1" parent="1" source="pharm_ctrls" target="base_ctrl">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dom_base" style="endArrow=open;endFill=0;html=1;dashed=1;" edge="1" parent="1" source="domain" target="base_mod">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_sess" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="pharm_ctrls" target="sess">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mw_sess" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="pharm_mw" target="sess">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="base_db" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="base_mod" target="dbcomp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="db_mysql" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="dbcomp" target="mysql_art">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_views" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="pharm_ctrls" target="views">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Deployment Diagram" id="deployment">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Deployment Diagram" style="text;html=1;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="10" width="440" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="client" value="«device»&#10;Client Device&#10;(Web Browser)" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;fillColor=#ffffff;fontSize=12;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="100" width="220" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dockerhost" value="«device» — Docker Host" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;fillColor=#ffffff;fontSize=13;fontStyle=1;verticalAlign=top;spacingTop=8;align=left;spacingLeft=30;" vertex="1" parent="1">
+          <mxGeometry x="420" y="80" width="720" height="800" as="geometry" />
+        </mxCell>
+
+        <mxCell id="app_container" value="«execution environment»&#10;Container — app" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.03;darkOpacity2=0.05;fillColor=#ffffff;fontSize=12;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="460" y="140" width="300" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="apache" value="«artifact»&#10;Apache + mod_rewrite" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="490" y="210" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="php" value="«artifact»&#10;PHP 8.2 runtime&#10;(pdo_mysql, composer)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="490" y="290" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="code" value="«artifact»&#10;Project source&#10;bind-mount at /var/www/html" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="490" y="400" width="240" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="db_container" value="«execution environment»&#10;Container — db" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.03;darkOpacity2=0.05;fillColor=#ffffff;fontSize=12;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="800" y="140" width="280" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="mysql" value="«artifact»&#10;MySQL 8.0 server" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="830" y="220" width="220" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pma_container" value="«execution environment»&#10;Container — phpmyadmin" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.03;darkOpacity2=0.05;fillColor=#ffffff;fontSize=12;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="800" y="400" width="280" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="pma" value="«artifact»&#10;phpMyAdmin" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="830" y="470" width="220" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="volume" value="«artifact»&#10;Named volume&#10;mysql_data" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffffff;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="490" y="680" width="200" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_app" value="HTTP — host port 8000" style="endArrow=open;endFill=0;html=1;fontSize=11;" edge="1" parent="1" source="client" target="apache">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c_pma" value="HTTP — host port 8080" style="endArrow=open;endFill=0;html=1;fontSize=11;" edge="1" parent="1" source="client" target="pma">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ap_php" value="" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="apache" target="php">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="php_code" value="" style="endArrow=open;endFill=0;html=1;" edge="1" parent="1" source="php" target="code">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="php_mysql" value="PDO — db:3306" style="endArrow=open;endFill=0;html=1;fontSize=11;" edge="1" parent="1" source="php" target="mysql">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="pma_mysql" value="db:3306" style="endArrow=open;endFill=0;html=1;fontSize=11;" edge="1" parent="1" source="pma" target="mysql">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mysql_vol" value="" style="endArrow=none;html=1;" edge="1" parent="1" source="mysql" target="volume">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

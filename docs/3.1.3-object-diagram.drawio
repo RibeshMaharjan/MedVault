@@ -1,0 +1,67 @@
+<mxfile host="app.diagrams.net" agent="MailSense">
+  <diagram name="Object Diagram" id="object-3-1-3">
+    <mxGraphModel dx="1697" dy="1178" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;" value="MailSense — Object Diagram" vertex="1">
+          <mxGeometry height="50" width="520" x="430" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="alice" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;swimlaneFillColor=#ffffff;fillColor=#dae8fc;strokeColor=#6c8ebf;html=1;" value="&lt;u&gt;alice : User&lt;/u&gt;" vertex="1">
+          <mxGeometry height="146" width="280" x="560" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="alice_attrs" parent="alice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=15;fontFamily=Courier New;" value="id        = &quot;u1&quot;&#xa;fullname  = &quot;Alice Smith&quot;&#xa;email     = &quot;alice@example.com&quot;&#xa;verified  = true&#xa;role      = &quot;user&quot;" vertex="1">
+          <mxGeometry height="120" width="280" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="gmailAcc" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;swimlaneFillColor=#ffffff;fillColor=#d5e8d4;strokeColor=#82b366;html=1;" value="&lt;u&gt;gmailAcc : EmailAccount&lt;/u&gt;" vertex="1">
+          <mxGeometry height="186" width="320" x="540" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="gmailAcc_attrs" parent="gmailAcc" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=15;fontFamily=Courier New;" value="id            = &quot;a1&quot;&#xa;userId        = &quot;u1&quot;&#xa;provider      = &quot;gmail&quot;&#xa;emailAddress  = &quot;alice@gmail.com&quot;&#xa;imapHost      = &quot;imap.gmail.com&quot;&#xa;smtpHost      = &quot;smtp.gmail.com&quot;&#xa;lastSyncedAt  = 2026-05-20T10:00Z" vertex="1">
+          <mxGeometry height="160" width="320" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;swimlaneFillColor=#ffffff;fillColor=#fff2cc;strokeColor=#d6b656;html=1;" value="&lt;u&gt;e1 : Email&lt;/u&gt;" vertex="1">
+          <mxGeometry height="186" width="280" x="190" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="e1_attrs" parent="e1" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=15;fontFamily=Courier New;" value="id        = &quot;e1&quot;&#xa;subject   = &quot;Project update&quot;&#xa;fromAddr  = &quot;bob@co.com&quot;&#xa;category  = &quot;primary&quot;&#xa;priority  = &quot;high&quot;&#xa;threadId  = &quot;t1&quot;&#xa;receivedAt= 2026-05-19T09:00Z" vertex="1">
+          <mxGeometry height="160" width="280" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;swimlaneFillColor=#ffffff;fillColor=#fff2cc;strokeColor=#d6b656;html=1;" value="&lt;u&gt;e2 : Email&lt;/u&gt;" vertex="1">
+          <mxGeometry height="186" width="280" x="550" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="e2_attrs" parent="e2" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=15;fontFamily=Courier New;" value="id        = &quot;e2&quot;&#xa;subject   = &quot;Re: Project update&quot;&#xa;fromAddr  = &quot;alice@gmail.com&quot;&#xa;category  = &quot;primary&quot;&#xa;priority  = &quot;medium&quot;&#xa;threadId  = &quot;t1&quot;&#xa;receivedAt= 2026-05-19T11:30Z" vertex="1">
+          <mxGeometry height="160" width="280" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;swimlaneFillColor=#ffffff;fillColor=#fff2cc;strokeColor=#d6b656;html=1;" value="&lt;u&gt;e3 : Email&lt;/u&gt;" vertex="1">
+          <mxGeometry height="186" width="280" x="880" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="e3_attrs" parent="e3" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=15;fontFamily=Courier New;" value="id        = &quot;e3&quot;&#xa;subject   = &quot;Weekly newsletter&quot;&#xa;fromAddr  = &quot;news@store.com&quot;&#xa;category  = &quot;promotions&quot;&#xa;priority  = &quot;low&quot;&#xa;threadId  = null&#xa;receivedAt= 2026-05-20T07:15Z" vertex="1">
+          <mxGeometry height="160" width="280" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="t1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;swimlaneFillColor=#ffffff;fillColor=#f8cecc;strokeColor=#b85450;html=1;fontSize=15;" value="&lt;u&gt;t1 : Thread&lt;/u&gt;" vertex="1">
+          <mxGeometry height="166" width="240" x="250" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="t1_attrs" parent="t1" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=15;fontFamily=Courier New;" value="id                = &quot;t1&quot;&#xa;subjectNormalized = &quot;project update&quot;&#xa;rootMessageId     = &quot;e1&quot;&#xa;messageCount      = 2&#xa;lastActivityAt    = 2026-05-19T11:30Z" vertex="1">
+          <mxGeometry height="140" width="240" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="link_alice_gmail" edge="1" parent="1" source="alice" style="endArrow=none;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=1.5;" target="gmailAcc" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link_gmail_e1" edge="1" parent="1" source="gmailAcc" style="endArrow=none;html=1;rounded=0;exitX=0.1;exitY=1;exitDx=0;exitDy=0;entryX=0.7;entryY=0;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=1.5;" target="e1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link_gmail_e2" edge="1" parent="1" source="gmailAcc" style="endArrow=none;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=1.5;" target="e2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link_gmail_e3" edge="1" parent="1" source="gmailAcc" style="endArrow=none;html=1;rounded=0;exitX=0.9;exitY=1;exitDx=0;exitDy=0;entryX=0.3;entryY=0;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=1.5;" target="e3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link_e1_t1" edge="1" parent="1" source="e1" style="endArrow=none;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;strokeColor=#9673a6;strokeWidth=1.5;dashed=0;" target="t1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link_e2_t1" edge="1" parent="1" source="e2" style="endArrow=none;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=1;entryDx=0;entryDy=0;strokeColor=#9673a6;strokeWidth=1.5;dashed=0;" target="t1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
