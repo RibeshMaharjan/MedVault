@@ -21,35 +21,12 @@ class Order extends Model
 
     public function paginateByPharmacy(int $pharmacyId, int $page, int $perPage, string $conditions = '', array $params = []): array
     {
-        $countWhere = "pharmacy_id = :pharmacy_id";
-        $selectWhere = "o.pharmacy_id = :pharmacy_id";
+        $where = "pharmacy_id = :pharmacy_id";
         $params['pharmacy_id'] = $pharmacyId;
         if ($conditions) {
-            $countWhere .= " AND {$conditions}";
-            $selectWhere .= " AND {$conditions}";
+            $where .= " AND {$conditions}";
         }
-
-        $offset = ($page - 1) * $perPage;
-        $totalRecords = $this->count($countWhere, $params);
-        $totalPages = (int) ceil($totalRecords / $perPage);
-
-        $sql = "SELECT o.*, m.medicine_name FROM {$this->table} o " .
-               "LEFT JOIN user_medicine_tbl m ON o.m_id = m.m_id";
-        if ($selectWhere) {
-            $sql .= " WHERE {$selectWhere}";
-        }
-        $sql .= " LIMIT {$perPage} OFFSET {$offset}";
-
-        $data = $this->query($sql, $params)->fetchAll();
-
-        return [
-            'data' => $data,
-            'currentPage' => $page,
-            'totalPages' => $totalPages,
-            'totalRecords' => $totalRecords,
-            'hasNextPage' => $page < $totalPages,
-            'hasPrevPage' => $page > 1,
-        ];
+        return $this->paginate($page, $perPage, $where, $params);
     }
 
     public function findByIdAndPharmacy(int $orderId, int $pharmacyId): ?array

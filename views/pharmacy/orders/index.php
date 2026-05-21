@@ -95,7 +95,6 @@
                             <div class="col">
                                 <button class="btn btn-success btn-md px-3 py-2 my-2 orderEditBtn"
                                     data-id="<?= $ord['o_id'] ?>" data-mid="<?= $ord['m_id'] ?>"
-                                    data-medname="<?= htmlspecialchars($ord['medicine_name'] ?? '') ?>"
                                     data-price="<?= $ord['price'] ?>" data-quantity="<?= $ord['quantity'] ?>"
                                     data-total="<?= $ord['total_amount'] ?>" data-status="<?= $ord['status'] ?>"
                                     data-date="<?= $ord['order_date'] ?>">
@@ -131,7 +130,6 @@ $(document).ready(function() {
         $('#orderEditForm').attr('action', '/pharmacy/orders/' + id);
         $('#update_id').val(id);
         $('#m_id').val($(this).data('mid'));
-        $('#name').val($(this).data('medname'));
         $('#price').val($(this).data('price'));
         $('#quantity').val($(this).data('quantity'));
         $('#total').val($(this).data('total'));
