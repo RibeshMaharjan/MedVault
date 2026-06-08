@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Sep 29, 2024 at 01:11 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: db
+-- Generation Time: Jun 05, 2026 at 08:38 AM
+-- Server version: 8.0.45
+-- PHP Version: 8.3.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,9 +28,9 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `cart` (
-  `pharmacy_id` int(11) NOT NULL,
-  `medicine_id` int(11) DEFAULT NULL,
-  `quantity` varchar(50) DEFAULT NULL
+  `pharmacy_id` int NOT NULL,
+  `medicine_id` int DEFAULT NULL,
+  `quantity` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -56,14 +56,14 @@ INSERT INTO `cart` (`pharmacy_id`, `medicine_id`, `quantity`) VALUES
 --
 
 CREATE TABLE `inventory` (
-  `medicine_id` int(11) NOT NULL,
-  `medicine_name` varchar(100) NOT NULL,
-  `manufacturer` varchar(100) NOT NULL,
-  `price` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
+  `medicine_id` int NOT NULL,
+  `medicine_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `manufacturer` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `price` int NOT NULL,
+  `quantity` int NOT NULL,
   `expiration_date` date NOT NULL,
-  `dosage` varchar(20) NOT NULL,
-  `image` varchar(100) NOT NULL
+  `dosage` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `image` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -101,11 +101,11 @@ INSERT INTO `inventory` (`medicine_id`, `medicine_name`, `manufacturer`, `price`
 --
 
 CREATE TABLE `order_address` (
-  `order_id` int(11) NOT NULL,
-  `city` varchar(50) NOT NULL,
-  `province` varchar(50) NOT NULL,
-  `street` varchar(50) NOT NULL,
-  `postal` int(11) NOT NULL
+  `order_id` int NOT NULL,
+  `city` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `province` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `street` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `postal` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -173,13 +173,13 @@ INSERT INTO `order_address` (`order_id`, `city`, `province`, `street`, `postal`)
 --
 
 CREATE TABLE `order_completed` (
-  `order_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `medicine_id` int(11) NOT NULL,
-  `invoice_number` int(255) NOT NULL,
-  `total_products` int(255) NOT NULL,
-  `amount` int(11) NOT NULL,
-  `order_status` varchar(255) NOT NULL
+  `order_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `medicine_id` int NOT NULL,
+  `invoice_number` int NOT NULL,
+  `total_products` int NOT NULL,
+  `amount` int NOT NULL,
+  `order_status` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -212,13 +212,13 @@ INSERT INTO `order_completed` (`order_id`, `user_id`, `medicine_id`, `invoice_nu
 --
 
 CREATE TABLE `order_pending` (
-  `order_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `medicine_id` int(11) NOT NULL,
-  `invoice_number` int(255) NOT NULL,
-  `total_products` int(255) NOT NULL,
-  `amount` int(11) NOT NULL,
-  `order_status` varchar(255) NOT NULL
+  `order_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `medicine_id` int NOT NULL,
+  `invoice_number` int NOT NULL,
+  `total_products` int NOT NULL,
+  `amount` int NOT NULL,
+  `order_status` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -267,11 +267,11 @@ INSERT INTO `order_pending` (`order_id`, `user_id`, `medicine_id`, `invoice_numb
 --
 
 CREATE TABLE `role` (
-  `user_id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` varchar(10) NOT NULL
+  `user_id` int NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `role` varchar(10) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -279,10 +279,10 @@ CREATE TABLE `role` (
 --
 
 INSERT INTO `role` (`user_id`, `name`, `email`, `password`, `role`) VALUES
-(18, 'Ribesh Majarjan', 'ribesh@admin.gmail.com', '$2y$10$gcTNHBwiF1F5IgziMPNIFu5vtnrG1j4vu.MHiIqJ4GvSYWgYPr6kK', 'admin'),
-(89, 'Pharmacy', 'pharmacy@gmail.com', '$2y$10$m5h/krzwRHZ01TA2.HpMV.VdhK5LWga1JiVMXlOTX/Q8vEdTMfIsC', 'user'),
-(90, 'ribesh', 'ribe@gmail.com', 'final', 'user'),
-(123, 'Rijan Bajracharya', 'rijan@admin.gmail.com', '$2y$10$5/iQmwkH4ETPbzQE.0Wb8OqAL.acnMFUuJ/kolA243PTe5t8il01G', 'admin'),
+(18, 'Ribesh Majarjan', 'ribesh@admin.gmail.com', '$2y$10$s0GYtiGf4GU0i8eqrdwoeeK0VshD/wpgGiasIJakuLIWphI82MhpS', 'admin'),
+(89, 'Pharmacy', 'pharmacy@gmail.com', '$2y$10$s0GYtiGf4GU0i8eqrdwoeeK0VshD/wpgGiasIJakuLIWphI82MhpS', 'user'),
+(90, 'ribesh', 'ribe@gmail.com', '$2y$10$s0GYtiGf4GU0i8eqrdwoeeK0VshD/wpgGiasIJakuLIWphI82MhpS', 'user'),
+(123, 'Rijan Bajracharya', 'rijan@admin.gmail.com', '$2y$10$s0GYtiGf4GU0i8eqrdwoeeK0VshD/wpgGiasIJakuLIWphI82MhpS', 'admin'),
 (125, 'Remon', 'remon@admin.gmail.com', '$2y$10$I.vKlQpB.GrA0bPTmO62A.Eswy4CB2CExaDEp4bvtPBh0V5ceFBJe', 'admin'),
 (129, 'test', 'test@gmail.com', 'test', 'user'),
 (319, 'asdad', 'asdad@admin.gmail.com', 'asdad', 'user'),
@@ -297,7 +297,9 @@ INSERT INTO `role` (`user_id`, `name`, `email`, `password`, `role`) VALUES
 (341, 'danesh', 'da@gmail.com', '$2y$10$XZ/FpaoRuVgiL7Fk6LXXNeyDdRdKGYrozXEfVh5KnmU53HxT5fF2K', 'user'),
 (343, 'sam', 'sam@gmail.com', '$2y$10$T5zVlaAWYrbffE3gHtssfOhb0aFjpufjpTGeN0ncX7J6KbleQCEva', 'user'),
 (345, 'sam pharmacy', 'sampharmacy@gmail.com', '$2y$10$G5F8ICj9KHaa9qU3468UmelraCLf2Ea/1HUXkP6tAN3ndf9Ug8Kcm', 'user'),
-(346, 'signuptest', 'signup@gmail.com', '$2y$10$Ln5M7dDGDHlerT2pIjtH0OUoKMBGC1EYQt3JzBRobhq0bzoFRdnrK', 'user');
+(346, 'signuptest', 'signup@gmail.com', '$2y$10$Ln5M7dDGDHlerT2pIjtH0OUoKMBGC1EYQt3JzBRobhq0bzoFRdnrK', 'user'),
+(347, 'testin', 'ribesh@test.com', '$2y$10$bimB0ZodRcSNmK5Iw6IiZuLbkEZQWR3poxiCoztoBja6WGNsLuAuO', 'user'),
+(348, 'asdasda', 'testing@password.com', '$2y$10$s0GYtiGf4GU0i8eqrdwoeeK0VshD/wpgGiasIJakuLIWphI82MhpS', 'user');
 
 -- --------------------------------------------------------
 
@@ -306,13 +308,13 @@ INSERT INTO `role` (`user_id`, `name`, `email`, `password`, `role`) VALUES
 --
 
 CREATE TABLE `settings` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `small_description` text DEFAULT NULL,
-  `sub_title` varchar(255) DEFAULT NULL,
-  `sub_description` text DEFAULT NULL,
-  `phone` varchar(10) DEFAULT NULL,
-  `email` varchar(50) DEFAULT NULL
+  `id` int UNSIGNED NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `small_description` text COLLATE utf8mb4_general_ci,
+  `sub_title` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `sub_description` text COLLATE utf8mb4_general_ci,
+  `phone` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `email` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -329,13 +331,13 @@ INSERT INTO `settings` (`id`, `title`, `small_description`, `sub_title`, `sub_de
 --
 
 CREATE TABLE `tbl_admin` (
-  `admin_id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `gender` varchar(10) NOT NULL,
-  `phone` varchar(10) NOT NULL,
+  `admin_id` int NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `gender` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `phone` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
   `dob` date NOT NULL,
-  `address` varchar(50) NOT NULL
+  `address` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -355,15 +357,15 @@ INSERT INTO `tbl_admin` (`admin_id`, `name`, `email`, `gender`, `phone`, `dob`, 
 --
 
 CREATE TABLE `tbl_medicine` (
-  `medicine_id` int(11) NOT NULL,
-  `medicine_name` varchar(100) NOT NULL,
-  `medicine_description` varchar(1000) DEFAULT NULL,
-  `manufacturer` varchar(100) NOT NULL,
-  `price` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
+  `medicine_id` int NOT NULL,
+  `medicine_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `medicine_description` varchar(1000) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `manufacturer` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `price` int NOT NULL,
+  `quantity` int NOT NULL,
   `expiration_date` date NOT NULL,
-  `dosage` varchar(50) NOT NULL,
-  `images` varchar(255) DEFAULT NULL
+  `dosage` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `images` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -404,12 +406,12 @@ INSERT INTO `tbl_medicine` (`medicine_id`, `medicine_name`, `medicine_descriptio
 --
 
 CREATE TABLE `tbl_pharmacy` (
-  `pharmacy_id` int(11) NOT NULL,
-  `pan` int(11) DEFAULT NULL,
-  `pharmacy_name` varchar(100) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `phone` varchar(10) DEFAULT NULL,
-  `address` varchar(50) DEFAULT NULL
+  `pharmacy_id` int NOT NULL,
+  `pan` int DEFAULT NULL,
+  `pharmacy_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `phone` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `address` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -429,7 +431,9 @@ INSERT INTO `tbl_pharmacy` (`pharmacy_id`, `pan`, `pharmacy_name`, `email`, `pho
 (341, 101010, 'danesh', 'da@gmail.com', '', ''),
 (343, 12345, 'sam', 'sam@gmail.com', '', ''),
 (345, 9845236, 'sam pharmacy', 'sampharmacy@gmail.com', '9841564231', 'jyatha'),
-(346, 987456123, 'signuptest', 'signup@gmail.com', '', '');
+(346, 987456123, 'signuptest', 'signup@gmail.com', '', ''),
+(347, NULL, 'testin', 'ribesh@test.com', NULL, NULL),
+(348, NULL, 'asdasda', 'testing@password.com', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -438,9 +442,9 @@ INSERT INTO `tbl_pharmacy` (`pharmacy_id`, `pan`, `pharmacy_name`, `email`, `pho
 --
 
 CREATE TABLE `user_category_tbl` (
-  `c_id` int(11) NOT NULL,
-  `pharmacy_id` int(11) NOT NULL,
-  `category_name` varchar(30) NOT NULL
+  `c_id` int NOT NULL,
+  `pharmacy_id` int NOT NULL,
+  `category_name` varchar(30) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -463,15 +467,15 @@ INSERT INTO `user_category_tbl` (`c_id`, `pharmacy_id`, `category_name`) VALUES
 --
 
 CREATE TABLE `user_medicine_tbl` (
-  `m_id` int(11) NOT NULL,
-  `pharmacy_id` int(11) NOT NULL,
-  `medicine_name` varchar(100) NOT NULL,
-  `medicine_desc` varchar(1000) NOT NULL,
-  `c_id` int(11) NOT NULL,
-  `in_stock` int(11) NOT NULL,
-  `buy_price` int(11) NOT NULL,
-  `sell_price` int(11) NOT NULL,
-  `added_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `m_id` int NOT NULL,
+  `pharmacy_id` int NOT NULL,
+  `medicine_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `medicine_desc` varchar(1000) COLLATE utf8mb4_general_ci NOT NULL,
+  `c_id` int NOT NULL,
+  `in_stock` int NOT NULL,
+  `buy_price` int NOT NULL,
+  `sell_price` int NOT NULL,
+  `added_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `exp_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -485,7 +489,13 @@ INSERT INTO `user_medicine_tbl` (`m_id`, `pharmacy_id`, `medicine_name`, `medici
 (22, 89, 'cetamol 2', 'medicine', 20, 50, 50, 60, '2024-07-11 17:30:10', '2030-11-12'),
 (24, 89, 'asdasd', 'asdasdad', 20, 12, 1200, 1300, '2024-07-11 21:48:05', '2030-12-12'),
 (25, 89, 'painkiller 5', 'medicine', 20, 50, 20, 25, '2024-07-12 01:21:19', '2030-12-11'),
-(26, 345, 'tesmedicine', 'tesing', 22, 20, 2000, 3000, '2024-07-12 02:37:00', '2023-12-12');
+(26, 345, 'tesmedicine', 'tesing', 22, 20, 2000, 3000, '2024-07-12 02:37:00', '2023-12-12'),
+(50, 89, 'Paracetamol 500mg', 'Analgesic and antipyretic', 20, 500, 10, 15, '2026-01-01 00:00:00', '2028-12-31'),
+(51, 89, 'Amoxicillin 250mg', 'Antibiotic for bacterial infections', 21, 300, 18, 25, '2026-01-01 00:00:00', '2028-12-31'),
+(52, 89, 'Ibuprofen 400mg', 'Anti-inflammatory pain relief', 20, 200, 14, 20, '2026-01-01 00:00:00', '2028-12-31'),
+(53, 89, 'Vitamin C 500mg', 'Immunity boosting supplement', 20, 400, 22, 30, '2026-01-01 00:00:00', '2028-12-31'),
+(54, 89, 'Metformin 500mg', 'Oral diabetes medication', 20, 150, 12, 18, '2026-01-01 00:00:00', '2028-12-31'),
+(55, 89, 'alu', 'kjbjaskjcbajkbchas cjkas hkac', 20, -20, -100, -200, '2026-05-22 01:49:28', '2026-05-22');
 
 -- --------------------------------------------------------
 
@@ -494,14 +504,14 @@ INSERT INTO `user_medicine_tbl` (`m_id`, `pharmacy_id`, `medicine_name`, `medici
 --
 
 CREATE TABLE `user_orders` (
-  `order_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `medicine_id` int(11) NOT NULL,
-  `invoice_number` int(255) NOT NULL,
-  `total_products` int(255) NOT NULL,
-  `amount` int(255) NOT NULL,
-  `order_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `order_status` varchar(255) NOT NULL
+  `order_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `medicine_id` int NOT NULL,
+  `invoice_number` int NOT NULL,
+  `total_products` int NOT NULL,
+  `amount` int NOT NULL,
+  `order_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `order_status` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -562,13 +572,13 @@ INSERT INTO `user_orders` (`order_id`, `user_id`, `medicine_id`, `invoice_number
 --
 
 CREATE TABLE `user_order_tbl` (
-  `o_id` int(11) NOT NULL,
-  `m_id` int(11) NOT NULL,
-  `pharmacy_id` int(11) NOT NULL,
-  `price` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `total_amount` int(11) NOT NULL,
-  `status` varchar(20) NOT NULL,
+  `o_id` int NOT NULL,
+  `m_id` int NOT NULL,
+  `pharmacy_id` int NOT NULL,
+  `price` int NOT NULL,
+  `quantity` int NOT NULL,
+  `total_amount` int NOT NULL,
+  `status` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
   `order_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -579,7 +589,193 @@ CREATE TABLE `user_order_tbl` (
 INSERT INTO `user_order_tbl` (`o_id`, `m_id`, `pharmacy_id`, `price`, `quantity`, `total_amount`, `status`, `order_date`) VALUES
 (23, 22, 89, 50, 10, 500, 'pending', '2030-11-22'),
 (24, 25, 89, 20, 10, 200, 'pending', '2024-12-07'),
-(25, 26, 345, 2000, 3, 6000, 'completed', '2026-12-12');
+(25, 26, 345, 2000, 3, 6000, 'completed', '2026-12-12'),
+(100, 51, 89, 25, 8, 200, 'pending', '2026-02-21'),
+(101, 50, 89, 15, 7, 105, 'completed', '2026-02-22'),
+(102, 54, 89, 18, 13, 234, 'pending', '2026-02-23'),
+(103, 50, 89, 15, 10, 150, 'pending', '2026-02-23'),
+(104, 53, 89, 30, 8, 240, 'completed', '2026-02-24'),
+(105, 54, 89, 18, 14, 252, 'pending', '2026-02-26'),
+(106, 50, 89, 15, 17, 255, 'completed', '2026-02-27'),
+(107, 52, 89, 20, 25, 500, 'completed', '2026-02-28'),
+(108, 52, 89, 20, 6, 120, 'completed', '2026-03-01'),
+(109, 52, 89, 20, 11, 220, 'pending', '2026-03-02'),
+(110, 53, 89, 30, 25, 750, 'completed', '2026-03-02'),
+(111, 52, 89, 20, 9, 180, 'completed', '2026-03-02'),
+(112, 54, 89, 18, 20, 360, 'completed', '2026-03-03'),
+(113, 53, 89, 30, 24, 720, 'completed', '2026-03-04'),
+(114, 53, 89, 30, 24, 720, 'cancelled', '2026-03-04'),
+(115, 54, 89, 18, 13, 234, 'cancelled', '2026-03-04'),
+(116, 51, 89, 25, 19, 475, 'completed', '2026-03-05'),
+(117, 52, 89, 20, 21, 420, 'pending', '2026-03-05'),
+(118, 51, 89, 25, 9, 225, 'completed', '2026-03-06'),
+(119, 51, 89, 25, 22, 550, 'cancelled', '2026-03-06'),
+(120, 54, 89, 18, 5, 90, 'completed', '2026-03-06'),
+(121, 51, 89, 25, 6, 150, 'completed', '2026-03-07'),
+(122, 54, 89, 18, 7, 126, 'completed', '2026-03-07'),
+(123, 53, 89, 30, 22, 660, 'completed', '2026-03-08'),
+(124, 52, 89, 20, 19, 380, 'cancelled', '2026-03-09'),
+(125, 53, 89, 30, 8, 240, 'completed', '2026-03-09'),
+(126, 50, 89, 15, 15, 225, 'completed', '2026-03-09'),
+(127, 50, 89, 15, 25, 375, 'completed', '2026-03-10'),
+(128, 51, 89, 25, 13, 325, 'pending', '2026-03-11'),
+(129, 51, 89, 25, 22, 550, 'completed', '2026-03-11'),
+(130, 54, 89, 18, 23, 414, 'completed', '2026-03-11'),
+(131, 50, 89, 15, 52, 780, 'completed', '2026-03-12'),
+(132, 50, 89, 15, 47, 705, 'completed', '2026-03-12'),
+(133, 51, 89, 25, 57, 1425, 'pending', '2026-03-12'),
+(134, 51, 89, 25, 53, 1325, 'completed', '2026-03-12'),
+(135, 52, 89, 20, 54, 1080, 'completed', '2026-03-12'),
+(136, 50, 89, 15, 12, 180, 'completed', '2026-03-13'),
+(137, 50, 89, 15, 17, 255, 'completed', '2026-03-14'),
+(138, 53, 89, 30, 14, 420, 'completed', '2026-03-14'),
+(139, 54, 89, 18, 6, 108, 'pending', '2026-03-15'),
+(140, 50, 89, 15, 6, 90, 'completed', '2026-03-15'),
+(141, 54, 89, 18, 21, 378, 'completed', '2026-03-15'),
+(142, 50, 89, 15, 12, 180, 'completed', '2026-03-16'),
+(143, 54, 89, 18, 12, 216, 'completed', '2026-03-16'),
+(144, 50, 89, 15, 24, 360, 'completed', '2026-03-16'),
+(145, 53, 89, 30, 9, 270, 'pending', '2026-03-17'),
+(146, 52, 89, 20, 19, 380, 'completed', '2026-03-17'),
+(147, 54, 89, 18, 11, 198, 'completed', '2026-03-18'),
+(148, 53, 89, 30, 22, 660, 'pending', '2026-03-19'),
+(149, 50, 89, 15, 9, 135, 'completed', '2026-03-20'),
+(150, 50, 89, 15, 22, 330, 'completed', '2026-03-20'),
+(151, 52, 89, 20, 24, 480, 'completed', '2026-03-20'),
+(152, 52, 89, 20, 6, 120, 'completed', '2026-03-21'),
+(153, 53, 89, 30, 13, 390, 'completed', '2026-03-21'),
+(154, 53, 89, 30, 22, 660, 'pending', '2026-03-23'),
+(155, 54, 89, 18, 5, 90, 'completed', '2026-03-23'),
+(156, 51, 89, 25, 22, 550, 'completed', '2026-03-23'),
+(157, 50, 89, 15, 16, 240, 'completed', '2026-03-24'),
+(158, 51, 89, 25, 8, 200, 'completed', '2026-03-24'),
+(159, 53, 89, 30, 5, 150, 'completed', '2026-03-25'),
+(160, 50, 89, 15, 20, 300, 'completed', '2026-03-26'),
+(161, 53, 89, 30, 16, 480, 'completed', '2026-03-26'),
+(162, 52, 89, 20, 13, 260, 'cancelled', '2026-03-27'),
+(163, 52, 89, 20, 16, 320, 'pending', '2026-03-27'),
+(164, 52, 89, 20, 6, 120, 'completed', '2026-03-28'),
+(165, 53, 89, 30, 16, 480, 'pending', '2026-03-28'),
+(166, 52, 89, 20, 18, 360, 'pending', '2026-03-28'),
+(167, 50, 89, 15, 18, 270, 'completed', '2026-03-29'),
+(168, 54, 89, 18, 11, 198, 'completed', '2026-03-29'),
+(169, 53, 89, 30, 15, 450, 'completed', '2026-03-30'),
+(170, 52, 89, 20, 22, 440, 'completed', '2026-03-30'),
+(171, 53, 89, 30, 17, 510, 'pending', '2026-03-30'),
+(172, 51, 89, 25, 18, 450, 'pending', '2026-03-31'),
+(173, 54, 89, 18, 25, 450, 'completed', '2026-03-31'),
+(174, 50, 89, 15, 14, 210, 'completed', '2026-04-01'),
+(175, 54, 89, 18, 15, 270, 'completed', '2026-04-01'),
+(176, 51, 89, 25, 14, 350, 'completed', '2026-04-01'),
+(177, 53, 89, 30, 24, 720, 'pending', '2026-04-02'),
+(178, 51, 89, 25, 9, 225, 'pending', '2026-04-03'),
+(179, 50, 89, 15, 8, 120, 'pending', '2026-04-03'),
+(180, 54, 89, 18, 12, 216, 'cancelled', '2026-04-04'),
+(181, 52, 89, 20, 19, 380, 'pending', '2026-04-05'),
+(182, 54, 89, 18, 18, 324, 'pending', '2026-04-05'),
+(183, 54, 89, 18, 19, 342, 'cancelled', '2026-04-05'),
+(184, 51, 89, 25, 13, 325, 'completed', '2026-04-06'),
+(185, 52, 89, 20, 12, 240, 'completed', '2026-04-06'),
+(186, 51, 89, 25, 7, 175, 'completed', '2026-04-07'),
+(187, 52, 89, 20, 22, 440, 'completed', '2026-04-07'),
+(188, 50, 89, 15, 11, 165, 'pending', '2026-04-07'),
+(189, 53, 89, 30, 22, 660, 'pending', '2026-04-08'),
+(190, 54, 89, 18, 24, 432, 'cancelled', '2026-04-08'),
+(191, 50, 89, 15, 17, 255, 'completed', '2026-04-09'),
+(192, 53, 89, 30, 10, 300, 'pending', '2026-04-09'),
+(193, 53, 89, 30, 10, 300, 'completed', '2026-04-10'),
+(194, 54, 89, 18, 41, 738, 'completed', '2026-04-11'),
+(195, 51, 89, 25, 60, 1500, 'completed', '2026-04-11'),
+(196, 50, 89, 15, 40, 600, 'completed', '2026-04-11'),
+(197, 51, 89, 25, 40, 1000, 'completed', '2026-04-11'),
+(198, 51, 89, 25, 44, 1100, 'pending', '2026-04-11'),
+(199, 52, 89, 20, 8, 160, 'completed', '2026-04-12'),
+(200, 52, 89, 20, 24, 480, 'pending', '2026-04-13'),
+(201, 52, 89, 20, 7, 140, 'completed', '2026-04-14'),
+(202, 52, 89, 20, 5, 100, 'pending', '2026-04-14'),
+(203, 53, 89, 30, 9, 270, 'completed', '2026-04-15'),
+(204, 54, 89, 18, 25, 450, 'completed', '2026-04-15'),
+(205, 54, 89, 18, 20, 360, 'completed', '2026-04-15'),
+(206, 53, 89, 30, 23, 690, 'pending', '2026-04-16'),
+(207, 51, 89, 25, 16, 400, 'pending', '2026-04-17'),
+(208, 52, 89, 20, 13, 260, 'cancelled', '2026-04-17'),
+(209, 54, 89, 18, 12, 216, 'pending', '2026-04-18'),
+(210, 53, 89, 30, 19, 570, 'pending', '2026-04-18'),
+(211, 54, 89, 18, 16, 288, 'completed', '2026-04-19'),
+(212, 54, 89, 18, 16, 288, 'completed', '2026-04-19'),
+(213, 54, 89, 18, 15, 270, 'completed', '2026-04-19'),
+(214, 51, 89, 25, 15, 375, 'completed', '2026-04-20'),
+(215, 54, 89, 18, 10, 180, 'completed', '2026-04-20'),
+(216, 53, 89, 30, 13, 390, 'pending', '2026-04-20'),
+(217, 52, 89, 20, 5, 100, 'pending', '2026-04-22'),
+(218, 51, 89, 25, 25, 625, 'cancelled', '2026-04-23'),
+(219, 53, 89, 30, 8, 240, 'cancelled', '2026-04-23'),
+(220, 54, 89, 18, 14, 252, 'completed', '2026-04-23'),
+(221, 50, 89, 15, 17, 255, 'completed', '2026-04-24'),
+(222, 54, 89, 18, 18, 324, 'pending', '2026-04-25'),
+(223, 54, 89, 18, 24, 432, 'completed', '2026-04-26'),
+(224, 50, 89, 15, 11, 165, 'pending', '2026-04-26'),
+(225, 50, 89, 15, 18, 270, 'completed', '2026-04-27'),
+(226, 53, 89, 30, 7, 210, 'pending', '2026-04-28'),
+(227, 52, 89, 20, 25, 500, 'completed', '2026-04-28'),
+(228, 51, 89, 25, 18, 450, 'completed', '2026-04-28'),
+(229, 54, 89, 18, 23, 414, 'cancelled', '2026-04-29'),
+(230, 53, 89, 30, 8, 240, 'completed', '2026-04-29'),
+(231, 54, 89, 18, 6, 108, 'cancelled', '2026-04-30'),
+(232, 52, 89, 20, 23, 460, 'completed', '2026-05-01'),
+(233, 51, 89, 25, 20, 500, 'completed', '2026-05-01'),
+(234, 53, 89, 30, 13, 390, 'completed', '2026-05-01'),
+(235, 52, 89, 20, 15, 300, 'pending', '2026-05-02'),
+(236, 51, 89, 25, 15, 375, 'completed', '2026-05-02'),
+(237, 52, 89, 20, 13, 260, 'completed', '2026-05-03'),
+(238, 52, 89, 20, 24, 480, 'pending', '2026-05-04'),
+(239, 53, 89, 30, 6, 180, 'completed', '2026-05-04'),
+(240, 54, 89, 18, 9, 162, 'cancelled', '2026-05-04'),
+(241, 50, 89, 15, 22, 330, 'completed', '2026-05-05'),
+(242, 51, 89, 25, 8, 200, 'completed', '2026-05-05'),
+(243, 50, 89, 15, 25, 375, 'pending', '2026-05-05'),
+(244, 53, 89, 30, 22, 660, 'completed', '2026-05-06'),
+(245, 52, 89, 20, 5, 100, 'completed', '2026-05-07'),
+(246, 52, 89, 20, 23, 460, 'completed', '2026-05-07'),
+(247, 53, 89, 30, 9, 270, 'completed', '2026-05-07'),
+(248, 52, 89, 20, 11, 220, 'cancelled', '2026-05-08'),
+(249, 51, 89, 25, 23, 575, 'completed', '2026-05-08'),
+(250, 53, 89, 30, 17, 510, 'cancelled', '2026-05-09'),
+(251, 51, 89, 25, 20, 500, 'cancelled', '2026-05-09'),
+(252, 51, 89, 25, 21, 525, 'cancelled', '2026-05-09'),
+(253, 52, 89, 20, 59, 1180, 'pending', '2026-05-10'),
+(254, 50, 89, 15, 50, 750, 'pending', '2026-05-10'),
+(255, 52, 89, 20, 60, 1200, 'pending', '2026-05-10'),
+(256, 54, 89, 18, 41, 738, 'completed', '2026-05-10'),
+(257, 51, 89, 25, 60, 1500, 'completed', '2026-05-10'),
+(258, 51, 89, 25, 42, 1050, 'pending', '2026-05-10'),
+(259, 50, 89, 15, 60, 900, 'completed', '2026-05-10'),
+(260, 52, 89, 20, 6, 120, 'completed', '2026-05-11'),
+(261, 51, 89, 25, 10, 250, 'completed', '2026-05-12'),
+(262, 54, 89, 18, 17, 306, 'pending', '2026-05-12'),
+(263, 51, 89, 25, 20, 500, 'cancelled', '2026-05-12'),
+(264, 52, 89, 20, 5, 100, 'cancelled', '2026-05-13'),
+(265, 53, 89, 30, 14, 420, 'pending', '2026-05-13'),
+(266, 52, 89, 20, 25, 500, 'cancelled', '2026-05-14'),
+(267, 52, 89, 20, 19, 380, 'pending', '2026-05-14'),
+(268, 51, 89, 25, 17, 425, 'cancelled', '2026-05-14'),
+(269, 52, 89, 20, 14, 280, 'completed', '2026-05-15'),
+(270, 53, 89, 30, 13, 390, 'completed', '2026-05-15'),
+(271, 50, 89, 15, 24, 360, 'pending', '2026-05-15'),
+(272, 51, 89, 25, 24, 600, 'completed', '2026-05-16'),
+(273, 51, 89, 25, 7, 175, 'cancelled', '2026-05-17'),
+(274, 52, 89, 20, 18, 360, 'completed', '2026-05-17'),
+(275, 51, 89, 25, 22, 550, 'cancelled', '2026-05-17'),
+(276, 52, 89, 20, 8, 160, 'completed', '2026-05-18'),
+(277, 50, 89, 15, 9, 135, 'pending', '2026-05-18'),
+(278, 51, 89, 25, 17, 425, 'cancelled', '2026-05-18'),
+(279, 50, 89, 15, 19, 285, 'completed', '2026-05-19'),
+(280, 52, 89, 20, 23, 460, 'completed', '2026-05-19'),
+(281, 52, 89, 20, 8, 160, 'pending', '2026-05-19'),
+(282, 54, 89, 18, 12, 216, 'pending', '2026-05-20'),
+(283, 53, 89, 30, 14, 420, 'pending', '2026-05-20'),
+(284, 53, 89, 30, 8, 240, 'completed', '2026-05-21'),
+(285, 54, 89, 18, 9, 162, 'completed', '2026-05-21');
 
 -- --------------------------------------------------------
 
@@ -588,13 +784,13 @@ INSERT INTO `user_order_tbl` (`o_id`, `m_id`, `pharmacy_id`, `price`, `quantity`
 --
 
 CREATE TABLE `user_sales_tbl` (
-  `s_id` int(11) NOT NULL,
-  `m_id` int(11) NOT NULL,
-  `pharmacy_id` int(11) NOT NULL,
-  `price` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `total_amount` int(11) NOT NULL,
-  `status` varchar(20) NOT NULL,
+  `s_id` int NOT NULL,
+  `m_id` int NOT NULL,
+  `pharmacy_id` int NOT NULL,
+  `price` int NOT NULL,
+  `quantity` int NOT NULL,
+  `total_amount` int NOT NULL,
+  `status` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
   `sales_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -641,7 +837,197 @@ INSERT INTO `user_sales_tbl` (`s_id`, `m_id`, `pharmacy_id`, `price`, `quantity`
 (44, 22, 89, 60, 22, 1320, 'completed', '2025-03-15'),
 (45, 24, 89, 1300, 2, 2600, 'completed', '2025-03-20'),
 (46, 25, 89, 25, 38, 950, 'completed', '2025-03-25'),
-(47, 22, 89, 60, 25, 1500, 'completed', '2025-04-01');
+(47, 22, 89, 60, 25, 1500, 'completed', '2025-04-01'),
+(100, 52, 89, 20, 42, 840, 'completed', '2026-02-21'),
+(101, 54, 89, 18, 64, 1152, 'completed', '2026-02-22'),
+(102, 50, 89, 15, 23, 345, 'completed', '2026-02-23'),
+(103, 51, 89, 25, 15, 375, 'completed', '2026-02-23'),
+(104, 53, 89, 30, 8, 240, 'completed', '2026-02-23'),
+(105, 51, 89, 25, 14, 350, 'completed', '2026-02-24'),
+(106, 52, 89, 20, 16, 320, 'completed', '2026-02-24'),
+(107, 52, 89, 20, 9, 180, 'completed', '2026-02-26'),
+(108, 53, 89, 30, 12, 360, 'completed', '2026-02-26'),
+(109, 50, 89, 15, 19, 285, 'completed', '2026-02-26'),
+(110, 51, 89, 25, 7, 175, 'completed', '2026-02-27'),
+(111, 50, 89, 15, 17, 255, 'completed', '2026-02-27'),
+(112, 52, 89, 20, 10, 200, 'completed', '2026-02-27'),
+(113, 52, 89, 20, 53, 1060, 'completed', '2026-02-28'),
+(114, 51, 89, 25, 10, 250, 'completed', '2026-03-01'),
+(115, 53, 89, 30, 12, 360, 'completed', '2026-03-01'),
+(116, 52, 89, 20, 19, 380, 'completed', '2026-03-01'),
+(117, 53, 89, 30, 10, 300, 'completed', '2026-03-02'),
+(118, 50, 89, 15, 20, 300, 'completed', '2026-03-02'),
+(119, 52, 89, 20, 17, 340, 'completed', '2026-03-03'),
+(120, 54, 89, 18, 19, 342, 'completed', '2026-03-03'),
+(121, 52, 89, 20, 14, 280, 'completed', '2026-03-03'),
+(122, 51, 89, 25, 24, 600, 'completed', '2026-03-04'),
+(123, 50, 89, 15, 18, 270, 'completed', '2026-03-05'),
+(124, 52, 89, 20, 11, 220, 'completed', '2026-03-05'),
+(125, 50, 89, 15, 14, 210, 'completed', '2026-03-05'),
+(126, 52, 89, 20, 50, 1000, 'completed', '2026-03-06'),
+(127, 50, 89, 15, 78, 1170, 'completed', '2026-03-07'),
+(128, 54, 89, 18, 63, 1134, 'completed', '2026-03-08'),
+(129, 53, 89, 30, 9, 270, 'completed', '2026-03-09'),
+(130, 54, 89, 18, 16, 288, 'completed', '2026-03-09'),
+(131, 52, 89, 20, 18, 360, 'completed', '2026-03-09'),
+(132, 54, 89, 18, 53, 954, 'completed', '2026-03-10'),
+(133, 52, 89, 20, 32, 640, 'completed', '2026-03-11'),
+(134, 53, 89, 30, 46, 1380, 'completed', '2026-03-12'),
+(135, 50, 89, 15, 43, 645, 'completed', '2026-03-12'),
+(136, 53, 89, 30, 51, 1530, 'completed', '2026-03-12'),
+(137, 53, 89, 30, 53, 1590, 'completed', '2026-03-12'),
+(138, 53, 89, 30, 63, 1890, 'completed', '2026-03-12'),
+(139, 50, 89, 15, 61, 915, 'completed', '2026-03-12'),
+(140, 54, 89, 18, 16, 288, 'completed', '2026-03-13'),
+(141, 50, 89, 15, 27, 405, 'completed', '2026-03-13'),
+(142, 51, 89, 25, 26, 650, 'completed', '2026-03-14'),
+(143, 50, 89, 15, 38, 570, 'completed', '2026-03-14'),
+(144, 53, 89, 30, 11, 330, 'completed', '2026-03-15'),
+(145, 51, 89, 25, 16, 400, 'completed', '2026-03-15'),
+(146, 51, 89, 25, 12, 300, 'completed', '2026-03-15'),
+(147, 51, 89, 25, 36, 900, 'completed', '2026-03-16'),
+(148, 54, 89, 18, 20, 360, 'completed', '2026-03-17'),
+(149, 52, 89, 20, 16, 320, 'completed', '2026-03-17'),
+(150, 52, 89, 20, 16, 320, 'completed', '2026-03-17'),
+(151, 53, 89, 30, 21, 630, 'completed', '2026-03-18'),
+(152, 50, 89, 15, 25, 375, 'completed', '2026-03-19'),
+(153, 52, 89, 20, 19, 380, 'completed', '2026-03-19'),
+(154, 54, 89, 18, 56, 1008, 'completed', '2026-03-20'),
+(155, 52, 89, 20, 61, 1220, 'completed', '2026-03-21'),
+(156, 52, 89, 20, 44, 880, 'completed', '2026-03-23'),
+(157, 54, 89, 18, 15, 270, 'completed', '2026-03-24'),
+(158, 53, 89, 30, 8, 240, 'completed', '2026-03-24'),
+(159, 50, 89, 15, 21, 315, 'completed', '2026-03-24'),
+(160, 54, 89, 18, 27, 486, 'completed', '2026-03-25'),
+(161, 51, 89, 25, 19, 475, 'completed', '2026-03-25'),
+(162, 51, 89, 25, 18, 450, 'completed', '2026-03-26'),
+(163, 51, 89, 25, 15, 375, 'completed', '2026-03-26'),
+(164, 50, 89, 15, 57, 855, 'completed', '2026-03-27'),
+(165, 54, 89, 18, 23, 414, 'completed', '2026-03-28'),
+(166, 50, 89, 15, 24, 360, 'completed', '2026-03-28'),
+(167, 52, 89, 20, 18, 360, 'completed', '2026-03-28'),
+(168, 53, 89, 30, 42, 1260, 'completed', '2026-03-29'),
+(169, 52, 89, 20, 14, 280, 'completed', '2026-03-30'),
+(170, 50, 89, 15, 17, 255, 'completed', '2026-03-30'),
+(171, 54, 89, 18, 14, 252, 'completed', '2026-03-30'),
+(172, 54, 89, 18, 16, 288, 'completed', '2026-03-31'),
+(173, 53, 89, 30, 13, 390, 'completed', '2026-03-31'),
+(174, 50, 89, 15, 19, 285, 'completed', '2026-03-31'),
+(175, 51, 89, 25, 24, 600, 'completed', '2026-04-01'),
+(176, 53, 89, 30, 15, 450, 'completed', '2026-04-01'),
+(177, 50, 89, 15, 55, 825, 'completed', '2026-04-02'),
+(178, 53, 89, 30, 12, 360, 'completed', '2026-04-03'),
+(179, 53, 89, 30, 16, 480, 'completed', '2026-04-03'),
+(180, 54, 89, 18, 67, 1206, 'completed', '2026-04-04'),
+(181, 51, 89, 25, 25, 625, 'completed', '2026-04-05'),
+(182, 54, 89, 18, 34, 612, 'completed', '2026-04-05'),
+(183, 52, 89, 20, 26, 520, 'completed', '2026-04-06'),
+(184, 52, 89, 20, 31, 620, 'completed', '2026-04-06'),
+(185, 50, 89, 15, 20, 300, 'completed', '2026-04-07'),
+(186, 51, 89, 25, 12, 300, 'completed', '2026-04-07'),
+(187, 53, 89, 30, 9, 270, 'completed', '2026-04-07'),
+(188, 50, 89, 15, 25, 375, 'completed', '2026-04-08'),
+(189, 53, 89, 30, 7, 210, 'completed', '2026-04-08'),
+(190, 52, 89, 20, 17, 340, 'completed', '2026-04-08'),
+(191, 52, 89, 20, 57, 1140, 'completed', '2026-04-09'),
+(192, 54, 89, 18, 12, 216, 'completed', '2026-04-10'),
+(193, 53, 89, 30, 5, 150, 'completed', '2026-04-10'),
+(194, 50, 89, 15, 21, 315, 'completed', '2026-04-10'),
+(195, 52, 89, 20, 46, 920, 'completed', '2026-04-11'),
+(196, 53, 89, 30, 50, 1500, 'completed', '2026-04-11'),
+(197, 52, 89, 20, 64, 1280, 'completed', '2026-04-11'),
+(198, 53, 89, 30, 48, 1440, 'completed', '2026-04-11'),
+(199, 53, 89, 30, 48, 1440, 'completed', '2026-04-11'),
+(200, 50, 89, 15, 55, 825, 'completed', '2026-04-11'),
+(201, 51, 89, 25, 18, 450, 'completed', '2026-04-12'),
+(202, 52, 89, 20, 19, 380, 'completed', '2026-04-12'),
+(203, 51, 89, 25, 12, 300, 'completed', '2026-04-12'),
+(204, 53, 89, 30, 13, 390, 'completed', '2026-04-13'),
+(205, 51, 89, 25, 10, 250, 'completed', '2026-04-13'),
+(206, 54, 89, 18, 17, 306, 'completed', '2026-04-13'),
+(207, 52, 89, 20, 63, 1260, 'completed', '2026-04-14'),
+(208, 53, 89, 30, 38, 1140, 'completed', '2026-04-15'),
+(209, 51, 89, 25, 17, 425, 'completed', '2026-04-16'),
+(210, 52, 89, 20, 28, 560, 'completed', '2026-04-16'),
+(211, 50, 89, 15, 39, 585, 'completed', '2026-04-17'),
+(212, 52, 89, 20, 25, 500, 'completed', '2026-04-17'),
+(213, 50, 89, 15, 32, 480, 'completed', '2026-04-18'),
+(214, 51, 89, 25, 13, 325, 'completed', '2026-04-18'),
+(215, 51, 89, 25, 18, 450, 'completed', '2026-04-18'),
+(216, 51, 89, 25, 25, 625, 'completed', '2026-04-19'),
+(217, 51, 89, 25, 23, 575, 'completed', '2026-04-19'),
+(218, 52, 89, 20, 28, 560, 'completed', '2026-04-20'),
+(219, 51, 89, 25, 19, 475, 'completed', '2026-04-20'),
+(220, 52, 89, 20, 16, 320, 'completed', '2026-04-22'),
+(221, 51, 89, 25, 15, 375, 'completed', '2026-04-22'),
+(222, 51, 89, 25, 16, 400, 'completed', '2026-04-22'),
+(223, 50, 89, 15, 28, 420, 'completed', '2026-04-23'),
+(224, 54, 89, 18, 26, 468, 'completed', '2026-04-23'),
+(225, 51, 89, 25, 19, 475, 'completed', '2026-04-24'),
+(226, 52, 89, 20, 31, 620, 'completed', '2026-04-24'),
+(227, 50, 89, 15, 30, 450, 'completed', '2026-04-25'),
+(228, 51, 89, 25, 19, 475, 'completed', '2026-04-25'),
+(229, 50, 89, 15, 31, 465, 'completed', '2026-04-25'),
+(230, 53, 89, 30, 17, 510, 'completed', '2026-04-26'),
+(231, 53, 89, 30, 14, 420, 'completed', '2026-04-26'),
+(232, 54, 89, 18, 25, 450, 'completed', '2026-04-26'),
+(233, 50, 89, 15, 21, 315, 'completed', '2026-04-27'),
+(234, 51, 89, 25, 12, 300, 'completed', '2026-04-27'),
+(235, 54, 89, 18, 16, 288, 'completed', '2026-04-27'),
+(236, 50, 89, 15, 38, 570, 'completed', '2026-04-28'),
+(237, 52, 89, 20, 29, 580, 'completed', '2026-04-28'),
+(238, 51, 89, 25, 14, 350, 'completed', '2026-04-29'),
+(239, 51, 89, 25, 11, 275, 'completed', '2026-04-29'),
+(240, 50, 89, 15, 21, 315, 'completed', '2026-04-29'),
+(241, 53, 89, 30, 12, 360, 'completed', '2026-04-30'),
+(242, 54, 89, 18, 24, 432, 'completed', '2026-04-30'),
+(243, 53, 89, 30, 15, 450, 'completed', '2026-04-30'),
+(244, 52, 89, 20, 14, 280, 'completed', '2026-05-01'),
+(245, 50, 89, 15, 23, 345, 'completed', '2026-05-01'),
+(246, 54, 89, 18, 16, 288, 'completed', '2026-05-01'),
+(247, 53, 89, 30, 22, 660, 'completed', '2026-05-02'),
+(248, 53, 89, 30, 26, 780, 'completed', '2026-05-02'),
+(249, 53, 89, 30, 28, 840, 'completed', '2026-05-03'),
+(250, 50, 89, 15, 52, 780, 'completed', '2026-05-03'),
+(251, 50, 89, 15, 30, 450, 'completed', '2026-05-04'),
+(252, 53, 89, 30, 15, 450, 'completed', '2026-05-04'),
+(253, 50, 89, 15, 25, 375, 'completed', '2026-05-04'),
+(254, 53, 89, 30, 10, 300, 'completed', '2026-05-05'),
+(255, 50, 89, 15, 25, 375, 'completed', '2026-05-05'),
+(256, 51, 89, 25, 16, 400, 'completed', '2026-05-05'),
+(257, 52, 89, 20, 24, 480, 'completed', '2026-05-06'),
+(258, 52, 89, 20, 22, 440, 'completed', '2026-05-06'),
+(259, 53, 89, 30, 16, 480, 'completed', '2026-05-06'),
+(260, 54, 89, 18, 17, 306, 'completed', '2026-05-07'),
+(261, 50, 89, 15, 23, 345, 'completed', '2026-05-07'),
+(262, 53, 89, 30, 12, 360, 'completed', '2026-05-07'),
+(263, 52, 89, 20, 35, 700, 'completed', '2026-05-08'),
+(264, 54, 89, 18, 36, 648, 'completed', '2026-05-08'),
+(265, 52, 89, 20, 75, 1500, 'completed', '2026-05-09'),
+(266, 50, 89, 15, 54, 810, 'completed', '2026-05-10'),
+(267, 50, 89, 15, 56, 840, 'completed', '2026-05-10'),
+(268, 53, 89, 30, 40, 1200, 'completed', '2026-05-10'),
+(269, 51, 89, 25, 53, 1325, 'completed', '2026-05-10'),
+(270, 51, 89, 25, 42, 1050, 'completed', '2026-05-10'),
+(271, 53, 89, 30, 65, 1950, 'completed', '2026-05-10'),
+(272, 52, 89, 20, 58, 1160, 'completed', '2026-05-11'),
+(273, 51, 89, 25, 23, 575, 'completed', '2026-05-12'),
+(274, 54, 89, 18, 35, 630, 'completed', '2026-05-12'),
+(275, 53, 89, 30, 35, 1050, 'completed', '2026-05-13'),
+(276, 53, 89, 30, 37, 1110, 'completed', '2026-05-14'),
+(277, 53, 89, 30, 36, 1080, 'completed', '2026-05-15'),
+(278, 54, 89, 18, 79, 1422, 'completed', '2026-05-16'),
+(279, 50, 89, 15, 25, 375, 'completed', '2026-05-17'),
+(280, 52, 89, 20, 25, 500, 'completed', '2026-05-17'),
+(281, 50, 89, 15, 30, 450, 'completed', '2026-05-17'),
+(282, 54, 89, 18, 22, 396, 'completed', '2026-05-18'),
+(283, 51, 89, 25, 16, 400, 'completed', '2026-05-18'),
+(284, 53, 89, 30, 13, 390, 'completed', '2026-05-18'),
+(285, 50, 89, 15, 47, 705, 'completed', '2026-05-19'),
+(286, 50, 89, 15, 45, 675, 'completed', '2026-05-19'),
+(287, 54, 89, 18, 77, 1386, 'completed', '2026-05-20'),
+(288, 50, 89, 15, 69, 1035, 'completed', '2026-05-21'),
+(289, 25, 89, 25, 25, 625, 'pending', '2026-05-22');
 
 --
 -- Indexes for dumped tables
@@ -758,55 +1144,55 @@ ALTER TABLE `user_sales_tbl`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `medicine_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `medicine_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=347;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=349;
 
 --
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tbl_medicine`
 --
 ALTER TABLE `tbl_medicine`
-  MODIFY `medicine_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `medicine_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT for table `user_category_tbl`
 --
 ALTER TABLE `user_category_tbl`
-  MODIFY `c_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `c_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `user_medicine_tbl`
 --
 ALTER TABLE `user_medicine_tbl`
-  MODIFY `m_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `m_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `user_orders`
 --
 ALTER TABLE `user_orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96257;
+  MODIFY `order_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96257;
 
 --
 -- AUTO_INCREMENT for table `user_order_tbl`
 --
 ALTER TABLE `user_order_tbl`
-  MODIFY `o_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `o_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=286;
 
 --
 -- AUTO_INCREMENT for table `user_sales_tbl`
 --
 ALTER TABLE `user_sales_tbl`
-  MODIFY `s_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `s_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=290;
 
 --
 -- Constraints for dumped tables
@@ -816,7 +1202,7 @@ ALTER TABLE `user_sales_tbl`
 -- Constraints for table `cart`
 --
 ALTER TABLE `cart`
-  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`medicine_id`) REFERENCES `tbl_medicine` (`medicine_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`medicine_id`) REFERENCES `tbl_medicine` (`medicine_id`),
   ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`pharmacy_id`) REFERENCES `tbl_pharmacy` (`pharmacy_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
