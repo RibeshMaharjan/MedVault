@@ -6,158 +6,133 @@ All diagrams are verified against the actual codebase at commit time. Every clas
 
 ## 1. Class Diagram
 
-Eight concrete models extend the abstract `App\Core\Model`. All persistence uses PDO prepared statements through the base class.
+Eight entities mapped to their database tables. Each entity lists its columns and FK navigation methods. Relationships are modeled at the bottom.
 
 ```plantuml
 @startuml
-skinparam class {
-    BackgroundColor #F0F8FF
-    BorderColor #2C3E50
-    ArrowColor #2C3E50
-}
 skinparam classAttributeIconSize 0
 top to bottom direction
 
-package "Framework Core" {
-    abstract class Model {
-        {abstract}
-        # string table
-        # string primaryKey
-        # PDO db
-        + __construct()
-        + findAll(conditions, params) : array
-        + findById(id, idCol) : ?array
-        + findAllBy(col, value) : array
-        + findOneBy(col, value) : ?array
-        + count(conditions, params) : int
-        + insert(data) : int
-        + update(id, data, idCol) : bool
-        + delete(id, idCol) : bool
-        + paginate(page, perPage, conditions, params) : array
-        # query(sql, params) : PDOStatement
-    }
+class User {
+    +user_id: int PK
+    +name: varchar(100)
+    +email: varchar(50)
+    +password: varchar(255)
+    +role: varchar(10)
+    +pharmacy()
+    +admin()
 }
 
-package "Identity & Access" {
-    class User {
-        # table = "role"
-        # primaryKey = "user_id"
-        + findByEmail(email) : ?array
-        + create(name, email, passwordHash, role) : int
-    }
-
-    class Pharmacy {
-        # table = "tbl_pharmacy"
-        # primaryKey = "pharmacy_id"
-        + createMinimal(pharmacyId, name, email) : bool
-    }
-
-    class Admin {
-        # table = "tbl_admin"
-        # primaryKey = "admin_id"
-    }
+class Pharmacy {
+    +pharmacy_id: int PK FK
+    +pan: int
+    +pharmacy_name: varchar(100)
+    +email: varchar(50)
+    +phone: varchar(10)
+    +address: varchar(50)
+    +isverified: tinyint
+    +verification_request_date: datetime
+    +verification_date: datetime
+    +license_number: varchar(100)
+    +reg_document: varchar(255)
+    +verification_notes: text
+    +created_at: datetime
+    +user()
+    +categories()
+    +medicines()
+    +orders()
+    +sales()
 }
 
-package "Inventory" {
-    class Category {
-        # table = "user_category_tbl"
-        # primaryKey = "c_id"
-        + findByPharmacy(pharmacyId) : array
-        + create(pharmacyId, name) : int
-        + hasMedicines(categoryId) : int
-    }
-
-    class UserMedicine {
-        # table = "user_medicine_tbl"
-        # primaryKey = "m_id"
-        + findByPharmacy(pharmacyId, conditions, params) : array
-        + paginateByPharmacy(pharmacyId, page, perPage ...) : array
-        + countByPharmacy(pharmacyId, conditions, params) : int
-        + create(data) : int
-        + search(pharmacyId, term, limit) : array
-        + updateStock(id, quantityChange) : bool
-        + getCategoryDistribution(pharmacyId) : array
-        + getLowStock(pharmacyId, threshold) : array
-        + getRecentActivities(pharmacyId, limit) : array
-        + hasRelatedRecords(medicineId) : array
-    }
+class Admin {
+    +admin_id: int PK FK
+    +name: varchar(100)
+    +email: varchar(50)
+    +gender: varchar(10)
+    +phone: varchar(10)
+    +dob: date
+    +address: varchar(50)
+    +user()
 }
 
-package "Transactions" {
-    class Order {
-        # table = "user_order_tbl"
-        # primaryKey = "o_id"
-        + findByPharmacy(pharmacyId, conditions, params) : array
-        + paginateByPharmacy(pharmacyId, page, perPage ...) : array
-        + findByIdAndPharmacy(orderId, pharmacyId) : ?array
-        + deleteByPharmacy(orderId, pharmacyId) : bool
-        + updateByPharmacy(orderId, pharmacyId, data) : bool
-        + getDailyOrders(pharmacyId, start, end) : array
-        + getStatusDistribution(pharmacyId, start, end) : array
-        + getStats(pharmacyId, start, end) : array
-        + getTopOrdered(pharmacyId, start, end, limit) : array
-        + getRecentOrders(pharmacyId, limit) : array
-    }
-
-    class Sale {
-        # table = "user_sales_tbl"
-        # primaryKey = "s_id"
-        + paginateByPharmacy(pharmacyId, page, perPage ...) : array
-        + findByIdAndPharmacy(saleId, pharmacyId) : ?array
-        + deleteByPharmacy(saleId, pharmacyId) : bool
-        + updateByPharmacy(saleId, pharmacyId, data) : bool
-        + getSalesData(pharmacyId, start, end) : array
-    }
+class Category {
+    +c_id: int PK
+    +pharmacy_id: int FK
+    +category_name: varchar(30)
+    +pharmacy()
+    +medicines()
 }
 
-package "System" {
-    class Setting {
-        # table = "settings"
-        # primaryKey = "id"
-    }
+class UserMedicine {
+    +m_id: int PK
+    +pharmacy_id: int FK
+    +medicine_name: varchar(100)
+    +medicine_desc: varchar(1000)
+    +c_id: int FK
+    +in_stock: int
+    +buy_price: int
+    +sell_price: int
+    +added_date: timestamp
+    +exp_date: date
+    +pharmacy()
+    +category()
+    +orders()
+    +sales()
 }
 
-' Inheritance
-User --|> Model
-Pharmacy --|> Model
-Admin --|> Model
-Category --|> Model
-UserMedicine --|> Model
-Order --|> Model
-Sale --|> Model
-Setting --|> Model
+class Order {
+    +o_id: int PK
+    +m_id: int FK
+    +pharmacy_id: int FK
+    +price: int
+    +quantity: int
+    +total_amount: int
+    +status: varchar(20)
+    +order_date: date
+    +medicine()
+    +pharmacy()
+}
 
-' Relationships
-User "1" --> "0..1" Pharmacy : owns profile
-User "1" --> "0..1" Admin : owns profile
-Pharmacy "1" *-- "0..*" Category : has
-Pharmacy "1" *-- "0..*" UserMedicine : stocks
-Pharmacy "1" *-- "0..*" Order : places
-Pharmacy "1" *-- "0..*" Sale : records
-Category "1" o-- "0..*" UserMedicine : classifies
-UserMedicine "1" --> "0..*" Order : line_item
-UserMedicine "1" --> "0..*" Sale : line_item
+class Sale {
+    +s_id: int PK
+    +m_id: int FK
+    +pharmacy_id: int FK
+    +price: int
+    +quantity: int
+    +total_amount: int
+    +status: varchar(20)
+    +sales_date: date
+    +medicine()
+    +pharmacy()
+}
+
+class Setting {
+    +id: int PK
+    +title: varchar(255)
+    +small_description: text
+    +sub_title: varchar(255)
+    +sub_description: text
+    +phone: varchar(10)
+    +email: varchar(50)
+}
+
+User "1" --> "0..1" Pharmacy : owns
+User "1" --> "0..1" Admin : owns
+Pharmacy "1" --> "*" Category : has
+Pharmacy "1" --> "*" UserMedicine : stocks
+Pharmacy "1" --> "*" Order : places
+Pharmacy "1" --> "*" Sale : records
+Category "1" --> "*" UserMedicine : classifies
+UserMedicine "1" --> "*" Order : line_item
+UserMedicine "1" --> "*" Sale : line_item
 @enduml
 ```
-
-### Database Table Details
-
-| Model | Table | PK | FK Column | References |
-|-------|-------|----|-----------|------------|
-| `User` | `role` | `user_id` | — | — |
-| `Pharmacy` | `tbl_pharmacy` | `pharmacy_id` | `pharmacy_id` | `role.user_id` |
-| `Admin` | `tbl_admin` | `admin_id` | `admin_id` | `role.user_id` |
-| `Category` | `user_category_tbl` | `c_id` | `pharmacy_id` | `role.user_id` |
-| `UserMedicine` | `user_medicine_tbl` | `m_id` | `pharmacy_id`, `c_id` | `role.user_id`, `user_category_tbl.c_id` |
-| `Order` | `user_order_tbl` | `o_id` | `m_id`, `pharmacy_id` | `user_medicine_tbl.m_id`, `role.user_id` |
-| `Sale` | `user_sales_tbl` | `s_id` | `m_id`, `pharmacy_id` | `user_medicine_tbl.m_id`, `role.user_id` |
-| `Setting` | `settings` | `id` | — | — |
 
 ---
 
 ## 2. Object Diagram
 
-Snapshot of pharmacy `user_id = 89` (from sample data). Shows category `tablets`, two medicines, one pending order, one completed sale.
+Snapshot of pharmacy `user_id = 89` from `pharmacy.sql`. Shows one category (`tablets`), two medicines, one pending order, and one completed sale.
 
 ```plantuml
 @startuml
@@ -171,7 +146,7 @@ top to bottom direction
 package "User & Pharmacy" {
     object "user_89: User" as user {
         user_id = 89
-        name = "city pharmacy"
+        name = "Pharmacy"
         email = "pharmacy@gmail.com"
         role = "user"
     }
@@ -181,6 +156,10 @@ package "User & Pharmacy" {
         pan = 987456
         pharmacy_name = "city pharmacy"
         email = "pharmacy@gmail.com"
+        isverified = 0
+        verification_request_date = null
+        license_number = null
+        reg_document = null
     }
 }
 
@@ -216,10 +195,10 @@ package "Transactions" {
     object "order_100: Order" as order {
         o_id = 100
         pharmacy_id = 89
-        m_id = 51
-        price = 25
-        quantity = 8
-        total_amount = 200
+        m_id = 50
+        price = 15
+        quantity = 10
+        total_amount = 150
         status = "pending"
         order_date = "2026-02-21"
     }
@@ -227,10 +206,10 @@ package "Transactions" {
     object "sale_100: Sale" as sale {
         s_id = 100
         pharmacy_id = 89
-        m_id = 52
-        price = 20
-        quantity = 42
-        total_amount = 840
+        m_id = 22
+        price = 60
+        quantity = 10
+        total_amount = 600
         status = "completed"
         sales_date = "2026-02-21"
     }
@@ -249,11 +228,9 @@ med22 ..> sale : sold_as
 
 ---
 
-## 3. State Transition Diagrams
+## 3. Combined State Transition Diagrams
 
-### Order Lifecycle
-
-Based on `OrderController@store` (inserts pending, deducts stock) and `OrderController@update` (status transitions with stock side-effects).
+Single navigable state machine covering the full application flow: authentication, role-based dashboard navigation, per-feature CRUD operations, and business-object lifecycles with stock side-effects.
 
 ```plantuml
 @startuml
@@ -261,113 +238,101 @@ skinparam state {
     BackgroundColor #F0F8FF
     BorderColor #2C3E50
     ArrowColor #2C3E50
-}
-left to right direction
-
-[*] --> pending : OrderController@store()
-
-state pending
-state completed
-
-pending --> completed : update() [in_stock >= qty]\n/ UserMedicine::updateStock(-qty)
-completed --> pending : update() [restore stock]\n/ UserMedicine::updateStock(+qty)
-
-pending --> [*] : destroy() / no stock restore
-completed --> [*] : destroy() / UserMedicine::updateStock(+qty)
-@enduml
-```
-
-### Sale Lifecycle
-
-**Important:** `SalesController@store()` inserts a sale as `pending` but does **not** deduct stock. Stock is deducted **only** when `SalesController@update()` transitions from `pending` to `completed`.
-
-```plantuml
-@startuml
-skinparam state {
-    BackgroundColor #F0F8FF
-    BorderColor #2C3E50
-    ArrowColor #2C3E50
-}
-left to right direction
-
-[*] --> pending : SalesController@store()\n/ no stock change
-
-state pending
-state completed
-
-pending --> completed : update()\n/ UserMedicine::updateStock(-qty)
-completed --> pending : update()\n/ UserMedicine::updateStock(+qty)
-
-pending --> [*] : destroy() / no stock restore
-completed --> [*] : destroy() / UserMedicine::updateStock(+qty)
-@enduml
-```
-
-### Authentication Session
-
-Based on `AuthController@login`, `AuthController@logout`, and `AuthMiddleware`/`PharmacyMiddleware`/`AdminMiddleware`.
-
-```plantuml
-@startuml
-skinparam state {
-    BackgroundColor #F0F8FF
-    BorderColor #2C3E50
-    ArrowColor #2C3E50
+    linetype ortho
 }
 top to bottom direction
 
-[*] --> Guest
+' ========== AUTH ==========
+[*] --> Unauthenticated
+Unauthenticated --> Authenticated : Login
+Authenticated --> Unauthenticated : Logout
 
-state Guest
 state Authenticated {
-    left to right direction
-    [*] --> AdminRole : loggedInUserRole = "admin"
-    [*] --> PharmacyRole : loggedInUserRole = "user"
+    [*] --> RoleCheck
+    RoleCheck --> PharmDashboard : role=user
+    RoleCheck --> AdminDashboard : role=admin
+
+    ' ===== PHARMACY DASHBOARD =====
+    state "Pharmacy Dashboard" as PharmDashboard
+
+    ' ===== MEDICINES =====
+    state "Medicines" as MedMgmt {
+        [*] --> MedicineList
+        MedicineList --> MedicineCreate : Add
+        MedicineCreate --> MedicineList : Save
+        MedicineList --> MedicineEdit : Modify
+        MedicineEdit --> MedicineList : Update
+        MedicineList --> [*] : Delete
+    }
+
+    ' ===== ORDERS =====
+    state "Orders" as OrderMgmt {
+        [*] --> OrderList
+        OrderList --> OrderCreate : Place
+        OrderCreate --> OrderList : Submit
+
+        state "Lifecycle" as OrderCycle {
+            [*] --> Pending
+            Pending --> Completed : Confirm
+            Completed --> Pending : Revert
+            Pending --> [*] : Delete
+            Completed --> [*] : Delete
+        }
+
+        OrderList --> OrderCycle : Manage
+        OrderCycle --> OrderList : Return
+    }
+
+    ' ===== ADMIN DASHBOARD =====
+    state "Dashboard" as AdminDashboard {
+        state "View Pharmacy Stats" as AdminStats
+    }
+
+    ' ===== VERIFICATION =====
+    state "Verification" as AdminVerify {
+        [*] --> PendingList
+        PendingList --> ApproveForm : Approve
+        PendingList --> RejectForm : Reject
+        ApproveForm --> PendingList : Confirm
+        RejectForm --> PendingList : Confirm
+    }
+
+    ' ===== ADMINS =====
+    state "Admins" as AdminMgmt {
+        [*] --> AdminList
+        AdminList --> AdminCreate : Add
+        AdminCreate --> AdminList : Save
+    }
+
+    ' ===== SETTINGS =====
+    state "Settings" as SettingMgmt {
+        [*] --> ViewSettings
+        ViewSettings --> EditSettings : Edit
+        EditSettings --> ViewSettings : Save
+    }
+
+    ' ===== PHARMACY NAVIGATION =====
+    PharmDashboard --> MedMgmt : Medicines
+    PharmDashboard --> OrderMgmt : Orders
+    MedMgmt --> PharmDashboard : Return
+    OrderMgmt --> PharmDashboard : Return
+
+    ' ===== ADMIN NAVIGATION =====
+    AdminDashboard --> AdminVerify : Verification
+    AdminDashboard --> AdminMgmt : Admins
+    AdminDashboard --> SettingMgmt : Settings
+    AdminVerify --> AdminDashboard : Return
+    AdminMgmt --> AdminDashboard : Return
+    SettingMgmt --> AdminDashboard : Return
 }
-
-Guest --> Guest : login [password_verify fails] / flash error
-Guest --> Authenticated : login [password_verify ok]
-Authenticated --> Guest : logout / Session::destroy()
-@enduml
-```
-
-### Pharmacy Verification Lifecycle
-
-Based on `ProfileController@requestVerification`, `PharmacyController@approve`, `PharmacyController@reject`.
-
-```plantuml
-@startuml
-skinparam state {
-    BackgroundColor #F0F8FF
-    BorderColor #2C3E50
-    ArrowColor #2C3E50
-}
-left to right direction
-
-[*] --> Unverified : register
-
-state Unverified
-state Pending {
-    verification_request_date = now
-}
-state Verified {
-    isverified = 1
-}
-
-Unverified --> Pending : ProfileController@requestVerification()\n/ set verification_request_date
-Pending --> Verified : PharmacyController@approve()\n/ set isverified=1, verification_date
-Pending --> Unverified : PharmacyController@reject()\n/ clear verification_request_date
-Pending --> Pending : ProfileController@requestVerification()\n/ resubmit
 @enduml
 ```
 
 ---
 
-## 4. Sequence Diagrams
+## 4. Combined Sequence Diagrams
 
-### Login Flow
-
-Actual route: `POST /login` → `AuthController@login`
+Three key interaction flows stacked vertically. Each flow has its own complete participant lifecycle. Shared infrastructure (Router, PDO Database) appears across flows.
 
 ```plantuml
 @startuml
@@ -376,157 +341,72 @@ skinparam sequence {
     LifeLineBackgroundColor #F0F8FF
     ParticipantBackgroundColor #F0F8FF
 }
-autonumber
+hide footbox
 
 actor User
-participant "App::boot()" as AppBoot
-participant Router
-participant "AuthController" as AuthCtrl
-participant "User Model" as UserModel
-participant "PDO Database" as DB
+participant "Router" as R
+participant "Controller" as C
+participant "Model" as M
+participant "Database" as DB
 
-User -> AppBoot : POST /login (email, password)
-
-AppBoot -> AppBoot : load .env, start session
-AppBoot -> Router : new Router()
-AppBoot -> Router : require routes.php
-AppBoot -> Router : dispatch(/login, POST)
-
-Router -> Router : match route -> AuthController@login
-Router -> AuthCtrl : new AuthController()
-activate AuthCtrl
-
-AuthCtrl -> AuthCtrl : validate(email), get password
-AuthCtrl -> UserModel : findByEmail(email)
-activate UserModel
-UserModel -> DB : SELECT * FROM role\nWHERE email = ? LIMIT 1
-DB --> UserModel : user record
-UserModel --> AuthCtrl : user array or null
-deactivate UserModel
-
-alt user not found
-  AuthCtrl --> User : redirect /login\n"Invalid Email or Password"
-else password_verify fails
-  AuthCtrl --> User : redirect /login\n"Invalid Password"
-else valid
-  AuthCtrl -> AuthCtrl : Session::setAuth(user, role)
-  alt role = "admin"
-    AuthCtrl --> User : redirect /admin/dashboard\n"Logged In Successfully"
-  else role = "user"
-    AuthCtrl --> User : redirect /pharmacy/dashboard\n"Logged In Successfully"
-  end
+group Authentication
+    User -> R: POST /login
+    R -> C: Mount AuthController
+    activate C
+    C -> C: Validate Input
+    C -> M: Find by Email
+    activate M
+    M -> DB: Fetch User
+    DB --> M: User Data
+    M --> C: Auth Result
+    deactivate M
+    alt Invalid Credentials
+        C --> User: Redirect with Error
+    else Valid
+        C -> C: Set Session
+        C --> User: Redirect Dashboard
+    end
+    deactivate C
 end
-deactivate AuthCtrl
-@enduml
-```
 
-### Pharmacy Places Order
-
-Actual route: `POST /pharmacy/orders` → `OrderController@store` (with `PharmacyMiddleware`)
-
-```plantuml
-@startuml
-skinparam sequence {
-    ArrowColor #2C3E50
-    LifeLineBackgroundColor #F0F8FF
-    ParticipantBackgroundColor #F0F8FF
-}
-autonumber
-
-actor "Pharmacy User" as User
-participant Router
-participant "PharmacyMiddleware" as Middleware
-participant "OrderController" as OrderCtrl
-participant "UserMedicine Model" as Medicine
-participant "Order Model" as OrderModel
-participant "PDO Database" as DB
-
-User -> Router : POST /pharmacy/orders\n(m_id, price, qty, total, order_date)
-
-Router -> Router : match route, detect middleware
-Router -> Middleware : new PharmacyMiddleware()->handle()
-activate Middleware
-alt session not auth or role != "user"
-  Middleware --> User : redirect /login\n"Access denied"
+group Place Order
+    User -> R: POST /pharmacy/orders
+    R -> C: Auth Middleware
+    activate C
+    C -> C: Validate Input
+    C -> M: Find Medicine
+    activate M
+    M -> DB: Fetch Stock
+    DB --> M: Medicine Data
+    M --> C: Stock Info
+    deactivate M
+    alt Insufficient Stock
+        C --> User: Redirect with Error
+    else Sufficient
+        C -> M: Insert Order
+        activate M
+        M -> DB: Store Record
+        DB --> M: Confirmation
+        deactivate M
+        C -> M: Update Stock
+        C --> User: Redirect to Orders
+    end
+    deactivate C
 end
-deactivate Middleware
 
-Router -> OrderCtrl : new OrderController()
-activate OrderCtrl
-
-OrderCtrl -> OrderCtrl : validate(qty>0, price>0, date >= today)
-
-OrderCtrl -> Medicine : findById(m_id)
-activate Medicine
-Medicine -> DB : SELECT * FROM user_medicine_tbl\nWHERE m_id = ? LIMIT 1
-DB --> Medicine : medicine row
-Medicine --> OrderCtrl : med array
-deactivate Medicine
-
-alt med null or med.in_stock < qty
-  OrderCtrl --> User : redirect /pharmacy/orders/create\n"Not enough stock"
-else stock sufficient
-  OrderCtrl -> OrderModel : insert({pharmacy_id, m_id, price,\nqty, total, status:"pending", order_date})
-  activate OrderModel
-  OrderModel -> DB : INSERT INTO user_order_tbl (...) VALUES (...)
-  DB --> OrderModel : lastInsertId
-  OrderModel --> OrderCtrl : o_id
-  deactivate OrderModel
-
-  OrderCtrl -> Medicine : updateStock(m_id, -qty)
-  activate Medicine
-  Medicine -> DB : UPDATE user_medicine_tbl\nSET in_stock = in_stock - ?\nWHERE m_id = ?
-  DB --> Medicine : rowCount
-  deactivate Medicine
-
-  OrderCtrl --> User : redirect /pharmacy/orders\n"Order has been submitted"
+group Approve Pharmacy
+    User -> R: POST /admin/pharmacies/approve
+    R -> C: Admin Middleware
+    activate C
+    C -> C: Validate Notes
+    C -> M: Update Pharmacy
+    activate M
+    M -> DB: Set Verified
+    DB --> M: Confirmation
+    deactivate M
+    C --> User: Redirect to Verification
+    deactivate C
 end
-deactivate OrderCtrl
-@enduml
-```
-
-### Admin Approves Pharmacy Verification
-
-Actual route: `POST /admin/pharmacies/{id}/approve` → `PharmacyController@approve` (with `AdminMiddleware`)
-
-```plantuml
-@startuml
-skinparam sequence {
-    ArrowColor #2C3E50
-    LifeLineBackgroundColor #F0F8FF
-    ParticipantBackgroundColor #F0F8FF
-}
-autonumber
-
-actor Admin
-participant Router
-participant "AdminMiddleware" as Middleware
-participant "PharmacyController" as PharmCtrl
-participant "Pharmacy Model" as PharmModel
-participant "PDO Database" as DB
-
-Admin -> Router : POST /admin/pharmacies/42/approve\n(verification_notes)
-
-Router -> Router : match route, detect middleware
-Router -> Middleware : new AdminMiddleware()->handle()
-activate Middleware
-alt not auth or role != "admin"
-  Middleware --> Admin : redirect /login\n"Access denied"
-end
-deactivate Middleware
-
-Router -> PharmCtrl : new PharmacyController()
-activate PharmCtrl
-
-PharmCtrl -> PharmCtrl : validate(verification_notes)
-PharmCtrl -> PharmModel : update(pharmacy_id=42,\n{isverified:1, verification_date:now,\nverification_notes:"..."})
-activate PharmModel
-PharmModel -> DB : UPDATE tbl_pharmacy\nSET isverified=1, verification_date=?,\nverification_notes=?\nWHERE pharmacy_id=?
-DB --> PharmModel : rowCount >= 0
-deactivate PharmModel
-
-PharmCtrl --> Admin : redirect /admin/pharmacies/verify\n"Pharmacy verified successfully!"
-deactivate PharmCtrl
 @enduml
 ```
 
@@ -548,45 +428,40 @@ title MedVault — Complete Order
 
 |#LightCyan|Auth|
 start
-:PharmacyMiddleware::handle()
-checks auth + role=user;
-
-if (Authenticated + role=user?) then (no)
-  :Redirect /login;
+:Check authentication;
+if (Authenticated?) then (no)
+  :Redirect to login;
   stop
 else (yes)
 endif
 
 |#White|OrderController|
-:Order::findByIdAndPharmacy(orderId, pharmacyId);
-
-if (Order found and\nbelongs to pharmacy?) then (no)
-  :Flash "Order not found";
+:Find order by ID;
+if (Order exists?) then (no)
+  :Show error;
   stop
 else (yes)
-endif
-
-if (Old status == completed?) then (yes)
-  :Flash "Already completed";
+if (Already completed?) then (yes)
+  :Show warning;
   stop
 else (no)
 endif
+endif
 
 |#AntiqueWhite|UserMedicine Model|
-:UserMedicine::findById(m_id);
-
-if (in_stock >= quantity?) then (no)
-  :Flash "Not enough stock";
+:Check stock;
+if (Stock sufficient?) then (no)
+  :Show stock error;
   stop
 else (yes)
-  :UserMedicine::updateStock(m_id, -quantity);
+  :Deduct stock;
 endif
 
 |#White|OrderController|
-:Order::updateByPharmacy(orderId, pharmacyId,\n{status:"completed", ...});
+:Mark as completed;
 
 |#LightCyan|User|
-:Flash "Order updated";
+:Show success;
 
 stop
 
@@ -601,9 +476,9 @@ endlegend
 
 ---
 
-## 6. Refinement of Class — Full Database Schema Mapping
+## 6. Refinement of Class
 
-Each model mapped to its actual database table with column types. `User` (table `role`) is the parent entity; `Pharmacy` and `Admin` are child profiles sharing the same PK as `role.user_id`.
+Full entity detail with packages, custom business methods, controller classes, and middleware guards.
 
 ```plantuml
 @startuml
@@ -615,108 +490,158 @@ skinparam class {
 skinparam classAttributeIconSize 0
 top to bottom direction
 
-package "Identity Tables" {
-    class role_table {
-        +int user_id PK AUTO_INCREMENT
-        +varchar(100) name
-        +varchar(50) email
-        +varchar(255) password (bcrypt hash)
-        +varchar(10) role ("admin"|"user")
+package "Identity & Access" {
+    class User {
+        +user_id: int PK
+        +name: varchar(100)
+        +email: varchar(50)
+        +password: varchar(255)
+        +role: varchar(10)
+        +pharmacy()
+        +admin()
+        +findByEmail(email)
+        +create(name, email, passwordHash, role)
     }
 
-    class tbl_pharmacy {
-        +int pharmacy_id PK FK -> role.user_id
-        +int pan
-        +varchar(100) pharmacy_name
-        +varchar(50) email
-        +varchar(10) phone
-        +varchar(50) address
-        +tinyint isverified (0|1)
-        +datetime verification_request_date
-        +datetime verification_date
-        +varchar(100) license_number
-        +varchar(255) reg_document (path)
-        +text verification_notes
-        +datetime created_at
+    class Pharmacy {
+        +pharmacy_id: int PK FK
+        +pan: int
+        +pharmacy_name: varchar(100)
+        +email: varchar(50)
+        +phone: varchar(10)
+        +address: varchar(50)
+        +isverified: tinyint
+        +verification_request_date: datetime
+        +verification_date: datetime
+        +license_number: varchar(100)
+        +reg_document: varchar(255)
+        +verification_notes: text
+        +created_at: datetime
+        +user()
+        +categories()
+        +medicines()
+        +orders()
+        +sales()
+        +createMinimal(pharmacyId, name, email)
     }
 
-    class tbl_admin {
-        +int admin_id PK FK -> role.user_id
-        +varchar(100) name
-        +varchar(50) email
-        +varchar(10) gender
-        +varchar(10) phone
-        +date dob
-        +varchar(50) address
-    }
-}
-
-package "Inventory Tables" {
-    class user_medicine_tbl {
-        +int m_id PK AUTO_INCREMENT
-        +int pharmacy_id FK
-        +varchar(100) medicine_name
-        +varchar(1000) medicine_desc
-        +int c_id FK -> user_category_tbl
-        +int in_stock
-        +int buy_price
-        +int sell_price
-        +timestamp added_date
-        +date exp_date
-    }
-
-    class user_category_tbl {
-        +int c_id PK AUTO_INCREMENT
-        +int pharmacy_id FK
-        +varchar(30) category_name
+    class Admin {
+        +admin_id: int PK FK
+        +name: varchar(100)
+        +email: varchar(50)
+        +gender: varchar(10)
+        +phone: varchar(10)
+        +dob: date
+        +address: varchar(50)
+        +user()
     }
 }
 
-package "Transaction Tables" {
-    class user_order_tbl {
-        +int o_id PK AUTO_INCREMENT
-        +int m_id FK -> user_medicine_tbl
-        +int pharmacy_id FK
-        +int price
-        +int quantity
-        +int total_amount
-        +varchar(20) status
-        +date order_date
+package "Inventory" {
+    class Category {
+        +c_id: int PK
+        +pharmacy_id: int FK
+        +category_name: varchar(30)
+        +pharmacy()
+        +medicines()
+        +findByPharmacy(pharmacyId)
+        +create(pharmacyId, name)
+        +hasMedicines(categoryId)
     }
 
-    class user_sales_tbl {
-        +int s_id PK AUTO_INCREMENT
-        +int m_id FK -> user_medicine_tbl
-        +int pharmacy_id FK
-        +int price
-        +int quantity
-        +int total_amount
-        +varchar(20) status
-        +date sales_date
+    class UserMedicine {
+        +m_id: int PK
+        +pharmacy_id: int FK
+        +medicine_name: varchar(100)
+        +medicine_desc: varchar(1000)
+        +c_id: int FK
+        +in_stock: int
+        +buy_price: int
+        +sell_price: int
+        +added_date: timestamp
+        +exp_date: date
+        +pharmacy()
+        +category()
+        +orders()
+        +sales()
+        +findByPharmacy(pharmacyId, conditions, params)
+        +paginateByPharmacy(pharmacyId, page, perPage, conditions, params)
+        +countByPharmacy(pharmacyId, conditions, params)
+        +create(data)
+        +search(pharmacyId, term, limit)
+        +updateStock(id, quantityChange)
+        +getCategoryDistribution(pharmacyId)
+        +getLowStock(pharmacyId, threshold)
+        +getRecentActivities(pharmacyId, limit)
+        +hasRelatedRecords(medicineId)
     }
 }
 
-package "System Tables" {
-    class settings {
-        +int id PK AUTO_INCREMENT
-        +varchar(255) title
-        +text small_description
-        +varchar(255) sub_title
-        +text sub_description
-        +varchar(10) phone
-        +varchar(50) email
+package "Transactions" {
+    class Order {
+        +o_id: int PK
+        +m_id: int FK
+        +pharmacy_id: int FK
+        +price: int
+        +quantity: int
+        +total_amount: int
+        +status: varchar(20)
+        +order_date: date
+        +medicine()
+        +pharmacy()
+        +findByPharmacy(pharmacyId, conditions, params)
+        +paginateByPharmacy(pharmacyId, page, perPage, conditions, params)
+        +findByIdAndPharmacy(orderId, pharmacyId)
+        +deleteByPharmacy(orderId, pharmacyId)
+        +updateByPharmacy(orderId, pharmacyId, data)
+        +getDailyOrders(pharmacyId, start, end)
+        +getStatusDistribution(pharmacyId, start, end)
+        +getStats(pharmacyId, start, end)
+        +getTopOrdered(pharmacyId, start, end, limit)
+        +getRecentOrders(pharmacyId, limit)
+    }
+
+    class Sale {
+        +s_id: int PK
+        +m_id: int FK
+        +pharmacy_id: int FK
+        +price: int
+        +quantity: int
+        +total_amount: int
+        +status: varchar(20)
+        +sales_date: date
+        +medicine()
+        +pharmacy()
+        +paginateByPharmacy(pharmacyId, page, perPage, conditions, params)
+        +findByIdAndPharmacy(saleId, pharmacyId)
+        +deleteByPharmacy(saleId, pharmacyId)
+        +updateByPharmacy(saleId, pharmacyId, data)
+        +getSalesData(pharmacyId, start, end)
     }
 }
 
-role_table --> tbl_pharmacy : pharmacy_id = user_id (1:1)
-role_table --> tbl_admin : admin_id = user_id (1:1)
-tbl_pharmacy --> user_medicine_tbl : pharmacy_id
-tbl_pharmacy --> user_category_tbl : pharmacy_id
-tbl_pharmacy --> user_order_tbl : pharmacy_id
-tbl_pharmacy --> user_sales_tbl : pharmacy_id
-user_category_tbl --> user_medicine_tbl : c_id
-user_medicine_tbl --> user_order_tbl : m_id
-user_medicine_tbl --> user_sales_tbl : m_id
+package "System" {
+    class Setting {
+        +id: int PK
+        +title: varchar(255)
+        +small_description: text
+        +sub_title: varchar(255)
+        +sub_description: text
+        +phone: varchar(10)
+        +email: varchar(50)
+    }
+}
+
+' Entity Relationships
+User "1" --> "0..1" Pharmacy : owns
+User "1" --> "0..1" Admin : owns
+Pharmacy "1" --> "*" Category : has
+Pharmacy "1" --> "*" UserMedicine : stocks
+Pharmacy "1" --> "*" Order : places
+Pharmacy "1" --> "*" Sale : records
+Category "1" --> "*" UserMedicine : classifies
+UserMedicine "1" --> "*" Order : line_item
+UserMedicine "1" --> "*" Sale : line_item
 @enduml
 ```
 
@@ -746,7 +671,7 @@ package "Identity Records" {
 
     object "pharm_89: Pharmacy" as pharm {
         pharmacy_id = 89
-        pan = null
+        pan = 987456
         pharmacy_name = "city pharmacy"
         email = "pharmacy@gmail.com"
         phone = null
@@ -791,22 +716,22 @@ package "Inventory Records" {
 package "Transaction Records" {
     object "order_100: Order" as order {
         o_id = 100
-        m_id = 51
+        m_id = 50
         pharmacy_id = 89
-        price = 25
-        quantity = 8
-        total_amount = 200
+        price = 15
+        quantity = 10
+        total_amount = 150
         status = "pending"
         order_date = "2026-02-21"
     }
 
     object "sale_100: Sale" as sale {
         s_id = 100
-        m_id = 52
+        m_id = 22
         pharmacy_id = 89
-        price = 20
-        quantity = 42
-        total_amount = 840
+        price = 60
+        quantity = 10
+        total_amount = 600
         status = "completed"
         sales_date = "2026-02-21"
     }
@@ -837,76 +762,48 @@ skinparam {
 }
 skinparam PackageBackgroundColor transparent
 skinparam PackageBorderColor #666666
-left to right direction
 
 title MedVault — Component Architecture
 
 [Web Browser] as Browser
 
-package "Entry Point" {
-    [public/index.php\nrequire autoload\ncall App::boot()] as Entry
+package "Presentation" {
+    [Views] as Views
+    [Assets] as Assets
 }
 
-package "Framework Core" {
-    [App: bootstrapper\n.env, session, router] as App
-    [Router: route matching\n+ middleware chain\n+ controller dispatch] as Router
-    [Database: PDO singleton] as Database
-    [Session: $_SESSION wrapper] as Session
-    [Controller: base class\nview(), redirect(),\njson(), validate()] as BaseCtrl
-    [Model: abstract\nCRUD + paginate] as BaseModel
+package "Application" {
+    [App] as App
+    [Router] as Router
+    [Middleware] as Middleware
+    [Controllers] as Controllers
 }
 
-package "app/Middleware/" as MiddlewarePkg {
-    [AuthMiddleware\nauth=true] as AuthM
-    [AdminMiddleware\nrole=admin] as AdminM
-    [PharmacyMiddleware\nrole=user] as PharmacyM
-}
-
-package "app/Controllers/" as Controllers {
-    [AuthController] as AuthCtrl
-    [Pharmacy Controllers:\nDashboard, Medicine,\nCategory, Order, Sales,\nAnalytics, Profile, Ajax] as PharmCtrls
-    [Admin Controllers:\nDashboard, Pharmacy,\nAdmin, Setting, Export] as AdminCtrls
-    [LandingController] as LandingCtrl
-}
-
-package "app/Models/" as Models {
-    [User (role)] as M_User
-    [Pharmacy (tbl_pharmacy)] as M_Pharmacy
-    [Admin (tbl_admin)] as M_Admin
-    [UserMedicine] as M_Medicine
+package "Domain" {
+    [User] as M_User
+    [Pharmacy] as M_Pharmacy
+    [Admin] as M_Admin
+    [Medicine] as M_Medicine
     [Category] as M_Category
     [Order] as M_Order
     [Sale] as M_Sale
     [Setting] as M_Setting
 }
 
-package "views/" as Views {
-    [layouts/ (admin, pharmacy)] as V_Layouts
-    [admin/ (dashboard,\npharmacies, admins,\nsettings)] as V_Admin
-    [pharmacy/ (dashboard,\nmedicines, orders, sales,\nanalytics, categories,\nprofile)] as V_Pharmacy
-    [auth/ (login)] as V_Auth
+package "Infrastructure" {
+    [Database] as Database
+    [Session] as Session
+    database "MySQL" as MySQL
 }
 
-package "Configuration" {
-    [routes.php\n83 route definitions] as Routes
-    [.env\nDB_HOST, DB_NAME, etc.] as Env
-}
-
-database "MySQL 8.0\npharmacy" as MySQL
-
-Browser --> Entry
-Entry --> App
-App --> Routes
+Browser --> App
 App --> Router
-Router --> MiddlewarePkg
-Router --> BaseCtrl
+Router --> Middleware
 Router --> Controllers
-Controllers --> BaseCtrl
-Controllers --> Models
+Controllers --> Domain
 Controllers --> Views
 Controllers --> Session
-Models --> BaseModel
-BaseModel --> Database
+Domain --> Database
 Database --> MySQL
 @enduml
 ```
@@ -929,33 +826,33 @@ skinparam artifactBackgroundColor #F0F8FF
 skinparam artifactBorderColor #2C3E50
 skinparam ArrowColor #2C3E50
 
-actor "Client Machine\n(Web Browser)" as Client
+actor "Browser" as Client
 
 node "Docker Host" as DockerHost {
-    node "app container\nphp:8.2-apache" as AppContainer {
-        artifact "Apache 2.4\nDocumentRoot: /var/www/html/public" as Apache
-        artifact "PHP 8.2\npdo, pdo_mysql" as PHP
-        artifact "Source Code\nbind-mounted /var/www/html" as Code
+    node "App (php:8.2-apache)" as AppContainer {
+        artifact "Apache" as Apache
+        artifact "PHP 8.2" as PHP
+        artifact "Source Code" as Code
     }
 
-    node "db container\nmysql:8.0" as DBContainer {
-        database "MySQL 8.0\ninit: pharmacy.sql\nat /docker-entrypoint-initdb.d/" as MySQL
+    node "DB (mysql:8.0)" as DBContainer {
+        database "MySQL" as MySQL
     }
 
-    node "phpmyadmin container" as PMAContainer {
-        artifact "phpMyAdmin\nPMA_HOST=db\nPMA_USER=root" as PMA
+    node "phpMyAdmin" as PMAContainer {
+        artifact "phpMyAdmin" as PMA
     }
 
-    folder "Named Volume\nmysql_data\n-> /var/lib/mysql" as Volume
+    folder "mysql_data" as Volume
 }
 
-Client --> Apache : HTTP localhost:8000
-Client --> PMA : HTTP localhost:8080
+Client --> Apache : :8000
+Client --> PMA : :8080
 
 Apache --> PHP
 PHP --> Code
-PHP --> MySQL : PDO mysql:host=db:3306\n dbname=pharmacy
-PMA --> MySQL : PHP mysql:host=db:3306
+PHP --> MySQL : PDO :3306
+PMA --> MySQL
 MySQL --> Volume
 @enduml
 ```
@@ -999,3 +896,11 @@ MySQL --> Volume
 | 20 | Inconsistent color palette across diagrams | Unified to `#F0F8FF` (background) / `#2C3E50` (borders+arrows) throughout all diagram types |
 | 21 | Activity diagram lacked swimlanes/legend | Added color-coded swimlane partitions (`|Auth|`, `|OrderController|`, `|UserMedicine Model|`) with legend |
 | 22 | Component diagram used `skinparam packageStyle rectangle` with raw rectangles | Upgraded to `ComponentStyle uml2` with standard UML2 component notation and transparent package borders |
+| 23 | Class diagram used abstract Model with inherited methods | Converted to entity-style showing only DB columns + FK navigation methods per entity |
+| 24 | Object diagram used incorrect user name "city pharmacy" | Changed to "Pharmacy" matching actual `role.name` value |
+| 25 | Object diagram referenced non-existent `pharmacy_id=89` in `tbl_pharmacy` | Added missing `tbl_pharmacy` record to `pharmacy.sql` |
+| 26 | Object diagram FK arrows pointed to wrong medicines (order_100.m_id=51, sale_100.m_id=52) | Fixed to m_id=50 and m_id=22 so arrows match medicines in the diagram |
+| 27 | Refined Class diagram missing 7 `tbl_pharmacy` columns | Added isverified, verification_request_date, verification_date, license_number, reg_document, verification_notes, created_at to match controller code |
+| 28 | State diagrams were 4 separate diagrams | Combined into single stacked portrait diagram for A4 readability |
+| 29 | Sequence diagrams were 3 separate diagrams | Combined into single stacked portrait diagram with independent flow sections |
+| 30 | Refinement of Class lacked controller and middleware classes | Added full Controller and Middleware packages with key methods, plus usage dependencies |
