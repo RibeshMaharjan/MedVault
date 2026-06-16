@@ -411,26 +411,34 @@ CREATE TABLE `tbl_pharmacy` (
   `pharmacy_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `email` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `phone` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `address` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL
+  `address` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `isverified` tinyint DEFAULT 0,
+  `verification_request_date` datetime DEFAULT NULL,
+  `verification_date` datetime DEFAULT NULL,
+  `license_number` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `reg_document` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `verification_notes` text COLLATE utf8mb4_general_ci,
+  `created_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_pharmacy`
 --
 
-INSERT INTO `tbl_pharmacy` (`pharmacy_id`, `pan`, `pharmacy_name`, `email`, `phone`, `address`) VALUES
-(129, 424242, 'test', 'test@gmail.com', '9840545629', 'thamel1'),
-(319, 9845, 'asdad', 'asdad@admin.gmail.com', '9840545628', 'asdad'),
-(325, 98745621, '123Assura', 'testsignup@gmail.com', '9841564152', 'swoyambhu'),
-(328, 98415, 'by', 'by@gmail.com', '9841562145', 'thamel'),
-(333, 564578, 'pantest', 'pantest@gmail.com', '', ''),
-(334, 2147483647, 'error', 'error@gmail.com', '', ''),
-(335, 3564, 'krees', 'krees@gmail', '', ''),
-(336, 45612, 'newpharmacy', 'newpharmacy@gmail.com', '9841562342', 'thamel'),
-(338, 121213, 'password', 'password@gmail.com', '', ''),
-(341, 101010, 'danesh', 'da@gmail.com', '', ''),
-(343, 12345, 'sam', 'sam@gmail.com', '', ''),
-(345, 9845236, 'sam pharmacy', 'sampharmacy@gmail.com', '9841564231', 'jyatha'),
+INSERT INTO `tbl_pharmacy` (`pharmacy_id`, `pan`, `pharmacy_name`, `email`, `phone`, `address`, `isverified`, `verification_request_date`, `verification_date`, `license_number`, `reg_document`, `verification_notes`, `created_at`) VALUES
+(89, 987456, 'city pharmacy', 'pharmacy@gmail.com', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(129, 424242, 'test', 'test@gmail.com', '9840545629', 'thamel1', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(319, 9845, 'asdad', 'asdad@admin.gmail.com', '9840545628', 'asdad', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(325, 98745621, '123Assura', 'testsignup@gmail.com', '9841564152', 'swoyambhu', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(328, 98415, 'by', 'by@gmail.com', '9841562145', 'thamel', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(333, 564578, 'pantest', 'pantest@gmail.com', '', '', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(334, 2147483647, 'error', 'error@gmail.com', '', '', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(335, 3564, 'krees', 'krees@gmail', '', '', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(336, 45612, 'newpharmacy', 'newpharmacy@gmail.com', '9841562342', 'thamel', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(338, 121213, 'password', 'password@gmail.com', '', '', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(341, 101010, 'danesh', 'da@gmail.com', '', '', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(343, 12345, 'sam', 'sam@gmail.com', '', '', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(345, 9845236, 'sam pharmacy', 'sampharmacy@gmail.com', '9841564231', 'jyatha', 0, NULL, NULL, NULL, NULL, NULL, NULL),
 (346, 987456123, 'signuptest', 'signup@gmail.com', '', ''),
 (347, NULL, 'testin', 'ribesh@test.com', NULL, NULL),
 (348, NULL, 'asdasda', 'testing@password.com', NULL, NULL);
