@@ -39,19 +39,27 @@ class ProfileController extends Controller
         $address = $this->validate($_POST['address'] ?? '');
         $pan = $this->validate($_POST['pan'] ?? '');
 
-        $this->pharmacy->update($pharmacyId, [
-            'pharmacy_name' => $name,
-            'email' => $email,
-            'phone' => $phone,
-            'address' => $address,
-            'pan' => $pan,
-        ], 'pharmacy_id');
+        try {
+            $this->pharmacy->beginTransaction();
+            $this->pharmacy->update($pharmacyId, [
+                'pharmacy_name' => $name,
+                'email' => $email,
+                'phone' => $phone,
+                'address' => $address,
+                'pan' => $pan,
+            ], 'pharmacy_id');
 
-        // Keep role table in sync
-        $this->user->update($pharmacyId, [
-            'name' => $name,
-            'email' => $email,
-        ], 'user_id');
+            // Keep role table in sync.
+            $this->user->update($pharmacyId, [
+                'name' => $name,
+                'email' => $email,
+            ], 'user_id');
+            $this->pharmacy->commit();
+        } catch (\Throwable $e) {
+            $this->pharmacy->rollBack();
+            error_log('Profile update failed: ' . $e->getMessage());
+            $this->redirect('/pharmacy/profile', 'Profile update failed. Please try again.');
+        }
 
         $this->redirect('/pharmacy/profile', 'Profile updated successfully!');
     }

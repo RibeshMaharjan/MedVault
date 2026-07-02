@@ -99,8 +99,17 @@ class AuthController extends Controller
         }
 
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-        $userId = $this->userModel->create($name, $email, $passwordHash, 'user');
-        $this->pharmacyModel->createMinimal($userId, $name, $email);
+
+        try {
+            $this->userModel->beginTransaction();
+            $userId = $this->userModel->create($name, $email, $passwordHash, 'user');
+            $this->pharmacyModel->createMinimal($userId, $name, $email);
+            $this->userModel->commit();
+        } catch (\Throwable $e) {
+            $this->userModel->rollBack();
+            error_log('Registration failed: ' . $e->getMessage());
+            $this->redirect('/login', 'Registration failed. Please try again.');
+        }
 
         $this->redirect('/login', 'Registration Successful!');
     }
