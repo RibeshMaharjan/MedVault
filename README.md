@@ -28,15 +28,19 @@ Docker test command used during stabilization:
 docker run --rm -v "$PWD:/var/www/html" -w /var/www/html medvault-app:latest php vendor/bin/phpunit --configuration phpunit.xml --fail-on-all-issues
 ```
 
+If host PHP lacks PDO SQLite/MySQL drivers, run the Docker command above.
+
 ## Current Stabilization Coverage
 
 - Pharmacy verification schema and flow.
 - Tenant-scoped pharmacy data access.
 - Server-side order/sale totals and stock updates.
 - Transaction-wrapped inventory writes.
+- Transaction-wrapped registration and profile sync writes.
 - CSRF protection for POST routes.
 - Upload validation for verification documents.
 - Analytics API tests and export tests.
+- Admin pharmacy delete guard for pharmacies with business records.
 
 ## Manual Smoke Checklist
 

@@ -21,7 +21,12 @@ class Database
                 throw new \RuntimeException('Database connection failed', 0, $e);
             }
             http_response_code(500);
-            echo 'Database connection failed';
+            $viewPath = dirname(__DIR__, 2) . '/views/errors/500.php';
+            if (is_file($viewPath)) {
+                require $viewPath;
+            } else {
+                echo 'Database connection failed';
+            }
             exit;
         }
     }

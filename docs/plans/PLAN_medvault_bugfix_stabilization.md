@@ -428,6 +428,9 @@ Revert export and docs changes.
 - Phase 5: revert CSRF/form/upload validation changes as a group.
 - Phase 6: revert API route/controller/view changes.
 - Phase 7: revert export/docs changes.
+- Phase 9: revert auth/profile transaction wrappers and transaction tests.
+- Phase 10: revert seed/UI/error page cleanup.
+- Phase 11: revert admin pharmacy delete guard and delete-flow tests.
 
 ---
 
@@ -441,6 +444,9 @@ Revert export and docs changes.
 - [x] Phase 6 complete
 - [x] Phase 7 complete
 - [x] Phase 8 plan cleanup complete
+- [x] Phase 9 transaction safety complete
+- [x] Phase 10 seed/UI/error cleanup complete
+- [x] Phase 11 admin delete guard complete
 
 ---
 
@@ -453,3 +459,4 @@ Revert export and docs changes.
 - 2026-07-02: Implemented CSRF route guard + form tokens, analytics API integration tests, admin export tests, medicine validation, docs refresh, and Docker `/login` smoke. Suite reached `OK (230 tests, 369 assertions)`.
 - 2026-07-02: HTTP smoke: pharmacy registration/login/dashboard/category create/analytics/inventory API passed. CSRF missing-token POST returns 403. Admin login, dashboard, verify page, and export CSV passed after resetting cloud DB admin password. Manual smoke complete.
 - 2026-07-02: Phase 8 plan cleanup complete. Optional validator/API-envelope work intentionally left out because current controller rules are flow-specific and API JSON shapes are already used by frontend/tests.
+- 2026-07-02: Remaining audit gaps fixed. Added registration/profile transaction rollback tests, cleaned negative seed values, fixed completed order badge style, added simple 404/500 views, guarded admin pharmacy delete when business records exist, and reached `OK (239 tests, 395 assertions)`.

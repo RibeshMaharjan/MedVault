@@ -134,7 +134,7 @@ class RouterTest extends TestCase
         $this->router->dispatch('/nonexistent', 'GET');
         $output = ob_get_clean();
         
-        $this->assertEquals('404 - Page Not Found', $output);
+        $this->assertStringContainsString('Page Not Found', $output);
     }
 
     public function testDispatchReturns404ForWrongMethod(): void
@@ -145,7 +145,7 @@ class RouterTest extends TestCase
         $this->router->dispatch('/test', 'POST');
         $output = ob_get_clean();
         
-        $this->assertEquals('404 - Page Not Found', $output);
+        $this->assertStringContainsString('Page Not Found', $output);
     }
 
     public function testDispatchMatchesRouteWithParameters(): void

@@ -395,8 +395,8 @@ INSERT INTO `tbl_medicine` (`medicine_id`, `medicine_name`, `medicine_descriptio
 (65, 'asadd', NULL, 'asdad', 20, 20, '2030-12-12', 'tablet', '../uploaded_img/66904ca3d024c6.20791652.jpg'),
 (68, 'newmedicine', NULL, 'newmanud', 23000, 12, '2030-12-12', 'tablet', '../uploaded_img/66901aac5c1055.38583994.jpg'),
 (70, 'new cetamol', NULL, 'dfs co', 50, 20, '2030-01-20', 'tablet', '../uploaded_img/669089b1969010.41432018.jpg'),
-(71, 'testing', NULL, 'tsting', -12, 20, '2030-12-12', 'capsule', '../uploaded_img/66909c17c629d9.40420607.jpg'),
-(72, 'trestinggg', NULL, 'trsting', 120, -3, '2030-12-12', 'tablet', '../uploaded_img/66909c3ff0abd8.91383333.jpg'),
+(71, 'testing', NULL, 'tsting', 12, 20, '2030-12-12', 'capsule', '../uploaded_img/66909c17c629d9.40420607.jpg'),
+(72, 'trestinggg', NULL, 'trsting', 120, 3, '2030-12-12', 'tablet', '../uploaded_img/66909c3ff0abd8.91383333.jpg'),
 (73, 'testing', NULL, 'testing', 300, 20, '2024-05-10', 'capsule', '../uploaded_img/66909c736d8124.25609616.jpg');
 
 -- --------------------------------------------------------
@@ -501,7 +501,7 @@ INSERT INTO `user_medicine_tbl` (`m_id`, `pharmacy_id`, `medicine_name`, `medici
 (52, 89, 'Ibuprofen 400mg', 'Anti-inflammatory pain relief', 20, 200, 14, 20, '2026-01-01 00:00:00', '2028-12-31'),
 (53, 89, 'Vitamin C 500mg', 'Immunity boosting supplement', 20, 400, 22, 30, '2026-01-01 00:00:00', '2028-12-31'),
 (54, 89, 'Metformin 500mg', 'Oral diabetes medication', 20, 150, 12, 18, '2026-01-01 00:00:00', '2028-12-31'),
-(55, 89, 'alu', 'kjbjaskjcbajkbchas cjkas hkac', 20, -20, -100, -200, '2026-05-22 01:49:28', '2026-05-22');
+(55, 89, 'alu', 'kjbjaskjcbajkbchas cjkas hkac', 20, 20, 100, 200, '2026-05-22 01:49:28', '2026-05-22');
 
 -- --------------------------------------------------------
 
