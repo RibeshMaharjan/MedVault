@@ -52,6 +52,7 @@ $router->post('/api/pharmacy/search-medicine', 'Pharmacy\AjaxController@searchMe
 $router->post('/api/pharmacy/medicine-row', 'Pharmacy\AjaxController@getMedicineRow', [PharmacyMiddleware::class]);
 $router->get('/api/pharmacy/sales-data', 'Pharmacy\AjaxController@getSalesData', [PharmacyMiddleware::class]);
 $router->get('/api/pharmacy/order-data', 'Pharmacy\AjaxController@getOrderData', [PharmacyMiddleware::class]);
+$router->get('/api/pharmacy/inventory-levels', 'Pharmacy\AjaxController@getInventoryLevels', [PharmacyMiddleware::class]);
 
 // Pharmacy - Profile
 $router->get('/pharmacy/profile', 'Pharmacy\ProfileController@edit', [PharmacyMiddleware::class]);

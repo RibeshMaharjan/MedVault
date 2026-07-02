@@ -11,7 +11,11 @@ class ExportController extends Controller
     {
         $db = Database::getInstance()->getConnection();
 
-        $sql = "SELECT * FROM user_orders";
+        $sql = "SELECT o.o_id, o.pharmacy_id, p.pharmacy_name, o.m_id, m.medicine_name,
+                       o.price, o.quantity, o.total_amount, o.status, o.order_date
+                FROM user_order_tbl o
+                LEFT JOIN tbl_pharmacy p ON o.pharmacy_id = p.pharmacy_id
+                LEFT JOIN user_medicine_tbl m ON o.m_id = m.m_id";
         $params = [];
 
         $status = $_GET['status'] ?? '';
@@ -20,11 +24,11 @@ class ExportController extends Controller
 
         $conditions = [];
         if ($status) {
-            $conditions[] = "status = :status";
+            $conditions[] = "o.status = :status";
             $params['status'] = $status;
         }
         if ($dateFrom && $dateTo) {
-            $conditions[] = "order_date BETWEEN :from AND :to";
+            $conditions[] = "o.order_date BETWEEN :from AND :to";
             $params['from'] = $dateFrom;
             $params['to'] = $dateTo;
         }
@@ -39,16 +43,16 @@ class ExportController extends Controller
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="orders_export.csv"');
 
+        $headers = ['o_id', 'pharmacy_id', 'pharmacy_name', 'm_id', 'medicine_name', 'price', 'quantity', 'total_amount', 'status', 'order_date'];
         $output = fopen('php://output', 'w');
-        $first = true;
+        fputcsv($output, $headers);
         while ($row = $stmt->fetch()) {
-            if ($first) {
-                fputcsv($output, array_keys($row));
-                $first = false;
-            }
             fputcsv($output, $row);
         }
         fclose($output);
+        if (($_ENV['APP_ENV'] ?? '') === 'testing') {
+            throw new \RuntimeException('CSV export complete');
+        }
         exit;
     }
 }

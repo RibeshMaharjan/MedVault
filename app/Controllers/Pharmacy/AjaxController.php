@@ -21,13 +21,17 @@ class AjaxController extends Controller
             echo '<ul class="list-group shadow-sm">';
             foreach ($results as $row) {
                 $stockClass = ($row['in_stock'] > 0) ? 'bg-success' : 'bg-danger';
+                $medicineName = htmlspecialchars($row['medicine_name'], ENT_QUOTES, 'UTF-8');
+                $fillArgument = htmlspecialchars(json_encode($row['medicine_name'], JSON_HEX_APOS | JSON_HEX_QUOT), ENT_QUOTES, 'UTF-8');
+                $price = htmlspecialchars((string) $row['sell_price'], ENT_QUOTES, 'UTF-8');
+                $stock = htmlspecialchars((string) $row['in_stock'], ENT_QUOTES, 'UTF-8');
                 echo "<li class=\"list-group-item list-group-item-action d-flex justify-content-between align-items-center\"
-                          onclick=\"fill('{$row['medicine_name']}')\">
+                          onclick=\"fill({$fillArgument})\">
                         <div>
-                            <strong>" . htmlspecialchars($row['medicine_name']) . "</strong>
-                            <small class=\"d-block text-muted\">Price: Rs.{$row['sell_price']}</small>
+                            <strong>{$medicineName}</strong>
+                            <small class=\"d-block text-muted\">Price: Rs.{$price}</small>
                         </div>
-                        <span class=\"badge {$stockClass} rounded-pill\">Stock: {$row['in_stock']}</span>
+                        <span class=\"badge {$stockClass} rounded-pill\">Stock: {$stock}</span>
                       </li>";
             }
             echo '</ul>';
@@ -42,7 +46,7 @@ class AjaxController extends Controller
         $name = $_POST['m_name'] ?? '';
 
         $medicine = new UserMedicine();
-        $result = $medicine->findOneBy('medicine_name', $name);
+        $result = $medicine->findByNameAndPharmacy($name, $userId);
 
         if ($result) {
             $this->json($result);
@@ -152,5 +156,13 @@ class AjaxController extends Controller
             'topOrders' => $topOrders,
             'recentOrders' => $recentOrders,
         ]);
+    }
+
+    public function getInventoryLevels(): void
+    {
+        $userId = $this->session->pharmacyId();
+        $medicine = new UserMedicine();
+
+        $this->json($medicine->getInventoryLevels($userId));
     }
 }

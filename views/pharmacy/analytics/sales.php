@@ -154,7 +154,6 @@ async function updateChartAndButtons(period) {
 // Function to fetch sales data
 async function fetchSalesData(period) {
     try {
-        console.log(`Fetching sales data for period: ${period}`);
         const response = await fetch(`/api/pharmacy/sales-data?period=${period}`);
 
         if (!response.ok) {
@@ -163,7 +162,6 @@ async function fetchSalesData(period) {
         }
 
         const data = await response.json();
-        console.log("API Response:", data);
 
         // If data is empty, return structured empty data
         if (!data.dates || data.dates.length === 0) {
@@ -233,8 +231,6 @@ function formatDate(date) {
 
 // Function to update chart
 async function updateChart(period) {
-    console.log("Updating chart for period:", period);
-
     // Update button states
     updateActiveButton(period);
 
@@ -247,7 +243,6 @@ async function updateChart(period) {
     }
 
     const data = await fetchSalesData(period);
-    console.log("Data received:", data); // Debug: log the data
 
     // Get canvas element
     let canvas = document.getElementById('salesChart');
@@ -257,7 +252,6 @@ async function updateChart(period) {
             canvas = document.createElement('canvas');
             canvas.id = 'salesChart';
             chartContainer.appendChild(canvas);
-            console.log("Created new canvas:", canvas);
         } else {
             console.error("Chart container not found");
             return;
@@ -380,7 +374,6 @@ async function updateChart(period) {
                 }
             }
         });
-        console.log("Chart created successfully:", salesChart);
     } catch (error) {
         console.error("Error creating chart:", error);
         // Show error but keep the canvas intact
@@ -617,8 +610,6 @@ function renderStockRecommendations(container, recommendations, inventory) {
 
 // Initialize with last week's data
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("DOM fully loaded");
-
     // Set initial active state for 'week' button
     const weekBtn = document.getElementById('weekBtn');
     if (weekBtn) {
