@@ -40,9 +40,10 @@ class MedicineCrudFlowTest extends TestCase
                 s_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 pharmacy_id INTEGER NOT NULL,
                 m_id INTEGER,
+                price REAL DEFAULT 0,
                 quantity INTEGER DEFAULT 0,
-                total_price REAL DEFAULT 0,
-                sale_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+                total_amount REAL DEFAULT 0,
+                sales_date DATE,
                 status TEXT DEFAULT 'completed'
             );
             
@@ -50,10 +51,10 @@ class MedicineCrudFlowTest extends TestCase
                 o_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 pharmacy_id INTEGER NOT NULL,
                 m_id INTEGER,
-                supplier_name TEXT NOT NULL,
-                order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+                price REAL DEFAULT 0,
                 quantity INTEGER DEFAULT 0,
                 total_amount REAL DEFAULT 0,
+                order_date DATE,
                 status TEXT DEFAULT 'pending',
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
@@ -67,6 +68,7 @@ class MedicineCrudFlowTest extends TestCase
         self::$pdo->exec("DELETE FROM user_category_tbl");
         self::$pdo->exec("DELETE FROM user_sales_tbl");
         self::$pdo->exec("DELETE FROM user_order_tbl");
+        self::$pdo->exec("DELETE FROM sqlite_sequence WHERE name IN ('user_medicine_tbl', 'user_category_tbl', 'user_sales_tbl', 'user_order_tbl')");
     }
 
     public function testCreateMedicine(): void
@@ -142,8 +144,8 @@ class MedicineCrudFlowTest extends TestCase
         $medId = 1;
         
         self::$pdo->exec("
-            INSERT INTO user_sales_tbl (pharmacy_id, m_id, quantity, total_price)
-            VALUES (1, $medId, 5, 50.00)
+            INSERT INTO user_sales_tbl (pharmacy_id, m_id, price, quantity, total_amount, sales_date)
+            VALUES (1, $medId, 10.00, 5, 50.00, '2026-07-02')
         ");
         
         $salesCount = self::$pdo->query("SELECT COUNT(*) as count FROM user_sales_tbl WHERE m_id = $medId")->fetch();
@@ -160,8 +162,8 @@ class MedicineCrudFlowTest extends TestCase
         $medId = 1;
         
         self::$pdo->exec("
-            INSERT INTO user_order_tbl (pharmacy_id, m_id, supplier_name, quantity, total_amount)
-            VALUES (1, $medId, 'Supplier', 10, 100.00)
+            INSERT INTO user_order_tbl (pharmacy_id, m_id, price, quantity, total_amount, order_date)
+            VALUES (1, $medId, 10.00, 10, 100.00, '2026-07-02')
         ");
         
         $orderCount = self::$pdo->query("SELECT COUNT(*) as count FROM user_order_tbl WHERE m_id = $medId")->fetch();

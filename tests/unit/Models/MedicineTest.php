@@ -31,16 +31,39 @@ class MedicineTest extends TestCase
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ");
+
+        self::$pdo->exec("
+            CREATE TABLE user_sales_tbl (
+                s_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                pharmacy_id INTEGER NOT NULL,
+                m_id INTEGER,
+                price REAL DEFAULT 0,
+                quantity INTEGER DEFAULT 0,
+                total_amount REAL DEFAULT 0,
+                sales_date DATE,
+                status TEXT DEFAULT 'completed'
+            );
+
+            CREATE TABLE user_order_tbl (
+                o_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                pharmacy_id INTEGER NOT NULL,
+                m_id INTEGER,
+                price REAL DEFAULT 0,
+                quantity INTEGER DEFAULT 0,
+                total_amount REAL DEFAULT 0,
+                order_date DATE,
+                status TEXT DEFAULT 'pending'
+            )
+        ");
     }
 
     protected function setUp(): void
     {
         parent::setUp();
         self::$pdo->exec("DELETE FROM user_medicine_tbl");
+        self::$pdo->exec("DELETE FROM sqlite_sequence WHERE name = 'user_medicine_tbl'");
         
-        $this->model = new class(self::$pdo) extends UserMedicine {
-            protected $db;
-            public function __construct($pdo)
+        $this->model = new class(self::$pdo) extends UserMedicine {            public function __construct($pdo)
             {
                 $this->db = $pdo;
             }
@@ -146,9 +169,83 @@ class MedicineTest extends TestCase
         $this->assertCount(5, $results);
     }
 
+    public function testFindByIdAndPharmacyDoesNotReturnOtherPharmacyMedicine(): void
+    {
+        $id = $this->seedMedicine(2, 'Other Pharmacy Medicine');
+
+        $result = $this->model->findByIdAndPharmacy($id, 1);
+
+        $this->assertNull($result);
+    }
+
+    public function testFindByNameAndPharmacyDoesNotReturnOtherPharmacyMedicine(): void
+    {
+        $this->seedMedicine(2, 'Shared Name');
+
+        $result = $this->model->findByNameAndPharmacy('Shared Name', 1);
+
+        $this->assertNull($result);
+    }
+
+    public function testUpdateByPharmacyDoesNotMutateOtherPharmacyMedicine(): void
+    {
+        $id = $this->seedMedicine(2, 'Original');
+
+        $result = $this->model->updateByPharmacy($id, 1, ['medicine_name' => 'Changed']);
+
+        $this->assertFalse($result);
+        $this->assertEquals('Original', $this->model->findById($id)['medicine_name']);
+    }
+
+    public function testDeleteByPharmacyDoesNotDeleteOtherPharmacyMedicine(): void
+    {
+        $id = $this->seedMedicine(2, 'Protected');
+
+        $result = $this->model->deleteByPharmacy($id, 1);
+
+        $this->assertFalse($result);
+        $this->assertNotNull($this->model->findById($id));
+    }
+
+    public function testUpdateStockByPharmacyDoesNotMutateOtherPharmacyMedicine(): void
+    {
+        $id = $this->seedMedicine(2, 'Protected', 10.00, 25);
+
+        $result = $this->model->updateStockByPharmacy($id, 1, -10);
+
+        $this->assertFalse($result);
+        $this->assertEquals(25, $this->model->findById($id)['in_stock']);
+    }
+
+    public function testHasRelatedRecordsByPharmacyIgnoresOtherPharmacyRecords(): void
+    {
+        $id = $this->seedMedicine(2, 'Protected');
+        self::$pdo->exec("INSERT INTO user_sales_tbl (pharmacy_id, m_id, quantity) VALUES (2, $id, 1)");
+        self::$pdo->exec("INSERT INTO user_order_tbl (pharmacy_id, m_id, quantity) VALUES (2, $id, 1)");
+
+        $result = $this->model->hasRelatedRecordsByPharmacy($id, 1);
+
+        $this->assertEquals(['sales' => 0, 'orders' => 0], $result);
+    }
+
+    public function testGetInventoryLevelsReturnsSummaryAndLowStockItems(): void
+    {
+        $this->seedMedicine(1, 'Low', 10.00, 5);
+        $this->seedMedicine(1, 'Out', 10.00, 0);
+        $this->seedMedicine(1, 'Healthy', 10.00, 25);
+        $this->seedMedicine(2, 'Other Pharmacy', 10.00, 1);
+
+        $result = $this->model->getInventoryLevels(1, 10);
+
+        $this->assertEquals(30, $result['totalStock']);
+        $this->assertEquals(1, $result['lowStockCount']);
+        $this->assertEquals(1, $result['outOfStockCount']);
+        $this->assertCount(2, $result['lowStockItems']);
+    }
+
     public function testUpdateStockIncreasesStock(): void
     {
-        $this->seedMedicine(1, 'Test', 50);
+        $this->seedMedicine(1, 'Test', 10.00, 50);
         
         $result = $this->model->updateStock(1, 50);
         
@@ -214,9 +311,9 @@ class MedicineTest extends TestCase
         $this->assertEquals('New Name', $medicine['medicine_name']);
     }
 
-    private function seedMedicine(int $pharmacyId, string $name, float $buyPrice = 10.00): int
+    private function seedMedicine(int $pharmacyId, string $name, float $buyPrice = 10.00, int $stock = 100): int
     {
-        self::$pdo->exec("INSERT INTO user_medicine_tbl (pharmacy_id, medicine_name, buy_price, in_stock) VALUES ($pharmacyId, '$name', $buyPrice, 100)");
+        self::$pdo->exec("INSERT INTO user_medicine_tbl (pharmacy_id, medicine_name, buy_price, in_stock) VALUES ($pharmacyId, '$name', $buyPrice, $stock)");
         return (int) self::$pdo->lastInsertId();
     }
 }

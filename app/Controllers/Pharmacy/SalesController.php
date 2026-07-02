@@ -57,25 +57,37 @@ class SalesController extends Controller
     {
         $userId = $this->session->pharmacyId();
         $medicineId = (int) ($_POST['m_id'] ?? 0);
-        $price = (float) ($_POST['sellprice'] ?? 0);
         $quantity = (int) ($_POST['quantity'] ?? 0);
-        $total = (float) ($_POST['total'] ?? 0);
         $date = $_POST['sales_date'] ?? '';
 
-        $med = $this->medicine->findById($medicineId, 'm_id');
+        if ($quantity <= 0) {
+            $this->redirect('/pharmacy/sales/create', 'Invalid quantity');
+        }
+
+        $med = $this->medicine->findByIdAndPharmacy($medicineId, $userId);
         if (!$med || $med['in_stock'] < $quantity) {
             $this->redirect('/pharmacy/sales/create', 'Not enough stock available');
         }
 
-        $this->sale->insert([
-            'pharmacy_id' => $userId,
-            'm_id' => $medicineId,
-            'price' => $price,
-            'quantity' => $quantity,
-            'total_amount' => $total,
-            'status' => 'pending',
-            'sales_date' => $date,
-        ]);
+        $price = (float) $med['sell_price'];
+        $total = $price * $quantity;
+
+        try {
+            $this->sale->beginTransaction();
+            $this->sale->insert([
+                'pharmacy_id' => $userId,
+                'm_id' => $medicineId,
+                'price' => $price,
+                'quantity' => $quantity,
+                'total_amount' => $total,
+                'status' => 'pending',
+                'sales_date' => $date,
+            ]);
+            $this->sale->commit();
+        } catch (\Throwable) {
+            $this->sale->rollBack();
+            $this->redirect('/pharmacy/sales/create', 'Unable to create sale');
+        }
 
         $this->redirect('/pharmacy/sales', 'Sale added successfully');
     }
@@ -95,20 +107,47 @@ class SalesController extends Controller
         $quantity = (int) ($_POST['quantity'] ?? 0);
         $oldStatus = $sale['status'];
 
-        if ($oldStatus !== 'completed' && $newStatus === 'completed') {
-            $this->medicine->updateStock($mId, -$quantity);
-        } elseif ($oldStatus === 'completed' && $newStatus !== 'completed') {
-            $this->medicine->updateStock($mId, (int) $sale['quantity']);
+        if ($quantity <= 0) {
+            $this->redirect('/pharmacy/sales', 'Invalid quantity');
         }
 
-        $this->sale->updateByPharmacy($saleId, $userId, [
-            'm_id' => $mId,
-            'price' => (float) ($_POST['price'] ?? 0),
-            'quantity' => $quantity,
-            'total_amount' => (float) ($_POST['total'] ?? 0),
-            'status' => $newStatus,
-            'sales_date' => $_POST['sales_date'] ?? '',
-        ]);
+        $med = $this->medicine->findByIdAndPharmacy($mId, $userId);
+        if (!$med) {
+            $this->redirect('/pharmacy/sales', 'Medicine not found');
+        }
+
+        if ($newStatus === 'completed') {
+            $availableStock = (int) $med['in_stock'];
+            if ((int) $sale['m_id'] === $mId && $oldStatus === 'completed') {
+                $availableStock += (int) $sale['quantity'];
+            }
+            if ($availableStock < $quantity) {
+                $this->redirect('/pharmacy/sales', 'Not enough stock available');
+            }
+        }
+
+        $price = (float) $med['sell_price'];
+        try {
+            $this->sale->beginTransaction();
+            if ($oldStatus === 'completed') {
+                $this->medicine->updateStockByPharmacy((int) $sale['m_id'], $userId, (int) $sale['quantity']);
+            }
+            if ($newStatus === 'completed') {
+                $this->medicine->updateStockByPharmacy($mId, $userId, -$quantity);
+            }
+            $this->sale->updateByPharmacy($saleId, $userId, [
+                'm_id' => $mId,
+                'price' => $price,
+                'quantity' => $quantity,
+                'total_amount' => $price * $quantity,
+                'status' => $newStatus,
+                'sales_date' => $_POST['sales_date'] ?? '',
+            ]);
+            $this->sale->commit();
+        } catch (\Throwable) {
+            $this->sale->rollBack();
+            $this->redirect('/pharmacy/sales', 'Unable to update sale');
+        }
 
         $this->redirect('/pharmacy/sales', 'Sales Updated Successfully');
     }
@@ -123,11 +162,18 @@ class SalesController extends Controller
             $this->redirect('/pharmacy/sales', 'Sales record not found');
         }
 
-        if ($sale['status'] === 'completed') {
-            $this->medicine->updateStock((int) $sale['m_id'], (int) $sale['quantity']);
+        try {
+            $this->sale->beginTransaction();
+            if ($sale['status'] === 'completed') {
+                $this->medicine->updateStockByPharmacy((int) $sale['m_id'], $userId, (int) $sale['quantity']);
+            }
+            $this->sale->deleteByPharmacy($saleId, $userId);
+            $this->sale->commit();
+        } catch (\Throwable) {
+            $this->sale->rollBack();
+            $this->redirect('/pharmacy/sales', 'Unable to delete sale');
         }
 
-        $this->sale->deleteByPharmacy($saleId, $userId);
         $this->redirect('/pharmacy/sales', 'Sales record removed and inventory adjusted successfully');
     }
 }

@@ -22,9 +22,38 @@ class Category extends Model
         ]);
     }
 
+    public function findByIdAndPharmacy(int $categoryId, int $pharmacyId): ?array
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE c_id = :id AND pharmacy_id = :pharmacy_id LIMIT 1";
+        $row = $this->query($sql, ['id' => $categoryId, 'pharmacy_id' => $pharmacyId])->fetch();
+        return $row ?: null;
+    }
+
+    public function updateByPharmacy(int $categoryId, int $pharmacyId, array $data): bool
+    {
+        $set = implode(', ', array_map(fn($key) => "{$key} = :{$key}", array_keys($data)));
+        $data['id'] = $categoryId;
+        $data['pharmacy_id'] = $pharmacyId;
+
+        $sql = "UPDATE {$this->table} SET {$set} WHERE c_id = :id AND pharmacy_id = :pharmacy_id";
+        return $this->query($sql, $data)->rowCount() > 0;
+    }
+
+    public function deleteByPharmacy(int $categoryId, int $pharmacyId): bool
+    {
+        $sql = "DELETE FROM {$this->table} WHERE c_id = :id AND pharmacy_id = :pharmacy_id LIMIT 1";
+        return $this->query($sql, ['id' => $categoryId, 'pharmacy_id' => $pharmacyId])->rowCount() > 0;
+    }
+
     public function hasMedicines(int $categoryId): int
     {
         $sql = "SELECT COUNT(*) as count FROM user_medicine_tbl WHERE c_id = :id";
         return (int) $this->query($sql, ['id' => $categoryId])->fetch()['count'];
+    }
+
+    public function hasMedicinesByPharmacy(int $categoryId, int $pharmacyId): int
+    {
+        $sql = "SELECT COUNT(*) as count FROM user_medicine_tbl WHERE c_id = :id AND pharmacy_id = :pharmacy_id";
+        return (int) $this->query($sql, ['id' => $categoryId, 'pharmacy_id' => $pharmacyId])->fetch()['count'];
     }
 }

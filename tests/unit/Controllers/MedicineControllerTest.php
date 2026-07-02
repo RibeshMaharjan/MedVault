@@ -4,7 +4,7 @@ namespace Tests\Unit\Controllers;
 
 use PHPUnit\Framework\TestCase;
 
-class MedicineControllerValidationTest extends TestCase
+class MedicineControllerTest extends TestCase
 {
     public function testValidateSanitizesInput(): void
     {
@@ -66,14 +66,33 @@ class MedicineControllerValidationTest extends TestCase
         $this->assertFalse($isInvalid);
     }
 
-    public function dataProviderPriceValidation(): array
+    public static function dataProviderStockValidation(): array
     {
         return [
-            ['10.00', '15.00', true],
-            ['0', '0', false],
-            ['-5.00', '10.00', false],
-            ['10.00', '-5.00', false],
-            ['', '', false],
+            [0, true],
+            [10, true],
+            [-1, false],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderStockValidation
+     */
+    public function testStockValidation(int $stock, bool $shouldPass): void
+    {
+        $isValid = $stock >= 0;
+
+        $this->assertEquals($shouldPass, $isValid);
+    }
+
+    public static function dataProviderPriceValidation(): array
+    {
+        return [
+            [10.00, 15.00, true],
+            [0.00, 0.00, false],
+            [-5.00, 10.00, false],
+            [10.00, -5.00, false],
+            [0.00, 0.00, false],
         ];
     }
 
@@ -87,10 +106,10 @@ class MedicineControllerValidationTest extends TestCase
         $this->assertEquals($shouldPass, $isValid);
     }
 
-    public function dataProviderExpiryDate(): array
+    public static function dataProviderExpiryDate(): array
     {
         return [
-            ['2025-12-31', true],
+            ['2027-12-31', true],
             ['2030-01-01', true],
             ['2020-01-01', false],
             ['', false],

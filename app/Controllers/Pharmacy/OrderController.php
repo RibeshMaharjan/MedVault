@@ -57,37 +57,42 @@ class OrderController extends Controller
     {
         $userId = $this->session->pharmacyId();
         $medicineId = (int) ($_POST['m_id'] ?? 0);
-        $price = (float) ($_POST['price'] ?? 0);
         $quantity = (int) ($_POST['quantity'] ?? 0);
-        $total = (float) ($_POST['total'] ?? 0);
         $date = $_POST['order_date'] ?? '';
 
         if (!is_numeric($quantity) || $quantity <= 0) {
             $this->redirect('/pharmacy/orders/create', 'Invalid quantity');
         }
-        if (!is_numeric($price) || $price <= 0) {
-            $this->redirect('/pharmacy/orders/create', 'Invalid price');
-        }
         if (strtotime($date) < strtotime(date('Y-m-d'))) {
             $this->redirect('/pharmacy/orders/create', 'Order date cannot be in the past');
         }
 
-        $med = $this->medicine->findById($medicineId, 'm_id');
+        $med = $this->medicine->findByIdAndPharmacy($medicineId, $userId);
         if (!$med || $med['in_stock'] < $quantity) {
             $this->redirect('/pharmacy/orders/create', 'Not enough stock available');
         }
 
-        $this->order->insert([
-            'pharmacy_id' => $userId,
-            'm_id' => $medicineId,
-            'price' => $price,
-            'quantity' => $quantity,
-            'total_amount' => $total,
-            'status' => 'pending',
-            'order_date' => $date,
-        ]);
+        $price = (float) $med['sell_price'];
+        $total = $price * $quantity;
 
-        $this->medicine->updateStock($medicineId, -$quantity);
+        try {
+            $this->order->beginTransaction();
+            $this->order->insert([
+                'pharmacy_id' => $userId,
+                'm_id' => $medicineId,
+                'price' => $price,
+                'quantity' => $quantity,
+                'total_amount' => $total,
+                'status' => 'pending',
+                'order_date' => $date,
+            ]);
+            $this->medicine->updateStockByPharmacy($medicineId, $userId, -$quantity);
+            $this->order->commit();
+        } catch (\Throwable) {
+            $this->order->rollBack();
+            $this->redirect('/pharmacy/orders/create', 'Unable to create order');
+        }
+
         $this->redirect('/pharmacy/orders', 'Order has been submitted successfully');
     }
 
@@ -104,26 +109,47 @@ class OrderController extends Controller
         $newStatus = $_POST['status'] ?? 'pending';
         $mId = (int) ($_POST['m_id'] ?? $order['m_id']);
         $quantity = (int) ($_POST['quantity'] ?? 0);
-        $oldStatus = $order['status'];
 
-        // Stock adjustments on status changes
-        if ($oldStatus !== 'completed' && $newStatus === 'completed') {
-            $med = $this->medicine->findById($mId, 'm_id');
-            if ($med && $med['in_stock'] < $quantity) {
-                $this->redirect('/pharmacy/orders', 'Not enough stock to complete this order.');
-            }
-            $this->medicine->updateStock($mId, -$quantity);
-        } elseif ($oldStatus === 'completed' && $newStatus !== 'completed') {
-            $this->medicine->updateStock($mId, (int) $order['quantity']);
+        if ($quantity <= 0) {
+            $this->redirect('/pharmacy/orders', 'Invalid quantity');
         }
 
-        $this->order->updateByPharmacy($orderId, $userId, [
-            'price' => (float) ($_POST['price'] ?? 0),
-            'quantity' => $quantity,
-            'total_amount' => (float) ($_POST['total'] ?? 0),
-            'status' => $newStatus,
-            'order_date' => $_POST['order_date'] ?? '',
-        ]);
+        $med = $this->medicine->findByIdAndPharmacy($mId, $userId);
+        if (!$med) {
+            $this->redirect('/pharmacy/orders', 'Medicine not found');
+        }
+
+        $oldMedicineId = (int) $order['m_id'];
+        $oldQuantity = (int) $order['quantity'];
+        if ($oldMedicineId === $mId && ((int) $med['in_stock'] + $oldQuantity) < $quantity) {
+            $this->redirect('/pharmacy/orders', 'Not enough stock available');
+        }
+        if ($oldMedicineId !== $mId && (int) $med['in_stock'] < $quantity) {
+            $this->redirect('/pharmacy/orders', 'Not enough stock available');
+        }
+
+        $price = (float) $med['sell_price'];
+        try {
+            $this->order->beginTransaction();
+            if ($oldMedicineId === $mId) {
+                $this->medicine->updateStockByPharmacy($mId, $userId, $oldQuantity - $quantity);
+            } else {
+                $this->medicine->updateStockByPharmacy($oldMedicineId, $userId, $oldQuantity);
+                $this->medicine->updateStockByPharmacy($mId, $userId, -$quantity);
+            }
+            $this->order->updateByPharmacy($orderId, $userId, [
+                'm_id' => $mId,
+                'price' => $price,
+                'quantity' => $quantity,
+                'total_amount' => $price * $quantity,
+                'status' => $newStatus,
+                'order_date' => $_POST['order_date'] ?? '',
+            ]);
+            $this->order->commit();
+        } catch (\Throwable) {
+            $this->order->rollBack();
+            $this->redirect('/pharmacy/orders', 'Unable to update order');
+        }
 
         $this->redirect('/pharmacy/orders', 'Order updated successfully');
     }
@@ -138,11 +164,16 @@ class OrderController extends Controller
             $this->redirect('/pharmacy/orders', 'Order not found');
         }
 
-        if ($order['status'] === 'completed') {
-            $this->medicine->updateStock((int) $order['m_id'], (int) $order['quantity']);
+        try {
+            $this->order->beginTransaction();
+            $this->medicine->updateStockByPharmacy((int) $order['m_id'], $userId, (int) $order['quantity']);
+            $this->order->deleteByPharmacy($orderId, $userId);
+            $this->order->commit();
+        } catch (\Throwable) {
+            $this->order->rollBack();
+            $this->redirect('/pharmacy/orders', 'Unable to delete order');
         }
 
-        $this->order->deleteByPharmacy($orderId, $userId);
         $this->redirect('/pharmacy/orders', 'Order deleted successfully');
     }
 }

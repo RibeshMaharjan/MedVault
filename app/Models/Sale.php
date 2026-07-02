@@ -43,10 +43,15 @@ class Sale extends Model
 
     public function getSalesData(int $pharmacyId, string $startDate, string $endDate): array
     {
+        $driver = $this->db->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        $nextDate = $driver === 'sqlite'
+            ? "date(date, '+1 day')"
+            : 'DATE_ADD(date, INTERVAL 1 DAY)';
+
         $sql = "WITH RECURSIVE date_range AS (
                     SELECT :start as date
                     UNION ALL
-                    SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM date_range WHERE DATE_ADD(date, INTERVAL 1 DAY) <= :end
+                    SELECT {$nextDate} FROM date_range WHERE {$nextDate} <= :end
                 ),
                 daily_sales AS (
                     SELECT DATE(sales_date) as sale_date, SUM(total_amount) as daily_total

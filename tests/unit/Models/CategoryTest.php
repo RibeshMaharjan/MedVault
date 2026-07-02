@@ -41,10 +41,9 @@ class CategoryTest extends TestCase
         parent::setUp();
         self::$pdo->exec("DELETE FROM user_category_tbl");
         self::$pdo->exec("DELETE FROM user_medicine_tbl");
+        self::$pdo->exec("DELETE FROM sqlite_sequence WHERE name IN ('user_category_tbl', 'user_medicine_tbl')");
         
-        $this->model = new class(self::$pdo) extends Category {
-            protected $db;
-            public function __construct($pdo)
+        $this->model = new class(self::$pdo) extends Category {            public function __construct($pdo)
             {
                 $this->db = $pdo;
             }
@@ -90,6 +89,45 @@ class CategoryTest extends TestCase
         $count = $this->model->hasMedicines($catId);
         
         $this->assertEquals(2, $count);
+    }
+
+    public function testFindByIdAndPharmacyDoesNotReturnOtherPharmacyCategory(): void
+    {
+        $id = $this->seedCategory(2, 'Other Pharmacy Category');
+
+        $result = $this->model->findByIdAndPharmacy($id, 1);
+
+        $this->assertNull($result);
+    }
+
+    public function testUpdateByPharmacyDoesNotMutateOtherPharmacyCategory(): void
+    {
+        $id = $this->seedCategory(2, 'Original');
+
+        $result = $this->model->updateByPharmacy($id, 1, ['category_name' => 'Changed']);
+
+        $this->assertFalse($result);
+        $this->assertEquals('Original', $this->model->findById($id)['category_name']);
+    }
+
+    public function testDeleteByPharmacyDoesNotDeleteOtherPharmacyCategory(): void
+    {
+        $id = $this->seedCategory(2, 'Protected');
+
+        $result = $this->model->deleteByPharmacy($id, 1);
+
+        $this->assertFalse($result);
+        $this->assertNotNull($this->model->findById($id));
+    }
+
+    public function testHasMedicinesByPharmacyIgnoresOtherPharmacyMedicines(): void
+    {
+        $catId = $this->seedCategory(2, 'Protected');
+        self::$pdo->exec("INSERT INTO user_medicine_tbl (pharmacy_id, c_id, medicine_name) VALUES (2, $catId, 'Medicine')");
+
+        $count = $this->model->hasMedicinesByPharmacy($catId, 1);
+
+        $this->assertEquals(0, $count);
     }
 
     public function testFindById(): void

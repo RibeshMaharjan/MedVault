@@ -107,6 +107,12 @@ class MedicineController extends Controller
         if (empty($name) || empty($category)) {
             $this->redirect('/pharmacy/medicines/create', 'Fill All the Fields');
         }
+        if ($inStock < 0 || $buyPrice <= 0 || $sellPrice <= 0) {
+            $this->redirect('/pharmacy/medicines/create', 'Invalid stock or price');
+        }
+        if (empty($expDate) || strtotime($expDate) < strtotime(date('Y-m-d'))) {
+            $this->redirect('/pharmacy/medicines/create', 'Invalid expiration date');
+        }
 
         $this->medicine->insert([
             'pharmacy_id' => $userId,
@@ -125,6 +131,7 @@ class MedicineController extends Controller
     public function update(string $id): void
     {
         $medicineId = (int) $id;
+        $userId = $this->session->pharmacyId();
 
         $name = $this->validate($_POST['name'] ?? '');
         $description = $this->validate($_POST['description'] ?? '');
@@ -137,8 +144,18 @@ class MedicineController extends Controller
         if (empty($name) || empty($category)) {
             $this->redirect('/pharmacy/medicines', 'Please fill all required fields');
         }
+        if ($inStock < 0 || $buyPrice <= 0 || $sellPrice <= 0) {
+            $this->redirect('/pharmacy/medicines', 'Invalid stock or price');
+        }
+        if (empty($expDate) || strtotime($expDate) < strtotime(date('Y-m-d'))) {
+            $this->redirect('/pharmacy/medicines', 'Invalid expiration date');
+        }
 
-        $this->medicine->update($medicineId, [
+        if (!$this->medicine->findByIdAndPharmacy($medicineId, $userId)) {
+            $this->redirect('/pharmacy/medicines', 'Medicine not found');
+        }
+
+        $this->medicine->updateByPharmacy($medicineId, $userId, [
             'medicine_name' => $name,
             'medicine_desc' => $description,
             'c_id' => $category,
@@ -146,7 +163,7 @@ class MedicineController extends Controller
             'buy_price' => $buyPrice,
             'sell_price' => $sellPrice,
             'exp_date' => $expDate,
-        ], 'm_id');
+        ]);
 
         $this->redirect('/pharmacy/medicines', 'Medicine updated successfully');
     }
@@ -154,18 +171,19 @@ class MedicineController extends Controller
     public function destroy(string $id): void
     {
         $medicineId = (int) $id;
+        $userId = $this->session->pharmacyId();
 
-        $related = $this->medicine->hasRelatedRecords($medicineId);
-        if ($related['sales'] > 0 || $related['orders'] > 0) {
-            $this->redirect('/pharmacy/medicines', 'Cannot delete: This medicine has related sales or order records');
-        }
-
-        $medicine = $this->medicine->findById($medicineId, 'm_id');
+        $medicine = $this->medicine->findByIdAndPharmacy($medicineId, $userId);
         if (!$medicine) {
             $this->redirect('/pharmacy/medicines', 'Medicine not found');
         }
 
-        $this->medicine->delete($medicineId, 'm_id');
+        $related = $this->medicine->hasRelatedRecordsByPharmacy($medicineId, $userId);
+        if ($related['sales'] > 0 || $related['orders'] > 0) {
+            $this->redirect('/pharmacy/medicines', 'Cannot delete: This medicine has related sales or order records');
+        }
+
+        $this->medicine->deleteByPharmacy($medicineId, $userId);
         $this->redirect('/pharmacy/medicines', 'Medicine deleted successfully');
     }
 }

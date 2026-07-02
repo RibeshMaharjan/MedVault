@@ -76,12 +76,19 @@ class Order extends Model
     {
         $sql = "SELECT COUNT(*) as total,
                 ROUND(AVG(total_amount)) as avg_order_value,
-                COUNT(CASE WHEN status = 'completed' THEN 1 END) * 100.0 / GREATEST(COUNT(*), 1) as completion_rate,
-                COUNT(CASE WHEN DATE(order_date) = CURDATE() THEN 1 END) as today_orders,
-                COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending_orders
+                CASE WHEN COUNT(*) = 0 THEN 0
+                    ELSE SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) * 100.0 / COUNT(*)
+                END as completion_rate,
+                SUM(CASE WHEN DATE(order_date) = :today THEN 1 ELSE 0 END) as today_orders,
+                SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending_orders
                 FROM {$this->table}
                 WHERE pharmacy_id = :pid AND order_date BETWEEN :start AND :end";
-        return $this->query($sql, ['pid' => $pharmacyId, 'start' => $startDate, 'end' => $endDate])->fetch();
+        return $this->query($sql, [
+            'pid' => $pharmacyId,
+            'start' => $startDate,
+            'end' => $endDate,
+            'today' => date('Y-m-d'),
+        ])->fetch();
     }
 
     public function getTopOrdered(int $pharmacyId, string $startDate, string $endDate, int $limit = 5): array
@@ -95,7 +102,7 @@ class Order extends Model
 
     public function getRecentOrders(int $pharmacyId, int $limit = 10): array
     {
-        $sql = "SELECT o.order_date, m.medicine_name, o.quantity, o.status, o.total_amount
+        $sql = "SELECT o.order_date, m.medicine_name, o.quantity, o.status, o.total_amount as amount
                 FROM {$this->table} o JOIN user_medicine_tbl m ON o.m_id = m.m_id
                 WHERE o.pharmacy_id = :pid ORDER BY o.order_date DESC LIMIT {$limit}";
         return $this->query($sql, ['pid' => $pharmacyId])->fetchAll();

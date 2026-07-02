@@ -4,7 +4,7 @@ namespace Tests\Unit\Controllers;
 
 use PHPUnit\Framework\TestCase;
 
-class CategoryControllerValidationTest extends TestCase
+class CategoryControllerTest extends TestCase
 {
     public function testValidateSanitizesInput(): void
     {

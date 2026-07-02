@@ -33,11 +33,9 @@ class UserTest extends TestCase
     {
         parent::setUp();
         self::$pdo->exec("DELETE FROM role");
-        self::$pdo->exec("DELETE FROM tbl_pharmacy");
+        self::$pdo->exec("DELETE FROM sqlite_sequence WHERE name = 'role'");
         
-        $this->model = new class(self::$pdo) extends User {
-            protected $db;
-            public function __construct($pdo)
+        $this->model = new class(self::$pdo) extends User {            public function __construct($pdo)
             {
                 $this->db = $pdo;
             }

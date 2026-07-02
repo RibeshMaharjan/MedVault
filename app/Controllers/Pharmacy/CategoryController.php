@@ -42,31 +42,37 @@ class CategoryController extends Controller
     public function update(string $id): void
     {
         $categoryId = (int) $id;
+        $userId = $this->session->pharmacyId();
         $name = $this->validate($_POST['name'] ?? '');
 
         if (empty($name)) {
             $this->redirect('/pharmacy/categories', 'Category name is required');
         }
 
-        $this->category->update($categoryId, ['category_name' => $name], 'c_id');
+        if (!$this->category->findByIdAndPharmacy($categoryId, $userId)) {
+            $this->redirect('/pharmacy/categories', 'Category not found');
+        }
+
+        $this->category->updateByPharmacy($categoryId, $userId, ['category_name' => $name]);
         $this->redirect('/pharmacy/categories', 'Category Updated Successfully');
     }
 
     public function destroy(string $id): void
     {
         $categoryId = (int) $id;
+        $userId = $this->session->pharmacyId();
 
-        $medicineCount = $this->category->hasMedicines($categoryId);
-        if ($medicineCount > 0) {
-            $this->redirect('/pharmacy/categories', "Cannot delete: This category contains {$medicineCount} medicines. Please reassign them first.");
-        }
-
-        $category = $this->category->findById($categoryId, 'c_id');
+        $category = $this->category->findByIdAndPharmacy($categoryId, $userId);
         if (!$category) {
             $this->redirect('/pharmacy/categories', 'Category not found');
         }
 
-        $this->category->delete($categoryId, 'c_id');
+        $medicineCount = $this->category->hasMedicinesByPharmacy($categoryId, $userId);
+        if ($medicineCount > 0) {
+            $this->redirect('/pharmacy/categories', "Cannot delete: This category contains {$medicineCount} medicines. Please reassign them first.");
+        }
+
+        $this->category->deleteByPharmacy($categoryId, $userId);
         $this->redirect('/pharmacy/categories', 'Category deleted successfully');
     }
 }

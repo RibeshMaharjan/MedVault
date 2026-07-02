@@ -22,9 +22,10 @@ class SaleTest extends TestCase
                 s_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 pharmacy_id INTEGER NOT NULL,
                 m_id INTEGER,
+                price REAL DEFAULT 0,
                 quantity INTEGER DEFAULT 0,
-                total_price REAL DEFAULT 0,
-                sale_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+                total_amount REAL DEFAULT 0,
+                sales_date DATE,
                 status TEXT DEFAULT 'completed'
             )
         ");
@@ -34,10 +35,9 @@ class SaleTest extends TestCase
     {
         parent::setUp();
         self::$pdo->exec("DELETE FROM user_sales_tbl");
+        self::$pdo->exec("DELETE FROM sqlite_sequence WHERE name = 'user_sales_tbl'");
         
-        $this->model = new class(self::$pdo) extends Sale {
-            protected $db;
-            public function __construct($pdo)
+        $this->model = new class(self::$pdo) extends Sale {            public function __construct($pdo)
             {
                 $this->db = $pdo;
             }
@@ -61,7 +61,7 @@ class SaleTest extends TestCase
         $this->seedSale(1, 50.00);
         $this->seedSale(1, 100.00);
         
-        $result = $this->model->paginateByPharmacy(1, 1, 10, 'total_price > :price', ['price' => 75.00]);
+        $result = $this->model->paginateByPharmacy(1, 1, 10, 'total_amount > :price', ['price' => 75.00]);
         
         $this->assertCount(1, $result['data']);
     }
@@ -73,7 +73,7 @@ class SaleTest extends TestCase
         $result = $this->model->findByIdAndPharmacy($id, 1);
         
         $this->assertNotNull($result);
-        $this->assertEquals(50.00, $result['total_price']);
+        $this->assertEquals(50.00, $result['total_amount']);
     }
 
     public function testFindByIdAndPharmacyReturnsNullForWrongPharmacy(): void
@@ -109,7 +109,7 @@ class SaleTest extends TestCase
         
         $result = $this->model->updateByPharmacy($id, 1, [
             'quantity' => 10,
-            'total_price' => 100.00,
+            'total_amount' => 100.00,
         ]);
         
         $this->assertTrue($result);
@@ -132,7 +132,7 @@ class SaleTest extends TestCase
 
     private function seedSale(int $pharmacyId, float $totalPrice): int
     {
-        self::$pdo->exec("INSERT INTO user_sales_tbl (pharmacy_id, quantity, total_price, status) VALUES ($pharmacyId, 5, $totalPrice, 'completed')");
+        self::$pdo->exec("INSERT INTO user_sales_tbl (pharmacy_id, price, quantity, total_amount, sales_date, status) VALUES ($pharmacyId, 10.00, 5, $totalPrice, '2026-07-02', 'completed')");
         return (int) self::$pdo->lastInsertId();
     }
 }

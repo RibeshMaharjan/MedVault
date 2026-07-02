@@ -22,10 +22,10 @@ class OrderTest extends TestCase
                 o_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 pharmacy_id INTEGER NOT NULL,
                 m_id INTEGER,
-                supplier_name TEXT NOT NULL,
-                order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+                price REAL DEFAULT 0,
                 quantity INTEGER DEFAULT 0,
                 total_amount REAL DEFAULT 0,
+                order_date DATE,
                 status TEXT DEFAULT 'pending',
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
@@ -36,10 +36,9 @@ class OrderTest extends TestCase
     {
         parent::setUp();
         self::$pdo->exec("DELETE FROM user_order_tbl");
+        self::$pdo->exec("DELETE FROM sqlite_sequence WHERE name = 'user_order_tbl'");
         
-        $this->model = new class(self::$pdo) extends Order {
-            protected $db;
-            public function __construct($pdo)
+        $this->model = new class(self::$pdo) extends Order {            public function __construct($pdo)
             {
                 $this->db = $pdo;
             }
@@ -48,9 +47,9 @@ class OrderTest extends TestCase
 
     public function testFindByPharmacy(): void
     {
-        $this->seedOrder(1, 'Supplier 1');
-        $this->seedOrder(1, 'Supplier 2');
-        $this->seedOrder(2, 'Supplier 3');
+        $this->seedOrder(1, 100.00);
+        $this->seedOrder(1, 200.00);
+        $this->seedOrder(2, 300.00);
         
         $results = $this->model->findByPharmacy(1);
         
@@ -60,7 +59,7 @@ class OrderTest extends TestCase
     public function testPaginateByPharmacy(): void
     {
         for ($i = 0; $i < 15; $i++) {
-            $this->seedOrder(1, "Supplier $i");
+            $this->seedOrder(1, 100.00 + $i);
         }
         
         $result = $this->model->paginateByPharmacy(1, 1, 5);
@@ -71,17 +70,17 @@ class OrderTest extends TestCase
 
     public function testFindByIdAndPharmacy(): void
     {
-        $id = $this->seedOrder(1, 'Test Supplier');
+        $id = $this->seedOrder(1, 125.00);
         
         $result = $this->model->findByIdAndPharmacy($id, 1);
         
         $this->assertNotNull($result);
-        $this->assertEquals('Test Supplier', $result['supplier_name']);
+        $this->assertEquals(125.00, $result['total_amount']);
     }
 
     public function testFindByIdAndPharmacyReturnsNullForWrongPharmacy(): void
     {
-        $id = $this->seedOrder(1, 'Test');
+        $id = $this->seedOrder(1, 100.00);
         
         $result = $this->model->findByIdAndPharmacy($id, 999);
         
@@ -90,7 +89,7 @@ class OrderTest extends TestCase
 
     public function testDeleteByPharmacy(): void
     {
-        $id = $this->seedOrder(1, 'Test');
+        $id = $this->seedOrder(1, 100.00);
         
         $result = $this->model->deleteByPharmacy($id, 1);
         
@@ -99,7 +98,7 @@ class OrderTest extends TestCase
 
     public function testUpdateByPharmacy(): void
     {
-        $id = $this->seedOrder(1, 'Test');
+        $id = $this->seedOrder(1, 100.00);
         
         $result = $this->model->updateByPharmacy($id, 1, [
             'status' => 'completed',
@@ -114,7 +113,7 @@ class OrderTest extends TestCase
 
     public function testDeleteByPharmacyFailsForWrongPharmacy(): void
     {
-        $id = $this->seedOrder(1, 'Test');
+        $id = $this->seedOrder(1, 100.00);
         
         $result = $this->model->deleteByPharmacy($id, 999);
         
@@ -123,8 +122,8 @@ class OrderTest extends TestCase
 
     public function testGetRecentOrders(): void
     {
-        $this->seedOrder(1, 'Supplier');
-        $this->seedOrder(1, 'Supplier 2');
+        $this->seedOrder(1, 100.00);
+        $this->seedOrder(1, 150.00);
         
         $reflection = new \ReflectionMethod($this->model, 'findAll');
         $results = $reflection->invoke($this->model);
@@ -132,9 +131,9 @@ class OrderTest extends TestCase
         $this->assertCount(2, $results);
     }
 
-    private function seedOrder(int $pharmacyId, string $supplierName): int
+    private function seedOrder(int $pharmacyId, float $totalAmount): int
     {
-        self::$pdo->exec("INSERT INTO user_order_tbl (pharmacy_id, supplier_name, quantity, total_amount, status) VALUES ($pharmacyId, '$supplierName', 10, 100.00, 'pending')");
+        self::$pdo->exec("INSERT INTO user_order_tbl (pharmacy_id, price, quantity, total_amount, status, order_date) VALUES ($pharmacyId, 10.00, 10, $totalAmount, 'pending', '2026-07-02')");
         return (int) self::$pdo->lastInsertId();
     }
 }
