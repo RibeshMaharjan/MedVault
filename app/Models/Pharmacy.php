@@ -19,4 +19,23 @@ class Pharmacy extends Model
         ]);
         return true;
     }
+
+    public function hasBusinessRecords(int $pharmacyId): bool
+    {
+        $tables = [
+            'user_category_tbl',
+            'user_medicine_tbl',
+            'user_order_tbl',
+            'user_sales_tbl',
+        ];
+
+        foreach ($tables as $table) {
+            $sql = "SELECT COUNT(*) as count FROM {$table} WHERE pharmacy_id = :pharmacy_id";
+            if ((int) $this->query($sql, ['pharmacy_id' => $pharmacyId])->fetch()['count'] > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

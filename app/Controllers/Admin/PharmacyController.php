@@ -75,7 +75,21 @@ class PharmacyController extends Controller
     public function destroy(string $id): void
     {
         $pharmacyId = (int) $id;
-        $this->pharmacy->delete($pharmacyId, 'pharmacy_id');
+        if ($this->pharmacy->hasBusinessRecords($pharmacyId)) {
+            $this->redirect('/admin/pharmacies', 'Cannot delete pharmacy with existing medicines, orders, or sales');
+        }
+
+        try {
+            $this->pharmacy->beginTransaction();
+            $this->pharmacy->delete($pharmacyId, 'pharmacy_id');
+            $this->user->delete($pharmacyId, 'user_id');
+            $this->pharmacy->commit();
+        } catch (\Throwable $e) {
+            $this->pharmacy->rollBack();
+            error_log('Pharmacy delete failed: ' . $e->getMessage());
+            $this->redirect('/admin/pharmacies', 'Pharmacy delete failed. Please try again.');
+        }
+
         $this->redirect('/admin/pharmacies', 'Pharmacy deleted successfully');
     }
 

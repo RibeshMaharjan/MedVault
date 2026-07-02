@@ -31,6 +31,26 @@ class PharmacyTest extends TestCase
                 verification_request_date DATETIME,
                 verification_date DATETIME,
                 verification_notes TEXT
+            );
+
+            CREATE TABLE user_category_tbl (
+                c_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                pharmacy_id INTEGER NOT NULL
+            );
+
+            CREATE TABLE user_medicine_tbl (
+                m_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                pharmacy_id INTEGER NOT NULL
+            );
+
+            CREATE TABLE user_order_tbl (
+                o_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                pharmacy_id INTEGER NOT NULL
+            );
+
+            CREATE TABLE user_sales_tbl (
+                s_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                pharmacy_id INTEGER NOT NULL
             )
         ");
     }
@@ -38,6 +58,10 @@ class PharmacyTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        self::$pdo->exec("DELETE FROM user_sales_tbl");
+        self::$pdo->exec("DELETE FROM user_order_tbl");
+        self::$pdo->exec("DELETE FROM user_medicine_tbl");
+        self::$pdo->exec("DELETE FROM user_category_tbl");
         self::$pdo->exec("DELETE FROM tbl_pharmacy");
         
         $this->model = new class(self::$pdo) extends Pharmacy {            public function __construct($pdo)
@@ -127,6 +151,21 @@ class PharmacyTest extends TestCase
         $results = $this->model->findAllBy('isverified', 1);
         
         $this->assertCount(1, $results);
+    }
+
+    public function testHasBusinessRecordsReturnsFalseWhenPharmacyHasNoData(): void
+    {
+        $this->seedPharmacy(1, 'Clean Pharmacy');
+
+        $this->assertFalse($this->model->hasBusinessRecords(1));
+    }
+
+    public function testHasBusinessRecordsReturnsTrueWhenPharmacyHasData(): void
+    {
+        $this->seedPharmacy(1, 'Busy Pharmacy');
+        self::$pdo->exec("INSERT INTO user_medicine_tbl (pharmacy_id) VALUES (1)");
+
+        $this->assertTrue($this->model->hasBusinessRecords(1));
     }
 
     private function seedPharmacy(int $id, string $name): void
