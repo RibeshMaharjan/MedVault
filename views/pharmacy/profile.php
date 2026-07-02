@@ -8,6 +8,7 @@
             </div>
             <div class="card-body">
                 <form action="/pharmacy/profile" method="post">
+                    <?= csrf_field() ?>
                     <div class="mb-3">
                         <label for="pharmacy_name" class="form-label">Pharmacy Name</label>
                         <input type="text" class="form-control" name="pharmacy_name" value="<?= htmlspecialchars($p['pharmacy_name'] ?? '') ?>" required>
@@ -46,8 +47,8 @@
                         <h5 class="text-success mb-3">Your pharmacy is verified!</h5>
                         <div class="verification-details">
                             <div class="d-flex justify-content-between mb-2"><span class="fw-bold">Status:</span><span class="badge bg-success">Verified</span></div>
-                            <div class="d-flex justify-content-between mb-2"><span class="fw-bold">Verification Date:</span><span><?= date('F j, Y', strtotime($p['verification_date'])) ?></span></div>
-                            <div class="d-flex justify-content-between mb-2"><span class="fw-bold">License Number:</span><span><?= htmlspecialchars($p['license_number']) ?></span></div>
+                            <div class="d-flex justify-content-between mb-2"><span class="fw-bold">Verification Date:</span><span><?= !empty($p['verification_date']) ? date('F j, Y', strtotime($p['verification_date'])) : 'N/A' ?></span></div>
+                            <div class="d-flex justify-content-between mb-2"><span class="fw-bold">License Number:</span><span><?= htmlspecialchars($p['license_number'] ?? '') ?></span></div>
                             <?php if (!empty($p['verification_notes'])): ?>
                             <div class="mb-2"><span class="fw-bold d-block mb-1">Notes:</span><div class="bg-light p-2 rounded"><?= htmlspecialchars($p['verification_notes']) ?></div></div>
                             <?php endif; ?>
@@ -60,7 +61,7 @@
                         <div class="verification-details">
                             <div class="d-flex justify-content-between mb-2"><span class="fw-bold">Status:</span><span class="badge bg-warning text-dark">Pending</span></div>
                             <div class="d-flex justify-content-between mb-2"><span class="fw-bold">Request Date:</span><span><?= date('F j, Y', strtotime($p['verification_request_date'])) ?></span></div>
-                            <div class="d-flex justify-content-between mb-2"><span class="fw-bold">License Number:</span><span><?= htmlspecialchars($p['license_number']) ?></span></div>
+                            <div class="d-flex justify-content-between mb-2"><span class="fw-bold">License Number:</span><span><?= htmlspecialchars($p['license_number'] ?? '') ?></span></div>
                             <?php if (!empty($p['reg_document'])): ?>
                             <div class="d-flex justify-content-between mb-2"><span class="fw-bold">Document:</span><a href="/uploads/documents/<?= htmlspecialchars(basename($p['reg_document'])) ?>" target="_blank" class="btn btn-sm btn-outline-secondary">View</a></div>
                             <?php endif; ?>
@@ -73,6 +74,7 @@
                         <h5 class="text-danger mb-3">Not Verified!</h5>
                         <div class="alert alert-warning mb-3"><i class="fas fa-info-circle"></i> Verification is required to access all features.</div>
                         <form action="/pharmacy/profile/verify" method="post" enctype="multipart/form-data">
+                            <?= csrf_field() ?>
                             <div class="mb-3">
                                 <label class="form-label">Pharmacy License Number</label>
                                 <input type="text" class="form-control" name="license_number" required>

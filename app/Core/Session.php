@@ -65,6 +65,9 @@ class Session
 
     public function setAuth(array $user, string $role): void
     {
+        if (session_status() === PHP_SESSION_ACTIVE && !headers_sent()) {
+            session_regenerate_id(true);
+        }
         $_SESSION['auth'] = true;
         $_SESSION['loggedInUserRole'] = $role;
         $_SESSION['loggedInUser'] = $user;

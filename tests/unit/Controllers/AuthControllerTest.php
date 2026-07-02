@@ -4,7 +4,7 @@ namespace Tests\Unit\Controllers;
 
 use PHPUnit\Framework\TestCase;
 
-class AuthControllerValidationTest extends TestCase
+class AuthControllerTest extends TestCase
 {
     public function testValidateSanitizesInput(): void
     {
@@ -42,7 +42,7 @@ class AuthControllerValidationTest extends TestCase
         $this->assertEquals('John Doe', $result);
     }
 
-    public function dataProviderValidateName(): array
+    public static function dataProviderValidateName(): array
     {
         return [
             ['John Doe', true],
@@ -62,12 +62,12 @@ class AuthControllerValidationTest extends TestCase
     {
         $pattern = "/^[a-zA-Z-' ]*$/";
         
-        $isValid = (bool) preg_match($pattern, $name);
+        $isValid = trim($name) !== '' && (bool) preg_match($pattern, $name);
         
         $this->assertEquals($shouldPass, (bool) $isValid);
     }
 
-    public function dataProviderValidateEmail(): array
+    public static function dataProviderValidateEmail(): array
     {
         return [
             ['test@example.com', true],
@@ -90,7 +90,7 @@ class AuthControllerValidationTest extends TestCase
         $this->assertEquals($shouldPass, $isValid);
     }
 
-    public function dataProviderValidatePassword(): array
+    public static function dataProviderValidatePassword(): array
     {
         return [
             ['Password123', true],

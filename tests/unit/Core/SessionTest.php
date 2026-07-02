@@ -205,7 +205,7 @@ class SessionTest extends TestCase
         
         $this->session->destroy();
         
-        $this->assertFalse($_SESSION['auth']);
+        $this->assertArrayNotHasKey('auth', $_SESSION);
         $this->assertFalse(isset($_SESSION['loggedInUserRole']));
         $this->assertFalse(isset($_SESSION['loggedInUser']));
         $this->assertFalse(isset($_SESSION['pharmacy_id']));

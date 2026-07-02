@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use App\Core\Security\Csrf;
+
 class Router
 {
     private array $routes = [];
@@ -38,6 +40,16 @@ class Router
 
             $pattern = $this->uriToRegex($route['uri']);
             if (preg_match($pattern, $uri, $matches)) {
+                if ($method === 'POST' && !Csrf::validate($_POST[Csrf::fieldName()] ?? null)) {
+                    $_SESSION['status'] = 'Invalid CSRF token';
+                    if (($_ENV['APP_ENV'] ?? '') === 'testing') {
+                        throw new \RuntimeException('Invalid CSRF token');
+                    }
+                    http_response_code(403);
+                    echo 'Invalid CSRF token';
+                    return;
+                }
+
                 // Run middleware
                 foreach ($route['middleware'] as $middlewareClass) {
                     $mw = new $middlewareClass();

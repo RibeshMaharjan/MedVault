@@ -1,5 +1,7 @@
 <?php
 
+use App\Core\Security\Csrf;
+
 function alertMessage(): void
 {
     if (isset($_SESSION['status'])) {
@@ -16,6 +18,16 @@ function alertMessage(): void
         </div>';
         unset($_SESSION['status']);
     }
+}
+
+function csrf_field(): string
+{
+    return Csrf::field();
+}
+
+function csrf_token(): string
+{
+    return Csrf::token();
 }
 
 function generatePaginationLinks(int $currentPage, int $totalPages, string $urlPattern): string

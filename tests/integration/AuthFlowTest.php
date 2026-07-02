@@ -27,14 +27,17 @@ class AuthFlowTest extends TestCase
             
             CREATE TABLE tbl_pharmacy (
                 pharmacy_id INTEGER PRIMARY KEY,
-                user_id INTEGER,
+                pan INTEGER,
                 pharmacy_name TEXT NOT NULL,
-                email TEXT,
+                email TEXT NOT NULL,
                 address TEXT,
                 phone TEXT,
-                verified INTEGER DEFAULT 0,
-                status TEXT DEFAULT 'pending',
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                isverified INTEGER DEFAULT 0,
+                license_number TEXT,
+                reg_document TEXT,
+                verification_request_date DATETIME,
+                verification_date DATETIME,
+                verification_notes TEXT
             )
         ");
     }
@@ -66,8 +69,8 @@ class AuthFlowTest extends TestCase
         $userId = (int) self::$pdo->lastInsertId();
         
         self::$pdo->exec("
-            INSERT INTO tbl_pharmacy (pharmacy_id, user_id, pharmacy_name, email, verified, status)
-            VALUES ($userId, $userId, '$name', '$email', 1, 'active')
+            INSERT INTO tbl_pharmacy (pharmacy_id, pharmacy_name, email, isverified)
+            VALUES ($userId, '$name', '$email', 0)
         ");
         
         $user = self::$pdo->query("SELECT * FROM role WHERE email = '$email'")->fetch();
@@ -76,7 +79,7 @@ class AuthFlowTest extends TestCase
         $this->assertNotNull($user);
         $this->assertNotNull($pharmacy);
         $this->assertEquals($email, $user['email']);
-        $this->assertEquals('active', $pharmacy['status']);
+        $this->assertEquals(0, $pharmacy['isverified']);
     }
 
     public function testLoginValidatesCredentials(): void

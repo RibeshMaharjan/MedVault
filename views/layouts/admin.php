@@ -32,6 +32,16 @@
         </div>
     </div>
     <script>
+        window.csrfToken = '<?= htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8') ?>';
+        $.ajaxPrefilter(function(options) {
+            const method = (options.type || options.method || 'GET').toUpperCase();
+            if (method !== 'POST') return;
+            if (typeof options.data === 'string') {
+                options.data += (options.data ? '&' : '') + '_csrf_token=' + encodeURIComponent(window.csrfToken);
+            } else {
+                options.data = Object.assign({}, options.data || {}, { _csrf_token: window.csrfToken });
+            }
+        });
         $(document).ready(function() {
             setTimeout(function() { $('.toast').fadeOut('slow'); }, 5000);
         });

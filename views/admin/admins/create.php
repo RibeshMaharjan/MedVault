@@ -2,6 +2,7 @@
     <div class="row px-3 p-4"><div class="col"><h1 class="fw-normal mb-3">Add Admin</h1></div></div>
     <div class="row px-3 pb-4">
         <form action="/admin/admins" method="POST" class="form" autocomplete="off">
+            <?= csrf_field() ?>
             <div class="mb-3"><label class="form-label">Name</label><input class="form-control" type="text" name="name" required></div>
             <div class="mb-3"><label class="form-label">Email</label><input class="form-control" type="email" name="email" required></div>
             <div class="mb-3"><label class="form-label">Password</label><input class="form-control" type="password" name="password" required></div>

@@ -6,6 +6,7 @@
         <div class="modal-content">
             <div class="modal-header"><h1 class="modal-title fs-5">Order Edit</h1><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
             <form action="" method="POST" id="orderEditForm">
+                <?= csrf_field() ?>
                 <div class="modal-body">
                     <input type="hidden" name="update_id" id="update_id">
                     <input type="hidden" name="m_id" id="m_id">
@@ -33,6 +34,7 @@
         <div class="modal-content">
             <div class="modal-header bg-danger text-white"><h1 class="modal-title fs-5">Confirm Delete</h1><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
             <form action="" method="POST" id="orderDeleteForm">
+                <?= csrf_field() ?>
                 <div class="modal-body">
                     <input type="hidden" name="delete_order_id" id="delete_id">
                     <p>Are you sure you want to delete this order?</p>

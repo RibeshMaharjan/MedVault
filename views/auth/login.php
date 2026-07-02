@@ -58,6 +58,7 @@
                 <!-- Registration Form -->
                 <div class="sign-up" id="sign-up">
                     <form action="/register" method="POST" id="register_form">
+                        <?= csrf_field() ?>
                         <h1>Create Account</h1>
                         <input type="text" name="name" placeholder="name" required>
                         <input type="email" name="email" placeholder="Email" required>
@@ -72,6 +73,7 @@
                 <!-- Login Form -->
                 <div class="sign-in" id="sign-in">
                     <form action="/login" method="POST" id="login_form">
+                        <?= csrf_field() ?>
                         <h1>Sign In</h1>
                         <input type="email" name="email" placeholder="Email" id="uname" required>
                         <input type="password" name="password" placeholder="Password" id="pass" required>

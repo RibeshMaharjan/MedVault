@@ -9,6 +9,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="" method="POST" id="medicineEditForm">
+                <?= csrf_field() ?>
                 <div class="modal-body">
                     <input type="hidden" name="update_id" id="update_id">
                     <div class="mb-3">
@@ -63,6 +64,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="" method="POST" id="medicineDeleteForm">
+                <?= csrf_field() ?>
                 <div class="modal-body">
                     <input type="hidden" name="delete_medicine_id" id="delete_medicine_id">
                     <p>Are you sure you want to delete this medicine?</p>

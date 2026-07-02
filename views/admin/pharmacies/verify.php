@@ -24,10 +24,12 @@
                     </div>
                     <div class="col-md-4">
                         <form action="/admin/pharmacies/<?= $p['pharmacy_id'] ?>/approve" method="POST" class="mb-2">
+                            <?= csrf_field() ?>
                             <textarea name="verification_notes" class="form-control mb-2" placeholder="Notes (optional)"></textarea>
                             <button type="submit" class="btn btn-success btn-sm">Approve</button>
                         </form>
                         <form action="/admin/pharmacies/<?= $p['pharmacy_id'] ?>/reject" method="POST">
+                            <?= csrf_field() ?>
                             <input type="hidden" name="verification_notes" value="">
                             <button type="submit" class="btn btn-danger btn-sm">Reject</button>
                         </form>

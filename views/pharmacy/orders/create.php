@@ -3,6 +3,7 @@
     <div class="row mb-4">
         <div class="col-xl-4">
             <form action="" id="order-suggest-form" method="post" class="search-form">
+                <?= csrf_field() ?>
                 <div class="input-group">
                     <input class="form-control" type="text" id="search" name="medicine_name" placeholder="Search medicine by name..." autocomplete="off">
                     <button type="submit" class="btn btn-danger">Add to Order</button>
@@ -13,6 +14,7 @@
     </div>
     <div class="table-responsive pt-4 mb-5">
         <form action="/pharmacy/orders" method="POST">
+            <?= csrf_field() ?>
             <table class="table table-striped">
                 <thead class="table-danger">
                     <tr><th>MEDICINE NAME</th><th>PRICE</th><th>QUANTITY</th><th>TOTAL</th><th>DATE</th><th>ACTION</th></tr>

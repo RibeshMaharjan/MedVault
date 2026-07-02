@@ -61,6 +61,10 @@ class ProfileController extends Controller
         $pharmacyId = $this->session->pharmacyId();
         $licenseNumber = $this->validate($_POST['license_number'] ?? '');
 
+        if (empty($licenseNumber)) {
+            $this->redirect('/pharmacy/profile', 'License number is required.');
+        }
+
         $updateData = [
             'license_number' => $licenseNumber,
             'verification_request_date' => date('Y-m-d H:i:s'),
@@ -70,11 +74,23 @@ class ProfileController extends Controller
         if (isset($_FILES['reg_document']) && $_FILES['reg_document']['error'] === 0) {
             $targetDir = dirname(__DIR__, 3) . '/public/uploads/documents/';
             if (!file_exists($targetDir)) {
-                mkdir($targetDir, 0777, true);
+                mkdir($targetDir, 0755, true);
             }
 
-            $ext = pathinfo($_FILES['reg_document']['name'], PATHINFO_EXTENSION);
-            $newFilename = $pharmacyId . '_' . time() . '.' . $ext;
+            $allowedTypes = [
+                'application/pdf' => 'pdf',
+                'image/jpeg' => 'jpg',
+                'image/png' => 'png',
+            ];
+            $maxBytes = 5 * 1024 * 1024;
+            $tmpName = $_FILES['reg_document']['tmp_name'];
+            $detectedType = (new \finfo(FILEINFO_MIME_TYPE))->file($tmpName) ?: '';
+
+            if ($_FILES['reg_document']['size'] > $maxBytes || !isset($allowedTypes[$detectedType])) {
+                $this->redirect('/pharmacy/profile', 'Invalid document. Upload a PDF, JPG, or PNG under 5MB.');
+            }
+
+            $newFilename = $pharmacyId . '_' . bin2hex(random_bytes(16)) . '.' . $allowedTypes[$detectedType];
             $targetFile = $targetDir . $newFilename;
 
             if (move_uploaded_file($_FILES['reg_document']['tmp_name'], $targetFile)) {
@@ -82,6 +98,8 @@ class ProfileController extends Controller
             } else {
                 $this->redirect('/pharmacy/profile', 'Error uploading document. Please try again.');
             }
+        } else {
+            $this->redirect('/pharmacy/profile', 'Registration document is required.');
         }
 
         $this->pharmacy->update($pharmacyId, $updateData, 'pharmacy_id');

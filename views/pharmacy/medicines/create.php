@@ -4,6 +4,7 @@
     </div>
     <div class="row px-3 pb-4">
         <form action="/pharmacy/medicines" method="POST" class="form" autocomplete="off">
+            <?= csrf_field() ?>
             <div class="mb-3">
                 <label for="name" class="form-label">Medicine Name</label>
                 <input class="form-control" type="text" placeholder="Medicine Name" name="name" required>

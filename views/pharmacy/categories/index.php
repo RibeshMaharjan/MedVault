@@ -7,6 +7,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="" method="POST" id="categoryEditForm">
+                <?= csrf_field() ?>
                 <div class="modal-body">
                     <input type="hidden" name="update_id" id="update_id">
                     <div class="mb-3">
@@ -32,6 +33,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="" method="POST" id="categoryDeleteForm">
+                <?= csrf_field() ?>
                 <div class="modal-body">
                     <input type="hidden" name="delete_category_id" id="delete_category_id">
                     <p>Are you sure you want to delete this category?</p>
@@ -59,6 +61,7 @@
         </div>
         <div class="row pt-4 pb-4 w-50">
             <form action="/pharmacy/categories" method="POST" class="form">
+                <?= csrf_field() ?>
                 <div class="mb-3 category-input">
                     <input class="form-control" type="text" placeholder="Category Name" name="category-name" required>
                 </div>

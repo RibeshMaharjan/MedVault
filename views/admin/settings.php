@@ -3,6 +3,7 @@
     <div class="row px-2 pt-3">
         <?php if ($settings): ?>
         <form action="/admin/settings" method="POST" class="form">
+            <?= csrf_field() ?>
             <div class="mb-3"><label class="form-label">Heading</label><input class="form-control" type="text" name="title" value="<?= htmlspecialchars($settings['title'] ?? '') ?>"></div>
             <div class="mb-3"><label class="form-label">Small Description</label><textarea class="form-control" rows="3" name="small-description"><?= htmlspecialchars($settings['small_description'] ?? '') ?></textarea></div>
             <div class="mb-3"><label class="form-label">Sub-Heading</label><input type="text" class="form-control" name="sub-title" value="<?= htmlspecialchars($settings['sub_title'] ?? '') ?>"></div>
