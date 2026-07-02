@@ -23,6 +23,21 @@ abstract class Model
         return $stmt;
     }
 
+    public function beginTransaction(): bool
+    {
+        return $this->db->beginTransaction();
+    }
+
+    public function commit(): bool
+    {
+        return $this->db->commit();
+    }
+
+    public function rollBack(): bool
+    {
+        return $this->db->inTransaction() && $this->db->rollBack();
+    }
+
     public function findAll(string $conditions = '', array $params = []): array
     {
         $sql = "SELECT * FROM {$this->table}";

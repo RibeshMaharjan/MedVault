@@ -61,14 +61,17 @@ abstract class TestCase extends BaseTestCase
 
             CREATE TABLE tbl_pharmacy (
                 pharmacy_id INTEGER PRIMARY KEY,
-                user_id INTEGER,
+                pan INTEGER,
                 pharmacy_name TEXT NOT NULL,
-                email TEXT,
+                email TEXT NOT NULL,
                 address TEXT,
                 phone TEXT,
-                verified INTEGER DEFAULT 0,
-                status TEXT DEFAULT 'pending',
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                isverified INTEGER DEFAULT 0,
+                license_number TEXT,
+                reg_document TEXT,
+                verification_request_date DATETIME,
+                verification_date DATETIME,
+                verification_notes TEXT
             );
 
             CREATE TABLE user_category_tbl (
@@ -95,10 +98,10 @@ abstract class TestCase extends BaseTestCase
                 o_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 pharmacy_id INTEGER NOT NULL,
                 m_id INTEGER,
-                supplier_name TEXT NOT NULL,
-                order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+                price REAL DEFAULT 0,
                 quantity INTEGER DEFAULT 0,
                 total_amount REAL DEFAULT 0,
+                order_date DATE,
                 status TEXT DEFAULT 'pending',
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             );
@@ -107,9 +110,10 @@ abstract class TestCase extends BaseTestCase
                 s_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 pharmacy_id INTEGER NOT NULL,
                 m_id INTEGER,
+                price REAL DEFAULT 0,
                 quantity INTEGER DEFAULT 0,
-                total_price REAL DEFAULT 0,
-                sale_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+                total_amount REAL DEFAULT 0,
+                sales_date DATE,
                 status TEXT DEFAULT 'completed'
             );
         ";
@@ -145,18 +149,17 @@ abstract class TestCase extends BaseTestCase
     {
         $defaults = [
             'pharmacy_id' => $userId,
-            'user_id' => $userId,
+            'pan' => null,
             'pharmacy_name' => 'Test Pharmacy',
             'email' => 'pharmacy' . $userId . '@example.com',
-            'verified' => 1,
-            'status' => 'active',
+            'isverified' => 1,
         ];
 
         $data = array_merge($defaults, $overrides);
         
         $stmt = self::$pdo->prepare("
-            INSERT INTO tbl_pharmacy (pharmacy_id, user_id, pharmacy_name, email, verified, status)
-            VALUES (:pharmacy_id, :user_id, :pharmacy_name, :email, :verified, :status)
+            INSERT INTO tbl_pharmacy (pharmacy_id, pan, pharmacy_name, email, isverified)
+            VALUES (:pharmacy_id, :pan, :pharmacy_name, :email, :isverified)
         ");
         $stmt->execute($data);
         
@@ -204,18 +207,19 @@ abstract class TestCase extends BaseTestCase
         $defaults = [
             'pharmacy_id' => $pharmacyId,
             'm_id' => null,
-            'supplier_name' => 'Test Supplier',
+            'price' => 10.00,
             'quantity' => 10,
             'total_amount' => 100.00,
             'status' => 'pending',
+            'order_date' => date('Y-m-d'),
         ];
 
         $data = array_merge($defaults, $overrides);
         
         $stmt = self::$pdo->prepare("
             INSERT INTO user_order_tbl 
-            (pharmacy_id, m_id, supplier_name, quantity, total_amount, status)
-            VALUES (:pharmacy_id, :m_id, :supplier_name, :quantity, :total_amount, :status)
+            (pharmacy_id, m_id, price, quantity, total_amount, status, order_date)
+            VALUES (:pharmacy_id, :m_id, :price, :quantity, :total_amount, :status, :order_date)
         ");
         $stmt->execute($data);
         
@@ -227,17 +231,19 @@ abstract class TestCase extends BaseTestCase
         $defaults = [
             'pharmacy_id' => $pharmacyId,
             'm_id' => null,
+            'price' => 15.00,
             'quantity' => 5,
-            'total_price' => 75.00,
+            'total_amount' => 75.00,
             'status' => 'completed',
+            'sales_date' => date('Y-m-d'),
         ];
 
         $data = array_merge($defaults, $overrides);
         
         $stmt = self::$pdo->prepare("
             INSERT INTO user_sales_tbl 
-            (pharmacy_id, m_id, quantity, total_price, status)
-            VALUES (:pharmacy_id, :m_id, :quantity, :total_price, :status)
+            (pharmacy_id, m_id, price, quantity, total_amount, status, sales_date)
+            VALUES (:pharmacy_id, :m_id, :price, :quantity, :total_amount, :status, :sales_date)
         ");
         $stmt->execute($data);
         

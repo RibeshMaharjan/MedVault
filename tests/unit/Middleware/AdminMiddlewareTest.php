@@ -14,6 +14,7 @@ class AdminMiddlewareTest extends TestCase
             session_destroy();
         }
         $_SESSION = [];
+        session_start();
     }
 
     protected function tearDown(): void
@@ -52,6 +53,7 @@ class AdminMiddlewareTest extends TestCase
         
         try {
             $middleware->handle();
+            $this->assertTrue(true);
         } catch (\Exception $e) {
             $this->fail('Should not throw for admin user');
         }

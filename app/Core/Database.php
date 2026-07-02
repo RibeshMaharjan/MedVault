@@ -16,7 +16,13 @@ class Database
             [$dsn, $user, $pass, $options] = $this->buildConnectionConfig();
             $this->pdo = new PDO($dsn, $user, $pass, $options);
         } catch (PDOException $e) {
-            die("Database connection failed: " . $e->getMessage());
+            error_log('Database connection failed: ' . $e->getMessage());
+            if (($_ENV['APP_ENV'] ?? '') === 'testing') {
+                throw new \RuntimeException('Database connection failed', 0, $e);
+            }
+            http_response_code(500);
+            echo 'Database connection failed';
+            exit;
         }
     }
 
@@ -27,6 +33,11 @@ class Database
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES => false,
         ];
+
+        if (($_ENV['DB_DRIVER'] ?? '') === 'sqlite') {
+            $path = $_ENV['DB_NAME'] ?? ':memory:';
+            return ["sqlite:{$path}", null, null, $options];
+        }
 
         $connectionString = $_ENV['DATABASE_URL'] ?? $_ENV['DB_URL'] ?? null;
 

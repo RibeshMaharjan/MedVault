@@ -12,12 +12,18 @@ class PharmacyMiddleware
 
         if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== true) {
             $_SESSION['status'] = 'Please login to continue';
+            if (($_ENV['APP_ENV'] ?? '') === 'testing') {
+                throw new \RuntimeException('Unauthenticated');
+            }
             header('Location: /login');
             exit;
         }
 
         if (($_SESSION['loggedInUserRole'] ?? '') !== 'user') {
             $_SESSION['status'] = 'Access denied';
+            if (($_ENV['APP_ENV'] ?? '') === 'testing') {
+                throw new \RuntimeException('Access denied');
+            }
             header('Location: /login');
             exit;
         }

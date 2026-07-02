@@ -36,6 +36,7 @@ class ModelTest extends TestCase
     {
         parent::setUp();
         self::$testPdo->exec("DELETE FROM test_table");
+        self::$testPdo->exec("DELETE FROM sqlite_sequence WHERE name = 'test_table'");
     }
 
     public function testFindAllReturnsAllRecords(): void

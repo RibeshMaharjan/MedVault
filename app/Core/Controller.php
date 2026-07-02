@@ -35,6 +35,9 @@ class Controller
         if ($message) {
             $this->session->flash($message);
         }
+        if (($_ENV['APP_ENV'] ?? '') === 'testing') {
+            throw new \RuntimeException("Redirect to {$url}: {$message}");
+        }
         header("Location: {$url}");
         exit;
     }
@@ -44,6 +47,9 @@ class Controller
         http_response_code($status);
         header('Content-Type: application/json');
         echo json_encode($data);
+        if (($_ENV['APP_ENV'] ?? '') === 'testing') {
+            throw new \RuntimeException("JSON response {$status}");
+        }
         exit;
     }
 

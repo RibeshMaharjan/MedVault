@@ -33,6 +33,16 @@ class RouterTest extends TestCase
 {
     private Router $router;
 
+    public static function setUpBeforeClass(): void
+    {
+        if (!class_exists('App\\Controllers\\MockController')) {
+            class_alias(MockController::class, 'App\\Controllers\\MockController');
+        }
+        if (!class_exists('App\\Controllers\\TestController')) {
+            class_alias(MockController::class, 'App\\Controllers\\TestController');
+        }
+    }
+
     protected function setUp(): void
     {
         $this->router = new Router();

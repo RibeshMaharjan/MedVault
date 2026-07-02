@@ -7,10 +7,6 @@
          executionOrder="depends,defects"
          requireCoverageMetadata="false"
          beStrictAboutOutputDuringTests="true"
-         failOnRisingWarnings="true"
-         displayDetailsOnTestsThatSkipped="true"
-         displayDetailsOnTestsThatUseCoverageIt="true"
-         convertDeprecationsToExceptions="true"
          stopOnDefect="false">
     <testsuites>
         <testsuite name="Unit">
