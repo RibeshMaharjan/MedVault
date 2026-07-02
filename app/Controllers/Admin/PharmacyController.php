@@ -53,6 +53,9 @@ class PharmacyController extends Controller
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->redirect('/admin/pharmacies/create', 'Invalid email format');
         }
+        if ($this->user->findByEmail($email)) {
+            $this->redirect('/admin/pharmacies/create', 'Email Already Exists');
+        }
 
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
         $userId = $this->user->create($name, $email, $passwordHash, 'user');

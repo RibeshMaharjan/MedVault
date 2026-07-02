@@ -411,7 +411,13 @@ CREATE TABLE `tbl_pharmacy` (
   `pharmacy_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `email` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `phone` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `address` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL
+  `address` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `isverified` tinyint(1) NOT NULL DEFAULT '0',
+  `license_number` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `reg_document` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `verification_request_date` datetime DEFAULT NULL,
+  `verification_date` datetime DEFAULT NULL,
+  `verification_notes` text COLLATE utf8mb4_general_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

@@ -60,6 +60,9 @@ class AdminController extends Controller
         if (!preg_match('/^[0-9]{10}$/', $phone)) {
             $this->redirect('/admin/admins/create', 'Invalid Phone Number');
         }
+        if ($this->user->findByEmail($email)) {
+            $this->redirect('/admin/admins/create', 'Email Already Exists');
+        }
 
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
         $adminId = $this->user->create($name, $email, $passwordHash, 'admin');

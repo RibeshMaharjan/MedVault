@@ -20,14 +20,17 @@ class PharmacyTest extends TestCase
         self::$pdo->exec("
             CREATE TABLE tbl_pharmacy (
                 pharmacy_id INTEGER PRIMARY KEY,
-                user_id INTEGER,
+                pan INTEGER,
                 pharmacy_name TEXT NOT NULL,
                 email TEXT,
                 address TEXT,
                 phone TEXT,
-                verified INTEGER DEFAULT 0,
-                status TEXT DEFAULT 'pending',
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                isverified INTEGER DEFAULT 0,
+                license_number TEXT,
+                reg_document TEXT,
+                verification_request_date DATETIME,
+                verification_date DATETIME,
+                verification_notes TEXT
             )
         ");
     }
@@ -37,9 +40,7 @@ class PharmacyTest extends TestCase
         parent::setUp();
         self::$pdo->exec("DELETE FROM tbl_pharmacy");
         
-        $this->model = new class(self::$pdo) extends Pharmacy {
-            protected $db;
-            public function __construct($pdo)
+        $this->model = new class(self::$pdo) extends Pharmacy {            public function __construct($pdo)
             {
                 $this->db = $pdo;
             }
@@ -74,14 +75,14 @@ class PharmacyTest extends TestCase
         $this->assertNull($result);
     }
 
-    public function testFindByUserIdReturnsPharmacy(): void
+    public function testFindByEmailReturnsPharmacy(): void
     {
-        self::$pdo->exec("INSERT INTO tbl_pharmacy (pharmacy_id, user_id, pharmacy_name) VALUES (1, 5, 'Test')");
+        self::$pdo->exec("INSERT INTO tbl_pharmacy (pharmacy_id, pharmacy_name, email) VALUES (1, 'Test', 'test@example.com')");
         
-        $result = $this->model->findOneBy('user_id', 5);
+        $result = $this->model->findOneBy('email', 'test@example.com');
         
         $this->assertNotNull($result);
-        $this->assertEquals(5, $result['user_id']);
+        $this->assertEquals('test@example.com', $result['email']);
     }
 
     public function testFindAllReturnsAllPharmacies(): void
@@ -118,12 +119,12 @@ class PharmacyTest extends TestCase
         $this->assertNull($pharmacy);
     }
 
-    public function testFindAllByStatus(): void
+    public function testFindAllByVerificationState(): void
     {
-        self::$pdo->exec("INSERT INTO tbl_pharmacy (pharmacy_id, pharmacy_name, status) VALUES (1, 'P1', 'active')");
-        self::$pdo->exec("INSERT INTO tbl_pharmacy (pharmacy_id, pharmacy_name, status) VALUES (2, 'P2', 'pending')");
+        self::$pdo->exec("INSERT INTO tbl_pharmacy (pharmacy_id, pharmacy_name, isverified) VALUES (1, 'P1', 1)");
+        self::$pdo->exec("INSERT INTO tbl_pharmacy (pharmacy_id, pharmacy_name, isverified) VALUES (2, 'P2', 0)");
         
-        $results = $this->model->findAllBy('status', 'active');
+        $results = $this->model->findAllBy('isverified', 1);
         
         $this->assertCount(1, $results);
     }
