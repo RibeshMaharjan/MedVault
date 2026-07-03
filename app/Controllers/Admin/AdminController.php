@@ -27,13 +27,6 @@ class AdminController extends Controller
         ], 'admin');
     }
 
-    public function create(): void
-    {
-        $this->view('admin/admins/create', [
-            'currentPage' => 'admin-create',
-        ], 'admin');
-    }
-
     public function store(): void
     {
         $name = $this->validate($_POST['name'] ?? '');
@@ -45,23 +38,23 @@ class AdminController extends Controller
         $address = $this->validate($_POST['address'] ?? '');
 
         if (empty($name) || empty($email) || empty($password)) {
-            $this->redirect('/admin/admins/create', 'Please fill all fields!');
+            $this->redirect('/admin/admins', 'Please fill all fields!');
         }
 
         if (!preg_match("/^[a-zA-Z-' ]*$/", $name)) {
-            $this->redirect('/admin/admins/create', 'Only letters and white space allowed');
+            $this->redirect('/admin/admins', 'Only letters and white space allowed');
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->redirect('/admin/admins/create', 'Invalid email format');
+            $this->redirect('/admin/admins', 'Invalid email format');
         }
         if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/', $password)) {
-            $this->redirect('/admin/admins/create', 'Invalid Password');
+            $this->redirect('/admin/admins', 'Invalid Password');
         }
         if (!preg_match('/^[0-9]{10}$/', $phone)) {
-            $this->redirect('/admin/admins/create', 'Invalid Phone Number');
+            $this->redirect('/admin/admins', 'Invalid Phone Number');
         }
         if ($this->user->findByEmail($email)) {
-            $this->redirect('/admin/admins/create', 'Email Already Exists');
+            $this->redirect('/admin/admins', 'Email Already Exists');
         }
 
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
@@ -82,9 +75,9 @@ class AdminController extends Controller
         } catch (\Throwable $e) {
             $this->user->rollBack();
             error_log('Admin create failed: ' . $e->getMessage());
-            $this->redirect('/admin/admins/create', 'Admin creation failed. Please try again.');
+            $this->redirect('/admin/admins', 'Admin creation failed. Please try again.');
         }
 
-        $this->redirect('/admin/admins/create', 'Admin Added Successfully');
+        $this->redirect('/admin/admins', 'Admin Added Successfully');
     }
 }

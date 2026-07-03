@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/assets/css/admin.css">
     <link rel="stylesheet" href="/assets/css/form.css">
     <link rel="stylesheet" href="/assets/css/new-sidebar.css">
+    <link rel="stylesheet" href="/assets/css/custom.css">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -23,14 +24,22 @@
     <div class="toast-container">
         <?php alertMessage(); ?>
     </div>
-    <div class="main-container d-flex">
+    <div class="main-container">
         <?php include dirname(__DIR__) . '/partials/admin-sidebar.php'; ?>
-        <div class="container-fluid p-0 pt-3">
+        <div class="mobile-topbar d-md-none">
+            <button class="btn open-btn" type="button" aria-label="Open navigation">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <span class="mobile-brand">MedVault</span>
+        </div>
+        <div class="sidebar-backdrop"></div>
+        <div class="container-fluid mv-content p-0 pt-3">
             <div class="dashboard-content bg-white pt-3">
                 <?= $content ?>
             </div>
         </div>
     </div>
+    <script src="/assets/js/app.js"></script>
     <script>
         window.csrfToken = '<?= htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8') ?>';
         $.ajaxPrefilter(function(options) {
@@ -44,6 +53,24 @@
         });
         $(document).ready(function() {
             setTimeout(function() { $('.toast').fadeOut('slow'); }, 5000);
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const openBtn = document.querySelector('.open-btn');
+            const closeBtn = document.querySelector('.close-btn');
+            const sidebar = document.querySelector('.sidebar');
+            const backdrop = document.querySelector('.sidebar-backdrop');
+            if (openBtn) openBtn.addEventListener('click', () => sidebar.classList.add('active'));
+            if (openBtn) openBtn.addEventListener('click', () => backdrop.classList.add('active'));
+            if (closeBtn) closeBtn.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
+            if (backdrop) backdrop.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
         });
     </script>
 </body>

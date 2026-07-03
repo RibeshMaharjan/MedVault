@@ -64,7 +64,6 @@ $router->get('/admin/dashboard', 'Admin\DashboardController@index', [AdminMiddle
 
 // Admin - Admins
 $router->get('/admin/admins', 'Admin\AdminController@index', [AdminMiddleware::class]);
-$router->get('/admin/admins/create', 'Admin\AdminController@create', [AdminMiddleware::class]);
 $router->post('/admin/admins', 'Admin\AdminController@store', [AdminMiddleware::class]);
 
 // Admin - Pharmacies
