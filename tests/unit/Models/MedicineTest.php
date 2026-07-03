@@ -243,6 +243,41 @@ class MedicineTest extends TestCase
         $this->assertCount(2, $result['lowStockItems']);
     }
 
+    public function testGetExpirySummaryCountsExpiredAndExpiringSoonByPharmacy(): void
+    {
+        $this->seedMedicine(1, 'Expired Old', 10.00, 10, '2026-06-01');
+        $this->seedMedicine(1, 'Expired Yesterday', 10.00, 10, '2026-07-02');
+        $this->seedMedicine(1, 'Expires Today', 10.00, 10, '2026-07-03');
+        $this->seedMedicine(1, 'Expires Soon', 10.00, 10, '2026-08-02');
+        $this->seedMedicine(1, 'Valid Later', 10.00, 10, '2026-08-03');
+        $this->seedMedicine(2, 'Other Expired', 10.00, 10, '2026-06-01');
+
+        $result = $this->model->getExpirySummary(1, 30, '2026-07-03');
+
+        $this->assertSame(2, $result['expiredCount']);
+        $this->assertSame(2, $result['expiringSoonCount']);
+    }
+
+    public function testGetExpiryAlertsReturnsStatusAndSignedDays(): void
+    {
+        $this->seedMedicine(1, 'Expired Old', 10.00, 10, '2026-06-01');
+        $this->seedMedicine(1, 'Expires Today', 10.00, 10, '2026-07-03');
+        $this->seedMedicine(1, 'Expires Soon', 10.00, 10, '2026-08-02');
+        $this->seedMedicine(1, 'Valid Later', 10.00, 10, '2026-08-03');
+        $this->seedMedicine(2, 'Other Expired', 10.00, 10, '2026-06-01');
+
+        $alerts = $this->model->getExpiryAlerts(1, 30, 10, '2026-07-03');
+
+        $this->assertCount(3, $alerts);
+        $this->assertSame('Expired Old', $alerts[0]['medicine_name']);
+        $this->assertSame('expired', $alerts[0]['expiry_status']);
+        $this->assertSame(-32, $alerts[0]['days_to_expiry']);
+        $this->assertSame('expiring_soon', $alerts[1]['expiry_status']);
+        $this->assertSame(0, $alerts[1]['days_to_expiry']);
+        $this->assertSame('expiring_soon', $alerts[2]['expiry_status']);
+        $this->assertSame(30, $alerts[2]['days_to_expiry']);
+    }
+
     public function testUpdateStockIncreasesStock(): void
     {
         $this->seedMedicine(1, 'Test', 10.00, 50);
@@ -311,9 +346,25 @@ class MedicineTest extends TestCase
         $this->assertEquals('New Name', $medicine['medicine_name']);
     }
 
-    private function seedMedicine(int $pharmacyId, string $name, float $buyPrice = 10.00, int $stock = 100): int
+    private function seedMedicine(
+        int $pharmacyId,
+        string $name,
+        float $buyPrice = 10.00,
+        int $stock = 100,
+        ?string $expDate = null
+    ): int
     {
-        self::$pdo->exec("INSERT INTO user_medicine_tbl (pharmacy_id, medicine_name, buy_price, in_stock) VALUES ($pharmacyId, '$name', $buyPrice, $stock)");
+        $stmt = self::$pdo->prepare("
+            INSERT INTO user_medicine_tbl (pharmacy_id, medicine_name, buy_price, in_stock, exp_date)
+            VALUES (:pharmacy_id, :medicine_name, :buy_price, :in_stock, :exp_date)
+        ");
+        $stmt->execute([
+            'pharmacy_id' => $pharmacyId,
+            'medicine_name' => $name,
+            'buy_price' => $buyPrice,
+            'in_stock' => $stock,
+            'exp_date' => $expDate ?? date('Y-m-d', strtotime('+1 year')),
+        ]);
         return (int) self::$pdo->lastInsertId();
     }
 }

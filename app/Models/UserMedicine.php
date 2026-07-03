@@ -14,6 +14,60 @@ class UserMedicine extends Model
         return strtotime($medicine['exp_date']) < strtotime(date('Y-m-d'));
     }
 
+    public function getExpirySummary(int $pharmacyId, int $warningDays = 30, ?string $today = null): array
+    {
+        $today = $today ?? date('Y-m-d');
+        $soonDate = date('Y-m-d', strtotime("+{$warningDays} days", strtotime($today)));
+
+        $summarySql = "SELECT
+                    COUNT(CASE WHEN exp_date < :expired_today THEN 1 END) as expired_count,
+                    COUNT(CASE WHEN exp_date >= :soon_today AND exp_date <= :soon_date THEN 1 END) as expiring_soon_count
+                FROM {$this->table}
+                WHERE pharmacy_id = :pharmacy_id";
+        $summary = $this->query($summarySql, [
+            'pharmacy_id' => $pharmacyId,
+            'expired_today' => $today,
+            'soon_today' => $today,
+            'soon_date' => $soonDate,
+        ])->fetch();
+
+        return [
+            'expiredCount' => (int) ($summary['expired_count'] ?? 0),
+            'expiringSoonCount' => (int) ($summary['expiring_soon_count'] ?? 0),
+        ];
+    }
+
+    public function getExpiryAlerts(int $pharmacyId, int $warningDays = 30, int $limit = 10, ?string $today = null): array
+    {
+        $today = $today ?? date('Y-m-d');
+        $soonDate = date('Y-m-d', strtotime("+{$warningDays} days", strtotime($today)));
+        $limit = max(1, $limit);
+
+        $sql = "SELECT m_id, medicine_name, in_stock, exp_date
+                FROM {$this->table}
+                WHERE pharmacy_id = :pharmacy_id
+                    AND (exp_date < :expired_today OR (exp_date >= :soon_today AND exp_date <= :soon_date))
+                ORDER BY CASE WHEN exp_date < :order_today THEN 0 ELSE 1 END, exp_date ASC
+                LIMIT {$limit}";
+        $alerts = $this->query($sql, [
+            'pharmacy_id' => $pharmacyId,
+            'expired_today' => $today,
+            'soon_today' => $today,
+            'soon_date' => $soonDate,
+            'order_today' => $today,
+        ])->fetchAll();
+
+        $todayDate = new \DateTimeImmutable($today);
+        foreach ($alerts as &$alert) {
+            $expDate = new \DateTimeImmutable($alert['exp_date']);
+            $days = (int) $todayDate->diff($expDate)->format('%r%a');
+            $alert['days_to_expiry'] = $days;
+            $alert['expiry_status'] = $days < 0 ? 'expired' : 'expiring_soon';
+        }
+
+        return $alerts;
+    }
+
     public function findByPharmacy(int $pharmacyId, string $conditions = '', array $params = []): array
     {
         $where = "pharmacy_id = :pharmacy_id";

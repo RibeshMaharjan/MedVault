@@ -53,14 +53,18 @@
     </div>
 </div>
 
-<div class="bg-white">
-    <div class="row px-3 pt-4">
-        <div class="col"><h1 class="fw-normal mb-3">Order Table</h1></div>
+<div class="mv-page">
+    <div class="mv-page-header">
+        <div>
+            <h1 class="mv-page-title">Orders</h1>
+            <p class="mv-page-subtitle">Track supplier orders and fulfillment status.</p>
+        </div>
+        <a href="/pharmacy/orders/create" class="btn btn-danger">Add Order</a>
     </div>
 
-    <div class="row mb-4 px-3">
-        <form method="GET" class="row g-3">
-            <div class="col-md-2">
+    <div class="mv-filter-panel">
+        <form method="GET" class="mv-filter-grid">
+            <div>
                 <select class="form-select" name="status">
                     <option value="">All Status</option>
                     <option value="pending" <?= (($f['status'] ?? '') == 'pending') ? 'selected' : '' ?>>Pending</option>
@@ -68,17 +72,18 @@
                     <option value="cancelled" <?= (($f['status'] ?? '') == 'cancelled') ? 'selected' : '' ?>>Cancelled</option>
                 </select>
             </div>
-            <div class="col-md-2"><input type="date" class="form-control" name="date_from" value="<?= htmlspecialchars($f['date_from'] ?? '') ?>"></div>
-            <div class="col-md-2"><input type="date" class="form-control" name="date_to" value="<?= htmlspecialchars($f['date_to'] ?? '') ?>"></div>
-            <div class="col-md-3">
+            <div><input type="date" class="form-control" name="date_from" value="<?= htmlspecialchars($f['date_from'] ?? '') ?>"></div>
+            <div><input type="date" class="form-control" name="date_to" value="<?= htmlspecialchars($f['date_to'] ?? '') ?>"></div>
+            <div class="mv-filter-actions">
                 <button type="submit" class="btn btn-danger">Filter</button>
                 <a href="/pharmacy/orders" class="btn btn-secondary">Reset</a>
             </div>
         </form>
     </div>
 
-    <div class="table-responsive px-3 pt-4 mb-5">
-        <table class="table table-striped">
+    <div class="mv-table-wrap mb-5">
+    <div class="table-responsive">
+        <table class="table table-striped mv-responsive-table">
             <thead class="table-danger">
                 <tr><th>ID</th><th>M_ID</th><th>MEDICINE</th><th>PRICE</th><th>QUANTITY</th><th>TOTAL</th><th>STATUS</th><th>DATE</th><th>ACTION</th></tr>
             </thead>
@@ -86,26 +91,24 @@
                 <?php if (!empty($orders)): ?>
                     <?php foreach ($orders as $ord): ?>
                     <tr>
-                        <td><?= $ord['o_id'] ?></td>
-                        <td><?= $ord['m_id'] ?></td>
-                        <td><?= htmlspecialchars($ord['medicine_name'] ?? $ord['m_id']) ?></td>
-                        <td><?= $ord['price'] ?></td>
-                        <td><?= $ord['quantity'] ?></td>
-                        <td><?= $ord['total_amount'] ?></td>
-                        <td><span class="badge <?= $ord['status'] == 'completed' ? 'bg-success' : ($ord['status'] == 'cancelled' ? 'bg-danger' : 'bg-warning') ?>"><?= $ord['status'] ?></span></td>
-                        <td><?= $ord['order_date'] ?></td>
-                        <td class="row g-0">
-                            <div class="col">
-                                <button class="btn btn-success btn-md px-3 py-2 my-2 orderEditBtn"
+                        <td data-label="ID"><?= $ord['o_id'] ?></td>
+                        <td data-label="Medicine ID"><?= $ord['m_id'] ?></td>
+                        <td data-label="Medicine"><?= htmlspecialchars($ord['medicine_name'] ?? $ord['m_id']) ?></td>
+                        <td data-label="Price"><?= $ord['price'] ?></td>
+                        <td data-label="Quantity"><?= $ord['quantity'] ?></td>
+                        <td data-label="Total"><?= $ord['total_amount'] ?></td>
+                        <td data-label="Status"><span class="badge <?= $ord['status'] == 'completed' ? 'bg-success' : ($ord['status'] == 'cancelled' ? 'bg-danger' : 'bg-warning') ?>"><?= $ord['status'] ?></span></td>
+                        <td data-label="Date"><?= $ord['order_date'] ?></td>
+                        <td class="mv-actions-cell" data-label="Action">
+                            <div class="mv-icon-actions">
+                                <button class="btn btn-success mv-icon-btn orderEditBtn"
                                     data-id="<?= $ord['o_id'] ?>" data-mid="<?= $ord['m_id'] ?>"
                                     data-price="<?= $ord['price'] ?>" data-quantity="<?= $ord['quantity'] ?>"
                                     data-total="<?= $ord['total_amount'] ?>" data-status="<?= $ord['status'] ?>"
                                     data-date="<?= $ord['order_date'] ?>">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
-                            </div>
-                            <div class="col">
-                                <button class="btn btn-danger btn-md px-3 py-2 my-2 orderDeleteBtn"
+                                <button class="btn btn-danger mv-icon-btn orderDeleteBtn"
                                     data-id="<?= $ord['o_id'] ?>" data-quantity="<?= $ord['quantity'] ?>"
                                     data-total="<?= $ord['total_amount'] ?>">
                                     <i class="fa-regular fa-trash-can"></i>
@@ -123,6 +126,7 @@
             $fp = http_build_query(array_filter($f, fn($v) => $v !== '' && $v !== null));
             echo generatePaginationLinks($p['currentPage'], $p['totalPages'], '/pharmacy/orders?page={page}' . ($fp ? "&{$fp}" : ''));
         ?>
+    </div>
     </div>
 </div>
 

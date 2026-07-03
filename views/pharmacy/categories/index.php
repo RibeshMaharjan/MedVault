@@ -54,42 +54,44 @@
     </div>
 </div>
 
-<div class="row pt-4 g-5">
-    <div class="col bg-white">
-        <div class="row">
-            <div class="col"><h1 class="fw-normal mb-3">Add Category</h1></div>
-        </div>
-        <div class="row pt-4 pb-4 w-50">
-            <form action="/pharmacy/categories" method="POST" class="form">
-                <?= csrf_field() ?>
-                <div class="mb-3 category-input">
-                    <input class="form-control" type="text" placeholder="Category Name" name="category-name" required>
-                </div>
-                <input type="submit" value="Add" class="btn btn-danger" name="submit-category">
-            </form>
+<div class="mv-page">
+    <div class="mv-page-header">
+        <div>
+            <h1 class="mv-page-title">Categories</h1>
+            <p class="mv-page-subtitle">Group medicines for scanning and reports.</p>
         </div>
     </div>
-    <div class="col-md-6 pt-4 bg-white ms-md-auto">
+    <div class="mv-two-col">
+    <div class="mv-section">
+            <h2 class="h5 mb-3">Add Category</h2>
+            <form action="/pharmacy/categories" method="POST" class="mv-filter-actions">
+                <?= csrf_field() ?>
+                <div class="flex-grow-1">
+                    <input class="form-control" type="text" placeholder="Category Name" name="category-name" required>
+                </div>
+                <button type="submit" class="btn btn-danger" name="submit-category">Add Category</button>
+            </form>
+    </div>
+    <div class="mv-table-wrap">
         <?php if (!empty($categories)): ?>
-        <table class="table table-striped">
+        <div class="table-responsive">
+        <table class="table table-striped mv-responsive-table">
             <thead class="table-danger">
                 <tr><th>C.ID</th><th>Category Name</th><th>Action</th></tr>
             </thead>
             <tbody>
                 <?php foreach ($categories as $cat): ?>
                 <tr>
-                    <td><?= $cat['c_id'] ?></td>
-                    <td><?= htmlspecialchars($cat['category_name']) ?></td>
-                    <td class="row g-0">
-                        <div class="col">
-                            <button class="btn btn-success btn-md px-3 py-2 my-2 categoryEditBtn"
+                    <td data-label="ID"><?= $cat['c_id'] ?></td>
+                    <td data-label="Category"><?= htmlspecialchars($cat['category_name']) ?></td>
+                    <td class="mv-actions-cell" data-label="Action">
+                        <div class="mv-icon-actions">
+                            <button class="btn btn-success mv-icon-btn categoryEditBtn"
                                 data-id="<?= $cat['c_id'] ?>"
                                 data-name="<?= htmlspecialchars($cat['category_name']) ?>">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
-                        </div>
-                        <div class="col">
-                            <button class="btn btn-danger btn-md px-3 py-2 my-2 categoryDeleteBtn"
+                            <button class="btn btn-danger mv-icon-btn categoryDeleteBtn"
                                 data-id="<?= $cat['c_id'] ?>"
                                 data-name="<?= htmlspecialchars($cat['category_name']) ?>">
                                 <i class="fa-regular fa-trash-can"></i>
@@ -100,9 +102,11 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
+        </div>
         <?php else: ?>
-            <h4 style="font-size: 26px; text-align: center;">No Data Found!</h4>
+            <div class="mv-empty">No categories found</div>
         <?php endif; ?>
+    </div>
     </div>
 </div>
 

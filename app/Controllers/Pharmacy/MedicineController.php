@@ -27,6 +27,8 @@ class MedicineController extends Controller
         // Build filter conditions with prepared statement params
         $conditions = [];
         $params = [];
+        $today = date('Y-m-d');
+        $soonDate = date('Y-m-d', strtotime('+30 days'));
 
         if (!empty($_GET['search'])) {
             $conditions[] = "medicine_name LIKE :search";
@@ -40,6 +42,19 @@ class MedicineController extends Controller
             $conditions[] = "exp_date BETWEEN :date_from AND :date_to";
             $params['date_from'] = $_GET['exp_date_from'];
             $params['date_to'] = $_GET['exp_date_to'];
+        }
+        if (!empty($_GET['expiry_status'])) {
+            if ($_GET['expiry_status'] === 'expired') {
+                $conditions[] = "exp_date < :expiry_today";
+                $params['expiry_today'] = $today;
+            } elseif ($_GET['expiry_status'] === 'expiring_soon') {
+                $conditions[] = "exp_date >= :expiry_today AND exp_date <= :expiry_soon";
+                $params['expiry_today'] = $today;
+                $params['expiry_soon'] = $soonDate;
+            } elseif ($_GET['expiry_status'] === 'valid') {
+                $conditions[] = "exp_date > :expiry_soon";
+                $params['expiry_soon'] = $soonDate;
+            }
         }
         if (($_GET['buy_price_min'] ?? '') !== '') {
             $conditions[] = "buy_price >= :buy_min";

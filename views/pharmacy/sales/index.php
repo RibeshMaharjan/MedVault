@@ -52,12 +52,18 @@
     </div>
 </div>
 
-<div class="bg-white">
-    <div class="row px-3 pt-4"><div class="col"><h1 class="fw-normal mb-3">Sales Table</h1></div></div>
+<div class="mv-page">
+    <div class="mv-page-header">
+        <div>
+            <h1 class="mv-page-title">Sales</h1>
+            <p class="mv-page-subtitle">Review sale transactions and status changes.</p>
+        </div>
+        <a href="/pharmacy/sales/create" class="btn btn-danger">Add Sale</a>
+    </div>
 
-    <div class="row mb-4 px-3">
-        <form method="GET" class="row g-3">
-            <div class="col-md-2">
+    <div class="mv-filter-panel">
+        <form method="GET" class="mv-filter-grid">
+            <div>
                 <select class="form-select" name="status">
                     <option value="">All Status</option>
                     <option value="pending" <?= (($f['status'] ?? '') == 'pending') ? 'selected' : '' ?>>Pending</option>
@@ -65,17 +71,18 @@
                     <option value="cancelled" <?= (($f['status'] ?? '') == 'cancelled') ? 'selected' : '' ?>>Cancelled</option>
                 </select>
             </div>
-            <div class="col-md-2"><input type="date" class="form-control" name="date_from" value="<?= htmlspecialchars($f['date_from'] ?? '') ?>"></div>
-            <div class="col-md-2"><input type="date" class="form-control" name="date_to" value="<?= htmlspecialchars($f['date_to'] ?? '') ?>"></div>
-            <div class="col-md-3">
+            <div><input type="date" class="form-control" name="date_from" value="<?= htmlspecialchars($f['date_from'] ?? '') ?>"></div>
+            <div><input type="date" class="form-control" name="date_to" value="<?= htmlspecialchars($f['date_to'] ?? '') ?>"></div>
+            <div class="mv-filter-actions">
                 <button type="submit" class="btn btn-danger">Filter</button>
                 <a href="/pharmacy/sales" class="btn btn-secondary">Reset</a>
             </div>
         </form>
     </div>
 
-    <div class="table-responsive px-3 pt-4 mb-5">
-        <table class="table table-striped">
+    <div class="mv-table-wrap mb-5">
+    <div class="table-responsive">
+        <table class="table table-striped mv-responsive-table">
             <thead class="table-danger">
                 <tr><th>ID</th><th>M_ID</th><th>MEDICINE</th><th>PRICE</th><th>QUANTITY</th><th>TOTAL</th><th>STATUS</th><th>DATE</th><th>ACTION</th></tr>
             </thead>
@@ -83,26 +90,24 @@
                 <?php if (!empty($sales)): ?>
                     <?php foreach ($sales as $s): ?>
                     <tr>
-                        <td><?= $s['s_id'] ?></td>
-                        <td><?= $s['m_id'] ?></td>
-                        <td><?= htmlspecialchars($s['medicine_name'] ?? $s['m_id']) ?></td>
-                        <td><?= $s['price'] ?></td>
-                        <td><?= $s['quantity'] ?></td>
-                        <td><?= $s['total_amount'] ?></td>
-                        <td><span class="badge <?= $s['status'] == 'completed' ? 'bg-success' : ($s['status'] == 'cancelled' ? 'bg-danger' : 'bg-warning') ?>"><?= $s['status'] ?></span></td>
-                        <td><?= $s['sales_date'] ?></td>
-                        <td class="row g-0">
-                            <div class="col">
-                                <button class="btn btn-success btn-md px-3 py-2 my-2 salesEditBtn"
+                        <td data-label="ID"><?= $s['s_id'] ?></td>
+                        <td data-label="Medicine ID"><?= $s['m_id'] ?></td>
+                        <td data-label="Medicine"><?= htmlspecialchars($s['medicine_name'] ?? $s['m_id']) ?></td>
+                        <td data-label="Price"><?= $s['price'] ?></td>
+                        <td data-label="Quantity"><?= $s['quantity'] ?></td>
+                        <td data-label="Total"><?= $s['total_amount'] ?></td>
+                        <td data-label="Status"><span class="badge <?= $s['status'] == 'completed' ? 'bg-success' : ($s['status'] == 'cancelled' ? 'bg-danger' : 'bg-warning') ?>"><?= $s['status'] ?></span></td>
+                        <td data-label="Date"><?= $s['sales_date'] ?></td>
+                        <td class="mv-actions-cell" data-label="Action">
+                            <div class="mv-icon-actions">
+                                <button class="btn btn-success mv-icon-btn salesEditBtn"
                                     data-id="<?= $s['s_id'] ?>" data-mid="<?= $s['m_id'] ?>"
                                     data-price="<?= $s['price'] ?>" data-quantity="<?= $s['quantity'] ?>"
                                     data-total="<?= $s['total_amount'] ?>" data-status="<?= $s['status'] ?>"
                                     data-date="<?= $s['sales_date'] ?>">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
-                            </div>
-                            <div class="col">
-                                <button class="btn btn-danger btn-md px-3 py-2 my-2 salesDeleteBtn"
+                                <button class="btn btn-danger mv-icon-btn salesDeleteBtn"
                                     data-id="<?= $s['s_id'] ?>" data-quantity="<?= $s['quantity'] ?>"
                                     data-total="<?= $s['total_amount'] ?>">
                                     <i class="fa-regular fa-trash-can"></i>
@@ -120,6 +125,7 @@
             $fp = http_build_query(array_filter($f, fn($v) => $v !== '' && $v !== null));
             echo generatePaginationLinks($p['currentPage'], $p['totalPages'], '/pharmacy/sales?page={page}' . ($fp ? "&{$fp}" : ''));
         ?>
+    </div>
     </div>
 </div>
 

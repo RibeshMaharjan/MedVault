@@ -1,8 +1,14 @@
 <?php $p = $pharmacy; ?>
 
-<div class="row">
-    <div class="col-md-6 mb-4">
-        <div class="card border-0 shadow">
+<div class="mv-page">
+    <div class="mv-page-header">
+        <div>
+            <h1 class="mv-page-title">Profile</h1>
+            <p class="mv-page-subtitle">Manage pharmacy identity and verification.</p>
+        </div>
+    </div>
+<div class="mv-two-col">
+        <div class="card">
             <div class="card-header bg-danger text-white">
                 <p class="fw-semibold fs-4 mb-0">Edit Profile</p>
             </div>
@@ -33,10 +39,8 @@
                 </form>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-6 mb-4">
-        <div class="card border-0 shadow">
+        <div class="card">
             <div class="card-header bg-danger text-white">
                 <h4>Verification Status</h4>
             </div>
@@ -90,5 +94,5 @@
                 <?php endif; ?>
             </div>
         </div>
-    </div>
+</div>
 </div>

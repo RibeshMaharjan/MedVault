@@ -21,12 +21,16 @@ class DashboardController extends Controller
     public function index(): void
     {
         $userId = $this->session->pharmacyId();
+        $expirySummary = $this->medicine->getExpirySummary($userId);
 
         $data = [
             'totalMedicines' => $this->medicine->countByPharmacy($userId),
             'totalCategories' => $this->category->count("pharmacy_id = :pid", ['pid' => $userId]),
             'lowStockCount' => $this->medicine->countByPharmacy($userId, "in_stock <= :threshold", ['threshold' => 10]),
             'outOfStockCount' => $this->medicine->countByPharmacy($userId, "in_stock = :zero", ['zero' => 0]),
+            'expiredCount' => $expirySummary['expiredCount'],
+            'expiringSoonCount' => $expirySummary['expiringSoonCount'],
+            'expiryAlerts' => $this->medicine->getExpiryAlerts($userId),
             'categoryDistribution' => $this->medicine->getCategoryDistribution($userId),
             'lowStockItems' => $this->medicine->getLowStock($userId),
             'recentActivities' => $this->medicine->getRecentActivities($userId),

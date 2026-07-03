@@ -34,21 +34,6 @@
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
-        .sidebar {
-            position: fixed; top: 0; left: 0; bottom: 0; width: 320px;
-            overflow-y: auto; background-color: white; z-index: 100;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .main-container { min-height: 100vh; display: block; }
-        .container-fluid {
-            margin-left: 320px; padding-bottom: 30px; min-height: 100vh;
-            width: calc(100% - 320px); overflow-y: auto;
-        }
-        @media (max-width: 767px) {
-            .sidebar { margin-left: -320px; transition: all 0.3s; }
-            .sidebar.active { margin-left: 0; }
-            .container-fluid { margin-left: 0; width: 100%; }
-        }
         .toast-container {
             position: fixed; top: 20px; right: 20px; z-index: 9999; max-width: 350px;
         }
@@ -67,7 +52,14 @@
 
     <div class="main-container">
         <?php include dirname(__DIR__) . '/partials/pharmacy-sidebar.php'; ?>
-        <div class="container-fluid p-5">
+        <div class="mobile-topbar d-md-none">
+            <button class="btn open-btn" type="button" aria-label="Open navigation">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <span class="mobile-brand">MedVault</span>
+        </div>
+        <div class="sidebar-backdrop"></div>
+        <div class="container-fluid mv-content">
             <?= $content ?>
         </div>
     </div>
@@ -94,8 +86,17 @@
             const openBtn = document.querySelector('.open-btn');
             const closeBtn = document.querySelector('.close-btn');
             const sidebar = document.querySelector('.sidebar');
+            const backdrop = document.querySelector('.sidebar-backdrop');
             if (openBtn) openBtn.addEventListener('click', () => sidebar.classList.add('active'));
-            if (closeBtn) closeBtn.addEventListener('click', () => sidebar.classList.remove('active'));
+            if (openBtn) openBtn.addEventListener('click', () => backdrop.classList.add('active'));
+            if (closeBtn) closeBtn.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
+            if (backdrop) backdrop.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                backdrop.classList.remove('active');
+            });
         });
     </script>
 </body>

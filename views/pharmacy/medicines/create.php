@@ -1,9 +1,12 @@
-<div class="bg-white">
-    <div class="row px-3 p-4">
-        <div class="col"><h1 class="fw-normal mb-3">Append Medicine Form</h1></div>
+<div class="mv-page">
+    <div class="mv-page-header">
+        <div>
+            <h1 class="mv-page-title">Add Medicine</h1>
+            <p class="mv-page-subtitle">Create an inventory item with stock, pricing, and expiry details.</p>
+        </div>
     </div>
-    <div class="row px-3 pb-4">
-        <form action="/pharmacy/medicines" method="POST" class="form" autocomplete="off">
+    <div class="mv-section mv-form-card">
+        <form action="/pharmacy/medicines" method="POST" class="mv-form-grid" autocomplete="off">
             <?= csrf_field() ?>
             <div class="mb-3">
                 <label for="name" class="form-label">Medicine Name</label>
@@ -38,7 +41,10 @@
                 <label for="exp_date" class="form-label">Expiration Date</label>
                 <input type="date" class="form-control" name="exp_date" required>
             </div>
-            <input type="submit" value="Add" class="btn btn-danger" name="add-medicine">
+            <div class="full mv-filter-actions">
+                <button type="submit" class="btn btn-danger" name="add-medicine">Add Medicine</button>
+                <a href="/pharmacy/medicines" class="btn btn-outline-secondary">View Medicines</a>
+            </div>
         </form>
     </div>
 </div>
