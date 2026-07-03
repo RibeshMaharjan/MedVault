@@ -22,7 +22,7 @@ class SettingController extends Controller
         $this->view('admin/settings', [
             'settings' => $settings,
             'currentPage' => 'settings',
-        ], 'admin');
+        ], 'app');
     }
 
     public function update(): void

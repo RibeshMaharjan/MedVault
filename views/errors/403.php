@@ -4,16 +4,22 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Request Blocked</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Request blocked · MedVault</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/css/tokens.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
 </head>
-<body class="bg-light">
-    <main class="container py-5">
-        <div class="mx-auto" style="max-width: 560px;">
-            <h1 class="h3 mb-3">Request Blocked</h1>
-            <p class="text-muted mb-4">This request could not be verified. Please go back and try again.</p>
-            <a class="btn btn-primary" href="/login">Go to login</a>
+<body>
+    <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:0 1rem;">
+        <div style="max-width:28rem;text-align:center;">
+            <p class="text-xs font-semibold text-destructive" style="text-transform:uppercase;letter-spacing:0.08em;">Error 403</p>
+            <h1 style="margin-top:0.75rem;font-size:2.25rem;font-weight:600;letter-spacing:-0.02em;">Request blocked</h1>
+            <p class="text-muted text-sm" style="margin-top:0.5rem;">This request could not be verified. Please go back and try again.</p>
+            <div style="margin-top:1.5rem;display:flex;justify-content:center;gap:0.5rem;">
+                <a href="/" class="btn btn--primary">Return home</a>
+                <a href="/login" class="btn btn--outline">Sign in</a>
+            </div>
         </div>
-    </main>
+    </div>
 </body>
 </html>

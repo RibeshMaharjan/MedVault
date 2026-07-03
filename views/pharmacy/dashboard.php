@@ -1,124 +1,60 @@
-<!-- Medicine Statistics -->
-<div class="row pt-4 mb-5">
-    <div class="col-md-3">
-        <div class="card border-0 shadow">
-            <div class="card-body">
-                <h5 class="card-title">Total Medicine Types</h5>
-                <p class="card-text text-danger h3"><?= $totalMedicines ?></p>
+<?= pageHeader('Dashboard', "A snapshot of today's inventory and revenue.") ?>
+
+<div class="grid-stats">
+    <?= statCard('Total medicines', (string) $totalMedicines, 'package', 'default', 'in your catalogue') ?>
+    <?= statCard('Low stock', (string) $lowStockCount, 'alert-triangle', 'warning', 'items at or below 10 units') ?>
+    <?= statCard('Pending orders', (string) $pendingOrders, 'clock', 'info', 'awaiting fulfilment') ?>
+    <?= statCard('Revenue (30d)', '$' . number_format((float) $revenue30d, 2), 'circle-dollar-sign', 'success', 'completed sales') ?>
+</div>
+
+<div class="grid-2col" style="margin-top:1.5rem;">
+    <div class="card grid-2col--span2">
+        <div class="card__header">
+            <div class="card__title" style="font-size:1rem;">Revenue · last 7 days</div>
+        </div>
+        <div class="card__content">
+            <div style="height:16rem;">
+                <canvas id="revenue-chart"></canvas>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card border-0 shadow">
-            <div class="card-body">
-                <h5 class="card-title">Total Categories</h5>
-                <p class="card-text text-danger h3"><?= $totalCategories ?></p>
-            </div>
+
+    <div class="card">
+        <div class="card__header">
+            <div class="card__title" style="font-size:1rem;">Recent activity</div>
         </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card border-0 shadow">
-            <div class="card-body">
-                <h5 class="card-title">Low Stock Items</h5>
-                <p class="card-text text-warning h3"><?= $lowStockCount ?></p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card border-0 shadow">
-            <div class="card-body">
-                <h5 class="card-title">Out of Stock</h5>
-                <p class="card-text text-danger h3"><?= $outOfStockCount ?></p>
-            </div>
+        <div class="card__content list-card">
+            <?php if (empty($recentActivities)): ?>
+                <p class="text-sm text-muted">No recent activity.</p>
+            <?php else: ?>
+                <?php foreach ($recentActivities as $row): ?>
+                    <div class="list-row">
+                        <div class="list-row__main">
+                            <p class="list-row__title"><?= htmlspecialchars($row['medicine_name'], ENT_QUOTES, 'UTF-8') ?></p>
+                            <p class="list-row__meta"><?= htmlspecialchars($row['type'], ENT_QUOTES, 'UTF-8') ?> · <?= date('M d, Y', strtotime($row['date'])) ?></p>
+                        </div>
+                        <div style="text-align:right;">
+                            <p class="list-row__amount">$<?= number_format((float) $row['amount'], 2) ?></p>
+                            <?= statusBadge($row['status']) ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
 </div>
 
-<!-- Category-wise Medicine Distribution -->
-<div class="row mb-4">
-    <div class="col-md-6">
-        <div class="card border-0 shadow">
-            <div class="card-body">
-                <h5 class="card-title">Medicine by Category</h5>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr><th>Category</th><th>Medicine Count</th><th>Total Stock</th></tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($categoryDistribution as $row): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($row['category_name']) ?></td>
-                                <td><?= $row['med_count'] ?></td>
-                                <td><?= $row['total_stock'] ?></td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="card border-0 shadow">
-            <div class="card-body">
-                <h5 class="card-title">Low Stock Alert</h5>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr><th>Medicine Name</th><th>Current Stock</th><th>Status</th></tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($lowStockItems as $row): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($row['medicine_name']) ?></td>
-                                <td><?= $row['in_stock'] ?></td>
-                                <td>
-                                    <?php if ($row['in_stock'] == 0): ?>
-                                        <span class="badge bg-danger">Out of Stock</span>
-                                    <?php else: ?>
-                                        <span class="badge bg-warning">Low Stock</span>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="/assets/js/chart-theme.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var labels = <?= json_encode(array_map(function ($row) {
+        return date('D', strtotime($row['sale_date']));
+    }, $revenueLast7)) ?>;
+    var data = <?= json_encode(array_map(function ($row) {
+        return round((float) $row['daily_total'], 2);
+    }, $revenueLast7)) ?>;
 
-<!-- Recent Activities -->
-<div class="row">
-    <div class="col-12">
-        <div class="card border-0 shadow">
-            <div class="card-body">
-                <h5 class="card-title">Recent Activities</h5>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr><th>Date</th><th>Type</th><th>Medicine</th><th>Quantity</th><th>Status</th></tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($recentActivities as $row): ?>
-                            <tr>
-                                <td><?= date('M d, Y', strtotime($row['date'])) ?></td>
-                                <td><?= $row['type'] ?></td>
-                                <td><?= htmlspecialchars($row['medicine_name']) ?></td>
-                                <td><?= $row['quantity'] ?></td>
-                                <td>
-                                    <span class="badge <?= $row['status'] == 'completed' ? 'bg-success' : 'bg-warning' ?>">
-                                        <?= $row['status'] ?>
-                                    </span>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+    new Chart(document.getElementById('revenue-chart'), window.chartTheme.bar(labels, data));
+});
+</script>

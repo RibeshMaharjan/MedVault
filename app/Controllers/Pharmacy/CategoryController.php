@@ -20,10 +20,15 @@ class CategoryController extends Controller
         $userId = $this->session->pharmacyId();
         $categories = $this->category->findByPharmacy($userId);
 
+        foreach ($categories as &$cat) {
+            $cat['medicine_count'] = $this->category->hasMedicinesByPharmacy((int) $cat['c_id'], $userId);
+        }
+        unset($cat);
+
         $this->view('pharmacy/categories/index', [
             'categories' => $categories,
             'currentPage' => 'category',
-        ], 'pharmacy');
+        ], 'app');
     }
 
     public function store(): void
@@ -32,10 +37,10 @@ class CategoryController extends Controller
         $name = $this->validate(trim($_POST['category-name'] ?? ''));
 
         if (empty($name)) {
-            $this->redirect('/pharmacy/categories', 'Category name is required');
+            $this->redirect('/pharmacy/categories?open=create', 'Category name is required', 'error');
         }
         if ($this->category->findByNameAndPharmacy($name, $userId)) {
-            $this->redirect('/pharmacy/categories', 'Category already exists');
+            $this->redirect('/pharmacy/categories?open=create', 'Category already exists', 'error');
         }
 
         $this->category->create($userId, $name);
@@ -49,16 +54,16 @@ class CategoryController extends Controller
         $name = $this->validate($_POST['name'] ?? '');
 
         if (empty($name)) {
-            $this->redirect('/pharmacy/categories', 'Category name is required');
+            $this->redirect('/pharmacy/categories', 'Category name is required', 'error');
         }
 
         if (!$this->category->findByIdAndPharmacy($categoryId, $userId)) {
-            $this->redirect('/pharmacy/categories', 'Category not found');
+            $this->redirect('/pharmacy/categories', 'Category not found', 'error');
         }
 
         $existing = $this->category->findByNameAndPharmacy($name, $userId);
         if ($existing && (int) $existing['c_id'] !== $categoryId) {
-            $this->redirect('/pharmacy/categories', 'Category already exists');
+            $this->redirect('/pharmacy/categories', 'Category already exists', 'error');
         }
 
         $this->category->updateByPharmacy($categoryId, $userId, ['category_name' => $name]);
@@ -72,12 +77,12 @@ class CategoryController extends Controller
 
         $category = $this->category->findByIdAndPharmacy($categoryId, $userId);
         if (!$category) {
-            $this->redirect('/pharmacy/categories', 'Category not found');
+            $this->redirect('/pharmacy/categories', 'Category not found', 'error');
         }
 
         $medicineCount = $this->category->hasMedicinesByPharmacy($categoryId, $userId);
         if ($medicineCount > 0) {
-            $this->redirect('/pharmacy/categories', "Cannot delete: This category contains {$medicineCount} medicines. Please reassign them first.");
+            $this->redirect('/pharmacy/categories', "Cannot delete: This category contains {$medicineCount} medicines. Please reassign them first.", 'error');
         }
 
         $this->category->deleteByPharmacy($categoryId, $userId);

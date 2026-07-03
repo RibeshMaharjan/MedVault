@@ -24,14 +24,12 @@ class PharmacyController extends Controller
         $this->view('admin/pharmacies/index', [
             'pharmacies' => $pharmacies,
             'currentPage' => 'pharmacy-display',
-        ], 'admin');
+        ], 'app');
     }
 
     public function create(): void
     {
-        $this->view('admin/pharmacies/create', [
-            'currentPage' => 'pharmacy-create',
-        ], 'admin');
+        $this->redirect('/admin/pharmacies?open=create');
     }
 
     public function store(): void
@@ -44,20 +42,20 @@ class PharmacyController extends Controller
         $address = $this->validate($_POST['address'] ?? '');
 
         if (empty($name) || empty($email) || empty($password)) {
-            $this->redirect('/admin/pharmacies/create', 'Please fill all fields!');
+            $this->redirect('/admin/pharmacies?open=create', 'Please fill all fields!', 'error');
         }
 
         if (!is_numeric($pan) || $pan <= 0) {
-            $this->redirect('/admin/pharmacies/create', 'Invalid PAN Number');
+            $this->redirect('/admin/pharmacies?open=create', 'Invalid PAN Number', 'error');
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->redirect('/admin/pharmacies/create', 'Invalid email format');
+            $this->redirect('/admin/pharmacies?open=create', 'Invalid email format', 'error');
         }
         if ($phone !== '' && !preg_match('/^[0-9]{10}$/', $phone)) {
-            $this->redirect('/admin/pharmacies/create', 'Invalid Phone Number');
+            $this->redirect('/admin/pharmacies?open=create', 'Invalid Phone Number', 'error');
         }
         if ($this->user->findByEmail($email)) {
-            $this->redirect('/admin/pharmacies/create', 'Email Already Exists');
+            $this->redirect('/admin/pharmacies?open=create', 'Email Already Exists', 'error');
         }
 
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
@@ -77,17 +75,17 @@ class PharmacyController extends Controller
         } catch (\Throwable $e) {
             $this->user->rollBack();
             error_log('Pharmacy create failed: ' . $e->getMessage());
-            $this->redirect('/admin/pharmacies/create', 'Pharmacy creation failed. Please try again.');
+            $this->redirect('/admin/pharmacies?open=create', 'Pharmacy creation failed. Please try again.', 'error');
         }
 
-        $this->redirect('/admin/pharmacies/create', 'Pharmacy Added successfully');
+        $this->redirect('/admin/pharmacies', 'Pharmacy Added successfully');
     }
 
     public function destroy(string $id): void
     {
         $pharmacyId = (int) $id;
         if ($this->pharmacy->hasBusinessRecords($pharmacyId)) {
-            $this->redirect('/admin/pharmacies', 'Cannot delete pharmacy with existing medicines, orders, or sales');
+            $this->redirect('/admin/pharmacies', 'Cannot delete pharmacy with existing medicines, orders, or sales', 'error');
         }
 
         try {
@@ -98,7 +96,7 @@ class PharmacyController extends Controller
         } catch (\Throwable $e) {
             $this->pharmacy->rollBack();
             error_log('Pharmacy delete failed: ' . $e->getMessage());
-            $this->redirect('/admin/pharmacies', 'Pharmacy delete failed. Please try again.');
+            $this->redirect('/admin/pharmacies', 'Pharmacy delete failed. Please try again.', 'error');
         }
 
         $this->redirect('/admin/pharmacies', 'Pharmacy deleted successfully');
@@ -129,7 +127,7 @@ class PharmacyController extends Controller
             'verifiedCount' => $verifiedCount,
             'pendingCount' => $pendingCount,
             'currentPage' => 'verify',
-        ], 'admin');
+        ], 'app');
     }
 
     public function approve(string $id): void
@@ -138,7 +136,7 @@ class PharmacyController extends Controller
         $notes = $this->validate($_POST['verification_notes'] ?? '');
 
         if (!$this->pharmacy->findById($pharmacyId, 'pharmacy_id')) {
-            $this->redirect('/admin/pharmacies/verify', 'Pharmacy not found');
+            $this->redirect('/admin/pharmacies/verify', 'Pharmacy not found', 'error');
         }
 
         $this->pharmacy->update($pharmacyId, [
@@ -156,7 +154,7 @@ class PharmacyController extends Controller
         $notes = $this->validate($_POST['verification_notes'] ?? '');
 
         if (!$this->pharmacy->findById($pharmacyId, 'pharmacy_id')) {
-            $this->redirect('/admin/pharmacies/verify', 'Pharmacy not found');
+            $this->redirect('/admin/pharmacies/verify', 'Pharmacy not found', 'error');
         }
 
         $sql = "UPDATE tbl_pharmacy SET verification_request_date = NULL, verification_notes = :notes WHERE pharmacy_id = :id";

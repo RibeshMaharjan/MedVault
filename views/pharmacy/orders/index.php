@@ -1,152 +1,167 @@
 <?php $p = $pagination; $f = $filters ?? []; ?>
 
-<!-- Edit Modal -->
-<div class="modal fade" id="orderEditModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header"><h1 class="modal-title fs-5">Order Edit</h1><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
-            <form action="" method="POST" id="orderEditForm">
-                <?= csrf_field() ?>
-                <div class="modal-body">
-                    <input type="hidden" name="update_id" id="update_id">
-                    <input type="hidden" name="m_id" id="m_id">
-                    <div class="mb-3"><label class="form-label">Medicine Name</label><input class="form-control" type="text" id="name" name="name" readonly></div>
-                    <div class="mb-3"><label class="form-label">Price</label><input type="text" class="form-control" id="price" name="price" required></div>
-                    <div class="mb-3"><label class="form-label">Quantity</label><input type="text" class="form-control" id="quantity" name="quantity" required></div>
-                    <div class="mb-3"><label class="form-label">Total</label><input type="text" class="form-control" id="total" name="total" required></div>
-                    <div class="mb-3"><label class="form-label">Status</label>
-                        <select class="form-select" id="status" name="status"><option value="pending">Pending</option><option value="completed">Completed</option></select>
-                    </div>
-                    <div class="mb-3"><label class="form-label">Order Date</label><input type="date" class="form-control" id="order_date" name="order_date"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-danger" name="update-order">Save changes</button>
-                </div>
-            </form>
+<?= pageHeader('Purchase orders', 'Track medicine restocking orders.', '<button type="button" class="btn btn--primary" data-dialog-open="#order-create">' . lucide('plus', 'icon-4') . ' New order</button>') ?>
+
+<div class="card" style="padding:0.75rem;margin-bottom:0.75rem;">
+    <form method="GET" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:0.75rem;align-items:end;">
+        <div>
+            <label class="label" style="margin-bottom:0.25rem;">Status</label>
+            <select class="select" name="status">
+                <option value="">All status</option>
+                <option value="pending" <?= (($f['status'] ?? '') === 'pending') ? 'selected' : '' ?>>Pending</option>
+                <option value="completed" <?= (($f['status'] ?? '') === 'completed') ? 'selected' : '' ?>>Completed</option>
+                <option value="cancelled" <?= (($f['status'] ?? '') === 'cancelled') ? 'selected' : '' ?>>Cancelled</option>
+            </select>
         </div>
-    </div>
+        <div>
+            <label class="label" style="margin-bottom:0.25rem;">Date from</label>
+            <input type="date" class="input" name="date_from" value="<?= htmlspecialchars($f['date_from'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        </div>
+        <div>
+            <label class="label" style="margin-bottom:0.25rem;">Date to</label>
+            <input type="date" class="input" name="date_to" value="<?= htmlspecialchars($f['date_to'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        </div>
+        <div style="display:flex;gap:0.5rem;">
+            <button type="submit" class="btn btn--primary">Filter</button>
+            <a href="/pharmacy/orders" class="btn btn--outline">Reset</a>
+        </div>
+    </form>
 </div>
 
-<!-- Delete Modal -->
-<div class="modal fade" id="orderDeleteModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white"><h1 class="modal-title fs-5">Confirm Delete</h1><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
-            <form action="" method="POST" id="orderDeleteForm">
-                <?= csrf_field() ?>
-                <div class="modal-body">
-                    <input type="hidden" name="delete_order_id" id="delete_id">
-                    <p>Are you sure you want to delete this order?</p>
-                    <div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i>This action cannot be undone.</div>
-                    <p><strong>Order ID:</strong> <span id="delete_order_id"></span></p>
-                    <p><strong>Medicine:</strong> <span id="delete_medicine"></span></p>
-                    <p><strong>Quantity:</strong> <span id="delete_quantity"></span></p>
-                    <p><strong>Total:</strong> <span id="delete_total"></span></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger" name="delete-order">Delete Order</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="bg-white">
-    <div class="row px-3 pt-4">
-        <div class="col"><h1 class="fw-normal mb-3">Order Table</h1></div>
-    </div>
-
-    <div class="row mb-4 px-3">
-        <form method="GET" class="row g-3">
-            <div class="col-md-2">
-                <select class="form-select" name="status">
-                    <option value="">All Status</option>
-                    <option value="pending" <?= (($f['status'] ?? '') == 'pending') ? 'selected' : '' ?>>Pending</option>
-                    <option value="completed" <?= (($f['status'] ?? '') == 'completed') ? 'selected' : '' ?>>Completed</option>
-                </select>
-            </div>
-            <div class="col-md-2"><input type="date" class="form-control" name="date_from" value="<?= htmlspecialchars($f['date_from'] ?? '') ?>"></div>
-            <div class="col-md-2"><input type="date" class="form-control" name="date_to" value="<?= htmlspecialchars($f['date_to'] ?? '') ?>"></div>
-            <div class="col-md-3">
-                <button type="submit" class="btn btn-danger">Filter</button>
-                <a href="/pharmacy/orders" class="btn btn-secondary">Reset</a>
-            </div>
-        </form>
-    </div>
-
-    <div class="table-responsive px-3 pt-4 mb-5">
-        <table class="table table-striped">
-            <thead class="table-danger">
-                <tr><th>ID</th><th>M_ID</th><th>MEDICINE</th><th>PRICE</th><th>QUANTITY</th><th>TOTAL</th><th>STATUS</th><th>DATE</th><th>ACTION</th></tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($orders)): ?>
-                    <?php foreach ($orders as $ord): ?>
+<div class="data-table-wrap">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Medicine</th>
+                <th class="text-right">Price</th>
+                <th class="text-right">Qty</th>
+                <th class="text-right">Total</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th class="text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($orders)): ?>
+                <?php foreach ($orders as $ord): ?>
+                    <?php $fields = json_encode([
+                        'update_id' => $ord['o_id'],
+                        'quantity' => $ord['quantity'],
+                        'status' => $ord['status'],
+                        'order_date' => $ord['order_date'],
+                    ]); ?>
                     <tr>
-                        <td><?= $ord['o_id'] ?></td>
-                        <td><?= $ord['m_id'] ?></td>
-                        <td><?= htmlspecialchars($ord['medicine_name'] ?? $ord['m_id']) ?></td>
-                        <td><?= $ord['price'] ?></td>
-                        <td><?= $ord['quantity'] ?></td>
-                        <td><?= $ord['total_amount'] ?></td>
-                        <td><span class="badge <?= $ord['status'] == 'completed' ? 'bg-success' : 'bg-warning' ?>"><?= $ord['status'] ?></span></td>
-                        <td><?= $ord['order_date'] ?></td>
-                        <td class="row g-0">
-                            <div class="col">
-                                <button class="btn btn-success btn-md px-3 py-2 my-2 orderEditBtn"
-                                    data-id="<?= $ord['o_id'] ?>" data-mid="<?= $ord['m_id'] ?>"
-                                    data-price="<?= $ord['price'] ?>" data-quantity="<?= $ord['quantity'] ?>"
-                                    data-total="<?= $ord['total_amount'] ?>" data-status="<?= $ord['status'] ?>"
-                                    data-date="<?= $ord['order_date'] ?>">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                            </div>
-                            <div class="col">
-                                <button class="btn btn-danger btn-md px-3 py-2 my-2 orderDeleteBtn"
-                                    data-id="<?= $ord['o_id'] ?>" data-quantity="<?= $ord['quantity'] ?>"
-                                    data-total="<?= $ord['total_amount'] ?>">
-                                    <i class="fa-regular fa-trash-can"></i>
-                                </button>
-                            </div>
+                        <td style="font-weight:500;"><?= htmlspecialchars($ord['medicine_name'] ?? ('#' . $ord['m_id']), ENT_QUOTES, 'UTF-8') ?></td>
+                        <td class="text-right tabular-nums">$<?= number_format((float) $ord['price'], 2) ?></td>
+                        <td class="text-right tabular-nums"><?= $ord['quantity'] ?></td>
+                        <td class="text-right tabular-nums">$<?= number_format((float) $ord['total_amount'], 2) ?></td>
+                        <td><?= statusBadge($ord['status']) ?></td>
+                        <td><?= date('M d, Y', strtotime($ord['order_date'])) ?></td>
+                        <td class="text-right">
+                            <button type="button" class="btn btn--ghost btn--icon"
+                                data-dialog-open="#order-edit"
+                                data-fields='<?= htmlspecialchars($fields, ENT_QUOTES, 'UTF-8') ?>'
+                                data-form-action="/pharmacy/orders/<?= $ord['o_id'] ?>"
+                                aria-label="Edit">
+                                <?= lucide('pencil', 'icon-4') ?>
+                            </button>
+                            <form action="/pharmacy/orders/<?= $ord['o_id'] ?>/delete" method="POST" style="display:inline;" data-confirm="Delete this order? This action cannot be undone.">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="btn btn--ghost btn--icon text-destructive" aria-label="Delete"><?= lucide('trash-2', 'icon-4') ?></button>
+                            </form>
                         </td>
                     </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr><td colspan="9" class="text-center">No Data Found</td></tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-        <?php
-            $fp = http_build_query(array_filter($f, fn($v) => $v !== '' && $v !== null));
-            echo generatePaginationLinks($p['currentPage'], $p['totalPages'], '/pharmacy/orders?page={page}' . ($fp ? "&{$fp}" : ''));
-        ?>
-    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr class="empty-row"><td colspan="7">No orders to display.</td></tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
 </div>
+<?php
+    $fp = http_build_query(array_filter($f, fn($v) => $v !== '' && $v !== null));
+    echo generateTableFooter($p['currentPage'], 10, $p['totalRecords'], '/pharmacy/orders?page={page}' . ($fp ? "&{$fp}" : ''));
+?>
 
-<script>
-$(document).ready(function() {
-    $('.orderEditBtn').on('click', function() {
-        var id = $(this).data('id');
-        $('#orderEditForm').attr('action', '/pharmacy/orders/' + id);
-        $('#update_id').val(id);
-        $('#m_id').val($(this).data('mid'));
-        $('#price').val($(this).data('price'));
-        $('#quantity').val($(this).data('quantity'));
-        $('#total').val($(this).data('total'));
-        $('#status').val($(this).data('status'));
-        $('#order_date').val($(this).data('date'));
-        $('#orderEditModal').modal('show');
-    });
-    $('.orderDeleteBtn').on('click', function() {
-        var id = $(this).data('id');
-        $('#orderDeleteForm').attr('action', '/pharmacy/orders/' + id + '/delete');
-        $('#delete_id').val(id);
-        $('#delete_order_id').text(id);
-        $('#delete_quantity').text($(this).data('quantity'));
-        $('#delete_total').text($(this).data('total'));
-        $('#orderDeleteModal').modal('show');
-    });
-});
-</script>
+<!-- New order dialog -->
+<dialog id="order-create" class="dialog dialog--lg" <?= ($_GET['open'] ?? '') === 'create' ? 'data-auto-open' : '' ?>>
+    <form action="/pharmacy/orders" method="POST" id="order-create-form">
+        <?= csrf_field() ?>
+        <input type="hidden" name="m_id" value="">
+        <div class="dialog__header">
+            <h2 class="dialog__title">New order</h2>
+            <p class="dialog__description">Search a medicine to add it to this order.</p>
+        </div>
+        <div class="combobox" data-combobox data-src="/api/pharmacy/search-medicine">
+            <button type="button" class="btn btn--outline combobox__trigger">
+                <span class="combobox__trigger-label"><?= lucide('search', 'icon-4') ?> Search medicine…</span>
+                <?= lucide('chevrons-up-down', 'icon-4') ?>
+            </button>
+            <div class="combobox__panel">
+                <div class="combobox__search">
+                    <?= lucide('search', 'icon-4') ?>
+                    <input type="text" placeholder="Type to search…">
+                </div>
+                <div class="combobox__list"></div>
+            </div>
+        </div>
+        <div data-txn-panel hidden style="margin-top:1rem;">
+            <table class="data-table" style="border:1px solid var(--border);border-radius:var(--radius-md);">
+                <thead><tr><th>Medicine</th><th class="text-right">Unit price</th><th class="text-right">Total</th></tr></thead>
+                <tbody><tr>
+                    <td data-txn-name></td>
+                    <td class="text-right" data-txn-price></td>
+                    <td class="text-right" data-txn-total></td>
+                </tr></tbody>
+            </table>
+            <div class="field-group field-group--2col" style="margin-top:0.75rem;">
+                <div class="field">
+                    <label class="label">Quantity</label>
+                    <input type="number" class="input" name="quantity" min="1" value="1">
+                    <p class="text-xs text-destructive" data-txn-quantity-warning></p>
+                </div>
+                <div class="field">
+                    <label class="label">Order date</label>
+                    <input type="date" class="input" name="order_date" data-txn-date>
+                    <p class="text-xs text-destructive" data-txn-date-warning></p>
+                </div>
+            </div>
+        </div>
+        <div class="dialog__footer">
+            <button type="button" class="btn btn--outline" data-dialog-close>Cancel</button>
+            <button type="submit" class="btn btn--primary" data-txn-submit disabled>New order</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- Edit order dialog -->
+<dialog id="order-edit" class="dialog">
+    <form action="" method="POST">
+        <?= csrf_field() ?>
+        <div class="dialog__header">
+            <h2 class="dialog__title">Edit order</h2>
+        </div>
+        <div class="field">
+            <label class="label" for="edit-order-quantity">Quantity</label>
+            <input type="number" class="input" id="edit-order-quantity" name="quantity" min="1">
+        </div>
+        <div class="field">
+            <label class="label" for="edit-order-status">Status</label>
+            <select class="select" id="edit-order-status" name="status">
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+        </div>
+        <div class="field">
+            <label class="label" for="edit-order-date">Order date</label>
+            <input type="date" class="input" id="edit-order-date" name="order_date">
+        </div>
+        <div class="dialog__footer">
+            <button type="button" class="btn btn--outline" data-dialog-close>Cancel</button>
+            <button type="submit" class="btn btn--primary">Save changes</button>
+        </div>
+    </form>
+</dialog>
+
+<script src="/assets/js/transactions.js" defer></script>

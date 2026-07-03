@@ -9,6 +9,16 @@ class Sale extends Model
     protected string $table = 'user_sales_tbl';
     protected string $primaryKey = 's_id';
 
+    public function getTopSelling(int $pharmacyId, int $limit = 5): array
+    {
+        $sql = "SELECT m.medicine_name, SUM(s.quantity) as total_quantity
+                FROM {$this->table} s JOIN user_medicine_tbl m ON s.m_id = m.m_id
+                WHERE s.pharmacy_id = :pid AND s.status = 'completed'
+                GROUP BY m.m_id, m.medicine_name
+                ORDER BY total_quantity DESC LIMIT {$limit}";
+        return $this->query($sql, ['pid' => $pharmacyId])->fetchAll();
+    }
+
     public function paginateByPharmacy(int $pharmacyId, int $page, int $perPage, string $conditions = '', array $params = []): array
     {
         $where = "pharmacy_id = :pharmacy_id";

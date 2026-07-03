@@ -1,65 +1,96 @@
-<div class="container-fluid p-4">
-    <h1 class="mb-4">Pharmacy Verification</h1>
+<?= pageHeader('Verification', 'Review and approve pharmacy verification requests.') ?>
 
-    <div class="row mb-4">
-        <div class="col-md-4"><div class="card border-0 shadow"><div class="card-body"><h5>Total Pharmacies</h5><p class="h3 text-danger"><?= $totalCount ?></p></div></div></div>
-        <div class="col-md-4"><div class="card border-0 shadow"><div class="card-body"><h5>Pending</h5><p class="h3 text-warning"><?= $pendingCount ?></p></div></div></div>
-        <div class="col-md-4"><div class="card border-0 shadow"><div class="card-body"><h5>Verified</h5><p class="h3 text-success"><?= $verifiedCount ?></p></div></div></div>
-    </div>
+<div data-tabs>
+<div class="tabs-list" style="margin-bottom:1rem;">
+    <button type="button" class="tabs-trigger" data-tab="pending" aria-selected="true">Pending (<?= $pendingCount ?>)</button>
+    <button type="button" class="tabs-trigger" data-tab="verified" aria-selected="false">Verified (<?= $verifiedCount ?>)</button>
+</div>
 
-    <h3 class="mb-3">Pending Verification</h3>
+<div data-tab-panel="pending">
     <?php if (!empty($pending)): ?>
-        <?php foreach ($pending as $p): ?>
-        <div class="card border-0 shadow mb-3">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-8">
-                        <h5><?= htmlspecialchars($p['pharmacy_name']) ?></h5>
-                        <p><strong>Email:</strong> <?= htmlspecialchars($p['email']) ?></p>
-                        <p><strong>License:</strong> <?= htmlspecialchars($p['license_number'] ?? 'N/A') ?></p>
-                        <p><strong>Requested:</strong> <?= date('F j, Y', strtotime($p['verification_request_date'])) ?></p>
+        <div class="grid-2col">
+            <?php foreach ($pending as $p): ?>
+                <div class="card">
+                    <div class="card__content">
+                        <h3 style="font-size:1rem;font-weight:600;margin:0 0 0.5rem;"><?= htmlspecialchars($p['pharmacy_name'], ENT_QUOTES, 'UTF-8') ?></h3>
+                        <p class="text-sm text-muted" style="margin:0 0 0.25rem;">Email: <?= htmlspecialchars($p['email'], ENT_QUOTES, 'UTF-8') ?></p>
+                        <p class="text-sm text-muted" style="margin:0 0 0.25rem;">License: <?= htmlspecialchars($p['license_number'] ?? 'N/A', ENT_QUOTES, 'UTF-8') ?></p>
+                        <p class="text-sm text-muted" style="margin:0 0 0.75rem;">Requested: <?= date('F j, Y', strtotime($p['verification_request_date'])) ?></p>
                         <?php if (!empty($p['reg_document'])): ?>
-                            <a href="/uploads/documents/<?= htmlspecialchars(basename($p['reg_document'])) ?>" target="_blank" class="btn btn-sm btn-outline-secondary">View Document</a>
+                            <a href="/uploads/documents/<?= htmlspecialchars(basename($p['reg_document']), ENT_QUOTES, 'UTF-8') ?>" target="_blank" class="btn btn--outline btn--sm" style="border-style:dashed;margin-bottom:0.75rem;">
+                                <?= lucide('file-text', 'icon-4') ?> View document
+                            </a>
                         <?php endif; ?>
-                    </div>
-                    <div class="col-md-4">
-                        <form action="/admin/pharmacies/<?= $p['pharmacy_id'] ?>/approve" method="POST" class="mb-2">
-                            <?= csrf_field() ?>
-                            <textarea name="verification_notes" class="form-control mb-2" placeholder="Notes (optional)"></textarea>
-                            <button type="submit" class="btn btn-success btn-sm">Approve</button>
-                        </form>
-                        <form action="/admin/pharmacies/<?= $p['pharmacy_id'] ?>/reject" method="POST">
-                            <?= csrf_field() ?>
-                            <input type="hidden" name="verification_notes" value="">
-                            <button type="submit" class="btn btn-danger btn-sm">Reject</button>
-                        </form>
+                        <div style="display:flex;gap:0.5rem;">
+                            <button type="button" class="btn btn--outline" style="flex:1;" data-dialog-open="#reject-dialog" data-form-action="/admin/pharmacies/<?= $p['pharmacy_id'] ?>/reject">Reject</button>
+                            <button type="button" class="btn btn--primary" style="flex:1;" data-dialog-open="#approve-dialog" data-form-action="/admin/pharmacies/<?= $p['pharmacy_id'] ?>/approve">Approve</button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php endforeach; ?>
         </div>
-        <?php endforeach; ?>
     <?php else: ?>
-        <p class="text-muted">No pending verification requests.</p>
+        <p class="text-sm text-muted">No pending verification requests.</p>
     <?php endif; ?>
+</div>
 
-    <h3 class="mb-3 mt-4">Verified Pharmacies</h3>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead class="table-success"><tr><th>Name</th><th>Email</th><th>License</th><th>Verified Date</th></tr></thead>
+<div data-tab-panel="verified" hidden>
+    <div class="data-table-wrap">
+        <table class="data-table">
+            <thead><tr><th>Pharmacy</th><th>Email</th><th>License</th><th>Verified date</th></tr></thead>
             <tbody>
                 <?php if (!empty($verified)): ?>
                     <?php foreach ($verified as $v): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($v['pharmacy_name']) ?></td>
-                        <td><?= htmlspecialchars($v['email']) ?></td>
-                        <td><?= htmlspecialchars($v['license_number'] ?? '') ?></td>
-                        <td><?= date('F j, Y', strtotime($v['verification_date'])) ?></td>
-                    </tr>
+                        <tr>
+                            <td style="font-weight:500;"><?= htmlspecialchars($v['pharmacy_name'], ENT_QUOTES, 'UTF-8') ?></td>
+                            <td><?= htmlspecialchars($v['email'], ENT_QUOTES, 'UTF-8') ?></td>
+                            <td><?= htmlspecialchars($v['license_number'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+                            <td><?= date('F j, Y', strtotime($v['verification_date'])) ?></td>
+                        </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <tr><td colspan="4">No verified pharmacies yet.</td></tr>
+                    <tr class="empty-row"><td colspan="4">No verified pharmacies yet.</td></tr>
                 <?php endif; ?>
             </tbody>
         </table>
     </div>
 </div>
+</div>
+
+<!-- Approve dialog -->
+<dialog id="approve-dialog" class="dialog">
+    <form action="" method="POST">
+        <?= csrf_field() ?>
+        <div class="dialog__header">
+            <h2 class="dialog__title">Approve pharmacy</h2>
+            <p class="dialog__description">Optionally add a note for this decision.</p>
+        </div>
+        <div class="field">
+            <label class="label" for="approve-notes">Notes</label>
+            <textarea class="textarea" id="approve-notes" name="verification_notes" placeholder="Notes (optional)"></textarea>
+        </div>
+        <div class="dialog__footer">
+            <button type="button" class="btn btn--outline" data-dialog-close>Cancel</button>
+            <button type="submit" class="btn btn--primary">Approve</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- Reject dialog -->
+<dialog id="reject-dialog" class="dialog">
+    <form action="" method="POST">
+        <?= csrf_field() ?>
+        <div class="dialog__header">
+            <h2 class="dialog__title">Reject verification request</h2>
+            <p class="dialog__description">This will clear the pharmacy's request so they can resubmit.</p>
+        </div>
+        <div class="field">
+            <label class="label" for="reject-notes">Notes</label>
+            <textarea class="textarea" id="reject-notes" name="verification_notes" placeholder="Reason (optional)"></textarea>
+        </div>
+        <div class="dialog__footer">
+            <button type="button" class="btn btn--outline" data-dialog-close>Cancel</button>
+            <button type="submit" class="btn btn--destructive">Reject</button>
+        </div>
+    </form>
+</dialog>

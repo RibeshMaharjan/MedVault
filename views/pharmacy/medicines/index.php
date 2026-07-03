@@ -1,254 +1,215 @@
 <?php $p = $pagination; $f = $filters ?? []; ?>
 
-<!-- Edit Modal -->
-<div class="modal fade" id="medicineeditmodal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5">Medicine Edit</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+<?= pageHeader('Medicines', 'Manage your pharmacy\'s medicine catalogue.', '<button type="button" class="btn btn--primary" data-dialog-open="#medicine-create">' . lucide('plus', 'icon-4') . ' Add medicine</button>') ?>
+
+<div class="card" style="padding:0.75rem;margin-bottom:0.75rem;">
+    <form method="GET" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:0.75rem;align-items:end;">
+        <div>
+            <label class="label" style="margin-bottom:0.25rem;">Search</label>
+            <div class="input-search">
+                <?= lucide('search', 'icon-4') ?>
+                <input type="text" class="input" name="search" placeholder="Medicine name..." value="<?= htmlspecialchars($f['search'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
             </div>
-            <form action="" method="POST" id="medicineEditForm">
-                <?= csrf_field() ?>
-                <div class="modal-body">
-                    <input type="hidden" name="update_id" id="update_id">
-                    <div class="mb-3">
-                        <label class="form-label">Medicine Name</label>
-                        <input class="form-control" type="text" id="name" name="name">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Category</label>
-                        <select class="form-select" id="category" name="category">
-                            <option value="">Select Category</option>
-                            <?php foreach ($categories as $cat): ?>
-                                <option value="<?= $cat['c_id'] ?>"><?= htmlspecialchars($cat['category_name']) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">In Stock</label>
-                        <input type="number" class="form-control" id="in_stock" name="in_stock">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Buy Price</label>
-                        <input type="number" step="0.01" class="form-control" id="buy_price" name="buy_price">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Sell Price</label>
-                        <input type="number" step="0.01" class="form-control" id="sell_price" name="sell_price">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Expiration Date</label>
-                        <input type="date" class="form-control" id="exp_date" name="exp_date">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-danger" name="update-medicine">Save changes</button>
-                </div>
-            </form>
         </div>
-    </div>
+        <div>
+            <label class="label" style="margin-bottom:0.25rem;">Category</label>
+            <select class="select" name="category">
+                <option value="">All categories</option>
+                <?php foreach ($categories as $cat): ?>
+                    <option value="<?= $cat['c_id'] ?>" <?= (($f['category'] ?? '') == $cat['c_id']) ? 'selected' : '' ?>><?= htmlspecialchars($cat['category_name'], ENT_QUOTES, 'UTF-8') ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div>
+            <label class="label" style="margin-bottom:0.25rem;">Expiry from</label>
+            <input type="date" class="input" name="exp_date_from" value="<?= htmlspecialchars($f['exp_date_from'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        </div>
+        <div>
+            <label class="label" style="margin-bottom:0.25rem;">Expiry to</label>
+            <input type="date" class="input" name="exp_date_to" value="<?= htmlspecialchars($f['exp_date_to'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        </div>
+        <div>
+            <label class="label" style="margin-bottom:0.25rem;">Min stock</label>
+            <input type="number" class="input" name="stock_min" value="<?= htmlspecialchars($f['stock_min'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        </div>
+        <div>
+            <label class="label" style="margin-bottom:0.25rem;">Max stock</label>
+            <input type="number" class="input" name="stock_max" value="<?= htmlspecialchars($f['stock_max'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        </div>
+        <div style="display:flex;gap:0.5rem;">
+            <button type="submit" class="btn btn--primary">Filter</button>
+            <a href="/pharmacy/medicines" class="btn btn--outline">Reset</a>
+        </div>
+    </form>
 </div>
 
-<!-- Delete Modal -->
-<div class="modal fade" id="medicineDeleteModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h1 class="modal-title fs-5">Confirm Delete</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form action="" method="POST" id="medicineDeleteForm">
-                <?= csrf_field() ?>
-                <div class="modal-body">
-                    <input type="hidden" name="delete_medicine_id" id="delete_medicine_id">
-                    <p>Are you sure you want to delete this medicine?</p>
-                    <div class="alert alert-warning">
-                        <i class="fas fa-exclamation-triangle me-2"></i>This action cannot be undone.
-                    </div>
-                    <div class="medicine-details mt-3">
-                        <p><strong>Medicine ID:</strong> <span id="delete_medicine_display_id"></span></p>
-                        <p><strong>Medicine Name:</strong> <span id="delete_medicine_name"></span></p>
-                        <p><strong>In Stock:</strong> <span id="delete_medicine_stock"></span></p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger" name="delete-medicine">Delete Medicine</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="bg-white">
-    <div class="row px-3 pt-4">
-        <div class="col"><h1 class="fw-normal mb-3">Medicine Table</h1></div>
-    </div>
-
-    <!-- Filter Form -->
-    <div class="row mb-4 px-3">
-        <div class="col-12">
-            <form method="GET" class="row g-3">
-                <div class="col-md-3">
-                    <input type="text" class="form-control" name="search" placeholder="Search medicine name..." value="<?= htmlspecialchars($f['search'] ?? '') ?>">
-                </div>
-                <div class="col-md-2">
-                    <select class="form-select" name="category">
-                        <option value="">All Categories</option>
-                        <?php foreach ($categories as $cat): ?>
-                            <option value="<?= $cat['c_id'] ?>" <?= (($f['category'] ?? '') == $cat['c_id']) ? 'selected' : '' ?>><?= htmlspecialchars($cat['category_name']) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <input type="date" class="form-control" name="exp_date_from" value="<?= htmlspecialchars($f['exp_date_from'] ?? '') ?>">
-                </div>
-                <div class="col-md-2">
-                    <input type="date" class="form-control" name="exp_date_to" value="<?= htmlspecialchars($f['exp_date_to'] ?? '') ?>">
-                </div>
-                <div class="col-md-3">
-                    <div class="input-group">
-                        <input type="number" class="form-control" name="buy_price_min" placeholder="Min Buy" value="<?= htmlspecialchars($f['buy_price_min'] ?? '') ?>">
-                        <input type="number" class="form-control" name="buy_price_max" placeholder="Max Buy" value="<?= htmlspecialchars($f['buy_price_max'] ?? '') ?>">
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="input-group">
-                        <input type="number" class="form-control" name="sell_price_min" placeholder="Min Sell" value="<?= htmlspecialchars($f['sell_price_min'] ?? '') ?>">
-                        <input type="number" class="form-control" name="sell_price_max" placeholder="Max Sell" value="<?= htmlspecialchars($f['sell_price_max'] ?? '') ?>">
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="input-group">
-                        <input type="number" class="form-control" name="stock_min" placeholder="Min Stock" value="<?= htmlspecialchars($f['stock_min'] ?? '') ?>">
-                        <input type="number" class="form-control" name="stock_max" placeholder="Max Stock" value="<?= htmlspecialchars($f['stock_max'] ?? '') ?>">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <button type="submit" class="btn btn-danger">Filter</button>
-                    <a href="/pharmacy/medicines" class="btn btn-secondary">Reset</a>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <p class="text-muted px-3">
-        Showing <?= ($p['currentPage'] - 1) * 10 + 1 ?> to <?= min($p['currentPage'] * 10, $p['totalRecords']) ?> of <?= $p['totalRecords'] ?> entries
-    </p>
-
-    <div class="table-responsive px-3 pt-4 mb-5">
-        <table class="table table-striped">
-            <thead class="table-danger">
-                <tr>
-                    <th>ID</th><th>MEDICINE NAME</th><th>DESCRIPTION</th><th>CATEGORY</th>
-                    <th>IN STOCK</th><th>BUY PRICE</th><th>SELL PRICE</th><th>EXPIRATION DATE</th><th>ACTION</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($medicines)): ?>
-                    <?php foreach ($medicines as $med): ?>
+<div class="data-table-wrap">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Medicine</th>
+                <th>Category</th>
+                <th class="text-right">Stock</th>
+                <th class="text-right">Buy</th>
+                <th class="text-right">Sell</th>
+                <th>Expiry</th>
+                <th class="text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($medicines)): ?>
+                <?php foreach ($medicines as $med): ?>
                     <?php
                         $expDate = new DateTime($med['exp_date']);
                         $today = new DateTime();
                         $daysDiff = (int) $today->diff($expDate)->format('%a');
-                        $expiring = $daysDiff < 30;
+                        $expiring = $expDate < $today ? true : $daysDiff < 90;
+                        $lowStock = (int) $med['in_stock'] < 20;
 
-                        // Find category name
                         $catName = 'Unknown';
                         foreach ($categories as $cat) {
                             if ($cat['c_id'] == $med['c_id']) { $catName = $cat['category_name']; break; }
                         }
+
+                        $fields = json_encode([
+                            'update_id' => $med['m_id'],
+                            'name' => $med['medicine_name'],
+                            'description' => $med['medicine_desc'],
+                            'category' => $med['c_id'],
+                            'in_stock' => $med['in_stock'],
+                            'buy_price' => $med['buy_price'],
+                            'sell_price' => $med['sell_price'],
+                            'exp_date' => $med['exp_date'],
+                        ]);
                     ?>
                     <tr>
-                        <td class="<?= $expiring ? 'bg-danger text-light' : '' ?>"><?= $med['m_id'] ?></td>
-                        <td><?= htmlspecialchars($med['medicine_name']) ?></td>
-                        <td><?= htmlspecialchars($med['medicine_desc']) ?></td>
-                        <td><?= htmlspecialchars($catName) ?></td>
-                        <td><?= $med['in_stock'] ?></td>
-                        <td><?= $med['buy_price'] ?></td>
-                        <td><?= $med['sell_price'] ?></td>
-                        <td><?= $med['exp_date'] ?></td>
-                        <td class="row g-0" style="height: 100px;">
-                            <div class="col">
-                                <button class="btn btn-success btn-md px-3 py-2 my-2 medicineeditbtn"
-                                    data-id="<?= $med['m_id'] ?>"
-                                    data-name="<?= htmlspecialchars($med['medicine_name']) ?>"
-                                    data-description="<?= htmlspecialchars($med['medicine_desc']) ?>"
-                                    data-category="<?= $med['c_id'] ?>"
-                                    data-instock="<?= $med['in_stock'] ?>"
-                                    data-buyprice="<?= $med['buy_price'] ?>"
-                                    data-sellprice="<?= $med['sell_price'] ?>"
-                                    data-expdate="<?= $med['exp_date'] ?>">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                            </div>
-                            <div class="col">
-                                <button class="btn btn-danger btn-md px-3 py-2 my-2 medicineDeleteBtn"
-                                    data-id="<?= $med['m_id'] ?>"
-                                    data-name="<?= htmlspecialchars($med['medicine_name']) ?>"
-                                    data-instock="<?= $med['in_stock'] ?>">
-                                    <i class="fa-regular fa-trash-can"></i>
-                                </button>
-                            </div>
+                        <td>
+                            <div style="font-weight:500;"><?= htmlspecialchars($med['medicine_name'], ENT_QUOTES, 'UTF-8') ?></div>
+                            <div class="text-xs text-muted"><?= htmlspecialchars($med['medicine_desc'], ENT_QUOTES, 'UTF-8') ?></div>
+                        </td>
+                        <td><span class="badge badge--secondary"><?= htmlspecialchars($catName, ENT_QUOTES, 'UTF-8') ?></span></td>
+                        <td class="text-right tabular-nums<?= $lowStock ? ' text-warning' : '' ?>" style="<?= $lowStock ? 'font-weight:500;' : '' ?>"><?= $med['in_stock'] ?></td>
+                        <td class="text-right tabular-nums">$<?= number_format((float) $med['buy_price'], 2) ?></td>
+                        <td class="text-right tabular-nums">$<?= number_format((float) $med['sell_price'], 2) ?></td>
+                        <td class="<?= $expiring ? 'text-destructive' : '' ?>"><?= $med['exp_date'] ?></td>
+                        <td class="text-right">
+                            <button type="button" class="btn btn--ghost btn--icon" data-dialog-open="#medicine-edit" data-fields='<?= htmlspecialchars($fields, ENT_QUOTES, 'UTF-8') ?>' data-form-action="/pharmacy/medicines/<?= $med['m_id'] ?>" aria-label="Edit">
+                                <?= lucide('pencil', 'icon-4') ?>
+                            </button>
+                            <form action="/pharmacy/medicines/<?= $med['m_id'] ?>/delete" method="POST" style="display:inline;" data-confirm="Delete <?= htmlspecialchars($med['medicine_name'], ENT_QUOTES, 'UTF-8') ?>? This action cannot be undone.">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="btn btn--ghost btn--icon text-destructive" aria-label="Delete"><?= lucide('trash-2', 'icon-4') ?></button>
+                            </form>
                         </td>
                     </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr><td colspan="9" class="text-center">No Data Found</td></tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-        <?php
-            $filter_params = http_build_query(array_filter($f, fn($v) => $v !== '' && $v !== null));
-            $pagination_url = '/pharmacy/medicines?page={page}' . ($filter_params ? '&' . $filter_params : '');
-            echo generatePaginationLinks($p['currentPage'], $p['totalPages'], $pagination_url);
-        ?>
-    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr class="empty-row"><td colspan="7">No medicines to display.</td></tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
 </div>
+<?php
+    $filter_params = http_build_query(array_filter($f, fn($v) => $v !== '' && $v !== null));
+    $pagination_url = '/pharmacy/medicines?page={page}' . ($filter_params ? '&' . $filter_params : '');
+    echo generateTableFooter($p['currentPage'], 10, $p['totalRecords'], $pagination_url);
+?>
 
-<script>
-$(document).ready(function () {
-    // Edit modal
-    $('.medicineeditbtn').on('click', function () {
-        var btn = $(this);
-        var id = btn.data('id');
-        $('#medicineEditForm').attr('action', '/pharmacy/medicines/' + id);
-        $('#medicineeditmodal').modal('show');
-        setTimeout(function() {
-            $('#update_id').val(id);
-            $('#name').val(btn.data('name'));
-            $('#description').val(btn.data('description'));
-            $('#category').val(btn.data('category'));
-            $('#in_stock').val(btn.data('instock'));
-            $('#buy_price').val(btn.data('buyprice'));
-            $('#sell_price').val(btn.data('sellprice'));
-            var expdate = btn.data('expdate');
-            if (expdate) {
-                var d = new Date(expdate);
-                if (!isNaN(d.getTime())) {
-                    $('#exp_date').val(d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'));
-                } else {
-                    $('#exp_date').val(expdate);
-                }
-            }
-        }, 300);
-    });
+<!-- Add medicine dialog -->
+<dialog id="medicine-create" class="dialog" <?= ($_GET['open'] ?? '') === 'create' ? 'data-auto-open' : '' ?>>
+    <form action="/pharmacy/medicines" method="POST" autocomplete="off">
+        <?= csrf_field() ?>
+        <div class="dialog__header">
+            <h2 class="dialog__title">Add medicine</h2>
+            <p class="dialog__description">Add a new medicine to your catalogue.</p>
+        </div>
+        <div class="field-group field-group--2col">
+            <div class="field" style="grid-column:1 / -1;">
+                <label class="label" for="name">Medicine name</label>
+                <input class="input" type="text" id="name" name="name" required>
+            </div>
+            <div class="field" style="grid-column:1 / -1;">
+                <label class="label" for="description">Description</label>
+                <textarea class="textarea" id="description" name="description"></textarea>
+            </div>
+            <div class="field">
+                <label class="label" for="category">Category</label>
+                <select class="select" id="category" name="category" required>
+                    <option value="">Select category</option>
+                    <?php foreach ($categories as $cat): ?>
+                        <option value="<?= $cat['c_id'] ?>"><?= htmlspecialchars($cat['category_name'], ENT_QUOTES, 'UTF-8') ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="field">
+                <label class="label" for="quantity">Stock</label>
+                <input type="number" class="input" id="quantity" name="quantity" required>
+            </div>
+            <div class="field">
+                <label class="label" for="buy_price">Buy price</label>
+                <input type="number" step="0.01" class="input" id="buy_price" name="buy_price" required>
+            </div>
+            <div class="field">
+                <label class="label" for="sell_price">Sell price</label>
+                <input type="number" step="0.01" class="input" id="sell_price" name="sell_price" required>
+            </div>
+            <div class="field" style="grid-column:1 / -1;">
+                <label class="label" for="exp_date">Expiration date</label>
+                <input type="date" class="input" id="exp_date" name="exp_date" required>
+            </div>
+        </div>
+        <div class="dialog__footer">
+            <button type="button" class="btn btn--outline" data-dialog-close>Cancel</button>
+            <button type="submit" class="btn btn--primary">Add medicine</button>
+        </div>
+    </form>
+</dialog>
 
-    // Delete modal
-    $('.medicineDeleteBtn').on('click', function () {
-        var id = $(this).data('id');
-        $('#medicineDeleteForm').attr('action', '/pharmacy/medicines/' + id + '/delete');
-        $('#delete_medicine_id').val(id);
-        $('#delete_medicine_display_id').text(id);
-        $('#delete_medicine_name').text($(this).data('name'));
-        $('#delete_medicine_stock').text($(this).data('instock'));
-        $('#medicineDeleteModal').modal('show');
-    });
-});
-</script>
+<!-- Edit medicine dialog -->
+<dialog id="medicine-edit" class="dialog">
+    <form action="" method="POST" autocomplete="off">
+        <?= csrf_field() ?>
+        <div class="dialog__header">
+            <h2 class="dialog__title">Edit medicine</h2>
+        </div>
+        <div class="field-group field-group--2col">
+            <div class="field" style="grid-column:1 / -1;">
+                <label class="label" for="edit-name">Medicine name</label>
+                <input class="input" type="text" id="edit-name" name="name">
+            </div>
+            <div class="field" style="grid-column:1 / -1;">
+                <label class="label" for="edit-description">Description</label>
+                <textarea class="textarea" id="edit-description" name="description"></textarea>
+            </div>
+            <div class="field">
+                <label class="label" for="edit-category">Category</label>
+                <select class="select" id="edit-category" name="category">
+                    <option value="">Select category</option>
+                    <?php foreach ($categories as $cat): ?>
+                        <option value="<?= $cat['c_id'] ?>"><?= htmlspecialchars($cat['category_name'], ENT_QUOTES, 'UTF-8') ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="field">
+                <label class="label" for="edit-in_stock">Stock</label>
+                <input type="number" class="input" id="edit-in_stock" name="in_stock">
+            </div>
+            <div class="field">
+                <label class="label" for="edit-buy_price">Buy price</label>
+                <input type="number" step="0.01" class="input" id="edit-buy_price" name="buy_price">
+            </div>
+            <div class="field">
+                <label class="label" for="edit-sell_price">Sell price</label>
+                <input type="number" step="0.01" class="input" id="edit-sell_price" name="sell_price">
+            </div>
+            <div class="field" style="grid-column:1 / -1;">
+                <label class="label" for="edit-exp_date">Expiration date</label>
+                <input type="date" class="input" id="edit-exp_date" name="exp_date">
+            </div>
+        </div>
+        <div class="dialog__footer">
+            <button type="button" class="btn btn--outline" data-dialog-close>Cancel</button>
+            <button type="submit" class="btn btn--primary">Save changes</button>
+        </div>
+    </form>
+</dialog>

@@ -1,19 +1,47 @@
-<div class="container-fluid bg-white">
-    <div class="row pt-3 ps-2"><div class="col"><h1 class="fw-normal mb-3">WebSite Settings</h1></div></div>
-    <div class="row px-2 pt-3">
-        <?php if ($settings): ?>
-        <form action="/admin/settings" method="POST" class="form">
-            <?= csrf_field() ?>
-            <div class="mb-3"><label class="form-label">Heading</label><input class="form-control" type="text" name="title" value="<?= htmlspecialchars($settings['title'] ?? '') ?>"></div>
-            <div class="mb-3"><label class="form-label">Small Description</label><textarea class="form-control" rows="3" name="small-description"><?= htmlspecialchars($settings['small_description'] ?? '') ?></textarea></div>
-            <div class="mb-3"><label class="form-label">Sub-Heading</label><input type="text" class="form-control" name="sub-title" value="<?= htmlspecialchars($settings['sub_title'] ?? '') ?>"></div>
-            <div class="mb-3"><label class="form-label">Sub-Description</label><textarea class="form-control" rows="3" name="sub-description"><?= htmlspecialchars($settings['sub_description'] ?? '') ?></textarea></div>
-            <div class="mb-3"><label class="form-label">Phone</label><input type="text" class="form-control" name="phone" value="<?= htmlspecialchars($settings['phone'] ?? '') ?>"></div>
-            <div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control" name="email" value="<?= htmlspecialchars($settings['email'] ?? '') ?>"></div>
-            <input type="submit" value="Save Setting" class="btn btn-danger" name="saveSetting">
-        </form>
-        <?php else: ?>
-            <h5>Settings not found</h5>
-        <?php endif; ?>
-    </div>
-</div>
+<?= pageHeader('Settings', 'Manage the public landing page content.') ?>
+
+<?php if ($settings): ?>
+    <form action="/admin/settings" method="POST">
+        <?= csrf_field() ?>
+        <div class="grid-2col">
+            <div class="card">
+                <div class="card__header"><div class="card__title" style="font-size:1rem;">Hero</div></div>
+                <div class="card__content">
+                    <div class="field">
+                        <label class="label" for="title">Title</label>
+                        <input class="input" type="text" id="title" name="title" value="<?= htmlspecialchars($settings['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                    </div>
+                    <div class="field">
+                        <label class="label" for="sub-title">Subtitle</label>
+                        <input class="input" type="text" id="sub-title" name="sub-title" value="<?= htmlspecialchars($settings['sub_title'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                    </div>
+                    <div class="field">
+                        <label class="label" for="small-description">Description</label>
+                        <textarea class="textarea" id="small-description" name="small-description" rows="3"><?= htmlspecialchars($settings['small_description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="sub-description">Extended description</label>
+                        <textarea class="textarea" id="sub-description" name="sub-description" rows="3"><?= htmlspecialchars($settings['sub_description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card__header"><div class="card__title" style="font-size:1rem;">Contact</div></div>
+                <div class="card__content">
+                    <div class="field">
+                        <label class="label" for="email">Email</label>
+                        <input class="input" type="email" id="email" name="email" value="<?= htmlspecialchars($settings['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                    </div>
+                    <div class="field">
+                        <label class="label" for="phone">Phone</label>
+                        <input class="input" type="text" id="phone" name="phone" value="<?= htmlspecialchars($settings['phone'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn--primary" style="margin-top:1rem;">Save settings</button>
+    </form>
+<?php else: ?>
+    <p class="text-sm text-muted">Settings not found.</p>
+<?php endif; ?>

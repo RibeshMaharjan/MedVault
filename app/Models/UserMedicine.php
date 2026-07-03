@@ -120,6 +120,14 @@ class UserMedicine extends Model
         return $this->query($sql, ['pharmacy_id' => $pharmacyId, 'threshold' => $threshold])->fetchAll();
     }
 
+    public function getStockLevels(int $pharmacyId, int $limit = 8): array
+    {
+        $sql = "SELECT medicine_name, in_stock FROM {$this->table}
+                WHERE pharmacy_id = :pharmacy_id
+                ORDER BY in_stock DESC LIMIT {$limit}";
+        return $this->query($sql, ['pharmacy_id' => $pharmacyId])->fetchAll();
+    }
+
     public function getInventoryLevels(int $pharmacyId, int $threshold = 10): array
     {
         $summarySql = "SELECT
@@ -143,11 +151,11 @@ class UserMedicine extends Model
 
     public function getRecentActivities(int $pharmacyId, int $limit = 10): array
     {
-        $sql = "(SELECT sales_date as date, 'Sale' as type, m.medicine_name, s.quantity, s.status
+        $sql = "(SELECT sales_date as date, 'Sale' as type, m.medicine_name, s.quantity, s.status, s.total_amount as amount
                  FROM user_sales_tbl s JOIN {$this->table} m ON s.m_id = m.m_id
                  WHERE s.pharmacy_id = :pid1)
                 UNION ALL
-                (SELECT order_date as date, 'Order' as type, m.medicine_name, o.quantity, o.status
+                (SELECT order_date as date, 'Order' as type, m.medicine_name, o.quantity, o.status, o.total_amount as amount
                  FROM user_order_tbl o JOIN {$this->table} m ON o.m_id = m.m_id
                  WHERE o.pharmacy_id = :pid2)
                 ORDER BY date DESC LIMIT {$limit}";

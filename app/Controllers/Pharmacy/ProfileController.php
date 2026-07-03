@@ -26,7 +26,7 @@ class ProfileController extends Controller
         $this->view('pharmacy/profile', [
             'pharmacy' => $data,
             'currentPage' => 'profile',
-        ], 'pharmacy');
+        ], 'app');
     }
 
     public function update(): void
@@ -40,21 +40,21 @@ class ProfileController extends Controller
         $pan = $this->validate($_POST['pan'] ?? '');
 
         if (empty($name) || empty($email)) {
-            $this->redirect('/pharmacy/profile', 'Name and email are required');
+            $this->redirect('/pharmacy/profile', 'Name and email are required', 'error');
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->redirect('/pharmacy/profile', 'Invalid email format');
+            $this->redirect('/pharmacy/profile', 'Invalid email format', 'error');
         }
         if ($phone !== '' && !preg_match('/^[0-9]{10}$/', $phone)) {
-            $this->redirect('/pharmacy/profile', 'Invalid phone number');
+            $this->redirect('/pharmacy/profile', 'Invalid phone number', 'error');
         }
         if ($pan !== '' && (!is_numeric($pan) || $pan <= 0)) {
-            $this->redirect('/pharmacy/profile', 'Invalid PAN number');
+            $this->redirect('/pharmacy/profile', 'Invalid PAN number', 'error');
         }
 
         $existing = $this->user->findByEmail($email);
         if ($existing && (int) $existing['user_id'] !== $pharmacyId) {
-            $this->redirect('/pharmacy/profile', 'Email already in use by another account');
+            $this->redirect('/pharmacy/profile', 'Email already in use by another account', 'error');
         }
 
         try {
@@ -76,7 +76,7 @@ class ProfileController extends Controller
         } catch (\Throwable $e) {
             $this->pharmacy->rollBack();
             error_log('Profile update failed: ' . $e->getMessage());
-            $this->redirect('/pharmacy/profile', 'Profile update failed. Please try again.');
+            $this->redirect('/pharmacy/profile', 'Profile update failed. Please try again.', 'error');
         }
 
         $this->redirect('/pharmacy/profile', 'Profile updated successfully!');
@@ -88,12 +88,12 @@ class ProfileController extends Controller
         $licenseNumber = $this->validate($_POST['license_number'] ?? '');
 
         if (empty($licenseNumber)) {
-            $this->redirect('/pharmacy/profile', 'License number is required.');
+            $this->redirect('/pharmacy/profile', 'License number is required.', 'error');
         }
 
         $current = $this->pharmacy->findById($pharmacyId, 'pharmacy_id');
         if ($current && (int) $current['isverified'] === 1) {
-            $this->redirect('/pharmacy/profile', 'Your pharmacy is already verified.');
+            $this->redirect('/pharmacy/profile', 'Your pharmacy is already verified.', 'error');
         }
 
         $updateData = [
@@ -118,7 +118,7 @@ class ProfileController extends Controller
             $detectedType = (new \finfo(FILEINFO_MIME_TYPE))->file($tmpName) ?: '';
 
             if ($_FILES['reg_document']['size'] > $maxBytes || !isset($allowedTypes[$detectedType])) {
-                $this->redirect('/pharmacy/profile', 'Invalid document. Upload a PDF, JPG, or PNG under 5MB.');
+                $this->redirect('/pharmacy/profile', 'Invalid document. Upload a PDF, JPG, or PNG under 5MB.', 'error');
             }
 
             $newFilename = $pharmacyId . '_' . bin2hex(random_bytes(16)) . '.' . $allowedTypes[$detectedType];
@@ -127,10 +127,10 @@ class ProfileController extends Controller
             if (move_uploaded_file($_FILES['reg_document']['tmp_name'], $targetFile)) {
                 $updateData['reg_document'] = 'uploads/documents/' . $newFilename;
             } else {
-                $this->redirect('/pharmacy/profile', 'Error uploading document. Please try again.');
+                $this->redirect('/pharmacy/profile', 'Error uploading document. Please try again.', 'error');
             }
         } else {
-            $this->redirect('/pharmacy/profile', 'Registration document is required.');
+            $this->redirect('/pharmacy/profile', 'Registration document is required.', 'error');
         }
 
         $this->pharmacy->update($pharmacyId, $updateData, 'pharmacy_id');

@@ -31,9 +31,10 @@ class Session
         unset($_SESSION[$key]);
     }
 
-    public function flash(string $message): void
+    public function flash(string $message, string $type = 'success'): void
     {
         $_SESSION['status'] = $message;
+        $_SESSION['status_type'] = $type;
     }
 
     public function getFlash(): ?string

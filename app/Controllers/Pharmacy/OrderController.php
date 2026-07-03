@@ -43,14 +43,12 @@ class OrderController extends Controller
             'pagination' => $result,
             'filters' => $_GET,
             'currentPage' => 'order-display',
-        ], 'pharmacy');
+        ], 'app');
     }
 
     public function create(): void
     {
-        $this->view('pharmacy/orders/create', [
-            'currentPage' => 'order-create',
-        ], 'pharmacy');
+        $this->redirect('/pharmacy/orders?open=create');
     }
 
     public function store(): void
@@ -61,18 +59,18 @@ class OrderController extends Controller
         $date = $_POST['order_date'] ?? '';
 
         if (!is_numeric($quantity) || $quantity <= 0) {
-            $this->redirect('/pharmacy/orders/create', 'Invalid quantity');
+            $this->redirect('/pharmacy/orders?open=create', 'Invalid quantity', 'error');
         }
         if (strtotime($date) < strtotime(date('Y-m-d'))) {
-            $this->redirect('/pharmacy/orders/create', 'Order date cannot be in the past');
+            $this->redirect('/pharmacy/orders?open=create', 'Order date cannot be in the past', 'error');
         }
 
         $med = $this->medicine->findByIdAndPharmacy($medicineId, $userId);
         if (!$med || $med['in_stock'] < $quantity) {
-            $this->redirect('/pharmacy/orders/create', 'Not enough stock available');
+            $this->redirect('/pharmacy/orders?open=create', 'Not enough stock available', 'error');
         }
         if (strtotime($med['exp_date']) < strtotime(date('Y-m-d'))) {
-            $this->redirect('/pharmacy/orders/create', 'Cannot order expired medicine');
+            $this->redirect('/pharmacy/orders?open=create', 'Cannot order expired medicine', 'error');
         }
 
         $price = (float) $med['sell_price'];
@@ -93,7 +91,7 @@ class OrderController extends Controller
             $this->order->commit();
         } catch (\Throwable) {
             $this->order->rollBack();
-            $this->redirect('/pharmacy/orders/create', 'Unable to create order');
+            $this->redirect('/pharmacy/orders?open=create', 'Unable to create order', 'error');
         }
 
         $this->redirect('/pharmacy/orders', 'Order has been submitted successfully');
@@ -106,7 +104,7 @@ class OrderController extends Controller
 
         $order = $this->order->findByIdAndPharmacy($orderId, $userId);
         if (!$order) {
-            $this->redirect('/pharmacy/orders', 'Order not found');
+            $this->redirect('/pharmacy/orders', 'Order not found', 'error');
         }
 
         $newStatus = $_POST['status'] ?? 'pending';
@@ -115,21 +113,21 @@ class OrderController extends Controller
         $orderDate = $_POST['order_date'] ?? '';
 
         if (!in_array($newStatus, ['pending', 'completed', 'cancelled'], true)) {
-            $this->redirect('/pharmacy/orders', 'Invalid status');
+            $this->redirect('/pharmacy/orders', 'Invalid status', 'error');
         }
         if ($quantity <= 0) {
-            $this->redirect('/pharmacy/orders', 'Invalid quantity');
+            $this->redirect('/pharmacy/orders', 'Invalid quantity', 'error');
         }
         if (empty($orderDate) || strtotime($orderDate) < strtotime(date('Y-m-d'))) {
-            $this->redirect('/pharmacy/orders', 'Invalid order date');
+            $this->redirect('/pharmacy/orders', 'Invalid order date', 'error');
         }
 
         $med = $this->medicine->findByIdAndPharmacy($mId, $userId);
         if (!$med) {
-            $this->redirect('/pharmacy/orders', 'Medicine not found');
+            $this->redirect('/pharmacy/orders', 'Medicine not found', 'error');
         }
         if ($newStatus !== 'cancelled' && strtotime($med['exp_date']) < strtotime(date('Y-m-d'))) {
-            $this->redirect('/pharmacy/orders', 'Cannot order expired medicine');
+            $this->redirect('/pharmacy/orders', 'Cannot order expired medicine', 'error');
         }
 
         $oldMedicineId = (int) $order['m_id'];
@@ -142,7 +140,7 @@ class OrderController extends Controller
             $availableStock += $oldQuantity;
         }
         if ($newReserved && $availableStock < $quantity) {
-            $this->redirect('/pharmacy/orders', 'Not enough stock available');
+            $this->redirect('/pharmacy/orders', 'Not enough stock available', 'error');
         }
 
         $price = (float) $med['sell_price'];
@@ -169,7 +167,7 @@ class OrderController extends Controller
             $this->order->commit();
         } catch (\Throwable) {
             $this->order->rollBack();
-            $this->redirect('/pharmacy/orders', 'Unable to update order');
+            $this->redirect('/pharmacy/orders', 'Unable to update order', 'error');
         }
 
         $this->redirect('/pharmacy/orders', 'Order updated successfully');
@@ -182,7 +180,7 @@ class OrderController extends Controller
 
         $order = $this->order->findByIdAndPharmacy($orderId, $userId);
         if (!$order) {
-            $this->redirect('/pharmacy/orders', 'Order not found');
+            $this->redirect('/pharmacy/orders', 'Order not found', 'error');
         }
 
         try {
@@ -194,7 +192,7 @@ class OrderController extends Controller
             $this->order->commit();
         } catch (\Throwable) {
             $this->order->rollBack();
-            $this->redirect('/pharmacy/orders', 'Unable to delete order');
+            $this->redirect('/pharmacy/orders', 'Unable to delete order', 'error');
         }
 
         $this->redirect('/pharmacy/orders', 'Order deleted successfully');

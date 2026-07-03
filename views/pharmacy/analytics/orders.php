@@ -1,233 +1,52 @@
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<?= pageHeader('Order analytics', 'Status mix and recent activity across your purchase orders.') ?>
 
-<div class="row pt-4 mb-4">
-    <div class="col-md-6">
-        <h1 class="mb-3">Order Analysis</h1>
+<div class="grid-2col">
+    <div class="card">
+        <div class="card__header"><div class="card__title" style="font-size:1rem;">Status distribution</div></div>
+        <div class="card__content">
+            <div style="height:16rem;"><canvas id="status-distribution-chart"></canvas></div>
+        </div>
     </div>
-    <div class="col-md-6">
-        <div class="btn-group float-end" role="group">
-            <button type="button" class="btn btn-outline-danger active" id="weekBtn" onclick="updateChartAndButtons('week')">Last Week</button>
-            <button type="button" class="btn btn-outline-danger" id="monthBtn" onclick="updateChartAndButtons('month')">Last Month</button>
-            <button type="button" class="btn btn-outline-danger" id="sixMonthsBtn" onclick="updateChartAndButtons('6months')">Last 6 Months</button>
+
+    <div class="card grid-2col--span2">
+        <div class="card__header"><div class="card__title" style="font-size:1rem;">Recent orders</div></div>
+        <div class="card__content list-card" id="recent-orders-list">
+            <p class="text-sm text-muted">Loading…</p>
         </div>
     </div>
 </div>
 
-<!-- Charts Container -->
-<div class="row">
-    <div class="col-md-8 mb-4">
-        <div class="card border-0 shadow">
-            <div class="card-body">
-                <h5 class="card-title">Order Trend</h5>
-                <canvas id="orderChart"></canvas>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 mb-4">
-        <div class="card border-0 shadow">
-            <div class="card-body">
-                <h5 class="card-title">Statistics</h5>
-                <div id="statsContainer">
-                    <!-- Stats will be populated by JavaScript -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Order Performance -->
-<div class="row mb-4">
-    <div class="col-md-6">
-        <div class="card border-0 shadow">
-            <div class="card-body">
-                <h5 class="card-title">Order Status Distribution</h5>
-                <canvas id="orderStatusChart"></canvas>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="card border-0 shadow">
-            <div class="card-body">
-                <h5 class="card-title">Top Ordered Medicines</h5>
-                <div id="topOrders">
-                    <!-- Top orders will be populated by JavaScript -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Order Timeline -->
-<div class="row">
-    <div class="col-12">
-        <div class="card border-0 shadow">
-            <div class="card-body">
-                <h5 class="card-title">Recent Orders Timeline</h5>
-                <div id="orderTimeline">
-                    <!-- Timeline will be populated by JavaScript -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="/assets/js/chart-theme.js"></script>
 <script>
-let orderChart = null;
-let orderStatusChart = null;
+document.addEventListener('DOMContentLoaded', function () {
+    fetch('/api/pharmacy/order-data')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+            var dist = data.statusDistribution || {};
+            var labels = ['pending', 'completed', 'cancelled'];
+            var values = labels.map(function (k) { return dist[k] || 0; });
+            var colors = [window.chartTheme.COLORS.warning, window.chartTheme.COLORS.success, window.chartTheme.COLORS.destructive];
+            new Chart(document.getElementById('status-distribution-chart'), window.chartTheme.doughnut(labels, values, colors));
 
-// Function to update active button state
-function updateActiveButton(period) {
-    // Remove active class from all buttons
-    document.querySelectorAll('.btn-group .btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-
-    // Add active class to selected button
-    const buttonMap = {
-        'week': 'weekBtn',
-        'month': 'monthBtn',
-        '6months': 'sixMonthsBtn'
-    };
-    document.getElementById(buttonMap[period]).classList.add('active');
-}
-
-// Combined function to update chart and buttons
-async function updateChartAndButtons(period) {
-    await updateChart(period);
-    updateActiveButton(period);
-}
-
-// Function to fetch order data
-async function fetchOrderData(period) {
-    const response = await fetch(`/api/pharmacy/order-data?period=${period}`);
-    return await response.json();
-}
-
-// Function to update charts
-async function updateChart(period) {
-    const data = await fetchOrderData(period);
-
-    // Update main order trend chart
-    if (orderChart) {
-        orderChart.destroy();
-    }
-
-    const ctx = document.getElementById('orderChart').getContext('2d');
-    orderChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: data.dates,
-            datasets: [{
-                label: 'Daily Orders',
-                data: data.orders,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Number of Orders'
-                    }
-                }
+            var list = document.getElementById('recent-orders-list');
+            var recent = data.recentOrders || [];
+            if (!recent.length) {
+                list.innerHTML = '<p class="text-sm text-muted">No orders yet.</p>';
+                return;
             }
-        }
-    });
-
-    // Update order status chart
-    if (orderStatusChart) {
-        orderStatusChart.destroy();
-    }
-
-    const statusCtx = document.getElementById('orderStatusChart').getContext('2d');
-    orderStatusChart = new Chart(statusCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Completed', 'Pending', 'Cancelled'],
-            datasets: [{
-                data: [
-                    data.statusDistribution.completed,
-                    data.statusDistribution.pending,
-                    data.statusDistribution.cancelled
-                ],
-                backgroundColor: [
-                    'rgb(75, 192, 192)',
-                    'rgb(255, 205, 86)',
-                    'rgb(255, 99, 132)'
-                ]
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
-
-    // Update statistics
-    updateStats(data.stats);
-
-    // Update top orders
-    updateTopOrders(data.topOrders);
-
-    // Update timeline
-    updateOrderTimeline(data.recentOrders);
-}
-
-function updateStats(stats) {
-    document.getElementById('statsContainer').innerHTML = `
-        <p><strong>Total Orders:</strong> ${stats.total}</p>
-        <p><strong>Average Daily Orders:</strong> ${stats.average}</p>
-        <p><strong>Completion Rate:</strong> ${stats.completionRate}%</p>
-        <p><strong>Average Order Value:</strong> Rs. ${stats.avgOrderValue}</p>
-    `;
-}
-
-function updateTopOrders(topOrders) {
-    let html = '<div class="table-responsive"><table class="table">';
-    html += '<thead><tr><th>Medicine</th><th>Orders</th><th>Total Quantity</th></tr></thead><tbody>';
-
-    topOrders.forEach(order => {
-        html += `
-            <tr>
-                <td>${order.medicine_name}</td>
-                <td>${order.order_count}</td>
-                <td>${order.total_quantity}</td>
-            </tr>
-        `;
-    });
-
-    html += '</tbody></table></div>';
-    document.getElementById('topOrders').innerHTML = html;
-}
-
-function updateOrderTimeline(recentOrders) {
-    let html = '<div class="table-responsive"><table class="table">';
-    html += '<thead><tr><th>Date</th><th>Medicine</th><th>Quantity</th><th>Status</th><th>Amount</th></tr></thead><tbody>';
-
-    recentOrders.forEach(order => {
-        const statusClass = order.status === 'completed' ? 'text-white bg-success'
-            : order.status === 'cancelled' ? 'text-white bg-danger'
-            : 'text-dark bg-warning';
-        html += `
-            <tr>
-                <td>${order.date}</td>
-                <td>${order.medicine_name}</td>
-                <td>${order.quantity}</td>
-                <td><span class="badge ${statusClass}">${order.status}</span></td>
-                <td>Rs. ${order.amount}</td>
-            </tr>
-        `;
-    });
-
-    html += '</tbody></table></div>';
-    document.getElementById('orderTimeline').innerHTML = html;
-}
-
-// Initialize with last week's data
-document.addEventListener('DOMContentLoaded', () => {
-    updateChart('week');
+            list.innerHTML = recent.slice(0, 8).map(function (o) {
+                return '<div class="list-row">' +
+                    '<div class="list-row__main">' +
+                    '<p class="list-row__title">' + (o.medicine_name || '#' + o.m_id) + '</p>' +
+                    '<p class="list-row__meta">' + o.date + ' · Qty ' + o.quantity + '</p>' +
+                    '</div>' +
+                    '<div style="display:flex;align-items:center;gap:0.75rem;flex-shrink:0;">' +
+                    '<span class="text-sm tabular-nums">$' + parseFloat(o.amount).toFixed(2) + '</span>' +
+                    '<span class="status-badge status-badge--' + o.status + '">' + o.status + '</span>' +
+                    '</div>' +
+                    '</div>';
+            }).join('');
+        });
 });
 </script>

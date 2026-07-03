@@ -30,10 +30,10 @@ class Controller
         }
     }
 
-    protected function redirect(string $url, string $message = ''): void
+    protected function redirect(string $url, string $message = '', string $type = 'success'): void
     {
         if ($message) {
-            $this->session->flash($message);
+            $this->session->flash($message, $type);
         }
         if (($_ENV['APP_ENV'] ?? '') === 'testing') {
             throw new \RuntimeException("Redirect to {$url}: {$message}");

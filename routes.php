@@ -7,6 +7,7 @@ use App\Middleware\PharmacyMiddleware;
 // Auth
 $router->get('/login', 'AuthController@showLogin');
 $router->post('/login', 'AuthController@login');
+$router->get('/register', 'AuthController@showRegister');
 $router->post('/register', 'AuthController@register');
 $router->get('/logout', 'AuthController@logout');
 
@@ -53,6 +54,9 @@ $router->post('/api/pharmacy/medicine-row', 'Pharmacy\AjaxController@getMedicine
 $router->get('/api/pharmacy/sales-data', 'Pharmacy\AjaxController@getSalesData', [PharmacyMiddleware::class]);
 $router->get('/api/pharmacy/order-data', 'Pharmacy\AjaxController@getOrderData', [PharmacyMiddleware::class]);
 $router->get('/api/pharmacy/inventory-levels', 'Pharmacy\AjaxController@getInventoryLevels', [PharmacyMiddleware::class]);
+$router->get('/api/pharmacy/stock-levels', 'Pharmacy\AjaxController@getStockLevels', [PharmacyMiddleware::class]);
+$router->get('/api/pharmacy/top-selling', 'Pharmacy\AjaxController@getTopSelling', [PharmacyMiddleware::class]);
+$router->get('/api/pharmacy/revenue-trend', 'Pharmacy\AjaxController@getRevenueTrend', [PharmacyMiddleware::class]);
 
 // Pharmacy - Profile
 $router->get('/pharmacy/profile', 'Pharmacy\ProfileController@edit', [PharmacyMiddleware::class]);

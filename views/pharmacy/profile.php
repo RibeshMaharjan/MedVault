@@ -1,94 +1,89 @@
 <?php $p = $pharmacy; ?>
 
-<div class="row">
-    <div class="col-md-6 mb-4">
-        <div class="card border-0 shadow">
-            <div class="card-header bg-danger text-white">
-                <p class="fw-semibold fs-4 mb-0">Edit Profile</p>
-            </div>
-            <div class="card-body">
-                <form action="/pharmacy/profile" method="post">
-                    <?= csrf_field() ?>
-                    <div class="mb-3">
-                        <label for="pharmacy_name" class="form-label">Pharmacy Name</label>
-                        <input type="text" class="form-control" name="pharmacy_name" value="<?= htmlspecialchars($p['pharmacy_name'] ?? '') ?>" required>
+<?= pageHeader('Profile', 'Manage your pharmacy business information and verification status.') ?>
+
+<div class="grid-2col">
+    <div class="card grid-2col--span2">
+        <div class="card__header"><div class="card__title" style="font-size:1rem;">Business information</div></div>
+        <div class="card__content">
+            <form action="/pharmacy/profile" method="post">
+                <?= csrf_field() ?>
+                <div class="field-group field-group--2col">
+                    <div class="field">
+                        <label class="label" for="pharmacy_name">Pharmacy name</label>
+                        <input type="text" class="input" id="pharmacy_name" name="pharmacy_name" value="<?= htmlspecialchars($p['pharmacy_name'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" name="email" value="<?= htmlspecialchars($p['email'] ?? '') ?>" required>
+                    <div class="field">
+                        <label class="label" for="pan">PAN number</label>
+                        <input type="text" class="input" id="pan" name="pan" value="<?= htmlspecialchars($p['pan'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                     </div>
-                    <div class="mb-3">
-                        <label for="pan" class="form-label">PAN Number</label>
-                        <input type="text" class="form-control" name="pan" value="<?= htmlspecialchars($p['pan'] ?? '') ?>" required>
+                    <div class="field">
+                        <label class="label" for="email">Email</label>
+                        <input type="email" class="input" id="email" name="email" value="<?= htmlspecialchars($p['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="phone" class="form-label">Phone</label>
-                        <input type="text" class="form-control" name="phone" value="<?= htmlspecialchars($p['phone'] ?? '') ?>" required>
+                    <div class="field">
+                        <label class="label" for="phone">Phone</label>
+                        <input type="text" class="input" id="phone" name="phone" value="<?= htmlspecialchars($p['phone'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                     </div>
-                    <div class="mb-3">
-                        <label for="address" class="form-label">Address</label>
-                        <input type="text" class="form-control" name="address" value="<?= htmlspecialchars($p['address'] ?? '') ?>" required>
+                    <div class="field" style="grid-column:1 / -1;">
+                        <label class="label" for="address">Address</label>
+                        <input type="text" class="input" id="address" name="address" value="<?= htmlspecialchars($p['address'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                     </div>
-                    <button type="submit" name="update_profile" class="btn btn-danger">Update Profile</button>
-                </form>
-            </div>
+                </div>
+                <button type="submit" class="btn btn--primary" style="margin-top:0.5rem;">Save changes</button>
+            </form>
         </div>
     </div>
 
-    <div class="col-md-6 mb-4">
-        <div class="card border-0 shadow">
-            <div class="card-header bg-danger text-white">
-                <h4>Verification Status</h4>
-            </div>
-            <div class="card-body">
-                <?php if (($p['isverified'] ?? 0) == 1): ?>
-                    <div class="verification-status verified">
-                        <div class="status-icon mb-3"><i class="fas fa-check-circle fa-3x text-success"></i></div>
-                        <h5 class="text-success mb-3">Your pharmacy is verified!</h5>
-                        <div class="verification-details">
-                            <div class="d-flex justify-content-between mb-2"><span class="fw-bold">Status:</span><span class="badge bg-success">Verified</span></div>
-                            <div class="d-flex justify-content-between mb-2"><span class="fw-bold">Verification Date:</span><span><?= !empty($p['verification_date']) ? date('F j, Y', strtotime($p['verification_date'])) : 'N/A' ?></span></div>
-                            <div class="d-flex justify-content-between mb-2"><span class="fw-bold">License Number:</span><span><?= htmlspecialchars($p['license_number'] ?? '') ?></span></div>
-                            <?php if (!empty($p['verification_notes'])): ?>
-                            <div class="mb-2"><span class="fw-bold d-block mb-1">Notes:</span><div class="bg-light p-2 rounded"><?= htmlspecialchars($p['verification_notes']) ?></div></div>
-                            <?php endif; ?>
-                        </div>
+    <div class="card">
+        <div class="card__header"><div class="card__title" style="font-size:1rem;">Verification</div></div>
+        <div class="card__content">
+            <?php if ((int) ($p['isverified'] ?? 0) === 1): ?>
+                <?= statusBadge('verified') ?>
+                <div style="margin-top:0.75rem;font-size:0.875rem;">
+                    <p><strong>Verified on:</strong> <?= !empty($p['verification_date']) ? date('F j, Y', strtotime($p['verification_date'])) : 'N/A' ?></p>
+                    <p><strong>License:</strong> <?= htmlspecialchars($p['license_number'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
+                    <?php if (!empty($p['verification_notes'])): ?>
+                        <p class="text-muted"><?= htmlspecialchars($p['verification_notes'], ENT_QUOTES, 'UTF-8') ?></p>
+                    <?php endif; ?>
+                </div>
+            <?php elseif (!empty($p['verification_request_date'])): ?>
+                <?= statusBadge('pending') ?>
+                <div style="margin-top:0.75rem;font-size:0.875rem;">
+                    <p><strong>Requested:</strong> <?= date('F j, Y', strtotime($p['verification_request_date'])) ?></p>
+                    <p><strong>License:</strong> <?= htmlspecialchars($p['license_number'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
+                    <?php if (!empty($p['reg_document'])): ?>
+                        <p><a href="/uploads/documents/<?= htmlspecialchars(basename($p['reg_document']), ENT_QUOTES, 'UTF-8') ?>" target="_blank" class="btn btn--outline btn--sm"><?= lucide('file-text', 'icon-4') ?> View document</a></p>
+                    <?php endif; ?>
+                </div>
+                <div style="margin-top:0.75rem;padding:0.75rem;border-radius:var(--radius-md);background:color-mix(in oklab, var(--warning) 10%, transparent);font-size:0.75rem;color:var(--warning-foreground);">
+                    Your verification request is under review.
+                </div>
+            <?php else: ?>
+                <?= statusBadge('unverified') ?>
+                <div style="margin-top:0.75rem;padding:0.75rem;border-radius:var(--radius-md);background:color-mix(in oklab, var(--warning) 10%, transparent);font-size:0.75rem;color:var(--warning-foreground);">
+                    Verification is required to access all features.
+                </div>
+                <form action="/pharmacy/profile/verify" method="post" enctype="multipart/form-data" style="margin-top:1rem;">
+                    <?= csrf_field() ?>
+                    <div class="field">
+                        <label class="label" for="license_number">License number</label>
+                        <input type="text" class="input" id="license_number" name="license_number" required>
                     </div>
-                <?php elseif (!empty($p['verification_request_date'])): ?>
-                    <div class="verification-status pending">
-                        <div class="status-icon mb-3"><i class="fas fa-clock fa-3x text-warning"></i></div>
-                        <h5 class="text-warning mb-3">Verification in progress!</h5>
-                        <div class="verification-details">
-                            <div class="d-flex justify-content-between mb-2"><span class="fw-bold">Status:</span><span class="badge bg-warning text-dark">Pending</span></div>
-                            <div class="d-flex justify-content-between mb-2"><span class="fw-bold">Request Date:</span><span><?= date('F j, Y', strtotime($p['verification_request_date'])) ?></span></div>
-                            <div class="d-flex justify-content-between mb-2"><span class="fw-bold">License Number:</span><span><?= htmlspecialchars($p['license_number'] ?? '') ?></span></div>
-                            <?php if (!empty($p['reg_document'])): ?>
-                            <div class="d-flex justify-content-between mb-2"><span class="fw-bold">Document:</span><a href="/uploads/documents/<?= htmlspecialchars(basename($p['reg_document'])) ?>" target="_blank" class="btn btn-sm btn-outline-secondary">View</a></div>
-                            <?php endif; ?>
-                        </div>
-                        <div class="alert alert-info mt-3"><i class="fas fa-info-circle"></i> Your verification request is under review.</div>
-                    </div>
-                <?php else: ?>
-                    <div class="verification-status not-verified">
-                        <div class="status-icon mb-3"><i class="fas fa-exclamation-triangle fa-3x text-danger"></i></div>
-                        <h5 class="text-danger mb-3">Not Verified!</h5>
-                        <div class="alert alert-warning mb-3"><i class="fas fa-info-circle"></i> Verification is required to access all features.</div>
-                        <form action="/pharmacy/profile/verify" method="post" enctype="multipart/form-data">
-                            <?= csrf_field() ?>
-                            <div class="mb-3">
-                                <label class="form-label">Pharmacy License Number</label>
-                                <input type="text" class="form-control" name="license_number" required>
+                    <div class="field">
+                        <label class="label">Registration document</label>
+                        <label class="file-upload" data-file-upload>
+                            <div data-file-upload-prompt>
+                                <div class="file-upload__icon"><?= lucide('upload-cloud', 'icon-5') ?></div>
+                                <p class="file-upload__text">Drag &amp; drop, or click to browse<br><span class="text-xs">PDF, PNG or JPG</span></p>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Registration Document (PDF/Image)</label>
-                                <input type="file" class="form-control" name="reg_document" accept=".pdf,.jpg,.jpeg,.png" required>
-                                <small class="text-muted">Upload your pharmacy registration certificate or license document.</small>
-                            </div>
-                            <button type="submit" name="submit_verification" class="btn btn-danger">Submit for Verification</button>
-                        </form>
+                            <div data-file-upload-chip hidden></div>
+                            <input type="file" class="file-upload__input" name="reg_document" accept=".pdf,.png,.jpg,.jpeg" required>
+                        </label>
                     </div>
-                <?php endif; ?>
-            </div>
+                    <button type="submit" class="btn btn--outline" style="width:100%;">Request re-verification</button>
+                </form>
+            <?php endif; ?>
         </div>
     </div>
 </div>

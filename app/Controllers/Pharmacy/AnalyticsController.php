@@ -10,13 +10,13 @@ class AnalyticsController extends Controller
     {
         $this->view('pharmacy/analytics/sales', [
             'currentPage' => 'analysis-sales',
-        ], 'pharmacy');
+        ], 'app');
     }
 
     public function orders(): void
     {
         $this->view('pharmacy/analytics/orders', [
             'currentPage' => 'analysis-order',
-        ], 'pharmacy');
+        ], 'app');
     }
 }

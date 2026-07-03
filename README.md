@@ -14,6 +14,25 @@ MedVault is a vanilla PHP MVC pharmacy management app with pharmacy and admin ro
 - `database/migrations/` - schema migration notes.
 - `pharmacy.sql` - current database dump.
 
+## UI design system
+
+The UI was redesigned to match the `medvault/` lovable.dev mockup pixel-for-pixel. No
+Bootstrap, jQuery, or Font Awesome — a hand-written CSS design system instead:
+
+- `public/assets/css/tokens.css` - color/radius/shadow/font design tokens (OKLCH, copied
+  verbatim from the mockup's `medvault/src/styles.css`).
+- `public/assets/css/components.css` - component classes (buttons, cards, tables, badges,
+  dialogs, sidebar/shell, combobox, file upload, etc).
+- `public/assets/js/ui.js` - vanilla-JS behaviors: native `<dialog>` open/close, dropdowns,
+  tabs, sidebar collapse, toasts, searchable combobox, table sort, confirm dialogs.
+- `public/assets/js/chart-theme.js` - Chart.js config factory styled to match the mockup's
+  recharts look (dashed grid, teal/green/amber/blue/red series).
+- `app/Helpers/icons.php` - inline lucide SVG icon helper (`lucide($name, $class)`).
+- `views/layouts/app.php` - single shell layout for both pharmacy and admin roles
+  (nav/product copy branches on session role).
+
+See `UI_REDESIGN_PLAN.md` for the full phase-by-phase history of this redesign.
+
 ## Local Commands
 
 ```bash

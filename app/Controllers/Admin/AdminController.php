@@ -24,14 +24,12 @@ class AdminController extends Controller
         $this->view('admin/admins/index', [
             'admins' => $admins,
             'currentPage' => 'admin-display',
-        ], 'admin');
+        ], 'app');
     }
 
     public function create(): void
     {
-        $this->view('admin/admins/create', [
-            'currentPage' => 'admin-create',
-        ], 'admin');
+        $this->redirect('/admin/admins?open=create');
     }
 
     public function store(): void
@@ -45,23 +43,23 @@ class AdminController extends Controller
         $address = $this->validate($_POST['address'] ?? '');
 
         if (empty($name) || empty($email) || empty($password)) {
-            $this->redirect('/admin/admins/create', 'Please fill all fields!');
+            $this->redirect('/admin/admins?open=create', 'Please fill all fields!', 'error');
         }
 
         if (!preg_match("/^[a-zA-Z-' ]*$/", $name)) {
-            $this->redirect('/admin/admins/create', 'Only letters and white space allowed');
+            $this->redirect('/admin/admins?open=create', 'Only letters and white space allowed', 'error');
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->redirect('/admin/admins/create', 'Invalid email format');
+            $this->redirect('/admin/admins?open=create', 'Invalid email format', 'error');
         }
         if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/', $password)) {
-            $this->redirect('/admin/admins/create', 'Invalid Password');
+            $this->redirect('/admin/admins?open=create', 'Invalid Password', 'error');
         }
         if (!preg_match('/^[0-9]{10}$/', $phone)) {
-            $this->redirect('/admin/admins/create', 'Invalid Phone Number');
+            $this->redirect('/admin/admins?open=create', 'Invalid Phone Number', 'error');
         }
         if ($this->user->findByEmail($email)) {
-            $this->redirect('/admin/admins/create', 'Email Already Exists');
+            $this->redirect('/admin/admins?open=create', 'Email Already Exists', 'error');
         }
 
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
@@ -82,9 +80,9 @@ class AdminController extends Controller
         } catch (\Throwable $e) {
             $this->user->rollBack();
             error_log('Admin create failed: ' . $e->getMessage());
-            $this->redirect('/admin/admins/create', 'Admin creation failed. Please try again.');
+            $this->redirect('/admin/admins?open=create', 'Admin creation failed. Please try again.', 'error');
         }
 
-        $this->redirect('/admin/admins/create', 'Admin Added Successfully');
+        $this->redirect('/admin/admins', 'Admin Added Successfully');
     }
 }

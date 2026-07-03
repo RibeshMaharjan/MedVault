@@ -12,32 +12,23 @@ class AjaxController extends Controller
     public function searchMedicine(): void
     {
         $userId = $this->session->pharmacyId();
-        $term = $_POST['search'] ?? '';
+        $term = $_POST['term'] ?? ($_POST['search'] ?? '');
 
         $medicine = new UserMedicine();
-        $results = $medicine->search($userId, $term, 5);
+        $results = $medicine->search($userId, $term, 8);
 
-        if (!empty($results)) {
-            echo '<ul class="list-group shadow-sm">';
-            foreach ($results as $row) {
-                $stockClass = ($row['in_stock'] > 0) ? 'bg-success' : 'bg-danger';
-                $medicineName = htmlspecialchars($row['medicine_name'], ENT_QUOTES, 'UTF-8');
-                $fillArgument = htmlspecialchars(json_encode($row['medicine_name'], JSON_HEX_APOS | JSON_HEX_QUOT), ENT_QUOTES, 'UTF-8');
-                $price = htmlspecialchars((string) $row['sell_price'], ENT_QUOTES, 'UTF-8');
-                $stock = htmlspecialchars((string) $row['in_stock'], ENT_QUOTES, 'UTF-8');
-                echo "<li class=\"list-group-item list-group-item-action d-flex justify-content-between align-items-center\"
-                          onclick=\"fill({$fillArgument})\">
-                        <div>
-                            <strong>{$medicineName}</strong>
-                            <small class=\"d-block text-muted\">Price: Rs.{$price}</small>
-                        </div>
-                        <span class=\"badge {$stockClass} rounded-pill\">Stock: {$stock}</span>
-                      </li>";
-            }
-            echo '</ul>';
-        } else {
-            echo '<div class="list-group-item text-center text-muted">No medicines found</div>';
-        }
+        $options = array_map(function ($row) {
+            return [
+                'value' => (string) $row['m_id'],
+                'label' => $row['medicine_name'],
+                'description' => 'Rs.' . $row['sell_price'] . ' · ' . $row['in_stock'] . ' in stock',
+                'm_id' => (int) $row['m_id'],
+                'sell_price' => (float) $row['sell_price'],
+                'in_stock' => (int) $row['in_stock'],
+            ];
+        }, $results);
+
+        $this->json($options);
     }
 
     public function getMedicineRow(): void
@@ -164,5 +155,42 @@ class AjaxController extends Controller
         $medicine = new UserMedicine();
 
         $this->json($medicine->getInventoryLevels($userId));
+    }
+
+    public function getStockLevels(): void
+    {
+        $userId = $this->session->pharmacyId();
+        $medicine = new UserMedicine();
+
+        $this->json($medicine->getStockLevels($userId));
+    }
+
+    public function getTopSelling(): void
+    {
+        $userId = $this->session->pharmacyId();
+        $sale = new Sale();
+
+        $this->json($sale->getTopSelling($userId));
+    }
+
+    public function getRevenueTrend(): void
+    {
+        $userId = $this->session->pharmacyId();
+        $days = max(1, (int) ($_GET['days'] ?? 14));
+
+        $endDate = date('Y-m-d');
+        $startDate = date('Y-m-d', strtotime('-' . ($days - 1) . ' days'));
+
+        $sale = new Sale();
+        $data = $sale->getSalesData($userId, $startDate, $endDate);
+
+        $labels = [];
+        $amounts = [];
+        foreach ($data as $row) {
+            $labels[] = date('M d', strtotime($row['sale_date']));
+            $amounts[] = round((float) $row['daily_total'], 2);
+        }
+
+        $this->json(['labels' => $labels, 'amounts' => $amounts]);
     }
 }
