@@ -124,14 +124,13 @@
     <div class="table-responsive">
         <table class="table table-striped mv-responsive-table">
             <thead class="table-danger">
-                <tr><th>ID</th><th>M_ID</th><th>MEDICINE</th><th>PRICE</th><th>QUANTITY</th><th>TOTAL</th><th>STATUS</th><th>DATE</th><th>ACTION</th></tr>
+                <tr><th>ID</th><th>MEDICINE</th><th>PRICE</th><th>QUANTITY</th><th>TOTAL</th><th>STATUS</th><th>DATE</th><th>ACTION</th></tr>
             </thead>
             <tbody>
                 <?php if (!empty($orders)): ?>
                     <?php foreach ($orders as $ord): ?>
                     <tr>
                         <td data-label="ID"><?= $ord['o_id'] ?></td>
-                        <td data-label="Medicine ID"><?= $ord['m_id'] ?></td>
                         <td data-label="Medicine"><?= htmlspecialchars($ord['medicine_name'] ?? $ord['m_id']) ?></td>
                         <td data-label="Price"><?= $ord['price'] ?></td>
                         <td data-label="Quantity"><?= $ord['quantity'] ?></td>
@@ -157,7 +156,7 @@
                     </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <tr><td colspan="9" class="text-center">No Data Found</td></tr>
+                    <tr><td colspan="8" class="text-center">No Data Found</td></tr>
                 <?php endif; ?>
             </tbody>
         </table>
