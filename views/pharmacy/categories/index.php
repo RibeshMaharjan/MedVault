@@ -4,8 +4,8 @@
     <table class="data-table">
         <thead>
             <tr>
-                <th>Category</th>
-                <th class="text-right">Medicines</th>
+                <?= sortableTh('Category') ?>
+                <?= sortableTh('Medicines', 'text-right') ?>
                 <th class="text-right">Actions</th>
             </tr>
         </thead>

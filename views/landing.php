@@ -25,7 +25,7 @@
         @media (min-width: 768px) { .landing-hero__content { padding-top: 6rem; padding-bottom: 6rem; } }
         .landing-hero__inner { max-width: 48rem; margin-inline: auto; text-align: center; }
         .landing-badge { display: inline-flex; align-items: center; gap: 0.5rem; border-radius: 9999px; border: 1px solid var(--border); background: var(--card); padding: 0.25rem 0.75rem; font-size: 0.75rem; font-weight: 500; color: var(--muted-foreground); }
-        .landing-h1 { margin-top: 1.25rem; font-size: 2.25rem; font-weight: 600; letter-spacing: -0.02em; color: var(--foreground); }
+        .landing-h1 { margin-top: 1.25rem; font-size: 2.25rem; font-weight: 600; letter-spacing: -0.02em; color: var(--foreground); line-height: 1.1; }
         @media (min-width: 768px) { .landing-h1 { font-size: 3.75rem; } }
         .landing-h1 span { color: var(--primary); }
         .landing-lede { margin: 1.25rem auto 0; max-width: 42rem; font-size: 1rem; color: var(--muted-foreground); }
@@ -46,6 +46,7 @@
         @media (min-width: 768px) { .cta-band__title { font-size: 1.875rem; } }
         .cta-band__list { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.875rem; color: var(--muted-foreground); list-style: none; padding: 0; }
         .cta-band__list li { display: flex; align-items: center; gap: 0.5rem; }
+        .cta-band__list li svg { color: var(--success); flex-shrink: 0; }
         .cta-band__actions { display: flex; flex-direction: column; gap: 0.5rem; }
         @media (min-width: 768px) { .cta-band__actions { min-width: 220px; } }
         .landing-footer { border-top: 1px solid var(--border); padding-block: 2rem; }

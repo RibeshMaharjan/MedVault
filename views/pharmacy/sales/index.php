@@ -3,27 +3,18 @@
 <?= pageHeader('Sales', 'Track medicine sales and revenue.', '<button type="button" class="btn btn--primary" data-dialog-open="#sale-create">' . lucide('plus', 'icon-4') . ' New sale</button>') ?>
 
 <div class="card" style="padding:0.75rem;margin-bottom:0.75rem;">
-    <form method="GET" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:0.75rem;align-items:end;">
-        <div>
-            <label class="label" style="margin-bottom:0.25rem;">Status</label>
-            <select class="select" name="status">
-                <option value="">All status</option>
-                <option value="pending" <?= (($f['status'] ?? '') === 'pending') ? 'selected' : '' ?>>Pending</option>
-                <option value="completed" <?= (($f['status'] ?? '') === 'completed') ? 'selected' : '' ?>>Completed</option>
-                <option value="cancelled" <?= (($f['status'] ?? '') === 'cancelled') ? 'selected' : '' ?>>Cancelled</option>
-            </select>
-        </div>
-        <div>
-            <label class="label" style="margin-bottom:0.25rem;">Date from</label>
-            <input type="date" class="input" name="date_from" value="<?= htmlspecialchars($f['date_from'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-        </div>
-        <div>
-            <label class="label" style="margin-bottom:0.25rem;">Date to</label>
-            <input type="date" class="input" name="date_to" value="<?= htmlspecialchars($f['date_to'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-        </div>
+    <form method="GET" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:0.5rem;">
+        <select class="select" name="status">
+            <option value="">All statuses</option>
+            <option value="pending" <?= (($f['status'] ?? '') === 'pending') ? 'selected' : '' ?>>Pending</option>
+            <option value="completed" <?= (($f['status'] ?? '') === 'completed') ? 'selected' : '' ?>>Completed</option>
+            <option value="cancelled" <?= (($f['status'] ?? '') === 'cancelled') ? 'selected' : '' ?>>Cancelled</option>
+        </select>
+        <input type="date" class="input" name="date_from" placeholder="Date from" value="<?= htmlspecialchars($f['date_from'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        <input type="date" class="input" name="date_to" placeholder="Date to" value="<?= htmlspecialchars($f['date_to'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
         <div style="display:flex;gap:0.5rem;">
-            <button type="submit" class="btn btn--primary">Filter</button>
-            <a href="/pharmacy/sales" class="btn btn--outline">Reset</a>
+            <button type="submit" class="btn btn--primary" style="flex:1;">Filter</button>
+            <a href="/pharmacy/sales" class="btn btn--outline" style="flex:1;text-align:center;">Reset</a>
         </div>
     </form>
 </div>
@@ -32,12 +23,12 @@
     <table class="data-table">
         <thead>
             <tr>
-                <th>Medicine</th>
-                <th class="text-right">Price</th>
-                <th class="text-right">Qty</th>
-                <th class="text-right">Total</th>
+                <?= sortableTh('Medicine') ?>
+                <?= sortableTh('Price', 'text-right') ?>
+                <?= sortableTh('Qty', 'text-right') ?>
+                <?= sortableTh('Total', 'text-right') ?>
                 <th>Status</th>
-                <th>Date</th>
+                <?= sortableTh('Date') ?>
                 <th class="text-right">Actions</th>
             </tr>
         </thead>

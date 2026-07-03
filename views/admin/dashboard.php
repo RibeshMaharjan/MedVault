@@ -1,9 +1,9 @@
-<?= pageHeader('Dashboard', 'Platform overview across pharmacies and admins.') ?>
+<?= pageHeader('Platform overview', 'How MedVault is doing across all pharmacies.') ?>
 
 <div class="grid-stats">
     <?= statCard('Pharmacies', (string) $totalPharmacies, 'building-2', 'default') ?>
     <?= statCard('Verified', (string) $verifiedCount, 'shield-check', 'success') ?>
-    <?= statCard('Pending', (string) $pendingCount, 'clock', 'warning') ?>
+    <?= statCard('Pending verification', (string) $pendingCount, 'clock', 'warning') ?>
     <?= statCard('Admins', (string) $totalAdmins, 'users', 'info') ?>
 </div>
 
@@ -16,8 +16,11 @@
             <?php else: ?>
                 <?php foreach ($recentPharmacies as $ph): ?>
                     <div class="list-row">
-                        <p class="list-row__title"><?= htmlspecialchars($ph['pharmacy_name'], ENT_QUOTES, 'UTF-8') ?></p>
-                        <?= statusBadge((int) $ph['isverified'] === 1 ? 'verified' : 'unverified') ?>
+                        <div class="list-row__main">
+                            <p class="list-row__title"><?= htmlspecialchars($ph['pharmacy_name'], ENT_QUOTES, 'UTF-8') ?></p>
+                            <p class="list-row__meta"><?= htmlspecialchars($ph['email'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
+                        </div>
+                        <?= statusBadge((int) $ph['isverified'] === 1 ? 'verified' : 'pending') ?>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
@@ -32,7 +35,10 @@
             <?php else: ?>
                 <?php foreach ($verificationQueue as $ph): ?>
                     <div class="list-row">
-                        <p class="list-row__title"><?= htmlspecialchars($ph['pharmacy_name'], ENT_QUOTES, 'UTF-8') ?></p>
+                        <div class="list-row__main">
+                            <p class="list-row__title"><?= htmlspecialchars($ph['pharmacy_name'], ENT_QUOTES, 'UTF-8') ?></p>
+                            <p class="list-row__meta">Requested <?= date('Y-m-d', strtotime($ph['verification_request_date'])) ?></p>
+                        </div>
                         <?= statusBadge('pending') ?>
                     </div>
                 <?php endforeach; ?>

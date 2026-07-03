@@ -1,6 +1,6 @@
 <?= pageHeader('Order analytics', 'Status mix and recent activity across your purchase orders.') ?>
 
-<div class="grid-2col">
+<div class="grid-3col">
     <div class="card">
         <div class="card__header"><div class="card__title" style="font-size:1rem;">Status distribution</div></div>
         <div class="card__content">
@@ -8,7 +8,7 @@
         </div>
     </div>
 
-    <div class="card grid-2col--span2">
+    <div class="card grid-3col--span2">
         <div class="card__header"><div class="card__title" style="font-size:1rem;">Recent orders</div></div>
         <div class="card__content list-card" id="recent-orders-list">
             <p class="text-sm text-muted">Loading…</p>
@@ -20,7 +20,7 @@
 <script src="/assets/js/chart-theme.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    fetch('/api/pharmacy/order-data')
+    fetch('/api/pharmacy/order-data?period=all')
         .then(function (r) { return r.json(); })
         .then(function (data) {
             var dist = data.statusDistribution || {};

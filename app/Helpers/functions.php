@@ -69,6 +69,12 @@ function statusBadge(string $status): string
     return '<span class="status-badge status-badge--' . $modifier . '">' . htmlspecialchars($status, ENT_QUOTES, 'UTF-8') . '</span>';
 }
 
+function sortableTh(string $label, string $class = ''): string
+{
+    $classAttr = $class !== '' ? ' class="' . htmlspecialchars($class, ENT_QUOTES, 'UTF-8') . '"' : '';
+    return '<th data-sort' . $classAttr . '><button type="button">' . htmlspecialchars($label, ENT_QUOTES, 'UTF-8') . ' ' . lucide('arrow-up-down', 'icon-3') . '</button></th>';
+}
+
 function csrf_field(): string
 {
     return Csrf::field();

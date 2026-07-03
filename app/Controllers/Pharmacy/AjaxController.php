@@ -110,6 +110,7 @@ class AjaxController extends Controller
         $startDate = match ($period) {
             'month' => date('Y-m-d', strtotime('-1 month')),
             '6months' => date('Y-m-d', strtotime('-6 months')),
+            'all' => date('Y-m-d', strtotime('-10 years')),
             default => date('Y-m-d', strtotime('-1 week')),
         };
 

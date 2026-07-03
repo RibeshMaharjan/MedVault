@@ -3,42 +3,21 @@
 <?= pageHeader('Medicines', 'Manage your pharmacy\'s medicine catalogue.', '<button type="button" class="btn btn--primary" data-dialog-open="#medicine-create">' . lucide('plus', 'icon-4') . ' Add medicine</button>') ?>
 
 <div class="card" style="padding:0.75rem;margin-bottom:0.75rem;">
-    <form method="GET" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:0.75rem;align-items:end;">
-        <div>
-            <label class="label" style="margin-bottom:0.25rem;">Search</label>
-            <div class="input-search">
-                <?= lucide('search', 'icon-4') ?>
-                <input type="text" class="input" name="search" placeholder="Medicine name..." value="<?= htmlspecialchars($f['search'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-            </div>
-        </div>
-        <div>
-            <label class="label" style="margin-bottom:0.25rem;">Category</label>
-            <select class="select" name="category">
-                <option value="">All categories</option>
-                <?php foreach ($categories as $cat): ?>
-                    <option value="<?= $cat['c_id'] ?>" <?= (($f['category'] ?? '') == $cat['c_id']) ? 'selected' : '' ?>><?= htmlspecialchars($cat['category_name'], ENT_QUOTES, 'UTF-8') ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        <div>
-            <label class="label" style="margin-bottom:0.25rem;">Expiry from</label>
-            <input type="date" class="input" name="exp_date_from" value="<?= htmlspecialchars($f['exp_date_from'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-        </div>
-        <div>
-            <label class="label" style="margin-bottom:0.25rem;">Expiry to</label>
-            <input type="date" class="input" name="exp_date_to" value="<?= htmlspecialchars($f['exp_date_to'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-        </div>
-        <div>
-            <label class="label" style="margin-bottom:0.25rem;">Min stock</label>
-            <input type="number" class="input" name="stock_min" value="<?= htmlspecialchars($f['stock_min'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-        </div>
-        <div>
-            <label class="label" style="margin-bottom:0.25rem;">Max stock</label>
-            <input type="number" class="input" name="stock_max" value="<?= htmlspecialchars($f['stock_max'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-        </div>
+    <form method="GET" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:0.5rem;">
+        <input type="text" class="input" name="search" placeholder="Search by name…" value="<?= htmlspecialchars($f['search'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        <select class="select" name="category">
+            <option value="">All categories</option>
+            <?php foreach ($categories as $cat): ?>
+                <option value="<?= $cat['c_id'] ?>" <?= (($f['category'] ?? '') == $cat['c_id']) ? 'selected' : '' ?>><?= htmlspecialchars($cat['category_name'], ENT_QUOTES, 'UTF-8') ?></option>
+            <?php endforeach; ?>
+        </select>
+        <input type="date" class="input" name="exp_date_from" placeholder="Expiry from" value="<?= htmlspecialchars($f['exp_date_from'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        <input type="date" class="input" name="exp_date_to" placeholder="Expiry to" value="<?= htmlspecialchars($f['exp_date_to'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        <input type="number" min="0" class="input" name="stock_min" placeholder="Min stock" value="<?= htmlspecialchars($f['stock_min'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        <input type="number" min="0" class="input" name="stock_max" placeholder="Max stock" value="<?= htmlspecialchars($f['stock_max'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
         <div style="display:flex;gap:0.5rem;">
-            <button type="submit" class="btn btn--primary">Filter</button>
-            <a href="/pharmacy/medicines" class="btn btn--outline">Reset</a>
+            <button type="submit" class="btn btn--primary" style="flex:1;">Filter</button>
+            <a href="/pharmacy/medicines" class="btn btn--outline" style="flex:1;text-align:center;">Reset</a>
         </div>
     </form>
 </div>
@@ -47,12 +26,12 @@
     <table class="data-table">
         <thead>
             <tr>
-                <th>Medicine</th>
+                <?= sortableTh('Medicine') ?>
                 <th>Category</th>
-                <th class="text-right">Stock</th>
-                <th class="text-right">Buy</th>
-                <th class="text-right">Sell</th>
-                <th>Expiry</th>
+                <?= sortableTh('Stock', 'text-right') ?>
+                <?= sortableTh('Buy', 'text-right') ?>
+                <?= sortableTh('Sell', 'text-right') ?>
+                <?= sortableTh('Expiry') ?>
                 <th class="text-right">Actions</th>
             </tr>
         </thead>

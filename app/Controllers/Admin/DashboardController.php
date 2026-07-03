@@ -16,11 +16,11 @@ class DashboardController extends Controller
         $db = Database::getInstance()->getConnection();
 
         $recentPharmacies = $db->query(
-            "SELECT pharmacy_id, pharmacy_name, isverified FROM tbl_pharmacy ORDER BY pharmacy_id DESC LIMIT 5"
+            "SELECT pharmacy_id, pharmacy_name, email, isverified FROM tbl_pharmacy ORDER BY pharmacy_id DESC LIMIT 5"
         )->fetchAll();
 
         $verificationQueue = $db->query(
-            "SELECT pharmacy_id, pharmacy_name FROM tbl_pharmacy
+            "SELECT pharmacy_id, pharmacy_name, verification_request_date FROM tbl_pharmacy
              WHERE verification_request_date IS NOT NULL AND isverified = 0
              ORDER BY verification_request_date DESC LIMIT 5"
         )->fetchAll();

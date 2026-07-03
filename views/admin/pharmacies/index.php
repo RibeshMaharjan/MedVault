@@ -4,7 +4,7 @@
     <table class="data-table">
         <thead>
             <tr>
-                <th>Pharmacy</th>
+                <?= sortableTh('Pharmacy') ?>
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Status</th>

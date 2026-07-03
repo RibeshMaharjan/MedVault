@@ -7,8 +7,8 @@
     <?= statCard('Revenue (30d)', '$' . number_format((float) $revenue30d, 2), 'circle-dollar-sign', 'success', 'completed sales') ?>
 </div>
 
-<div class="grid-2col" style="margin-top:1.5rem;">
-    <div class="card grid-2col--span2">
+<div class="grid-3col" style="margin-top:1.5rem;">
+    <div class="card grid-3col--span2">
         <div class="card__header">
             <div class="card__title" style="font-size:1rem;">Revenue · last 7 days</div>
         </div>

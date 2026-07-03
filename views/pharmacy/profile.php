@@ -2,8 +2,8 @@
 
 <?= pageHeader('Profile', 'Manage your pharmacy business information and verification status.') ?>
 
-<div class="grid-2col">
-    <div class="card grid-2col--span2">
+<div class="grid-3col">
+    <div class="card grid-3col--span2">
         <div class="card__header"><div class="card__title" style="font-size:1rem;">Business information</div></div>
         <div class="card__content">
             <form action="/pharmacy/profile" method="post">
