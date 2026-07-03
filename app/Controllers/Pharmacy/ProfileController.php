@@ -39,6 +39,24 @@ class ProfileController extends Controller
         $address = $this->validate($_POST['address'] ?? '');
         $pan = $this->validate($_POST['pan'] ?? '');
 
+        if (empty($name) || empty($email)) {
+            $this->redirect('/pharmacy/profile', 'Name and email are required');
+        }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->redirect('/pharmacy/profile', 'Invalid email format');
+        }
+        if ($phone !== '' && !preg_match('/^[0-9]{10}$/', $phone)) {
+            $this->redirect('/pharmacy/profile', 'Invalid phone number');
+        }
+        if ($pan !== '' && (!is_numeric($pan) || $pan <= 0)) {
+            $this->redirect('/pharmacy/profile', 'Invalid PAN number');
+        }
+
+        $existing = $this->user->findByEmail($email);
+        if ($existing && (int) $existing['user_id'] !== $pharmacyId) {
+            $this->redirect('/pharmacy/profile', 'Email already in use by another account');
+        }
+
         try {
             $this->pharmacy->beginTransaction();
             $this->pharmacy->update($pharmacyId, [
@@ -71,6 +89,11 @@ class ProfileController extends Controller
 
         if (empty($licenseNumber)) {
             $this->redirect('/pharmacy/profile', 'License number is required.');
+        }
+
+        $current = $this->pharmacy->findById($pharmacyId, 'pharmacy_id');
+        if ($current && (int) $current['isverified'] === 1) {
+            $this->redirect('/pharmacy/profile', 'Your pharmacy is already verified.');
         }
 
         $updateData = [

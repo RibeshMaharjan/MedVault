@@ -164,10 +164,14 @@ class InventoryStockFlowTest extends TestCase
     private function seedMedicine(int $stock, float $sellPrice): int
     {
         $stmt = $this->pdo->prepare("
-            INSERT INTO user_medicine_tbl (pharmacy_id, medicine_name, in_stock, sell_price)
-            VALUES (1, 'Test Medicine', :stock, :sell_price)
+            INSERT INTO user_medicine_tbl (pharmacy_id, medicine_name, in_stock, sell_price, exp_date)
+            VALUES (1, 'Test Medicine', :stock, :sell_price, :exp_date)
         ");
-        $stmt->execute(['stock' => $stock, 'sell_price' => $sellPrice]);
+        $stmt->execute([
+            'stock' => $stock,
+            'sell_price' => $sellPrice,
+            'exp_date' => date('Y-m-d', strtotime('+1 year')),
+        ]);
         return (int) $this->pdo->lastInsertId();
     }
 

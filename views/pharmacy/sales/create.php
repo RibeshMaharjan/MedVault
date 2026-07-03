@@ -52,6 +52,10 @@ $(document).ready(function() {
     });
 });
 
+function escapeHtml(value) {
+    return $('<div>').text(value).html();
+}
+
 function fill(name) {
     $('#search').val(name);
     $('#display').html('').removeClass('show');
@@ -60,10 +64,10 @@ function fill(name) {
         success: function(med) {
             var today = new Date().toISOString().split('T')[0];
             var row = '<tr>' +
-                '<td>' + med.medicine_name + '<input type="hidden" name="m_id" value="' + med.m_id + '"></td>' +
-                '<td><input type="number" step="0.01" class="form-control price-input" name="sellprice" value="' + med.sell_price + '"></td>' +
-                '<td><input type="number" class="form-control quantity-input" name="quantity" value="1" min="1" max="' + med.in_stock + '"><span class="quantity-warning"></span></td>' +
-                '<td><input type="number" step="0.01" class="form-control total-input" name="total" value="' + med.sell_price + '" readonly></td>' +
+                '<td>' + escapeHtml(med.medicine_name) + '<input type="hidden" name="m_id" value="' + encodeURIComponent(med.m_id) + '"></td>' +
+                '<td><input type="number" step="0.01" class="form-control price-input" name="sellprice" value="' + encodeURIComponent(med.sell_price) + '"></td>' +
+                '<td><input type="number" class="form-control quantity-input" name="quantity" value="1" min="1" max="' + encodeURIComponent(med.in_stock) + '"><span class="quantity-warning"></span></td>' +
+                '<td><input type="number" step="0.01" class="form-control total-input" name="total" value="' + encodeURIComponent(med.sell_price) + '" readonly></td>' +
                 '<td><input type="date" class="form-control" name="sales_date" value="' + today + '"></td>' +
                 '<td><button type="submit" name="add-sales" class="btn btn-danger submit-order-btn">Submit</button></td></tr>';
             $('#product-info').html(row);

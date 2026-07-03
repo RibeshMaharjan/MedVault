@@ -113,6 +113,9 @@ class MedicineController extends Controller
         if (empty($expDate) || strtotime($expDate) < strtotime(date('Y-m-d'))) {
             $this->redirect('/pharmacy/medicines/create', 'Invalid expiration date');
         }
+        if (!$this->category->findByIdAndPharmacy($category, $userId)) {
+            $this->redirect('/pharmacy/medicines/create', 'Invalid category');
+        }
 
         $this->medicine->insert([
             'pharmacy_id' => $userId,
@@ -153,6 +156,9 @@ class MedicineController extends Controller
 
         if (!$this->medicine->findByIdAndPharmacy($medicineId, $userId)) {
             $this->redirect('/pharmacy/medicines', 'Medicine not found');
+        }
+        if (!$this->category->findByIdAndPharmacy($category, $userId)) {
+            $this->redirect('/pharmacy/medicines', 'Invalid category');
         }
 
         $this->medicine->updateByPharmacy($medicineId, $userId, [

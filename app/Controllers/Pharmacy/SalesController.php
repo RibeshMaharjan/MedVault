@@ -63,10 +63,16 @@ class SalesController extends Controller
         if ($quantity <= 0) {
             $this->redirect('/pharmacy/sales/create', 'Invalid quantity');
         }
+        if (empty($date) || strtotime($date) === false) {
+            $this->redirect('/pharmacy/sales/create', 'Invalid sales date');
+        }
 
         $med = $this->medicine->findByIdAndPharmacy($medicineId, $userId);
         if (!$med || $med['in_stock'] < $quantity) {
             $this->redirect('/pharmacy/sales/create', 'Not enough stock available');
+        }
+        if (strtotime($med['exp_date']) < strtotime(date('Y-m-d'))) {
+            $this->redirect('/pharmacy/sales/create', 'Cannot sell expired medicine');
         }
 
         $price = (float) $med['sell_price'];
@@ -105,15 +111,25 @@ class SalesController extends Controller
         $newStatus = $_POST['status'] ?? 'pending';
         $mId = (int) ($_POST['m_id'] ?? $sale['m_id']);
         $quantity = (int) ($_POST['quantity'] ?? 0);
+        $salesDate = $_POST['sales_date'] ?? '';
         $oldStatus = $sale['status'];
 
+        if (!in_array($newStatus, ['pending', 'completed', 'cancelled'], true)) {
+            $this->redirect('/pharmacy/sales', 'Invalid status');
+        }
         if ($quantity <= 0) {
             $this->redirect('/pharmacy/sales', 'Invalid quantity');
+        }
+        if (empty($salesDate) || strtotime($salesDate) === false) {
+            $this->redirect('/pharmacy/sales', 'Invalid sales date');
         }
 
         $med = $this->medicine->findByIdAndPharmacy($mId, $userId);
         if (!$med) {
             $this->redirect('/pharmacy/sales', 'Medicine not found');
+        }
+        if ($newStatus === 'completed' && strtotime($med['exp_date']) < strtotime(date('Y-m-d'))) {
+            $this->redirect('/pharmacy/sales', 'Cannot sell expired medicine');
         }
 
         if ($newStatus === 'completed') {
@@ -141,7 +157,7 @@ class SalesController extends Controller
                 'quantity' => $quantity,
                 'total_amount' => $price * $quantity,
                 'status' => $newStatus,
-                'sales_date' => $_POST['sales_date'] ?? '',
+                'sales_date' => $salesDate,
             ]);
             $this->sale->commit();
         } catch (\Throwable) {

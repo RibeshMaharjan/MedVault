@@ -208,7 +208,9 @@ function updateOrderTimeline(recentOrders) {
     html += '<thead><tr><th>Date</th><th>Medicine</th><th>Quantity</th><th>Status</th><th>Amount</th></tr></thead><tbody>';
 
     recentOrders.forEach(order => {
-        const statusClass = order.status === 'completed' ? 'text-white bg-success' : 'text-dark bg-warning';
+        const statusClass = order.status === 'completed' ? 'text-white bg-success'
+            : order.status === 'cancelled' ? 'text-white bg-danger'
+            : 'text-dark bg-warning';
         html += `
             <tr>
                 <td>${order.date}</td>

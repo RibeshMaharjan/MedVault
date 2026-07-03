@@ -71,6 +71,9 @@ class OrderController extends Controller
         if (!$med || $med['in_stock'] < $quantity) {
             $this->redirect('/pharmacy/orders/create', 'Not enough stock available');
         }
+        if (strtotime($med['exp_date']) < strtotime(date('Y-m-d'))) {
+            $this->redirect('/pharmacy/orders/create', 'Cannot order expired medicine');
+        }
 
         $price = (float) $med['sell_price'];
         $total = $price * $quantity;
@@ -109,33 +112,51 @@ class OrderController extends Controller
         $newStatus = $_POST['status'] ?? 'pending';
         $mId = (int) ($_POST['m_id'] ?? $order['m_id']);
         $quantity = (int) ($_POST['quantity'] ?? 0);
+        $orderDate = $_POST['order_date'] ?? '';
 
+        if (!in_array($newStatus, ['pending', 'completed', 'cancelled'], true)) {
+            $this->redirect('/pharmacy/orders', 'Invalid status');
+        }
         if ($quantity <= 0) {
             $this->redirect('/pharmacy/orders', 'Invalid quantity');
+        }
+        if (empty($orderDate) || strtotime($orderDate) < strtotime(date('Y-m-d'))) {
+            $this->redirect('/pharmacy/orders', 'Invalid order date');
         }
 
         $med = $this->medicine->findByIdAndPharmacy($mId, $userId);
         if (!$med) {
             $this->redirect('/pharmacy/orders', 'Medicine not found');
         }
+        if ($newStatus !== 'cancelled' && strtotime($med['exp_date']) < strtotime(date('Y-m-d'))) {
+            $this->redirect('/pharmacy/orders', 'Cannot order expired medicine');
+        }
 
         $oldMedicineId = (int) $order['m_id'];
         $oldQuantity = (int) $order['quantity'];
-        if ($oldMedicineId === $mId && ((int) $med['in_stock'] + $oldQuantity) < $quantity) {
-            $this->redirect('/pharmacy/orders', 'Not enough stock available');
+        $oldReserved = $order['status'] !== 'cancelled';
+        $newReserved = $newStatus !== 'cancelled';
+
+        $availableStock = (int) $med['in_stock'];
+        if ($oldReserved && $oldMedicineId === $mId) {
+            $availableStock += $oldQuantity;
         }
-        if ($oldMedicineId !== $mId && (int) $med['in_stock'] < $quantity) {
+        if ($newReserved && $availableStock < $quantity) {
             $this->redirect('/pharmacy/orders', 'Not enough stock available');
         }
 
         $price = (float) $med['sell_price'];
         try {
             $this->order->beginTransaction();
-            if ($oldMedicineId === $mId) {
+            if ($oldReserved && $newReserved && $oldMedicineId === $mId) {
                 $this->medicine->updateStockByPharmacy($mId, $userId, $oldQuantity - $quantity);
             } else {
-                $this->medicine->updateStockByPharmacy($oldMedicineId, $userId, $oldQuantity);
-                $this->medicine->updateStockByPharmacy($mId, $userId, -$quantity);
+                if ($oldReserved) {
+                    $this->medicine->updateStockByPharmacy($oldMedicineId, $userId, $oldQuantity);
+                }
+                if ($newReserved) {
+                    $this->medicine->updateStockByPharmacy($mId, $userId, -$quantity);
+                }
             }
             $this->order->updateByPharmacy($orderId, $userId, [
                 'm_id' => $mId,
@@ -143,7 +164,7 @@ class OrderController extends Controller
                 'quantity' => $quantity,
                 'total_amount' => $price * $quantity,
                 'status' => $newStatus,
-                'order_date' => $_POST['order_date'] ?? '',
+                'order_date' => $orderDate,
             ]);
             $this->order->commit();
         } catch (\Throwable) {
@@ -166,7 +187,9 @@ class OrderController extends Controller
 
         try {
             $this->order->beginTransaction();
-            $this->medicine->updateStockByPharmacy((int) $order['m_id'], $userId, (int) $order['quantity']);
+            if ($order['status'] !== 'cancelled') {
+                $this->medicine->updateStockByPharmacy((int) $order['m_id'], $userId, (int) $order['quantity']);
+            }
             $this->order->deleteByPharmacy($orderId, $userId);
             $this->order->commit();
         } catch (\Throwable) {

@@ -46,6 +46,11 @@ class Router
                         throw new \RuntimeException('Invalid CSRF token');
                     }
                     http_response_code(403);
+                    $viewPath = dirname(__DIR__, 2) . '/views/errors/403.php';
+                    if (is_file($viewPath)) {
+                        require $viewPath;
+                        return;
+                    }
                     echo 'Invalid CSRF token';
                     return;
                 }

@@ -21,8 +21,13 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        if (!in_array('sqlite', PDO::getAvailableDrivers(), true)) {
+            $this->markTestSkipped('pdo_sqlite driver not available on this PHP install; run tests via Docker.');
+        }
+
         $this->cleanSession();
-        
+
         if (!self::$initialized) {
             $this->initializeTestDatabase();
             self::$initialized = true;
@@ -187,7 +192,7 @@ abstract class TestCase extends BaseTestCase
             'in_stock' => 100,
             'buy_price' => 10.00,
             'sell_price' => 15.00,
-            'exp_date' => '2025-12-31',
+            'exp_date' => date('Y-m-d', strtotime('+1 year')),
         ];
 
         $data = array_merge($defaults, $overrides);

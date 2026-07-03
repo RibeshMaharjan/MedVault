@@ -34,6 +34,9 @@ class CategoryController extends Controller
         if (empty($name)) {
             $this->redirect('/pharmacy/categories', 'Category name is required');
         }
+        if ($this->category->findByNameAndPharmacy($name, $userId)) {
+            $this->redirect('/pharmacy/categories', 'Category already exists');
+        }
 
         $this->category->create($userId, $name);
         $this->redirect('/pharmacy/categories', 'Category Added');
@@ -51,6 +54,11 @@ class CategoryController extends Controller
 
         if (!$this->category->findByIdAndPharmacy($categoryId, $userId)) {
             $this->redirect('/pharmacy/categories', 'Category not found');
+        }
+
+        $existing = $this->category->findByNameAndPharmacy($name, $userId);
+        if ($existing && (int) $existing['c_id'] !== $categoryId) {
+            $this->redirect('/pharmacy/categories', 'Category already exists');
         }
 
         $this->category->updateByPharmacy($categoryId, $userId, ['category_name' => $name]);

@@ -22,6 +22,13 @@ class Category extends Model
         ]);
     }
 
+    public function findByNameAndPharmacy(string $name, int $pharmacyId): ?array
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE category_name = :name AND pharmacy_id = :pharmacy_id LIMIT 1";
+        $row = $this->query($sql, ['name' => $name, 'pharmacy_id' => $pharmacyId])->fetch();
+        return $row ?: null;
+    }
+
     public function findByIdAndPharmacy(int $categoryId, int $pharmacyId): ?array
     {
         $sql = "SELECT * FROM {$this->table} WHERE c_id = :id AND pharmacy_id = :pharmacy_id LIMIT 1";

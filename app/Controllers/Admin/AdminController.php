@@ -65,17 +65,25 @@ class AdminController extends Controller
         }
 
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-        $adminId = $this->user->create($name, $email, $passwordHash, 'admin');
 
-        $this->admin->insert([
-            'admin_id' => $adminId,
-            'name' => $name,
-            'email' => $email,
-            'gender' => $gender,
-            'phone' => $phone,
-            'dob' => date('Y-m-d', strtotime($dob)),
-            'address' => $address,
-        ]);
+        try {
+            $this->user->beginTransaction();
+            $adminId = $this->user->create($name, $email, $passwordHash, 'admin');
+            $this->admin->insert([
+                'admin_id' => $adminId,
+                'name' => $name,
+                'email' => $email,
+                'gender' => $gender,
+                'phone' => $phone,
+                'dob' => date('Y-m-d', strtotime($dob)),
+                'address' => $address,
+            ]);
+            $this->user->commit();
+        } catch (\Throwable $e) {
+            $this->user->rollBack();
+            error_log('Admin create failed: ' . $e->getMessage());
+            $this->redirect('/admin/admins/create', 'Admin creation failed. Please try again.');
+        }
 
         $this->redirect('/admin/admins/create', 'Admin Added Successfully');
     }

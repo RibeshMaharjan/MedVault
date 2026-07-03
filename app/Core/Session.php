@@ -82,5 +82,8 @@ class Session
         unset($_SESSION['loggedInUserRole']);
         unset($_SESSION['loggedInUser']);
         unset($_SESSION['pharmacy_id']);
+        if (session_status() === PHP_SESSION_ACTIVE && !headers_sent()) {
+            session_regenerate_id(true);
+        }
     }
 }

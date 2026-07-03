@@ -92,7 +92,8 @@ abstract class Model
         $set = implode(', ', array_map(fn($k) => "{$k} = :{$k}", array_keys($data)));
         $data['_id'] = $id;
         $sql = "UPDATE {$this->table} SET {$set} WHERE {$col} = :_id";
-        return $this->query($sql, $data)->rowCount() >= 0;
+        $this->query($sql, $data);
+        return true;
     }
 
     public function delete(mixed $id, ?string $idCol = null): bool

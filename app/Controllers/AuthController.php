@@ -48,7 +48,7 @@ class AuthController extends Controller
         }
 
         if (!password_verify($password, $user['password'])) {
-            $this->redirect('/login', 'Invalid Password');
+            $this->redirect('/login', 'Invalid Email or Password');
         }
 
         $this->session->setAuth([

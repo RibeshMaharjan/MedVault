@@ -46,7 +46,8 @@ class UserMedicine extends Model
 
     public function search(int $pharmacyId, string $term, int $limit = 5): array
     {
-        $sql = "SELECT * FROM {$this->table} WHERE pharmacy_id = :pharmacy_id AND medicine_name LIKE :term LIMIT {$limit}";
+        $term = str_replace(['!', '%', '_'], ['!!', '!%', '!_'], $term);
+        $sql = "SELECT * FROM {$this->table} WHERE pharmacy_id = :pharmacy_id AND medicine_name LIKE :term ESCAPE '!' LIMIT {$limit}";
         return $this->query($sql, [
             'pharmacy_id' => $pharmacyId,
             'term' => "%{$term}%",
@@ -145,7 +146,7 @@ class UserMedicine extends Model
         $sql = "(SELECT sales_date as date, 'Sale' as type, m.medicine_name, s.quantity, s.status
                  FROM user_sales_tbl s JOIN {$this->table} m ON s.m_id = m.m_id
                  WHERE s.pharmacy_id = :pid1)
-                UNION
+                UNION ALL
                 (SELECT order_date as date, 'Order' as type, m.medicine_name, o.quantity, o.status
                  FROM user_order_tbl o JOIN {$this->table} m ON o.m_id = m.m_id
                  WHERE o.pharmacy_id = :pid2)
