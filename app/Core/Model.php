@@ -92,8 +92,7 @@ abstract class Model
         $set = implode(', ', array_map(fn($k) => "{$k} = :{$k}", array_keys($data)));
         $data['_id'] = $id;
         $sql = "UPDATE {$this->table} SET {$set} WHERE {$col} = :_id";
-        $this->query($sql, $data);
-        return true;
+        return $this->query($sql, $data)->rowCount() > 0;
     }
 
     public function delete(mixed $id, ?string $idCol = null): bool
@@ -103,13 +102,13 @@ abstract class Model
         return $this->query($sql, ['id' => $id])->rowCount() > 0;
     }
 
-    public function paginate(int $page, int $perPage, string $conditions = '', array $params = []): array
+    public function paginate(int $page, int $perPage, string $conditions = '', array $params = [], string $select = '*', string $join = ''): array
     {
         $offset = ($page - 1) * $perPage;
         $totalRecords = $this->count($conditions, $params);
         $totalPages = (int) ceil($totalRecords / $perPage);
 
-        $sql = "SELECT * FROM {$this->table}";
+        $sql = "SELECT {$select} FROM {$this->table}{$join}";
         if ($conditions) {
             $sql .= " WHERE {$conditions}";
         }

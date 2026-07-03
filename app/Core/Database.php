@@ -20,13 +20,7 @@ class Database
             if (($_ENV['APP_ENV'] ?? '') === 'testing') {
                 throw new \RuntimeException('Database connection failed', 0, $e);
             }
-            http_response_code(500);
-            $viewPath = dirname(__DIR__, 2) . '/views/errors/500.php';
-            if (is_file($viewPath)) {
-                require $viewPath;
-            } else {
-                echo 'Database connection failed';
-            }
+            ErrorView::render(500, '500', 'Database connection failed');
             exit;
         }
     }

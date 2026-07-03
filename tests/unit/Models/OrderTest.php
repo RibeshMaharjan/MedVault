@@ -30,6 +30,13 @@ class OrderTest extends TestCase
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ");
+        self::$pdo->exec("
+            CREATE TABLE user_medicine_tbl (
+                m_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                pharmacy_id INTEGER NOT NULL,
+                medicine_name TEXT NOT NULL
+            )
+        ");
     }
 
     protected function setUp(): void
@@ -61,11 +68,21 @@ class OrderTest extends TestCase
         for ($i = 0; $i < 15; $i++) {
             $this->seedOrder(1, 100.00 + $i);
         }
-        
+
         $result = $this->model->paginateByPharmacy(1, 1, 5);
-        
+
         $this->assertArrayHasKey('data', $result);
         $this->assertEquals(3, $result['totalPages']);
+    }
+
+    public function testPaginateByPharmacyIncludesMedicineName(): void
+    {
+        $mId = $this->seedMedicine(1, 'Paracetamol');
+        $this->seedOrder(1, 100.00, $mId);
+
+        $result = $this->model->paginateByPharmacy(1, 1, 10);
+
+        $this->assertSame('Paracetamol', $result['data'][0]['medicine_name']);
     }
 
     public function testFindByIdAndPharmacy(): void
@@ -131,9 +148,17 @@ class OrderTest extends TestCase
         $this->assertCount(2, $results);
     }
 
-    private function seedOrder(int $pharmacyId, float $totalAmount): int
+    private function seedOrder(int $pharmacyId, float $totalAmount, ?int $mId = null): int
     {
-        self::$pdo->exec("INSERT INTO user_order_tbl (pharmacy_id, price, quantity, total_amount, status, order_date) VALUES ($pharmacyId, 10.00, 10, $totalAmount, 'pending', '2026-07-02')");
+        $stmt = self::$pdo->prepare("INSERT INTO user_order_tbl (pharmacy_id, m_id, price, quantity, total_amount, status, order_date) VALUES (:pharmacy_id, :m_id, 10.00, 10, :total_amount, 'pending', '2026-07-02')");
+        $stmt->execute(['pharmacy_id' => $pharmacyId, 'm_id' => $mId, 'total_amount' => $totalAmount]);
+        return (int) self::$pdo->lastInsertId();
+    }
+
+    private function seedMedicine(int $pharmacyId, string $name): int
+    {
+        $stmt = self::$pdo->prepare("INSERT INTO user_medicine_tbl (pharmacy_id, medicine_name) VALUES (:pharmacy_id, :name)");
+        $stmt->execute(['pharmacy_id' => $pharmacyId, 'name' => $name]);
         return (int) self::$pdo->lastInsertId();
     }
 }

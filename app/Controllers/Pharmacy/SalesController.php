@@ -3,6 +3,7 @@
 namespace App\Controllers\Pharmacy;
 
 use App\Core\Controller;
+use App\Core\TransactionStatus;
 use App\Models\Sale;
 use App\Models\UserMedicine;
 
@@ -71,7 +72,7 @@ class SalesController extends Controller
         if (!$med || $med['in_stock'] < $quantity) {
             $this->redirect('/pharmacy/sales/create', 'Not enough stock available');
         }
-        if (strtotime($med['exp_date']) < strtotime(date('Y-m-d'))) {
+        if (UserMedicine::isExpired($med)) {
             $this->redirect('/pharmacy/sales/create', 'Cannot sell expired medicine');
         }
 
@@ -114,7 +115,7 @@ class SalesController extends Controller
         $salesDate = $_POST['sales_date'] ?? '';
         $oldStatus = $sale['status'];
 
-        if (!in_array($newStatus, ['pending', 'completed', 'cancelled'], true)) {
+        if (!TransactionStatus::isValid($newStatus)) {
             $this->redirect('/pharmacy/sales', 'Invalid status');
         }
         if ($quantity <= 0) {
@@ -128,7 +129,7 @@ class SalesController extends Controller
         if (!$med) {
             $this->redirect('/pharmacy/sales', 'Medicine not found');
         }
-        if ($newStatus === 'completed' && strtotime($med['exp_date']) < strtotime(date('Y-m-d'))) {
+        if ($newStatus === 'completed' && UserMedicine::isExpired($med)) {
             $this->redirect('/pharmacy/sales', 'Cannot sell expired medicine');
         }
 

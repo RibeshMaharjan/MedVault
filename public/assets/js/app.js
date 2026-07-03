@@ -69,3 +69,7 @@ $('.close-btn').on('click', function () {
     $('.sidebar').removeClass('active');
 
 })
+
+function escapeHtml(value) {
+    return $('<div>').text(value).html();
+}

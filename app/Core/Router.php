@@ -45,13 +45,7 @@ class Router
                     if (($_ENV['APP_ENV'] ?? '') === 'testing') {
                         throw new \RuntimeException('Invalid CSRF token');
                     }
-                    http_response_code(403);
-                    $viewPath = dirname(__DIR__, 2) . '/views/errors/403.php';
-                    if (is_file($viewPath)) {
-                        require $viewPath;
-                        return;
-                    }
-                    echo 'Invalid CSRF token';
+                    ErrorView::render(403, '403', 'Invalid CSRF token');
                     return;
                 }
 
@@ -73,14 +67,7 @@ class Router
             }
         }
 
-        http_response_code(404);
-        $viewPath = dirname(__DIR__, 2) . '/views/errors/404.php';
-        if (is_file($viewPath)) {
-            require $viewPath;
-            return;
-        }
-
-        echo "404 - Page Not Found";
+        ErrorView::render(404, '404', '404 - Page Not Found');
     }
 
     private function uriToRegex(string $uri): string

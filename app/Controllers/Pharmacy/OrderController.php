@@ -3,6 +3,7 @@
 namespace App\Controllers\Pharmacy;
 
 use App\Core\Controller;
+use App\Core\TransactionStatus;
 use App\Models\Order;
 use App\Models\UserMedicine;
 
@@ -71,7 +72,7 @@ class OrderController extends Controller
         if (!$med || $med['in_stock'] < $quantity) {
             $this->redirect('/pharmacy/orders/create', 'Not enough stock available');
         }
-        if (strtotime($med['exp_date']) < strtotime(date('Y-m-d'))) {
+        if (UserMedicine::isExpired($med)) {
             $this->redirect('/pharmacy/orders/create', 'Cannot order expired medicine');
         }
 
@@ -114,13 +115,13 @@ class OrderController extends Controller
         $quantity = (int) ($_POST['quantity'] ?? 0);
         $orderDate = $_POST['order_date'] ?? '';
 
-        if (!in_array($newStatus, ['pending', 'completed', 'cancelled'], true)) {
+        if (!TransactionStatus::isValid($newStatus)) {
             $this->redirect('/pharmacy/orders', 'Invalid status');
         }
         if ($quantity <= 0) {
             $this->redirect('/pharmacy/orders', 'Invalid quantity');
         }
-        if (empty($orderDate) || strtotime($orderDate) < strtotime(date('Y-m-d'))) {
+        if (empty($orderDate) || strtotime($orderDate) === false) {
             $this->redirect('/pharmacy/orders', 'Invalid order date');
         }
 
@@ -128,7 +129,7 @@ class OrderController extends Controller
         if (!$med) {
             $this->redirect('/pharmacy/orders', 'Medicine not found');
         }
-        if ($newStatus !== 'cancelled' && strtotime($med['exp_date']) < strtotime(date('Y-m-d'))) {
+        if ($newStatus !== 'cancelled' && UserMedicine::isExpired($med)) {
             $this->redirect('/pharmacy/orders', 'Cannot order expired medicine');
         }
 

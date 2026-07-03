@@ -15,7 +15,7 @@
                     <div class="mb-3"><label class="form-label">Quantity</label><input type="text" class="form-control" id="quantity" name="quantity" required></div>
                     <div class="mb-3"><label class="form-label">Total</label><input type="text" class="form-control" id="total" name="total" required></div>
                     <div class="mb-3"><label class="form-label">Status</label>
-                        <select class="form-select" id="status" name="status"><option value="pending">Pending</option><option value="completed">Completed</option></select>
+                        <select class="form-select" id="status" name="status"><option value="pending">Pending</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select>
                     </div>
                     <div class="mb-3"><label class="form-label">Sales Date</label><input type="date" class="form-control" id="sales_date" name="sales_date"></div>
                 </div>
@@ -62,6 +62,7 @@
                     <option value="">All Status</option>
                     <option value="pending" <?= (($f['status'] ?? '') == 'pending') ? 'selected' : '' ?>>Pending</option>
                     <option value="completed" <?= (($f['status'] ?? '') == 'completed') ? 'selected' : '' ?>>Completed</option>
+                    <option value="cancelled" <?= (($f['status'] ?? '') == 'cancelled') ? 'selected' : '' ?>>Cancelled</option>
                 </select>
             </div>
             <div class="col-md-2"><input type="date" class="form-control" name="date_from" value="<?= htmlspecialchars($f['date_from'] ?? '') ?>"></div>
@@ -88,7 +89,7 @@
                         <td><?= $s['price'] ?></td>
                         <td><?= $s['quantity'] ?></td>
                         <td><?= $s['total_amount'] ?></td>
-                        <td><span class="badge <?= $s['status'] == 'completed' ? 'bg-success' : 'bg-warning' ?>"><?= $s['status'] ?></span></td>
+                        <td><span class="badge <?= $s['status'] == 'completed' ? 'bg-success' : ($s['status'] == 'cancelled' ? 'bg-danger' : 'bg-warning') ?>"><?= $s['status'] ?></span></td>
                         <td><?= $s['sales_date'] ?></td>
                         <td class="row g-0">
                             <div class="col">

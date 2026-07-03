@@ -52,10 +52,6 @@ $(document).ready(function() {
     });
 });
 
-function escapeHtml(value) {
-    return $('<div>').text(value).html();
-}
-
 function fill(name) {
     $('#search').val(name);
     $('#display').html('').removeClass('show');

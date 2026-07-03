@@ -9,6 +9,11 @@ class UserMedicine extends Model
     protected string $table = 'user_medicine_tbl';
     protected string $primaryKey = 'm_id';
 
+    public static function isExpired(array $medicine): bool
+    {
+        return strtotime($medicine['exp_date']) < strtotime(date('Y-m-d'));
+    }
+
     public function findByPharmacy(int $pharmacyId, string $conditions = '', array $params = []): array
     {
         $where = "pharmacy_id = :pharmacy_id";

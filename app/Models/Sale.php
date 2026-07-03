@@ -11,12 +11,16 @@ class Sale extends Model
 
     public function paginateByPharmacy(int $pharmacyId, int $page, int $perPage, string $conditions = '', array $params = []): array
     {
-        $where = "pharmacy_id = :pharmacy_id";
+        $where = "user_sales_tbl.pharmacy_id = :pharmacy_id";
         $params['pharmacy_id'] = $pharmacyId;
         if ($conditions) {
             $where .= " AND {$conditions}";
         }
-        return $this->paginate($page, $perPage, $where, $params);
+        return $this->paginate(
+            $page, $perPage, $where, $params,
+            'user_sales_tbl.*, user_medicine_tbl.medicine_name',
+            ' LEFT JOIN user_medicine_tbl ON user_sales_tbl.m_id = user_medicine_tbl.m_id'
+        );
     }
 
     public function findByIdAndPharmacy(int $saleId, int $pharmacyId): ?array
