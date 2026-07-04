@@ -68,16 +68,8 @@ $router->post('/admin/admins', 'Admin\AdminController@store', [AdminMiddleware::
 
 // Admin - Pharmacies
 $router->get('/admin/pharmacies', 'Admin\PharmacyController@index', [AdminMiddleware::class]);
-$router->get('/admin/pharmacies/create', 'Admin\PharmacyController@create', [AdminMiddleware::class]);
 $router->post('/admin/pharmacies', 'Admin\PharmacyController@store', [AdminMiddleware::class]);
 $router->post('/admin/pharmacies/{id}/delete', 'Admin\PharmacyController@destroy', [AdminMiddleware::class]);
 $router->get('/admin/pharmacies/verify', 'Admin\PharmacyController@verify', [AdminMiddleware::class]);
 $router->post('/admin/pharmacies/{id}/approve', 'Admin\PharmacyController@approve', [AdminMiddleware::class]);
 $router->post('/admin/pharmacies/{id}/reject', 'Admin\PharmacyController@reject', [AdminMiddleware::class]);
-
-// Admin - Settings
-$router->get('/admin/settings', 'Admin\SettingController@index', [AdminMiddleware::class]);
-$router->post('/admin/settings', 'Admin\SettingController@update', [AdminMiddleware::class]);
-
-// Admin - Export
-$router->get('/admin/export/orders', 'Admin\ExportController@orders', [AdminMiddleware::class]);

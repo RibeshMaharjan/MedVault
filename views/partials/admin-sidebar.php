@@ -2,8 +2,8 @@
 $cp = $currentPage ?? '';
 $dashboard_active = ($cp == 'dashboard') ? 'active' : '';
 $admin_active = ($cp == 'admin-display') ? 'active' : '';
-$customer_active = in_array($cp, ['pharmacy-create', 'pharmacy-display', 'verify'], true) ? 'active' : '';
-$customer_show = $customer_active ? 'show' : '';
+$pharmacy_active = ($cp == 'pharmacy-display') ? 'active' : '';
+$verify_active = ($cp == 'verify') ? 'active' : '';
 ?>
 <div class="sidebar" id="side_nav">
     <div class="sidebar-header">
@@ -24,20 +24,12 @@ $customer_show = $customer_active ? 'show' : '';
             <li class="<?= $admin_active ?>">
                 <a href="/admin/admins" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-home icon"></i> Admins</a>
             </li>
-            <li>
-                <a href="#customermenu" data-bs-toggle="collapse" class="text-decoration-none px-3 py-2 d-block <?= $customer_active ?>">
-                    <i class="fa fa-user icon"></i> Customer Management<i class="fa fa-caret-down float-end"></i></a>
-                <ul class="nav collapse <?= $customer_show ?> text-decoration-none px-3 py-2 flex-column" id="customermenu">
-                    <li class="nav-item"><a class="nav-link <?= $cp == 'pharmacy-create' ? 'active' : '' ?>" href="/admin/pharmacies/create">Add Customer</a></li>
-                    <li class="nav-item"><a class="nav-link <?= $cp == 'pharmacy-display' ? 'active' : '' ?>" href="/admin/pharmacies">Display Customer</a></li>
-                    <li class="nav-item"><a class="nav-link <?= $cp == 'verify' ? 'active' : '' ?>" href="/admin/pharmacies/verify">Verify Pharmacies</a></li>
-                </ul>
+            <li class="<?= $pharmacy_active ?>">
+                <a href="/admin/pharmacies" class="text-decoration-none px-3 py-2 d-block"><i class="fa fa-user icon"></i> Pharmacies</a>
             </li>
-        </ul>
-        <hr class="h-color mx-2">
-        <ul class="list-unstyled px-2" id="menu">
-            <li><a href="/admin/export/orders" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-file-export icon"></i> Export Orders</a></li>
-            <li><a href="/admin/settings" class="text-decoration-none px-3 py-2 d-block <?= $cp == 'settings' ? 'active' : '' ?>"><i class="fal fa-bars icon"></i> Settings</a></li>
+            <li class="<?= $verify_active ?>">
+                <a href="/admin/pharmacies/verify" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-circle-check icon"></i> Verify Pharmacies</a>
+            </li>
         </ul>
     </div>
     <div class="sidebar-footer">

@@ -1,4 +1,4 @@
-<div class="container-fluid bg-white">
+<div class="mv-page">
     <!-- Add Modal -->
     <div class="modal fade" id="adminAddModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -54,32 +54,37 @@
         </div>
     </div>
 
-    <div class="pt-3 ps-2 d-flex justify-content-between align-items-center">
-        <h1 class="fw-normal mb-3">Admin Table</h1>
-        <button type="button" class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="#adminAddModal">Add Admin</button>
+    <div class="mv-page-header">
+        <div>
+            <h1 class="mv-page-title">Admins</h1>
+            <p class="mv-page-subtitle">Manage the administrators who can access this panel.</p>
+        </div>
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#adminAddModal">Add Admin</button>
     </div>
-    <div class="table-responsive px-2 pt-3 mb-5">
-        <table class="table table-striped">
-            <thead class="table-danger">
-                <tr><th>#</th><th>NAME</th><th>EMAIL</th><th>GENDER</th><th>PHONE</th><th>D.O.B</th><th>ADDRESS</th></tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($admins)): ?>
-                    <?php foreach ($admins as $a): ?>
-                    <tr>
-                        <td><?= $a['admin_id'] ?></td>
-                        <td><?= htmlspecialchars($a['name']) ?></td>
-                        <td><?= htmlspecialchars($a['email']) ?></td>
-                        <td><?= htmlspecialchars($a['gender'] ?? '') ?></td>
-                        <td><?= htmlspecialchars($a['phone'] ?? '') ?></td>
-                        <td><?= $a['dob'] ?? '' ?></td>
-                        <td><?= htmlspecialchars($a['address'] ?? '') ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr><td colspan="7">No Data Found</td></tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+    <div class="mv-table-wrap mb-5">
+        <div class="table-responsive">
+            <table class="table table-striped mv-responsive-table">
+                <thead class="table-danger">
+                    <tr><th>#</th><th>NAME</th><th>EMAIL</th><th>GENDER</th><th>PHONE</th><th>D.O.B</th><th>ADDRESS</th></tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($admins)): ?>
+                        <?php foreach ($admins as $a): ?>
+                        <tr>
+                            <td data-label="#"><?= $a['admin_id'] ?></td>
+                            <td data-label="Name"><?= htmlspecialchars($a['name']) ?></td>
+                            <td data-label="Email"><?= htmlspecialchars($a['email']) ?></td>
+                            <td data-label="Gender"><?= htmlspecialchars($a['gender'] ?? '') ?></td>
+                            <td data-label="Phone"><?= htmlspecialchars($a['phone'] ?? '') ?></td>
+                            <td data-label="D.O.B"><?= $a['dob'] ?? '' ?></td>
+                            <td data-label="Address"><?= htmlspecialchars($a['address'] ?? '') ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr><td colspan="7">No Data Found</td></tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

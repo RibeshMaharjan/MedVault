@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="/assets/css/form.css">
     <link rel="stylesheet" href="/assets/css/new-sidebar.css">
     <link rel="stylesheet" href="/assets/css/custom.css">
+    <link rel="stylesheet" href="/assets/css/admin-dashboard.css">
+    <link rel="stylesheet" href="/assets/css/admin-verify.css">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -33,10 +35,8 @@
             <span class="mobile-brand">MedVault</span>
         </div>
         <div class="sidebar-backdrop"></div>
-        <div class="container-fluid mv-content p-0 pt-3">
-            <div class="dashboard-content bg-white pt-3">
-                <?= $content ?>
-            </div>
+        <div class="container-fluid mv-content">
+            <?= $content ?>
         </div>
     </div>
     <script src="/assets/js/app.js"></script>

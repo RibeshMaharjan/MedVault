@@ -38,4 +38,23 @@ class Pharmacy extends Model
 
         return false;
     }
+
+    public function recent(int $limit = 4): array
+    {
+        $limit = max(1, $limit);
+        $sql = "SELECT p.*, r.name, r.email as user_email
+                FROM {$this->table} p JOIN role r ON p.pharmacy_id = r.user_id
+                ORDER BY p.pharmacy_id DESC LIMIT {$limit}";
+        return $this->query($sql)->fetchAll();
+    }
+
+    public function pendingVerifications(int $limit = 5): array
+    {
+        $limit = max(1, $limit);
+        $sql = "SELECT p.*, r.name, r.email as user_email
+                FROM {$this->table} p JOIN role r ON p.pharmacy_id = r.user_id
+                WHERE p.verification_request_date IS NOT NULL AND p.isverified = 0
+                ORDER BY p.verification_request_date DESC LIMIT {$limit}";
+        return $this->query($sql)->fetchAll();
+    }
 }

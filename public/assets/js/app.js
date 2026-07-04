@@ -42,8 +42,8 @@ $(document).ready(function () {
     $('#menu a').each(function () {
         const href = $(this).attr('href');
 
-        // Check if the href matches the current URL
-        if (currentUrl.includes(href)) {
+        // Check if the href matches the current URL exactly
+        if (currentUrl === href) {
             // Add 'active' class to the parent <li> element
             $(this).parent().addClass('active');
 

@@ -1,0 +1,164 @@
+/* Scoped styles for the admin Pharmacy Verification page.
+   Everything here is nested under .mv-verify so it never leaks
+   onto other admin/pharmacy pages sharing the same layout. */
+
+.mv-verify {
+    font-family: ui-monospace, 'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+
+.mv-verify-tabs {
+    display: inline-flex;
+    gap: 4px;
+    background: var(--mv-bg);
+    border: 1px solid var(--mv-border);
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 20px;
+    list-style: none;
+}
+
+.mv-verify-tabs .nav-link {
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--mv-muted);
+    background: transparent;
+}
+
+.mv-verify-tabs .nav-link.active {
+    background: var(--mv-surface);
+    color: var(--mv-text);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
+.mv-verify-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.mv-verify-card {
+    background: var(--mv-surface);
+    border: 1px solid var(--mv-border);
+    border-radius: var(--mv-radius);
+    padding: 20px;
+}
+
+.mv-verify-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.mv-verify-name {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--mv-text);
+}
+
+.mv-verify-email {
+    margin: 2px 0 0;
+    font-size: 0.85rem;
+    color: var(--mv-muted);
+}
+
+.mv-verify-meta {
+    margin: 10px 0 0;
+    font-size: 0.85rem;
+    color: var(--mv-muted);
+}
+
+.mv-verify-meta strong {
+    color: var(--mv-text);
+    font-weight: 600;
+}
+
+.mv-verify-doc {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
+    padding: 10px 14px;
+    border: 1px dashed var(--mv-border);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--mv-text);
+}
+
+.mv-verify-doc i {
+    color: var(--mv-muted);
+    margin-right: 6px;
+}
+
+.mv-verify-doc a {
+    color: #0f766e;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.mv-verify-doc a:hover {
+    text-decoration: underline;
+}
+
+.mv-verify-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.mv-verify-actions form {
+    margin: 0;
+    display: flex;
+}
+
+.mv-verify-reject-form {
+    flex: 1;
+}
+
+.mv-verify-approve-form {
+    flex: 2;
+}
+
+.mv-verify-btn {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 600;
+    border: 1px solid var(--mv-border);
+}
+
+.mv-verify-btn-reject {
+    background: var(--mv-surface);
+    color: var(--mv-text);
+}
+
+.mv-verify-btn-reject:hover {
+    background: var(--mv-bg);
+}
+
+.mv-verify-btn-approve {
+    background: var(--mv-danger);
+    color: #fff;
+    border-color: var(--mv-danger);
+}
+
+.mv-verify-btn-approve:hover {
+    background: #bb2d3b;
+}
+
+@media (max-width: 767px) {
+    .mv-verify-grid {
+        grid-template-columns: 1fr;
+    }
+}

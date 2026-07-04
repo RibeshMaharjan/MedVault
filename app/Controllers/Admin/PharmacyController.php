@@ -27,13 +27,6 @@ class PharmacyController extends Controller
         ], 'admin');
     }
 
-    public function create(): void
-    {
-        $this->view('admin/pharmacies/create', [
-            'currentPage' => 'pharmacy-create',
-        ], 'admin');
-    }
-
     public function store(): void
     {
         $pan = $this->validate($_POST['pan'] ?? '');
@@ -44,20 +37,20 @@ class PharmacyController extends Controller
         $address = $this->validate($_POST['address'] ?? '');
 
         if (empty($name) || empty($email) || empty($password)) {
-            $this->redirect('/admin/pharmacies/create', 'Please fill all fields!');
+            $this->redirect('/admin/pharmacies', 'Please fill all fields!');
         }
 
         if (!is_numeric($pan) || $pan <= 0) {
-            $this->redirect('/admin/pharmacies/create', 'Invalid PAN Number');
+            $this->redirect('/admin/pharmacies', 'Invalid PAN Number');
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->redirect('/admin/pharmacies/create', 'Invalid email format');
+            $this->redirect('/admin/pharmacies', 'Invalid email format');
         }
         if ($phone !== '' && !preg_match('/^[0-9]{10}$/', $phone)) {
-            $this->redirect('/admin/pharmacies/create', 'Invalid Phone Number');
+            $this->redirect('/admin/pharmacies', 'Invalid Phone Number');
         }
         if ($this->user->findByEmail($email)) {
-            $this->redirect('/admin/pharmacies/create', 'Email Already Exists');
+            $this->redirect('/admin/pharmacies', 'Email Already Exists');
         }
 
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
@@ -77,10 +70,10 @@ class PharmacyController extends Controller
         } catch (\Throwable $e) {
             $this->user->rollBack();
             error_log('Pharmacy create failed: ' . $e->getMessage());
-            $this->redirect('/admin/pharmacies/create', 'Pharmacy creation failed. Please try again.');
+            $this->redirect('/admin/pharmacies', 'Pharmacy creation failed. Please try again.');
         }
 
-        $this->redirect('/admin/pharmacies/create', 'Pharmacy Added successfully');
+        $this->redirect('/admin/pharmacies', 'Pharmacy Added successfully');
     }
 
     public function destroy(string $id): void
