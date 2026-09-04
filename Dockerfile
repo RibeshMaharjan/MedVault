@@ -16,7 +16,7 @@ WORKDIR /var/www/html
 COPY . .
 
 # Install dependencies
-RUN composer install --no-dev --optimize-autoloader || true
+RUN composer install --no-dev --optimize-autoloader
 
 # Copy custom Apache config
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
