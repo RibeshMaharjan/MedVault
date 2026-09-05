@@ -150,3 +150,17 @@ body{
     font-size: 14px;
     color: #000;
 }
+
+.forgot-password-link {
+    align-self: flex-end;
+    color: #4b5563;
+    font-size: 13px;
+    letter-spacing: normal;
+    margin: 4px 0 10px;
+    text-transform: none;
+}
+
+.forgot-password-link:hover {
+    color: #111827;
+    text-decoration: underline;
+}

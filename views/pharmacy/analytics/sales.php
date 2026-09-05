@@ -35,13 +35,30 @@
                     </div>
                 </div>
             </div>
-            <!-- Anomaly Detection Results -->
-            <div class="card border-0 shadow">
-                <div class="card-body">
-                    <h5 class="card-title">Sales Anomalies</h5>
-                    <div id="anomalyContainer">
-                        <!-- Anomalies will be populated by JavaScript -->
-                    </div>
+        </div>
+    </div>
+</div>
+
+<!-- Anomaly Scatter Chart -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow">
+            <div class="card-body">
+                <h5 class="card-title">Anomaly Detection</h5>
+                <canvas id="anomalyScatterChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Anomaly Table -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow">
+            <div class="card-body">
+                <h5 class="card-title">Anomaly Details</h5>
+                <div id="anomalyTableContainer">
+                    <!-- Anomaly table will be populated by JavaScript -->
                 </div>
             </div>
         </div>
@@ -64,6 +81,7 @@
 
 <script>
 let salesChart = null;
+let anomalyScatterChart = null;
 
 // Function to calculate moving average
 function calculateMovingAverage(data, windowSize) {

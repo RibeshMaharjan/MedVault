@@ -23,4 +23,9 @@ class User extends Model
             'role' => $role,
         ]);
     }
+
+    public function updatePassword(int $userId, string $passwordHash): bool
+    {
+        return $this->update($userId, ['password' => $passwordHash]);
+    }
 }

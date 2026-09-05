@@ -77,6 +77,7 @@
                         <h1>Sign In</h1>
                         <input type="email" name="email" placeholder="Email" id="uname" required>
                         <input type="password" name="password" placeholder="Password" id="pass" required>
+                        <a class="forgot-password-link" href="/forgot-password">Forgot password?</a>
                         <span class="acc-text">Dont Have an account? <span id="sign-up2">Sign Up</span></span>
                         <div class="button">
                             <input type="submit" name="signIn" value="signIn" class="signInBtn">

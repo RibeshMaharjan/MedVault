@@ -304,6 +304,21 @@ INSERT INTO `role` (`user_id`, `name`, `email`, `password`, `role`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `password_reset_tokens`
+--
+
+CREATE TABLE `password_reset_tokens` (
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` int NOT NULL,
+  `token_hash` char(64) COLLATE utf8mb4_general_ci NOT NULL,
+  `expires_at` datetime NOT NULL,
+  `used_at` datetime DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `settings`
 --
 
@@ -1082,6 +1097,14 @@ ALTER TABLE `role`
   ADD PRIMARY KEY (`user_id`);
 
 --
+-- Indexes for table `password_reset_tokens`
+--
+ALTER TABLE `password_reset_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `password_reset_tokens_token_hash_unique` (`token_hash`),
+  ADD KEY `password_reset_tokens_user_id_created_at_index` (`user_id`,`created_at`);
+
+--
 -- Indexes for table `settings`
 --
 ALTER TABLE `settings`
@@ -1159,6 +1182,12 @@ ALTER TABLE `role`
   MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=349;
 
 --
+-- AUTO_INCREMENT for table `password_reset_tokens`
+--
+ALTER TABLE `password_reset_tokens`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
@@ -1234,6 +1263,12 @@ ALTER TABLE `order_pending`
 --
 ALTER TABLE `tbl_admin`
   ADD CONSTRAINT `tbl_admin_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `role` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `password_reset_tokens`
+--
+ALTER TABLE `password_reset_tokens`
+  ADD CONSTRAINT `password_reset_tokens_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `role` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `tbl_pharmacy`

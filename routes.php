@@ -12,6 +12,10 @@ $verifiedPharmacyAccess = [PharmacyMiddleware::class, VerifiedPharmacyMiddleware
 $router->get('/login', 'AuthController@showLogin');
 $router->post('/login', 'AuthController@login');
 $router->post('/register', 'AuthController@register');
+$router->get('/forgot-password', 'AuthController@showForgotPassword');
+$router->post('/forgot-password', 'AuthController@sendResetLink');
+$router->get('/reset-password', 'AuthController@showResetPassword');
+$router->post('/reset-password', 'AuthController@resetPassword');
 $router->get('/logout', 'AuthController@logout');
 
 // Landing

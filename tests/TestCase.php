@@ -64,6 +64,16 @@ abstract class TestCase extends BaseTestCase
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             );
 
+            CREATE TABLE password_reset_tokens (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                token_hash TEXT UNIQUE NOT NULL,
+                expires_at DATETIME NOT NULL,
+                used_at DATETIME,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES role(user_id) ON DELETE CASCADE
+            );
+
             CREATE TABLE tbl_pharmacy (
                 pharmacy_id INTEGER PRIMARY KEY,
                 pan INTEGER,
