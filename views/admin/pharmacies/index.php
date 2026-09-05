@@ -13,7 +13,7 @@
                         <div class="mv-form-grid">
                             <div class="mb-3">
                                 <label for="add_pan" class="form-label">PAN Number</label>
-                                <input class="form-control" type="text" id="add_pan" placeholder="PAN Number" name="pan" required>
+                                <input class="form-control" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="9" id="add_pan" placeholder="PAN Number" name="pan" required>
                             </div>
                             <div class="mb-3">
                                 <label for="add_pharmacy_name" class="form-label">Pharmacy Name</label>
@@ -29,7 +29,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="add_pharmacy_phone" class="form-label">Phone</label>
-                                <input class="form-control" type="text" id="add_pharmacy_phone" placeholder="Phone" name="phone" required>
+                                <input class="form-control" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="10" id="add_pharmacy_phone" placeholder="Phone" name="phone" required>
                             </div>
                             <div class="mb-3 full">
                                 <label for="add_pharmacy_address" class="form-label">Address</label>

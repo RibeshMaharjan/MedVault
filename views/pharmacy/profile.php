@@ -25,11 +25,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="pan" class="form-label">PAN Number</label>
-                        <input type="text" class="form-control" name="pan" value="<?= htmlspecialchars($p['pan'] ?? '') ?>" required>
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="9" class="form-control" name="pan" value="<?= htmlspecialchars($p['pan'] ?? '') ?>" required>
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone</label>
-                        <input type="text" class="form-control" name="phone" value="<?= htmlspecialchars($p['phone'] ?? '') ?>" required>
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="10" class="form-control" name="phone" value="<?= htmlspecialchars($p['phone'] ?? '') ?>" required>
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>

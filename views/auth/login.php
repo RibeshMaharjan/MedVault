@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="/assets/css/login/login.css">
     <link rel="stylesheet" href="/assets/css/login/toggle.css">
     <title>MedVault - Login</title>
@@ -29,6 +30,28 @@
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
+        }
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+            margin: 8px 15px;
+        }
+        .password-wrapper input {
+            width: 100%;
+            margin: 0;
+            padding-right: 40px;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #888;
+            user-select: none;
+        }
+        .toggle-password:hover {
+            color: #333;
         }
     </style>
 </head>
@@ -62,8 +85,14 @@
                         <h1>Create Account</h1>
                         <input type="text" name="name" placeholder="name" required>
                         <input type="email" name="email" placeholder="Email" required>
-                        <input type="password" name="password" placeholder="Password" required>
-                        <input type="password" name="repassword" placeholder="Re-Password" required>
+                        <div class="password-wrapper">
+                            <input type="password" name="password" placeholder="Password" required>
+                            <i class="fa-regular fa-eye toggle-password"></i>
+                        </div>
+                        <div class="password-wrapper">
+                            <input type="password" name="repassword" placeholder="Re-Password" required>
+                            <i class="fa-regular fa-eye toggle-password"></i>
+                        </div>
                         <span class="acc-text">Already Have an account? <span id="sign-in2">Sign In</span></span>
                         <div class="button">
                             <input type="submit" name="register" value="Register" class="signInBtn">
@@ -76,7 +105,10 @@
                         <?= csrf_field() ?>
                         <h1>Sign In</h1>
                         <input type="email" name="email" placeholder="Email" id="uname" required>
-                        <input type="password" name="password" placeholder="Password" id="pass" required>
+                        <div class="password-wrapper">
+                            <input type="password" name="password" placeholder="Password" id="pass" required>
+                            <i class="fa-regular fa-eye toggle-password"></i>
+                        </div>
                         <a class="forgot-password-link" href="/forgot-password">Forgot password?</a>
                         <span class="acc-text">Dont Have an account? <span id="sign-up2">Sign Up</span></span>
                         <div class="button">
@@ -123,6 +155,20 @@
             document.querySelectorAll('.toast .btn-close').forEach(btn => {
                 btn.addEventListener('click', function() {
                     this.closest('.toast').classList.remove('show');
+                });
+            });
+
+            document.querySelectorAll('.toggle-password').forEach(function(icon) {
+                icon.addEventListener('click', function() {
+                    var wrapper = this.closest('.password-wrapper');
+                    var input = wrapper.querySelector('input');
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        this.classList.replace('fa-eye', 'fa-eye-slash');
+                    } else {
+                        input.type = 'password';
+                        this.classList.replace('fa-eye-slash', 'fa-eye');
+                    }
                 });
             });
         });

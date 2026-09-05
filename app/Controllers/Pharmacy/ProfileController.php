@@ -51,8 +51,8 @@ class ProfileController extends Controller
         if ($phone !== '' && !preg_match('/^[0-9]{10}$/', $phone)) {
             $this->redirect('/pharmacy/profile', 'Invalid phone number');
         }
-        if ($pan !== '' && (!is_numeric($pan) || $pan <= 0)) {
-            $this->redirect('/pharmacy/profile', 'Invalid PAN number');
+        if ($pan !== '' && !preg_match('/^[0-9]{1,9}$/', $pan)) {
+            $this->redirect('/pharmacy/profile', 'PAN number must be 1-9 digits');
         }
 
         $existing = $this->user->findByEmail($email);

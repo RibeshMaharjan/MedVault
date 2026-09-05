@@ -42,8 +42,8 @@ class PharmacyController extends Controller
             $this->redirect('/admin/pharmacies', 'Please fill all fields!');
         }
 
-        if (!is_numeric($pan) || $pan <= 0) {
-            $this->redirect('/admin/pharmacies', 'Invalid PAN Number');
+        if (!preg_match('/^[0-9]{1,9}$/', $pan)) {
+            $this->redirect('/admin/pharmacies', 'PAN number must be 1-9 digits');
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->redirect('/admin/pharmacies', 'Invalid email format');
