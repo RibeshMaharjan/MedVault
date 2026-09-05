@@ -19,7 +19,8 @@ class Sale extends Model
         return $this->paginate(
             $page, $perPage, $where, $params,
             'user_sales_tbl.*, user_medicine_tbl.medicine_name',
-            ' LEFT JOIN user_medicine_tbl ON user_sales_tbl.m_id = user_medicine_tbl.m_id'
+            ' LEFT JOIN user_medicine_tbl ON user_sales_tbl.m_id = user_medicine_tbl.m_id',
+            'user_sales_tbl.sales_date DESC, user_sales_tbl.s_id DESC'
         );
     }
 

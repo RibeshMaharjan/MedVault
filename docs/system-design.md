@@ -14,7 +14,7 @@ The class, object, state, and sequence diagrams in the analysis chapters are alr
 
 ### Activity Diagram — Order Approval Workflow
 
-The order-approval workflow is the most behaviourally rich path in the system: it spans a user decision, an authorisation guard, a stock-availability guard, a persistence side-effect, and two distinct outcomes. It is the most informative single workflow to model.
+The order-receipt workflow is the most behaviourally rich path in the system: it spans a user decision, an authorisation guard, an order lookup, a stock-increase side-effect, and two distinct outcomes. It is the most informative single workflow to model.
 
 **UML shape mapping used below**
 
@@ -35,20 +35,17 @@ flowchart TD
 
     Load --> Exists{"Order belongs to<br/>this pharmacy?"}
     Exists -- no --> NotFound("Show flash —<br/>Order not found") --> EndNotFound((("End")))
-    Exists -- yes --> StockCheck{"Linked medicine<br/>has enough stock?"}
+    Exists -- yes --> Receive("Add received quantity<br/>to medicine in_stock")
 
-    StockCheck -- no --> InsufficientStock("Show flash —<br/>Not enough stock") --> EndNoStock((("End")))
-    StockCheck -- yes --> Deduct("Deduct quantity<br/>from medicine in_stock")
-
-    Deduct --> Persist("Persist order<br/>status = completed")
+    Receive --> Persist("Persist order<br/>status = completed")
     Persist --> Success("Show flash —<br/>Order updated") --> EndOk((("End")))
 ```
 
 The diagram exposes three facts the sequence and state diagrams imply but do not show side-by-side:
 
-1. There are **two guards in series** before the success path — authorisation (enforced by middleware) and stock-availability (enforced in the controller).
-2. The **stock deduction happens before the status persist**, which means a database failure on the second step would leave the medicine's stock and the order's status temporarily inconsistent — a known limitation of the current implementation.
-3. There are **three distinct failure terminations**, each producing a different flash message and returning the user to a different screen. UML allows multiple activity-final nodes; they are drawn identically because they all represent the same kind of termination (the workflow ends).
+1. Authorisation and pharmacy ownership are checked before stock is changed.
+2. Completing a supplier order **adds** the received quantity to inventory; sales are the transactions that deduct inventory.
+3. The inventory update and status change run in one database transaction, so a failure rolls both changes back.
 
 ---
 

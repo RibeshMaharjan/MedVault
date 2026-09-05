@@ -85,6 +85,17 @@ class OrderTest extends TestCase
         $this->assertSame('Paracetamol', $result['data'][0]['medicine_name']);
     }
 
+    public function testPaginateByPharmacySortsNewestOrdersFirst(): void
+    {
+        $oldestId = $this->seedOrder(1, 100.00, null, '2026-07-01');
+        $newestId = $this->seedOrder(1, 150.00, null, '2026-07-03');
+        $sameDayLaterId = $this->seedOrder(1, 200.00, null, '2026-07-03');
+
+        $result = $this->model->paginateByPharmacy(1, 1, 10);
+
+        $this->assertSame([$sameDayLaterId, $newestId, $oldestId], array_column($result['data'], 'o_id'));
+    }
+
     public function testFindByIdAndPharmacy(): void
     {
         $id = $this->seedOrder(1, 125.00);
@@ -148,10 +159,10 @@ class OrderTest extends TestCase
         $this->assertCount(2, $results);
     }
 
-    private function seedOrder(int $pharmacyId, float $totalAmount, ?int $mId = null): int
+    private function seedOrder(int $pharmacyId, float $totalAmount, ?int $mId = null, string $orderDate = '2026-07-02'): int
     {
-        $stmt = self::$pdo->prepare("INSERT INTO user_order_tbl (pharmacy_id, m_id, price, quantity, total_amount, status, order_date) VALUES (:pharmacy_id, :m_id, 10.00, 10, :total_amount, 'pending', '2026-07-02')");
-        $stmt->execute(['pharmacy_id' => $pharmacyId, 'm_id' => $mId, 'total_amount' => $totalAmount]);
+        $stmt = self::$pdo->prepare("INSERT INTO user_order_tbl (pharmacy_id, m_id, price, quantity, total_amount, status, order_date) VALUES (:pharmacy_id, :m_id, 10.00, 10, :total_amount, 'pending', :order_date)");
+        $stmt->execute(['pharmacy_id' => $pharmacyId, 'm_id' => $mId, 'total_amount' => $totalAmount, 'order_date' => $orderDate]);
         return (int) self::$pdo->lastInsertId();
     }
 

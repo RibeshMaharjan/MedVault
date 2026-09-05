@@ -190,18 +190,10 @@ $(document).ready(function() {
         let row = $(this).closest('tr');
         let price = parseFloat(row.find('.price-input').val());
         let quantity = parseInt($(this).val());
-        let maxStock = parseInt($(this).attr('max'));
         let submitBtn = row.find('.submit-order-btn');
-        let warningSpan = row.find('.quantity-warning');
         if (quantity < 1 || isNaN(quantity)) { $(this).val(1); quantity = 1; }
         row.find('.total-input').val(price * quantity);
-        if (quantity > maxStock) {
-            warningSpan.html('<span class="text-danger">Quantity exceeds available stock!</span>');
-            submitBtn.prop('disabled', true);
-        } else {
-            warningSpan.html('');
-            submitBtn.prop('disabled', false);
-        }
+        submitBtn.prop('disabled', false);
     });
 
     $(document).on('change', '.date-input', function() {
@@ -255,7 +247,7 @@ function fill(name) {
             var row = '<tr>' +
                 '<td data-label="Medicine">' + escapeHtml(med.medicine_name) + '<input type="hidden" name="m_id" value="' + encodeURIComponent(med.m_id) + '"></td>' +
                 '<td data-label="Price"><input type="number" step="0.01" class="form-control price-input" name="price" value="' + encodeURIComponent(med.buy_price) + '"></td>' +
-                '<td data-label="Quantity"><input type="number" class="form-control quantity-input" name="quantity" value="1" min="1" max="' + encodeURIComponent(med.in_stock) + '">' +
+                '<td data-label="Quantity"><input type="number" class="form-control quantity-input" name="quantity" value="1" min="1">' +
                 '<span class="quantity-warning"></span></td>' +
                 '<td data-label="Total"><input type="number" step="0.01" class="form-control total-input" name="total" value="' + encodeURIComponent(med.buy_price) + '" readonly></td>' +
                 '<td data-label="Date"><input type="date" class="form-control date-input" name="order_date" value="' + today + '">' +

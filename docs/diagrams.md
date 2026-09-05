@@ -253,7 +253,7 @@ med22 ..> sale : sold_as
 
 ### Order Lifecycle
 
-Based on `OrderController@store` (inserts pending, deducts stock) and `OrderController@update` (status transitions with stock side-effects).
+Based on `OrderController@store` (inserts a pending supplier order without changing stock) and `OrderController@update` (records received stock when the order is completed).
 
 ```plantuml
 @startuml
@@ -269,17 +269,17 @@ left to right direction
 state pending
 state completed
 
-pending --> completed : update() [in_stock >= qty]\n/ UserMedicine::updateStock(-qty)
-completed --> pending : update() [restore stock]\n/ UserMedicine::updateStock(+qty)
+pending --> completed : update()\n/ UserMedicine::updateStock(+qty)
+completed --> pending : update() [stock still available]\n/ UserMedicine::updateStock(-qty)
 
-pending --> [*] : destroy() / no stock restore
-completed --> [*] : destroy() / UserMedicine::updateStock(+qty)
+pending --> [*] : destroy() / no stock change
+completed --> [*] : destroy() / UserMedicine::updateStock(-qty)
 @enduml
 ```
 
 ### Sale Lifecycle
 
-**Important:** `SalesController@store()` inserts a sale as `pending` but does **not** deduct stock. Stock is deducted **only** when `SalesController@update()` transitions from `pending` to `completed`.
+**Important:** `SalesController@store()` records a sale as `completed` and deducts its quantity from stock in the same database transaction.
 
 ```plantuml
 @startuml
@@ -290,7 +290,7 @@ skinparam state {
 }
 left to right direction
 
-[*] --> pending : SalesController@store()\n/ no stock change
+[*] --> completed : SalesController@store()\n/ UserMedicine::updateStock(-qty)
 
 state pending
 state completed
@@ -298,7 +298,7 @@ state completed
 pending --> completed : update()\n/ UserMedicine::updateStock(-qty)
 completed --> pending : update()\n/ UserMedicine::updateStock(+qty)
 
-pending --> [*] : destroy() / no stock restore
+pending --> [*] : destroy() / no stock change
 completed --> [*] : destroy() / UserMedicine::updateStock(+qty)
 @enduml
 ```

@@ -87,9 +87,10 @@ class SalesController extends Controller
                 'price' => $price,
                 'quantity' => $quantity,
                 'total_amount' => $total,
-                'status' => 'pending',
+                'status' => 'completed',
                 'sales_date' => $date,
             ]);
+            $this->medicine->updateStockByPharmacy($medicineId, $userId, -$quantity);
             $this->sale->commit();
         } catch (\Throwable) {
             $this->sale->rollBack();

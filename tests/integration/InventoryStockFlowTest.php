@@ -35,9 +35,9 @@ class InventoryStockFlowTest extends TestCase
         parent::tearDown();
     }
 
-    public function testOrderCreateIgnoresClientTotalsAndReservesStock(): void
+    public function testOrderCreateUsesPurchasePriceAndDoesNotChangeStockUntilReceived(): void
     {
-        $medicineId = $this->seedMedicine(stock: 100, sellPrice: 25.00);
+        $medicineId = $this->seedMedicine(stock: 100, buyPrice: 20.00, sellPrice: 25.00);
         $_POST = [
             'm_id' => $medicineId,
             'price' => 1.00,
@@ -51,14 +51,15 @@ class InventoryStockFlowTest extends TestCase
         $order = $this->pdo->query('SELECT * FROM user_order_tbl')->fetch();
         $stock = $this->stockFor($medicineId);
 
-        $this->assertEquals(25.00, (float) $order['price']);
-        $this->assertEquals(50.00, (float) $order['total_amount']);
-        $this->assertEquals(98, $stock);
+        $this->assertEquals(20.00, (float) $order['price']);
+        $this->assertEquals(40.00, (float) $order['total_amount']);
+        $this->assertEquals('pending', $order['status']);
+        $this->assertEquals(100, $stock);
     }
 
-    public function testCompletingPendingOrderDoesNotDoubleDeductStock(): void
+    public function testCompletingPendingOrderAddsStock(): void
     {
-        $medicineId = $this->seedMedicine(stock: 90, sellPrice: 25.00);
+        $medicineId = $this->seedMedicine(stock: 90, buyPrice: 20.00, sellPrice: 25.00);
         $orderId = $this->seedOrder($medicineId, quantity: 10, status: 'pending');
         $_POST = [
             'm_id' => $medicineId,
@@ -69,22 +70,52 @@ class InventoryStockFlowTest extends TestCase
 
         $this->expectRedirect('/pharmacy/orders', fn() => (new OrderController())->update((string) $orderId));
 
-        $this->assertEquals(90, $this->stockFor($medicineId));
+        $this->assertEquals(100, $this->stockFor($medicineId));
     }
 
-    public function testDeletingReservedOrderRestoresStock(): void
+    public function testDeletingPendingOrderDoesNotChangeStock(): void
     {
-        $medicineId = $this->seedMedicine(stock: 90, sellPrice: 25.00);
+        $medicineId = $this->seedMedicine(stock: 90, buyPrice: 20.00, sellPrice: 25.00);
         $orderId = $this->seedOrder($medicineId, quantity: 10, status: 'pending');
 
         $this->expectRedirect('/pharmacy/orders', fn() => (new OrderController())->destroy((string) $orderId));
 
-        $this->assertEquals(100, $this->stockFor($medicineId));
+        $this->assertEquals(90, $this->stockFor($medicineId));
+    }
+
+    public function testDeletingCompletedOrderReversesReceivedStock(): void
+    {
+        $medicineId = $this->seedMedicine(stock: 100, buyPrice: 20.00, sellPrice: 25.00);
+        $orderId = $this->seedOrder($medicineId, quantity: 10, status: 'completed');
+
+        $this->expectRedirect('/pharmacy/orders', fn() => (new OrderController())->destroy((string) $orderId));
+
+        $this->assertEquals(90, $this->stockFor($medicineId));
+    }
+
+    public function testSaleCreateUsesSellingPriceAndReducesStock(): void
+    {
+        $medicineId = $this->seedMedicine(stock: 100, buyPrice: 10.00, sellPrice: 15.00);
+        $_POST = [
+            'm_id' => $medicineId,
+            'price' => 1.00,
+            'quantity' => 10,
+            'total' => 1.00,
+            'sales_date' => date('Y-m-d'),
+        ];
+
+        $this->expectRedirect('/pharmacy/sales', fn() => (new SalesController())->store());
+
+        $sale = $this->pdo->query('SELECT * FROM user_sales_tbl')->fetch();
+        $this->assertEquals(15.00, (float) $sale['price']);
+        $this->assertEquals(150.00, (float) $sale['total_amount']);
+        $this->assertEquals('completed', $sale['status']);
+        $this->assertEquals(90, $this->stockFor($medicineId));
     }
 
     public function testSaleCompletionRejectsInsufficientStockWithoutMutation(): void
     {
-        $medicineId = $this->seedMedicine(stock: 3, sellPrice: 15.00);
+        $medicineId = $this->seedMedicine(stock: 3, buyPrice: 10.00, sellPrice: 15.00);
         $saleId = $this->seedSale($medicineId, quantity: 1, status: 'pending');
         $_POST = [
             'm_id' => $medicineId,
@@ -100,7 +131,7 @@ class InventoryStockFlowTest extends TestCase
 
     public function testCompletedSaleUpdateUsesServerTotalAndAdjustsStockDelta(): void
     {
-        $medicineId = $this->seedMedicine(stock: 90, sellPrice: 15.00);
+        $medicineId = $this->seedMedicine(stock: 90, buyPrice: 10.00, sellPrice: 15.00);
         $saleId = $this->seedSale($medicineId, quantity: 10, status: 'completed');
         $_POST = [
             'm_id' => $medicineId,
@@ -161,14 +192,15 @@ class InventoryStockFlowTest extends TestCase
         ");
     }
 
-    private function seedMedicine(int $stock, float $sellPrice): int
+    private function seedMedicine(int $stock, float $buyPrice, float $sellPrice): int
     {
         $stmt = $this->pdo->prepare("
-            INSERT INTO user_medicine_tbl (pharmacy_id, medicine_name, in_stock, sell_price, exp_date)
-            VALUES (1, 'Test Medicine', :stock, :sell_price, :exp_date)
+            INSERT INTO user_medicine_tbl (pharmacy_id, medicine_name, in_stock, buy_price, sell_price, exp_date)
+            VALUES (1, 'Test Medicine', :stock, :buy_price, :sell_price, :exp_date)
         ");
         $stmt->execute([
             'stock' => $stock,
+            'buy_price' => $buyPrice,
             'sell_price' => $sellPrice,
             'exp_date' => date('Y-m-d', strtotime('+1 year')),
         ]);

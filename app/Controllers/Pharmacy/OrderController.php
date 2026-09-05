@@ -69,14 +69,14 @@ class OrderController extends Controller
         }
 
         $med = $this->medicine->findByIdAndPharmacy($medicineId, $userId);
-        if (!$med || $med['in_stock'] < $quantity) {
-            $this->redirect('/pharmacy/orders/create', 'Not enough stock available');
+        if (!$med) {
+            $this->redirect('/pharmacy/orders/create', 'Medicine not found');
         }
         if (UserMedicine::isExpired($med)) {
             $this->redirect('/pharmacy/orders/create', 'Cannot order expired medicine');
         }
 
-        $price = (float) $med['sell_price'];
+        $price = (float) $med['buy_price'];
         $total = $price * $quantity;
 
         try {
@@ -90,7 +90,6 @@ class OrderController extends Controller
                 'status' => 'pending',
                 'order_date' => $date,
             ]);
-            $this->medicine->updateStockByPharmacy($medicineId, $userId, -$quantity);
             $this->order->commit();
         } catch (\Throwable) {
             $this->order->rollBack();
@@ -135,28 +134,34 @@ class OrderController extends Controller
 
         $oldMedicineId = (int) $order['m_id'];
         $oldQuantity = (int) $order['quantity'];
-        $oldReserved = $order['status'] !== 'cancelled';
-        $newReserved = $newStatus !== 'cancelled';
-
-        $availableStock = (int) $med['in_stock'];
-        if ($oldReserved && $oldMedicineId === $mId) {
-            $availableStock += $oldQuantity;
+        $oldReceived = $order['status'] === 'completed';
+        $newReceived = $newStatus === 'completed';
+        $stockChanges = [];
+        if ($oldReceived) {
+            $stockChanges[$oldMedicineId] = ($stockChanges[$oldMedicineId] ?? 0) - $oldQuantity;
         }
-        if ($newReserved && $availableStock < $quantity) {
-            $this->redirect('/pharmacy/orders', 'Not enough stock available');
+        if ($newReceived) {
+            $stockChanges[$mId] = ($stockChanges[$mId] ?? 0) + $quantity;
         }
 
-        $price = (float) $med['sell_price'];
+        foreach ($stockChanges as $stockMedicineId => $change) {
+            if ($change >= 0) {
+                continue;
+            }
+            $stockMedicine = $stockMedicineId === $mId
+                ? $med
+                : $this->medicine->findByIdAndPharmacy($stockMedicineId, $userId);
+            if (!$stockMedicine || (int) $stockMedicine['in_stock'] + $change < 0) {
+                $this->redirect('/pharmacy/orders', 'Cannot reverse received stock that has already been sold');
+            }
+        }
+
+        $price = (float) $med['buy_price'];
         try {
             $this->order->beginTransaction();
-            if ($oldReserved && $newReserved && $oldMedicineId === $mId) {
-                $this->medicine->updateStockByPharmacy($mId, $userId, $oldQuantity - $quantity);
-            } else {
-                if ($oldReserved) {
-                    $this->medicine->updateStockByPharmacy($oldMedicineId, $userId, $oldQuantity);
-                }
-                if ($newReserved) {
-                    $this->medicine->updateStockByPharmacy($mId, $userId, -$quantity);
+            foreach ($stockChanges as $stockMedicineId => $change) {
+                if ($change !== 0) {
+                    $this->medicine->updateStockByPharmacy($stockMedicineId, $userId, $change);
                 }
             }
             $this->order->updateByPharmacy($orderId, $userId, [
@@ -188,8 +193,12 @@ class OrderController extends Controller
 
         try {
             $this->order->beginTransaction();
-            if ($order['status'] !== 'cancelled') {
-                $this->medicine->updateStockByPharmacy((int) $order['m_id'], $userId, (int) $order['quantity']);
+            if ($order['status'] === 'completed') {
+                $medicine = $this->medicine->findByIdAndPharmacy((int) $order['m_id'], $userId);
+                if (!$medicine || (int) $medicine['in_stock'] < (int) $order['quantity']) {
+                    throw new \RuntimeException('Cannot reverse received stock that has already been sold');
+                }
+                $this->medicine->updateStockByPharmacy((int) $order['m_id'], $userId, -(int) $order['quantity']);
             }
             $this->order->deleteByPharmacy($orderId, $userId);
             $this->order->commit();

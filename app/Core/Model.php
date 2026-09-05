@@ -102,7 +102,7 @@ abstract class Model
         return $this->query($sql, ['id' => $id])->rowCount() > 0;
     }
 
-    public function paginate(int $page, int $perPage, string $conditions = '', array $params = [], string $select = '*', string $join = ''): array
+    public function paginate(int $page, int $perPage, string $conditions = '', array $params = [], string $select = '*', string $join = '', string $orderBy = ''): array
     {
         $offset = ($page - 1) * $perPage;
         $totalRecords = $this->count($conditions, $params);
@@ -111,6 +111,9 @@ abstract class Model
         $sql = "SELECT {$select} FROM {$this->table}{$join}";
         if ($conditions) {
             $sql .= " WHERE {$conditions}";
+        }
+        if ($orderBy) {
+            $sql .= " ORDER BY {$orderBy}";
         }
         $sql .= " LIMIT {$perPage} OFFSET {$offset}";
 

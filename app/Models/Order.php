@@ -29,7 +29,8 @@ class Order extends Model
         return $this->paginate(
             $page, $perPage, $where, $params,
             'user_order_tbl.*, user_medicine_tbl.medicine_name',
-            ' LEFT JOIN user_medicine_tbl ON user_order_tbl.m_id = user_medicine_tbl.m_id'
+            ' LEFT JOIN user_medicine_tbl ON user_order_tbl.m_id = user_medicine_tbl.m_id',
+            'user_order_tbl.order_date DESC, user_order_tbl.o_id DESC'
         );
     }
 
