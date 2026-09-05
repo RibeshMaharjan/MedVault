@@ -137,10 +137,15 @@ function detectAnomalies(data, threshold = 2) {
     const squareDiffs = data.map(value => Math.pow(value - mean, 2));
     const stdDev = Math.sqrt(squareDiffs.reduce((a, b) => a + b, 0) / data.length);
 
-    return data.map((value, index) => {
-        const zScore = Math.abs(value - mean) / stdDev;
-        return zScore > threshold ? index : null;
-    }).filter(index => index !== null);
+    return data
+        .map((value, index) => {
+            const zScore = Math.abs(value - mean) / stdDev;
+            if (zScore > threshold) {
+                return { index, value, type: value > mean ? 'high' : 'low' };
+            }
+            return null;
+        })
+        .filter(Boolean);
 }
 
 // Function to update active button state
@@ -406,7 +411,9 @@ async function updateChart(period) {
     // Update statistics and other sections
     updateStats(calculateStats(data.amounts));
     updateStockRecommendations(data);
-    updateAnomalies(detectAnomalies(data.amounts), data);
+    const anomalies = detectAnomalies(data.amounts);
+    renderAnomalyScatter(anomalies, data);
+    updateAnomalyTable(anomalies, data);
 }
 
 function calculateStats(amounts) {
@@ -439,27 +446,170 @@ function updateStats(stats) {
     `;
 }
 
-function updateAnomalies(anomalies, data) {
-    const container = document.getElementById('anomalyContainer');
-    if (!container) return;
+function renderAnomalyScatter(anomalies, data) {
+    const canvas = document.getElementById('anomalyScatterChart');
+    if (!canvas) return;
+
+    if (anomalyScatterChart) {
+        try { anomalyScatterChart.destroy(); } catch (err) {}
+    }
 
     if (!anomalies || anomalies.length === 0) {
-        container.innerHTML = '<p>No sales anomalies detected in this period.</p>';
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = '14px sans-serif';
+        ctx.fillStyle = '#888';
+        ctx.textAlign = 'center';
+        ctx.fillText('No anomalies detected in this period.', canvas.width / 2, canvas.height / 2);
         return;
     }
 
-    let html = '<ul class="list-group">';
-    anomalies.forEach(index => {
-        if (data.dates[index] && data.amounts[index] !== undefined) {
-            html += `
-                <li class="mb-2 list-group-item ${data.amounts[index] > data.averageSale ? 'list-group-item-success' : 'list-group-item-danger'}">
-                    ${data.dates[index]}: Rs. ${data.amounts[index]}
-                    (${data.amounts[index] > data.averageSale ? 'Unusually high' : 'Unusually low'} sales)
-                </li>
-            `;
+    const highPoints = anomalies
+        .filter(a => a.type === 'high')
+        .map(a => ({ x: a.index, y: a.value }));
+
+    const lowPoints = anomalies
+        .filter(a => a.type === 'low')
+        .map(a => ({ x: a.index, y: a.value }));
+
+    const datasets = [];
+
+    if (highPoints.length > 0) {
+        datasets.push({
+            label: 'Unusually High',
+            data: highPoints,
+            backgroundColor: 'rgb(220, 53, 69)',
+            borderColor: 'rgb(220, 53, 69)',
+            pointRadius: 7,
+            pointHoverRadius: 9,
+            pointStyle: 'circle',
+            pointBorderWidth: 2,
+            pointBorderColor: '#fff',
+            showLine: false
+        });
+    }
+
+    if (lowPoints.length > 0) {
+        datasets.push({
+            label: 'Unusually Low',
+            data: lowPoints,
+            backgroundColor: 'rgb(255, 193, 7)',
+            borderColor: 'rgb(255, 193, 7)',
+            pointRadius: 7,
+            pointHoverRadius: 9,
+            pointStyle: 'circle',
+            pointBorderWidth: 2,
+            pointBorderColor: '#fff',
+            showLine: false
+        });
+    }
+
+    const ctx = canvas.getContext('2d');
+    anomalyScatterChart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Detected Anomalies'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const idx = context.parsed.x;
+                            const date = data.dates[idx] || 'Unknown';
+                            const amount = context.parsed.y;
+                            const type = context.dataset.label;
+                            return `${date} | Rs. ${amount.toFixed(2)} | ${type}`;
+                        }
+                    }
+                },
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            },
+            scales: {
+                x: {
+                    type: 'linear',
+                    title: {
+                        display: true,
+                        text: 'Day Index'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return data.dates[value] || value;
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Sales Amount (Rs.)'
+                    }
+                }
+            }
         }
     });
-    html += '</ul>';
+}
+
+function updateAnomalyTable(anomalies, data) {
+    const container = document.getElementById('anomalyTableContainer');
+    if (!container) return;
+
+    if (!anomalies || anomalies.length === 0) {
+        container.innerHTML = '<p class="text-muted">No anomalies detected in this period.</p>';
+        return;
+    }
+
+    const mean = data.amounts.reduce((a, b) => a + b, 0) / data.amounts.length;
+    const squareDiffs = data.amounts.map(v => Math.pow(v - mean, 2));
+    const stdDev = Math.sqrt(squareDiffs.reduce((a, b) => a + b, 0) / data.amounts.length);
+
+    const sorted = [...anomalies].sort((a, b) => a.index - b.index);
+
+    let html = `
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount (Rs.)</th>
+                        <th>Type</th>
+                        <th>Deviation</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+
+    sorted.forEach(a => {
+        const deviation = stdDev > 0 ? ((a.value - mean) / stdDev).toFixed(2) : '0.00';
+        const rowClass = a.type === 'high' ? 'table-danger' : 'table-warning';
+        const badgeClass = a.type === 'high' ? 'bg-danger' : 'bg-warning text-dark';
+        const label = a.type === 'high' ? 'Unusually High' : 'Unusually Low';
+
+        html += `
+            <tr class="${rowClass}">
+                <td>${data.dates[a.index] || 'N/A'}</td>
+                <td>${a.value.toFixed(2)}</td>
+                <td><span class="badge ${badgeClass}">${label}</span></td>
+                <td>${deviation}σ</td>
+            </tr>
+        `;
+    });
+
+    html += `
+                </tbody>
+            </table>
+        </div>
+    `;
+
     container.innerHTML = html;
 }
 

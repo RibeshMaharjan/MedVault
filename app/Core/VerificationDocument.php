@@ -18,7 +18,7 @@ class VerificationDocument
 
         $filename = $pharmacyId . '_' . bin2hex(random_bytes(16)) . '.' . $extension;
         $target = $directory . '/' . $filename;
-        if (!move_uploaded_file($upload['tmp_name'], $target)) {
+        if (!@move_uploaded_file($upload['tmp_name'], $target)) {
             return null;
         }
 

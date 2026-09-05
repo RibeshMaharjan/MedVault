@@ -2,7 +2,7 @@ services:
   app:
     build: .
     ports:
-      - "8000:80"
+      - "8010:80"
     volumes:
       - .:/var/www/html
       - /var/www/html/vendor
@@ -15,13 +15,18 @@ services:
       - DB_NAME=pharmacy
       - DB_USER=root
       - DB_PASS=medvault
-      - APP_URL=http://localhost:8000
+      - APP_URL=http://localhost:8010
       - MAIL_HOST=${MAIL_HOST:-smtp.gmail.com}
       - MAIL_PORT=${MAIL_PORT:-587}
       - MAIL_USERNAME=${MAIL_USERNAME:-}
       - MAIL_PASSWORD=${MAIL_PASSWORD:-}
       - MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS:-}
       - MAIL_FROM_NAME=${MAIL_FROM_NAME:-MedVault}
+    command: >
+      sh -c "
+        chown -R www-data:www-data /var/www/html/storage/verification-documents &&
+        apache2-foreground
+      "
 
   db:
     image: mysql:8.0
