@@ -53,6 +53,9 @@
                             <div class="d-flex justify-content-between mb-2"><span class="fw-bold">Status:</span><span class="badge bg-success">Verified</span></div>
                             <div class="d-flex justify-content-between mb-2"><span class="fw-bold">Verification Date:</span><span><?= !empty($p['verification_date']) ? date('F j, Y', strtotime($p['verification_date'])) : 'N/A' ?></span></div>
                             <div class="d-flex justify-content-between mb-2"><span class="fw-bold">License Number:</span><span><?= htmlspecialchars($p['license_number'] ?? '') ?></span></div>
+                            <?php if (!empty($p['reg_document'])): ?>
+                            <div class="d-flex justify-content-between mb-2"><span class="fw-bold">Document:</span><a href="/pharmacy/profile/document" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary">View</a></div>
+                            <?php endif; ?>
                             <?php if (!empty($p['verification_notes'])): ?>
                             <div class="mb-2"><span class="fw-bold d-block mb-1">Notes:</span><div class="bg-light p-2 rounded"><?= htmlspecialchars($p['verification_notes']) ?></div></div>
                             <?php endif; ?>
@@ -67,7 +70,7 @@
                             <div class="d-flex justify-content-between mb-2"><span class="fw-bold">Request Date:</span><span><?= date('F j, Y', strtotime($p['verification_request_date'])) ?></span></div>
                             <div class="d-flex justify-content-between mb-2"><span class="fw-bold">License Number:</span><span><?= htmlspecialchars($p['license_number'] ?? '') ?></span></div>
                             <?php if (!empty($p['reg_document'])): ?>
-                            <div class="d-flex justify-content-between mb-2"><span class="fw-bold">Document:</span><a href="/uploads/documents/<?= htmlspecialchars(basename($p['reg_document'])) ?>" target="_blank" class="btn btn-sm btn-outline-secondary">View</a></div>
+                            <div class="d-flex justify-content-between mb-2"><span class="fw-bold">Document:</span><a href="/pharmacy/profile/document" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary">View</a></div>
                             <?php endif; ?>
                         </div>
                         <div class="alert alert-info mt-3"><i class="fas fa-info-circle"></i> Your verification request is under review.</div>
@@ -77,6 +80,9 @@
                         <div class="status-icon mb-3"><i class="fas fa-exclamation-triangle fa-3x text-danger"></i></div>
                         <h5 class="text-danger mb-3">Not Verified!</h5>
                         <div class="alert alert-warning mb-3"><i class="fas fa-info-circle"></i> Verification is required to access all features.</div>
+                        <?php if (!empty($p['verification_notes'])): ?>
+                        <div class="alert alert-danger mb-3"><strong>Previous request feedback:</strong> <?= htmlspecialchars($p['verification_notes']) ?></div>
+                        <?php endif; ?>
                         <form action="/pharmacy/profile/verify" method="post" enctype="multipart/form-data">
                             <?= csrf_field() ?>
                             <div class="mb-3">

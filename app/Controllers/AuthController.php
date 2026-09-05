@@ -25,7 +25,11 @@ class AuthController extends Controller
             if ($role === 'admin') {
                 $this->redirect('/admin/dashboard', 'Already Logged In');
             } else {
-                $this->redirect('/pharmacy/dashboard', 'Already Logged In');
+                $pharmacyId = $this->session->pharmacyId() ?? 0;
+                $destination = $this->pharmacyModel->isVerified($pharmacyId)
+                    ? '/pharmacy/dashboard'
+                    : '/pharmacy/profile';
+                $this->redirect($destination, 'Already Logged In');
             }
         }
 
@@ -60,7 +64,13 @@ class AuthController extends Controller
         if ($user['role'] === 'admin') {
             $this->redirect('/admin/dashboard', 'Logged In Successfully');
         } else {
-            $this->redirect('/pharmacy/dashboard', 'Logged In Successfully');
+            $destination = $this->pharmacyModel->isVerified((int) $user['user_id'])
+                ? '/pharmacy/dashboard'
+                : '/pharmacy/profile';
+            $message = $destination === '/pharmacy/profile'
+                ? 'Logged in. Submit your pharmacy verification to unlock all features.'
+                : 'Logged In Successfully';
+            $this->redirect($destination, $message);
         }
     }
 

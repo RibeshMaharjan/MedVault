@@ -3,6 +3,8 @@
 namespace App\Controllers\Pharmacy;
 
 use App\Core\Controller;
+use App\Core\ErrorView;
+use App\Core\VerificationDocument;
 use App\Models\Pharmacy;
 use App\Models\User;
 
@@ -25,6 +27,7 @@ class ProfileController extends Controller
 
         $this->view('pharmacy/profile', [
             'pharmacy' => $data,
+            'pharmacyVerified' => (int) ($data['isverified'] ?? 0) === 1,
             'currentPage' => 'profile',
         ], 'pharmacy');
     }
@@ -97,17 +100,15 @@ class ProfileController extends Controller
         }
 
         $updateData = [
+            'isverified' => 0,
             'license_number' => $licenseNumber,
             'verification_request_date' => date('Y-m-d H:i:s'),
+            'verification_date' => null,
+            'verification_notes' => null,
         ];
 
         // Handle file upload
         if (isset($_FILES['reg_document']) && $_FILES['reg_document']['error'] === 0) {
-            $targetDir = dirname(__DIR__, 3) . '/public/uploads/documents/';
-            if (!file_exists($targetDir)) {
-                mkdir($targetDir, 0755, true);
-            }
-
             $allowedTypes = [
                 'application/pdf' => 'pdf',
                 'image/jpeg' => 'jpg',
@@ -121,19 +122,41 @@ class ProfileController extends Controller
                 $this->redirect('/pharmacy/profile', 'Invalid document. Upload a PDF, JPG, or PNG under 5MB.');
             }
 
-            $newFilename = $pharmacyId . '_' . bin2hex(random_bytes(16)) . '.' . $allowedTypes[$detectedType];
-            $targetFile = $targetDir . $newFilename;
-
-            if (move_uploaded_file($_FILES['reg_document']['tmp_name'], $targetFile)) {
-                $updateData['reg_document'] = 'uploads/documents/' . $newFilename;
-            } else {
+            $storedPath = VerificationDocument::store(
+                $_FILES['reg_document'],
+                $pharmacyId,
+                $allowedTypes[$detectedType]
+            );
+            if (!$storedPath) {
                 $this->redirect('/pharmacy/profile', 'Error uploading document. Please try again.');
             }
+            $updateData['reg_document'] = $storedPath;
         } else {
             $this->redirect('/pharmacy/profile', 'Registration document is required.');
         }
 
         $this->pharmacy->update($pharmacyId, $updateData, 'pharmacy_id');
         $this->redirect('/pharmacy/profile', 'Verification request submitted successfully! Your request is now under review.');
+    }
+
+    public function document(): void
+    {
+        $pharmacyId = $this->session->pharmacyId();
+        $pharmacy = $this->pharmacy->findById($pharmacyId, 'pharmacy_id');
+        $path = VerificationDocument::resolve($pharmacy['reg_document'] ?? null);
+        if (!$pharmacy || !$path) {
+            ErrorView::render(404, '404', 'Registration document not found');
+            return;
+        }
+
+        $mime = (new \finfo(FILEINFO_MIME_TYPE))->file($path) ?: 'application/octet-stream';
+        header('Content-Type: ' . $mime);
+        header('Content-Length: ' . filesize($path));
+        header('Content-Disposition: inline; filename="' . basename($path) . '"');
+        header('X-Content-Type-Options: nosniff');
+        readfile($path);
+        if (($_ENV['APP_ENV'] ?? '') !== 'testing') {
+            exit;
+        }
     }
 }

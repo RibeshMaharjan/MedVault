@@ -6,6 +6,7 @@ services:
     volumes:
       - .:/var/www/html
       - /var/www/html/vendor
+      - verification_documents:/var/www/html/storage/verification-documents
     depends_on:
       db:
         condition: service_healthy
@@ -45,3 +46,4 @@ services:
 
 volumes:
   mysql_data:
+  verification_documents:

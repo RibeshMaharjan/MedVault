@@ -9,6 +9,24 @@ class Pharmacy extends Model
     protected string $table = 'tbl_pharmacy';
     protected string $primaryKey = 'pharmacy_id';
 
+    public function isVerified(int $pharmacyId): bool
+    {
+        $sql = "SELECT isverified FROM {$this->table} WHERE pharmacy_id = :pharmacy_id LIMIT 1";
+        $row = $this->query($sql, ['pharmacy_id' => $pharmacyId])->fetch();
+        return $row && (int) $row['isverified'] === 1;
+    }
+
+    public function findDetailedById(int $pharmacyId): ?array
+    {
+        $sql = "SELECT p.*, r.name AS account_name, r.email AS account_email
+                FROM {$this->table} p
+                LEFT JOIN role r ON r.user_id = p.pharmacy_id
+                WHERE p.pharmacy_id = :pharmacy_id
+                LIMIT 1";
+        $row = $this->query($sql, ['pharmacy_id' => $pharmacyId])->fetch();
+        return $row ?: null;
+    }
+
     public function createMinimal(int $pharmacyId, string $name, string $email): bool
     {
         $sql = "INSERT INTO {$this->table} (pharmacy_id, pharmacy_name, email) VALUES (:pharmacy_id, :pharmacy_name, :email)";

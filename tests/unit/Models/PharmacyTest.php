@@ -18,6 +18,14 @@ class PharmacyTest extends TestCase
         self::$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         
         self::$pdo->exec("
+            CREATE TABLE role (
+                user_id INTEGER PRIMARY KEY,
+                name TEXT NOT NULL,
+                email TEXT NOT NULL,
+                password TEXT NOT NULL,
+                role TEXT NOT NULL
+            );
+
             CREATE TABLE tbl_pharmacy (
                 pharmacy_id INTEGER PRIMARY KEY,
                 pan INTEGER,
@@ -63,6 +71,7 @@ class PharmacyTest extends TestCase
         self::$pdo->exec("DELETE FROM user_medicine_tbl");
         self::$pdo->exec("DELETE FROM user_category_tbl");
         self::$pdo->exec("DELETE FROM tbl_pharmacy");
+        self::$pdo->exec("DELETE FROM role");
         
         $this->model = new class(self::$pdo) extends Pharmacy {            public function __construct($pdo)
             {
@@ -151,6 +160,29 @@ class PharmacyTest extends TestCase
         $results = $this->model->findAllBy('isverified', 1);
         
         $this->assertCount(1, $results);
+    }
+
+    public function testIsVerifiedReadsCurrentVerificationState(): void
+    {
+        self::$pdo->exec("INSERT INTO tbl_pharmacy (pharmacy_id, pharmacy_name, isverified) VALUES (1, 'Verified', 1)");
+        self::$pdo->exec("INSERT INTO tbl_pharmacy (pharmacy_id, pharmacy_name, isverified) VALUES (2, 'Pending', 0)");
+
+        $this->assertTrue($this->model->isVerified(1));
+        $this->assertFalse($this->model->isVerified(2));
+        $this->assertFalse($this->model->isVerified(999));
+    }
+
+    public function testFindDetailedByIdIncludesAccountAndVerificationFields(): void
+    {
+        self::$pdo->exec("INSERT INTO role (user_id, name, email, password, role) VALUES (1, 'Account Owner', 'owner@example.com', 'hash', 'user')");
+        self::$pdo->exec("INSERT INTO tbl_pharmacy (pharmacy_id, pharmacy_name, email, isverified, license_number, reg_document) VALUES (1, 'Detail Pharmacy', 'pharmacy@example.com', 0, 'LIC-123', 'verification-documents/1_doc.pdf')");
+
+        $result = $this->model->findDetailedById(1);
+
+        $this->assertSame('Account Owner', $result['account_name']);
+        $this->assertSame('owner@example.com', $result['account_email']);
+        $this->assertSame('LIC-123', $result['license_number']);
+        $this->assertSame('verification-documents/1_doc.pdf', $result['reg_document']);
     }
 
     public function testHasBusinessRecordsReturnsFalseWhenPharmacyHasNoData(): void

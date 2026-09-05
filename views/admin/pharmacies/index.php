@@ -75,6 +75,7 @@
                             <td data-label="Verified"><span class="badge <?= ($p['isverified'] ?? 0) ? 'bg-success' : 'bg-warning' ?>"><?= ($p['isverified'] ?? 0) ? 'Yes' : 'No' ?></span></td>
                             <td class="mv-actions-cell" data-label="Action">
                                 <div class="mv-icon-actions">
+                                    <a href="/admin/pharmacies/<?= $p['pharmacy_id'] ?>" class="btn btn-secondary mv-icon-btn" title="View details" aria-label="View <?= htmlspecialchars($p['pharmacy_name']) ?> details"><i class="fa-regular fa-eye"></i></a>
                                     <form action="/admin/pharmacies/<?= $p['pharmacy_id'] ?>/delete" method="POST" onsubmit="return confirm('Delete this pharmacy?');">
                                         <?= csrf_field() ?>
                                         <button type="submit" class="btn btn-danger mv-icon-btn" title="Delete"><i class="fa-regular fa-trash-can"></i></button>

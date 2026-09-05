@@ -3,6 +3,8 @@
 namespace App\Controllers\Admin;
 
 use App\Core\Controller;
+use App\Core\ErrorView;
+use App\Core\VerificationDocument;
 use App\Models\Pharmacy;
 use App\Models\User;
 
@@ -76,6 +78,32 @@ class PharmacyController extends Controller
         $this->redirect('/admin/pharmacies', 'Pharmacy Added successfully');
     }
 
+    public function show(string $id): void
+    {
+        $pharmacy = $this->pharmacy->findDetailedById((int) $id);
+        if (!$pharmacy) {
+            ErrorView::render(404, '404', 'Pharmacy not found');
+            return;
+        }
+
+        $this->view('admin/pharmacies/show', [
+            'pharmacy' => $pharmacy,
+            'currentPage' => 'pharmacy-display',
+        ], 'admin');
+    }
+
+    public function document(string $id): void
+    {
+        $pharmacy = $this->pharmacy->findById((int) $id, 'pharmacy_id');
+        $path = VerificationDocument::resolve($pharmacy['reg_document'] ?? null);
+        if (!$pharmacy || !$path) {
+            ErrorView::render(404, '404', 'Registration document not found');
+            return;
+        }
+
+        $this->streamDocument($path);
+    }
+
     public function destroy(string $id): void
     {
         $pharmacyId = (int) $id;
@@ -130,8 +158,15 @@ class PharmacyController extends Controller
         $pharmacyId = (int) $id;
         $notes = $this->validate($_POST['verification_notes'] ?? '');
 
-        if (!$this->pharmacy->findById($pharmacyId, 'pharmacy_id')) {
+        $pharmacy = $this->pharmacy->findById($pharmacyId, 'pharmacy_id');
+        if (!$pharmacy) {
             $this->redirect('/admin/pharmacies/verify', 'Pharmacy not found');
+        }
+        if ((int) $pharmacy['isverified'] === 1) {
+            $this->redirect($this->verificationRedirect($pharmacyId), 'Pharmacy is already verified');
+        }
+        if (empty($pharmacy['verification_request_date']) || empty($pharmacy['reg_document'])) {
+            $this->redirect($this->verificationRedirect($pharmacyId), 'A submitted verification request and document are required');
         }
 
         $this->pharmacy->update($pharmacyId, [
@@ -140,7 +175,7 @@ class PharmacyController extends Controller
             'verification_notes' => $notes,
         ], 'pharmacy_id');
 
-        $this->redirect('/admin/pharmacies/verify', 'Pharmacy verified successfully!');
+        $this->redirect($this->verificationRedirect($pharmacyId), 'Pharmacy verified successfully!');
     }
 
     public function reject(string $id): void
@@ -148,8 +183,15 @@ class PharmacyController extends Controller
         $pharmacyId = (int) $id;
         $notes = $this->validate($_POST['verification_notes'] ?? '');
 
-        if (!$this->pharmacy->findById($pharmacyId, 'pharmacy_id')) {
+        $pharmacy = $this->pharmacy->findById($pharmacyId, 'pharmacy_id');
+        if (!$pharmacy) {
             $this->redirect('/admin/pharmacies/verify', 'Pharmacy not found');
+        }
+        if (empty($pharmacy['verification_request_date']) || (int) $pharmacy['isverified'] === 1) {
+            $this->redirect($this->verificationRedirect($pharmacyId), 'No pending verification request was found');
+        }
+        if ($notes === '') {
+            $this->redirect($this->verificationRedirect($pharmacyId), 'A rejection reason is required');
         }
 
         $sql = "UPDATE tbl_pharmacy SET verification_request_date = NULL, verification_notes = :notes WHERE pharmacy_id = :id";
@@ -157,6 +199,26 @@ class PharmacyController extends Controller
         $stmt = $db->prepare($sql);
         $stmt->execute(['notes' => $notes, 'id' => $pharmacyId]);
 
-        $this->redirect('/admin/pharmacies/verify', 'Pharmacy verification request rejected!');
+        $this->redirect($this->verificationRedirect($pharmacyId), 'Pharmacy verification request rejected!');
+    }
+
+    private function verificationRedirect(int $pharmacyId): string
+    {
+        return ($_POST['return_to'] ?? '') === 'details'
+            ? "/admin/pharmacies/{$pharmacyId}"
+            : '/admin/pharmacies/verify';
+    }
+
+    private function streamDocument(string $path): void
+    {
+        $mime = (new \finfo(FILEINFO_MIME_TYPE))->file($path) ?: 'application/octet-stream';
+        header('Content-Type: ' . $mime);
+        header('Content-Length: ' . filesize($path));
+        header('Content-Disposition: inline; filename="' . basename($path) . '"');
+        header('X-Content-Type-Options: nosniff');
+        readfile($path);
+        if (($_ENV['APP_ENV'] ?? '') !== 'testing') {
+            exit;
+        }
     }
 }

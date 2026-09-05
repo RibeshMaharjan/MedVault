@@ -33,19 +33,11 @@
                             <?php if (!empty($p['reg_document'])): ?>
                                 <div class="mv-verify-doc">
                                     <span><i class="fa-regular fa-file-lines"></i><?= htmlspecialchars(basename($p['reg_document'])) ?></span>
-                                    <a href="/uploads/documents/<?= htmlspecialchars(basename($p['reg_document'])) ?>" target="_blank" rel="noopener">View</a>
+                                    <a href="/admin/pharmacies/<?= (int) $p['pharmacy_id'] ?>/document" target="_blank" rel="noopener">View</a>
                                 </div>
                             <?php endif; ?>
                             <div class="mv-verify-actions">
-                                <form action="/admin/pharmacies/<?= $p['pharmacy_id'] ?>/reject" method="POST" class="mv-verify-reject-form">
-                                    <?= csrf_field() ?>
-                                    <input type="hidden" name="verification_notes" value="">
-                                    <button type="submit" class="mv-verify-btn mv-verify-btn-reject"><i class="fa-solid fa-circle-xmark"></i> Reject</button>
-                                </form>
-                                <form action="/admin/pharmacies/<?= $p['pharmacy_id'] ?>/approve" method="POST" class="mv-verify-approve-form">
-                                    <?= csrf_field() ?>
-                                    <button type="submit" class="mv-verify-btn mv-verify-btn-approve"><i class="fa-solid fa-circle-check"></i> Approve</button>
-                                </form>
+                                <a href="/admin/pharmacies/<?= $p['pharmacy_id'] ?>" class="mv-verify-btn mv-verify-btn-approve"><i class="fa-regular fa-eye"></i> Review details</a>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -66,6 +58,9 @@
                                     <p class="mv-verify-meta">Verified <?= date('Y-m-d', strtotime($v['verification_date'])) ?></p>
                                 </div>
                                 <span class="mv-pill mv-pill-verified">Verified</span>
+                            </div>
+                            <div class="mv-verify-actions">
+                                <a href="/admin/pharmacies/<?= $v['pharmacy_id'] ?>" class="mv-verify-btn mv-verify-btn-approve"><i class="fa-regular fa-eye"></i> View details</a>
                             </div>
                         </div>
                     <?php endforeach; ?>

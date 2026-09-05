@@ -8,10 +8,11 @@ $order_active = (strpos($cp, 'order') !== false) ? 'active' : '';
 $sales_active = (strpos($cp, 'sales') !== false && strpos($cp, 'analysis') === false) ? 'active' : '';
 $analysis_sales_active = ($cp == 'analysis-sales') ? 'active' : '';
 $analysis_order_active = ($cp == 'analysis-order') ? 'active' : '';
+$showBusinessNavigation = !isset($pharmacyVerified) || $pharmacyVerified;
 ?>
 <div class="sidebar" id="side_nav">
     <div class="sidebar-header">
-        <a href="/pharmacy/dashboard" class="sidebar-brand">
+        <a href="<?= $showBusinessNavigation ? '/pharmacy/dashboard' : '/pharmacy/profile' ?>" class="sidebar-brand">
             <img src="/image/logo.png" alt="MedVault">
             <span>MedVault</span>
         </a>
@@ -21,6 +22,7 @@ $analysis_order_active = ($cp == 'analysis-order') ? 'active' : '';
     </div>
     <div class="sidebar-scroll">
             <ul class="nav flex-column list-unstyled" id="menu">
+                <?php if ($showBusinessNavigation): ?>
                 <li class="<?= $dashboard_active ?>">
                     <a href="/pharmacy/dashboard" class="text-decoration-none px-3 py-2 d-block"><i class="fa-solid fa-list me-1 icon"></i>Dashboard</a>
                 </li>
@@ -49,6 +51,7 @@ $analysis_order_active = ($cp == 'analysis-order') ? 'active' : '';
                 <li class="nav-item <?= $analysis_order_active ?>">
                     <a class="nav-link" href="/pharmacy/analytics/orders"><span class="material-symbols-outlined fs-6 icon">category</span>Order Analysis</a>
                 </li>
+                <?php endif; ?>
                 <li class="nav-item <?= $profile_active ?>">
                     <a class="nav-link" href="/pharmacy/profile"><span class="material-symbols-outlined fs-6 icon">person</span>Profile</a>
                 </li>
